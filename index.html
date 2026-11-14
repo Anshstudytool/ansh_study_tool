@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANSH.STUDY - Study Smart. Achieve More.</title>
+<title>ANSH.STUDY - Ultimate Exam & Books Hub</title>
 <style>
   :root {
     --bg: #0b1120;
@@ -17,6 +17,7 @@
     --red: #ef4444;
     --line: #1e293b;
     --orange: #f59e0b;
+    --purple: #8b5cf6;
   }
   body.light {
     --bg: #f8fafc;
@@ -59,7 +60,7 @@
   }
   .hero h1 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
   .hero h1 span { color: #60a5fa; }
-  .hero p { color: var(--muted); font-size: 14px; max-width: 450px; margin: 0 auto; }
+  .hero p { color: var(--muted); font-size: 14px; max-width: 480px; margin: 0 auto; }
 
   /* News Ticker Bar */
   .news-ticker {
@@ -101,6 +102,8 @@
     background: var(--panel); border: 1px solid var(--line);
     padding: 16px; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between;
   }
+  .tool-card.highlight { border: 2px solid var(--green); background: linear-gradient(to bottom right, var(--panel), rgba(16, 185, 129, 0.05)); }
+  .tool-card.quiz-highlight { border: 2px solid var(--purple); background: linear-gradient(to bottom right, var(--panel), rgba(139, 92, 246, 0.05)); }
   .tool-card.hidden { display: none !important; }
   .t-icon { font-size: 24px; margin-bottom: 10px; }
   .t-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
@@ -112,6 +115,7 @@
   }
   .open-btn:hover { background: var(--blue-hover); }
   .open-btn.green { background: var(--green); }
+  .open-btn.purple { background: var(--purple); }
 
   /* Active Tool Workspace */
   .tool-area {
@@ -146,12 +150,13 @@
     background: var(--blue); color: white; font-weight: 600; font-size: 13px; cursor: pointer;
   }
   .action-btn.green { background: var(--green); }
+  .action-btn.purple { background: var(--purple); }
   .action-btn.gray { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
   
   .result-box {
-    margin-top: 14px; padding: 12px; border-radius: 8px;
+    margin-top: 14px; padding: 14px; border-radius: 8px;
     background: var(--panel2); border-left: 4px solid var(--blue);
-    font-weight: 600; font-size: 14px;
+    font-weight: normal; font-size: 13px; line-height: 1.6;
   }
 
   /* Lists */
@@ -194,15 +199,15 @@
 <div class="wrap">
   <!-- Hero -->
   <div class="hero">
-    <div class="badge">✨ YOUR PERSONAL STUDY PARTNER</div>
+    <div class="badge">✨ ULTIMATE EXAM & BOOKS HUB</div>
     <h1>Study Smart.<br><span>Achieve More.</span></h1>
-    <p>Plan better. Focus deeper, read news & access study books in one place.</p>
+    <p>Complete books, syllabus, formulas & preparation tools for NDA, B.Sc. & Competitive Exams.</p>
   </div>
 
-  <!-- 📰 Live News / Exam Update Ticker -->
+  <!-- 📰 Live News Ticker -->
   <div class="news-ticker">
-    <div class="news-tag">🔥 Flash News</div>
-    <div class="news-content" id="newsTickerText">UPSC NDA & B.Sc. Exam preparation tips updated. Check study tools & free books below!</div>
+    <div class="news-tag">🔥 Exam Alert</div>
+    <div class="news-content" id="newsTickerText">New Dynamic Math Quiz Hub is now live! Test your NDA & B.Sc. math skills.</div>
   </div>
 
   <!-- Dashboard -->
@@ -232,6 +237,58 @@
 
   <!-- ACTIVE TOOL WORKSPACE -->
   <div id="workspace">
+
+    <!-- 🧮 Dynamic Math Quiz Hub -->
+    <div id="tool-mathquiz" class="tool-area">
+      <div class="tool-header">
+        <h2>🧮 Math Quiz & Practice Hub</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select your difficulty level and solve endless generated math problems for NDA, B.Sc. & exams:</p>
+      
+      <div class="btn-row" style="margin-bottom:15px;">
+        <button class="action-btn green" onclick="setQuizLevel('easy')">🟢 Easy (Basic Arithmetic)</button>
+        <button class="action-btn" onclick="setQuizLevel('medium')">🟡 Medium (Algebra & Percent)</button>
+        <button class="action-btn purple" onclick="setQuizLevel('hard')">🔴 Hard (Calculus & NDA Level)</button>
+      </div>
+
+      <div style="background:var(--panel2); padding:15px; border-radius:10px; border:1px solid var(--line);">
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px;">
+          <span id="quizLevelBadge">Level: Easy</span>
+          <span>Score: <strong id="quizScore" style="color:var(--green)">0</strong> | Streak: <strong id="quizStreak" style="color:var(--orange)">0</strong></span>
+        </div>
+        <div id="quizQuestionBox" style="font-size:18px; font-weight:700; margin-bottom:12px;">Click a difficulty level above to start the quiz!</div>
+        <div class="form-group">
+          <input type="number" id="quizUserAnswer" class="form-control" placeholder="Enter your answer here..." onkeypress="checkQuizEnter(event)">
+        </div>
+        <div class="btn-row">
+          <button class="action-btn green" onclick="submitQuizAnswer()">Submit Answer</button>
+          <button class="action-btn gray" onclick="nextQuizQuestion()">Next Question ➔</button>
+        </div>
+        <div class="result-box" id="quizFeedback" style="display:none; margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- 📚 Mega Study Books & Exam Hub -->
+    <div id="tool-books" class="tool-area">
+      <div class="tool-header">
+        <h2>📚 Comprehensive Exam Books & Notes Hub</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select target examination or course to access complete books, direct official PDF links, and notes:</p>
+      
+      <div class="btn-row">
+        <button class="action-btn green" onclick="loadBook('nda')">🎖️ NDA & Defence Exams</button>
+        <button class="action-btn purple" onclick="loadBook('bsc')">🎓 B.Sc. PCM (Uni Semesters)</button>
+        <button class="action-btn" onclick="loadBook('ssc')">💼 SSC / GD / Railway</button>
+        <button class="action-btn gray" onclick="loadBook('ncert')">📖 NCERT 11th & 12th</button>
+      </div>
+
+      <div class="result-box" id="bookContentViewer" style="margin-top:15px; white-space:pre-wrap;">
+        👉 Select any category above to view complete subjects, official direct PDF links, and preparation resources.
+      </div>
+      <div style="margin-top:12px;" id="offlineDownloadContainer"></div>
+    </div>
 
     <!-- Percentage Calculator -->
     <div id="tool-percentage" class="tool-area">
@@ -381,34 +438,36 @@
       <ul class="item-list" id="goalList"></ul>
     </div>
 
-    <!-- 📚 Study Books & Materials Hub -->
-    <div id="tool-books" class="tool-area">
-      <div class="tool-header">
-        <h2>📚 Free Study Books & PDFs</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select a subject to read important notes & reference books:</p>
-      <div class="btn-row">
-        <button class="action-btn" onclick="loadBook('math')">📐 Mathematics</button>
-        <button class="action-btn" onclick="loadBook('physics')">⚡ Physics</button>
-        <button class="action-btn" onclick="loadBook('chemistry')">🧪 Chemistry</button>
-        <button class="action-btn green" onclick="loadBook('nda')">🎖️ NDA / Defence</button>
-      </div>
-      <div class="result-box" id="bookContentViewer" style="margin-top:15px; white-space:pre-wrap; font-weight:normal; font-size:13px;">
-        Click any category above to view quick formulas and book resources.
-      </div>
-    </div>
-
   </div>
 
   <!-- Explore Study Tools & Books -->
-  <div class="sec-title">🚀 Explore Study Tools & Books</div>
+  <div class="sec-title">🚀 Explore Study Tools & Books Hub</div>
   <div class="search-box">
-    <input type="text" id="searchInput" onkeyup="filterTools()" placeholder="Search tools, calculators, books...">
+    <input type="text" id="searchInput" onkeyup="filterTools()" placeholder="Search books, math quiz, NDA, calculator, planner...">
     <button onclick="filterTools()">Search</button>
   </div>
 
   <div class="grid" id="toolsGrid">
+    <!-- Math Quiz Hub Card -->
+    <div class="tool-card quiz-highlight" data-search="math quiz test practice questions solver">
+      <div>
+        <div class="t-icon">🧮</div>
+        <div class="t-title">Math Quiz & Practice Hub</div>
+        <div class="t-desc">Solve infinite math questions with selectable difficulty levels (Easy, Medium, Hard).</div>
+      </div>
+      <button class="open-btn purple" onclick="openTool('mathquiz')">Open Math Quiz Hub →</button>
+    </div>
+
+    <!-- Featured Books Card -->
+    <div class="tool-card highlight" data-search="books nda bsc ssc pdf notes library">
+      <div>
+        <div class="t-icon">📚</div>
+        <div class="t-title">Exam Books & PDF Hub</div>
+        <div class="t-desc">Complete syllabus, reference books & direct PDF downloads for NDA, B.Sc. PCM & NCERT.</div>
+      </div>
+      <button class="open-btn green" onclick="openTool('books')">Open Books Hub →</button>
+    </div>
+
     <div class="tool-card" data-search="percentage calculator marks">
       <div>
         <div class="t-icon">📈</div>
@@ -481,111 +540,66 @@
       <button class="open-btn" onclick="openTool('notes')">Open Tool →</button>
     </div>
 
-    <div class="tool-card" data-search="daily goals targets">
+    <div class="tool-card" data-search="daily goals">
       <div>
         <div class="t-icon">🏆</div>
         <div class="t-title">Daily Goals</div>
-        <div class="t-desc">Set targets and monitor your progress.</div>
+        <div class="t-desc">Set and achieve your daily learning targets.</div>
       </div>
       <button class="open-btn" onclick="openTool('goals')">Open Tool →</button>
     </div>
-
-    <!-- New Books Card -->
-    <div class="tool-card" data-search="books pdf notes library">
-      <div>
-        <div class="t-icon">📚</div>
-        <div class="t-title">Study Books Hub</div>
-        <div class="t-desc">Access quick reference books, formulas & notes.</div>
-      </div>
-      <button class="open-btn green" onclick="openTool('books')">Explore Books →</button>
-    </div>
   </div>
+
 </div>
 
 <footer>
-  <strong>ANSH STUDY TOOLS</strong><br>
-  Study • Focus • Revise • Succeed<br>
-  Made for Students ❤️<br><br>
-  © 2026 Ansh Study Tools. All rights reserved.
+  ANSH.STUDY &copy; 2026 | Ultimate Exam & Books Hub | Designed for Smart Students
 </footer>
 
 <script>
-  // Dynamic News Ticker Carousel
-  const newsList = [
-    "🔥 Latest Update: UPSC NDA & Defence exam notifications & strategy tips active.",
-    "💡 Tip of the Day: Consistent 5-hour focused study beats 10-hour distracted reading.",
-    "📚 New Additions: Check out the 'Study Books Hub' for quick formulas and subject notes.",
-    "🎯 Stay Focused: Use the Focus Timer tool daily to improve your productivity score!"
-  ];
-  let newsIdx = 0;
-  setInterval(() => {
-    newsIdx = (newsIdx + 1) % newsList.length;
-    document.getElementById('newsTickerText').textContent = newsList[newsIdx];
-  }, 4000);
+  // Global State
+  let tasks = JSON.parse(localStorage.getItem('ans_tasks')) || [];
+  let revisions = JSON.parse(localStorage.getItem('ans_revisions')) || [];
+  let notes = JSON.parse(localStorage.getItem('ans_notes')) || [];
+  let goals = JSON.parse(localStorage.getItem('ans_goals')) || [];
+  let studyMins = parseInt(localStorage.getItem('ans_mins')) || 45;
+  let streak = parseInt(localStorage.getItem('ans_streak')) || 5;
 
-  // Load Saved Data from LocalStorage
-  let appData = JSON.parse(localStorage.getItem('anshStudyData')) || {
-    theme: 'dark',
-    minutes: 0,
-    tasks: [],
-    revisions: [],
-    notes: [],
-    goals: [],
-    exam: null,
-    streak: 1,
-    lastActiveDate: null
-  };
-
-  // Streak Calculation Function
-  function checkAndUpdateStreak() {
-    const todayStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    
-    if (!appData.lastActiveDate) {
-      appData.lastActiveDate = todayStr;
-      appData.streak = 1;
-    } else {
-      const lastDate = new Date(appData.lastActiveDate);
-      const currentDate = new Date(todayStr);
-      
-      const diffTime = currentDate - lastDate;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      
-      if (diffDays === 1) {
-        // Next consecutive day
-        appData.streak += 1;
-        appData.lastActiveDate = todayStr;
-      } else if (diffDays > 1) {
-        // Streak broken
-        appData.streak = 1;
-        appData.lastActiveDate = todayStr;
-      }
-      // If diffDays === 0 (same day), streak remains unchanged
-    }
-  }
-
-  // Run streak check on load
-  checkAndUpdateStreak();
+  // Math Quiz State
+  let currentQuizLevel = 'easy';
+  let currentQuizAnswer = 0;
+  let quizScore = 0;
+  let quizStreakCount = 0;
 
   function saveData() {
-    localStorage.setItem('anshStudyData', JSON.stringify(appData));
-    updateDashboard();
+    localStorage.setItem('ans_tasks', JSON.stringify(tasks));
+    localStorage.setItem('ans_revisions', JSON.stringify(revisions));
+    localStorage.setItem('ans_notes', JSON.stringify(notes));
+    localStorage.setItem('ans_goals', JSON.stringify(goals));
+    localStorage.setItem('ans_mins', studyMins);
+    localStorage.setItem('ans_streak', streak);
+    updateDashboardStats();
   }
 
-  // Theme Toggle
-  if (appData.theme === 'light') document.body.classList.add('light');
-  function toggleTheme() {
-    document.body.classList.toggle('light');
-    appData.theme = document.body.classList.contains('light') ? 'light' : 'dark';
-    saveData();
+  function updateDashboardStats() {
+    const pending = tasks.filter(t => !t.done).length;
+    const completed = tasks.filter(t => t.done).length;
+    document.getElementById('statPending').innerText = pending;
+    document.getElementById('statCompleted').innerText = completed;
+    document.getElementById('statMinutes').innerText = studyMins;
+    document.getElementById('statStreak').innerText = streak;
   }
 
-  // Open & Close Tools
-  function openTool(name) {
-    closeTools();
-    const el = document.getElementById('tool-' + name);
-    if (el) {
-      el.classList.add('active');
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Tool Workspace Toggles
+  function openTool(toolName) {
+    document.querySelectorAll('.tool-area').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('tool-' + toolName);
+    if(target) {
+      target.classList.add('active');
+      window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+    }
+    if(toolName === 'mathquiz' && document.getElementById('quizQuestionBox').innerText.includes('Click')) {
+      setQuizLevel('easy');
     }
   }
 
@@ -593,299 +607,387 @@
     document.querySelectorAll('.tool-area').forEach(el => el.classList.remove('active'));
   }
 
+  // Theme Toggle
+  function toggleTheme() {
+    document.body.classList.toggle('light');
+  }
+
+  // Backup & Export
+  function exportBackup() {
+    const backupData = { tasks, revisions, notes, goals, studyMins, streak, date: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ansh_study_backup.json';
+    a.click();
+  }
+
   // Search Filter
   function filterTools() {
-    const q = document.getElementById('searchInput').value.toLowerCase().trim();
-    document.querySelectorAll('.tool-card').forEach(card => {
-      const text = (card.innerText + ' ' + card.dataset.search).toLowerCase();
-      card.classList.toggle('hidden', !text.includes(q));
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.tool-card');
+    cards.forEach(card => {
+      const keywords = card.getAttribute('data-search') || '';
+      if(keywords.includes(q) || card.innerText.toLowerCase().includes(q)) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
     });
   }
 
-  // Percentage Calculator
+  // Math Quiz Logic
+  function setQuizLevel(level) {
+    currentQuizLevel = level;
+    let badgeText = "Easy (Arithmetic)";
+    if(level === 'medium') badgeText = "Medium (Algebra & Percentage)";
+    if(level === 'hard') badgeText = "Hard (Calculus, Trigonometry & NDA Level)";
+    document.getElementById('quizLevelBadge').innerText = "Level: " + badgeText;
+    nextQuizQuestion();
+  }
+
+  function nextQuizQuestion() {
+    const qBox = document.getElementById('quizQuestionBox');
+    const feedback = document.getElementById('quizFeedback');
+    feedback.style.display = 'none';
+    document.getElementById('quizUserAnswer').value = '';
+
+    let num1, num2, ans, qText;
+
+    if(currentQuizLevel === 'easy') {
+      const ops = ['+', '-', '*'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      num1 = Math.floor(Math.random() * 50) + 5;
+      num2 = Math.floor(Math.random() * 50) + 5;
+      if(op === '-') { if(num1 < num2) { let temp = num1; num1 = num2; num2 = temp; } ans = num1 - num2; }
+      else if(op === '+') { ans = num1 + num2; }
+      else { num1 = Math.floor(Math.random() * 12) + 2; num2 = Math.floor(Math.random() * 12) + 2; ans = num1 * num2; }
+      qText = `Solve: ${num1} ${op} ${num2} = ?`;
+      currentQuizAnswer = ans;
+    } else if(currentQuizLevel === 'medium') {
+      const type = Math.floor(Math.random() * 3);
+      if(type === 0) {
+        // Percentage
+        num1 = Math.floor(Math.random() * 40) + 10; // percentage
+        num2 = (Math.floor(Math.random() * 40) + 10) * 20; // total number
+        ans = (num1 * num2) / 100;
+        qText = `Find ${num1}% of ${num2}?`;
+      } else if(type === 1) {
+        // Simple Equation: ax + b = c
+        let a = Math.floor(Math.random() * 5) + 2;
+        let x = Math.floor(Math.random() * 15) + 1;
+        let b = Math.floor(Math.random() * 20) + 1;
+        let c = (a * x) + b;
+        ans = x;
+        qText = `Find x if: ${a}x + ${b} = ${c} (Enter value of x)`;
+      } else {
+        // Squares or Square Roots
+        num1 = Math.floor(Math.random() * 15) + 5;
+        ans = num1 * num1;
+        qText = `What is the square of ${num1} (${num1}²)?`;
+      }
+      currentQuizAnswer = ans;
+    } else {
+      // Hard (NDA / B.Sc. Level)
+      const type = Math.floor(Math.random() * 3);
+      if(type === 0) {
+        // Trigonometry identity value or angle
+        let angles = [0, 30, 45, 60, 90];
+        let ang = angles[Math.floor(Math.random() * angles.length)];
+        if(ang === 0) { ans = 0; qText = `Evaluate sin(0°) + cos(0°)? (Note: sin0=0, cos0=1)`; ans = 1; }
+        else if(ang === 30) { ans = 1; qText = `Evaluate: If tan(θ) = 1/√3, what is θ in degrees?`; ans = 30; }
+        else if(ang === 45) { ans = 2; qText = `Evaluate: sin²(45°) + cos²(45°)?`; ans = 1; }
+        else if(ang === 60) { ans = 3; qText = `Evaluate: tan(60°) × cot(60°)?`; ans = 1; }
+        else { ans = 1; qText = `Evaluate: sin(90°) × cos(0°)?`; ans = 1; }
+      } else if(type === 1) {
+        // Arithmetic Progression (AP) nth term or sum
+        let a = Math.floor(Math.random() * 5) + 1;
+        let d = Math.floor(Math.random() * 4) + 2;
+        let n = 10; // 10th term
+        ans = a + (n - 1) * d;
+        qText = `Find the 10th term of AP where first term a=${a} and common difference d=${d}?`;
+      } else {
+        // Derivative basic: d/dx (x^n) -> e.g., for 3x^2 at x=2
+        let coeff = Math.floor(Math.random() * 3) + 2;
+        let pow = 3;
+        let xVal = 2;
+        // derivative of coeff*x^pow is coeff*pow*x^(pow-1) -> at x=2
+        ans = coeff * pow * Math.pow(xVal, pow - 1);
+        qText = `If f(x) = ${coeff}x³, find the derivative f'(x) when x = ${xVal}?`;
+      }
+      currentQuizAnswer = ans;
+    }
+
+    qBox.innerText = qText;
+  }
+
+  function submitQuizAnswer() {
+    const userAnsInput = document.getElementById('quizUserAnswer').value;
+    const feedback = document.getElementById('quizFeedback');
+    feedback.style.display = 'block';
+
+    if(userAnsInput === "") {
+      feedback.style.borderLeftColor = varColor('--orange');
+      feedback.innerHTML = "⚠️ Please enter an answer first.";
+      return;
+    }
+
+    const userVal = parseFloat(userAnsInput);
+    if(Math.abs(userVal - currentQuizAnswer) < 0.001) {
+      quizScore += 10;
+      quizStreakCount += 1;
+      feedback.style.borderLeftColor = 'var(--green)';
+      feedback.innerHTML = `✅ <strong>Correct!</strong> Great job. (+10 Score)<br>Correct Answer was: <strong>${currentQuizAnswer}</strong>`;
+    } else {
+      quizStreakCount = 0;
+      feedback.style.borderLeftColor = 'var(--red)';
+      feedback.innerHTML = `❌ <strong>Incorrect!</strong><br>Your Answer: ${userVal} | Correct Answer: <strong>${currentQuizAnswer}</strong>`;
+    }
+
+    document.getElementById('quizScore').innerText = quizScore;
+    document.getElementById('quizStreak').innerText = quizStreakCount;
+  }
+
+  function checkQuizEnter(e) {
+    if(e.key === 'Enter') submitQuizAnswer();
+  }
+
+  function varColor(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name);
+  }
+
+  // Books Hub with Direct Official Links & Downloader
+  function loadBook(category) {
+    const viewer = document.getElementById('bookContentViewer');
+    const dlContainer = document.getElementById('offlineDownloadContainer');
+    dlContainer.innerHTML = '';
+
+    if(category === 'nda') {
+      viewer.innerHTML = `🎖️ <strong>NDA & Defence Exam Official Hub</strong>
+
+• <strong>Mathematics (Code 01):</strong> Algebra, Matrices, Determinants, Trigonometry, Analytical Geometry, Differential Calculus, Integral Calculus, Vector Algebra, Probability & Statistics.
+• <strong>General Ability Test - GAT (Code 02):</strong>
+  - Part A (English - 200 Marks): Grammar, Vocabulary, Comprehension.
+  - Part B (General Knowledge - 400 Marks): Physics, Chemistry, General Science, History, Freedom Movement, Geography, Current Events.
+
+🌐 <strong>Official Direct Resources & Portals:</strong>
+• UPSC Official Exam Portal: <a href="https://www.upsc.gov.in" target="_blank" style="color:var(--blue)">upsc.gov.in</a>
+• Previous Year Question Papers: <a href="https://www.upsc.gov.in/examinations/previous-question-papers" target="_blank" style="color:var(--blue)">UPSC PYQ Repository</a>`;
+
+      dlContainer.innerHTML = `<button class="action-btn green" onclick="downloadStudyGuide('NDA_Preparation_Guide')">📥 Download NDA Study Guide (.txt)</button>`;
+
+    } else if(category === 'bsc') {
+      viewer.innerHTML = `🎓 <strong>B.Sc. PCM Semester Hub (Rajju Bhaiya University / General)</strong>
+
+• <strong>Physics (Mechanics & Waves):</strong> Vector Mechanics, Laws of Motion, Conservative Forces, Simple Harmonic Motion, Wave Equations.
+• <strong>Chemistry (Organic & Inorganic):</strong> Atomic Structure, Periodic Properties, Chemical Bonding, Alkanes, Alkenes, Stereochemistry.
+• <strong>Mathematics (Algebra & Calculus):</strong> Matrices & Theory of Equations, Polar Coordinates, Successive Differentiation, Partial Differentiation.
+
+🌐 <strong>Official Direct E-Learning Portals:</strong>
+• NPTEL Online Courses: <a href="https://nptel.ac.in" target="_blank" style="color:var(--blue)">nptel.ac.in</a>
+• e-PG Pathshala (MHRD): <a href="https://epgp.inflibnet.ac.in" target="_blank" style="color:var(--blue)">epgp.inflibnet.ac.in</a>`;
+
+      dlContainer.innerHTML = `<button class="action-btn purple" onclick="downloadStudyGuide('BSc_PCM_Semester_Notes')">📥 Download B.Sc. PCM Guide (.txt)</button>`;
+
+    } else if(category === 'ssc') {
+      viewer.innerHTML = `💼 <strong>SSC, GD Constable & Railway Exam Hub</strong>
+
+• <strong>Quantitative Aptitude:</strong> Number Systems, LCM/HCF, Percentage, Ratio & Proportion, Profit & Loss, SI/CI, Time & Work, Speed Distance.
+• <strong>General Intelligence & Reasoning:</strong> Analogies, Coding-Decoding, Syllogism, Blood Relations, Non-Verbal Reasoning.
+• <strong>General Awareness & English:</strong> Indian Polity, Economics, Static GK, Comprehension, Cloze Test.
+
+🌐 <strong>Official Direct Portals:</strong>
+• Staff Selection Commission: <a href="https://ssc.nic.in" target="_blank" style="color:var(--blue)">ssc.nic.in</a>`;
+
+      dlContainer.innerHTML = `<button class="action-btn" onclick="downloadStudyGuide('SSC_Railway_Guide')">📥 Download SSC Study Guide (.txt)</button>`;
+
+    } else if(category === 'ncert') {
+      viewer.innerHTML = `📖 <strong>NCERT 11th & 12th Textbooks Hub</strong>
+
+• Essential for building rock-solid fundamentals in Physics, Chemistry, and Mathematics for both NDA and University entrance examinations.
+
+🌐 <strong>Official Direct PDF Download Portal:</strong>
+• NCERT Official e-Book Repository: <a href="https://ncert.nic.in/textbook.php" target="_blank" style="color:var(--blue)">ncert.nic.in/textbook.php</a>`;
+
+      dlContainer.innerHTML = `<button class="action-btn gray" onclick="downloadStudyGuide('NCERT_Reference_Guide')">📥 Download NCERT Reading List (.txt)</button>`;
+    }
+  }
+
+  function downloadStudyGuide(guideName) {
+    const textContent = `ANSH.STUDY - OFFICIAL STUDY GUIDE & ROADMAP\nGenerated for: Ansh (B.Sc. & NDA Aspirant)\nGuide: ${guideName}\n\n1. Maintain 11-hour daily focused schedule.\n2. Revise core formulas and practice 50+ math questions daily.\n3. Utilize online portals and mock tests regularly.\n\nBest of luck with your preparation!`;
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${guideName}_AnshStudy.txt`;
+    a.click();
+  }
+
+  // Other Tools Functions
   function calcPercentage() {
     const obt = parseFloat(document.getElementById('obtMarks').value);
     const tot = parseFloat(document.getElementById('totMarks').value);
     const res = document.getElementById('resPercentage');
-    if (isNaN(obt) || isNaN(tot) || tot <= 0) {
-      res.textContent = "⚠️ Please enter valid obtained and total marks.";
+    if(isNaN(obt) || isNaN(tot) || tot <= 0) {
+      res.innerText = "Please enter valid marks.";
       return;
     }
-    const pct = ((obt / tot) * 100).toFixed(2);
-    res.textContent = `✅ Your Percentage: ${pct}%`;
+    const perc = ((obt / tot) * 100).toFixed(2);
+    res.innerHTML = `Result: <strong>${perc}%</strong> (${obt} out of ${tot})`;
   }
 
-  // Smart Calculator
   function runCalc(op) {
     const a = parseFloat(document.getElementById('calcA').value);
     const b = parseFloat(document.getElementById('calcB').value);
     const res = document.getElementById('resCalc');
-    if (isNaN(a) || isNaN(b)) {
-      res.textContent = "⚠️ Please enter both numbers.";
-      return;
-    }
+    if(isNaN(a) || isNaN(b)) { res.innerText = "Please enter both numbers."; return; }
     let ans = 0;
-    if (op === '+') ans = a + b;
-    if (op === '-') ans = a - b;
-    if (op === '*') ans = a * b;
-    if (op === '/') {
-      if (b === 0) { res.textContent = "⚠️ Cannot divide by zero."; return; }
-      ans = (a / b).toFixed(4);
-    }
-    res.textContent = `✅ Answer: ${ans}`;
+    if(op === '+') ans = a + b;
+    if(op === '-') ans = a - b;
+    if(op === '*') ans = a * b;
+    if(op === '/') ans = b !== 0 ? (a / b).toFixed(2) : "Cannot divide by zero";
+    res.innerHTML = `Answer: <strong>${ans}</strong>`;
   }
 
-  // Study Time Calculator
   function calcStudyTime() {
-    const s = document.getElementById('stStart').value;
-    const e = document.getElementById('stEnd').value;
+    const start = document.getElementById('stStart').value;
+    const end = document.getElementById('stEnd').value;
     const res = document.getElementById('resStudyTime');
-    if (!s || !e) { res.textContent = "⚠️ Please select both times."; return; }
-    const [sh, sm] = s.split(':').map(Number);
-    const [eh, em] = e.split(':').map(Number);
+    if(!start || !end) { res.innerText = "Please select both start and end times."; return; }
+    const [sh, sm] = start.split(':').map(Number);
+    const [eh, em] = end.split(':').map(Number);
     let diff = (eh * 60 + em) - (sh * 60 + sm);
-    if (diff < 0) diff += 1440;
+    if(diff < 0) diff += 24 * 60;
     const hrs = Math.floor(diff / 60);
     const mins = diff % 60;
-    res.textContent = `✅ Total Duration: ${hrs} Hours ${mins} Minutes`;
-  }
-
-  // Exam Countdown
-  function saveExam() {
-    const name = document.getElementById('examName').value.trim();
-    const date = document.getElementById('examDate').value;
-    if (!name || !date) return;
-    appData.exam = { name, date };
+    res.innerHTML = `Total Study Duration: <strong>${hrs} hours ${mins} minutes</strong>`;
+    studyMins += diff;
     saveData();
-    renderExam();
   }
 
-  function renderExam() {
+  function saveExam() {
+    const name = document.getElementById('examName').value;
+    const date = document.getElementById('examDate').value;
     const res = document.getElementById('resExam');
-    if (!appData.exam) return;
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const target = new Date(appData.exam.date);
-    const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
-    if (diffDays > 0) {
-      res.textContent = `🎯 ${diffDays} Days remaining for ${appData.exam.name}!`;
-    } else if (diffDays === 0) {
-      res.textContent = `🔥 Today is your ${appData.exam.name} exam! Best of Luck!`;
-    } else {
-      res.textContent = `✅ ${appData.exam.name} exam date has passed.`;
-    }
+    if(!name || !date) { res.innerText = "Please enter exam name and date."; return; }
+    const diffDays = Math.ceil((new Date(date) - new Date()) / (1000 * 60 * 60 * 24));
+    res.innerHTML = `Target: <strong>${name}</strong> in <strong>${diffDays > 0 ? diffDays : 0} days</strong>!`;
   }
 
-  // Focus Timer
-  let timerSec = 25 * 60;
-  let timerInt = null;
-  let selectedMins = 25;
-
-  function updateTimerDisplay() {
-    const m = String(Math.floor(timerSec / 60)).padStart(2, '0');
-    const s = String(timerSec % 60).padStart(2, '0');
-    document.getElementById('timerDisplay').textContent = `${m}:${s}`;
-  }
-
+  // Timer state
+  let timerInterval = null;
+  let timeLeft = 25 * 60;
   function setTimer(mins) {
     pauseTimer();
-    selectedMins = mins;
-    timerSec = mins * 60;
+    timeLeft = mins * 60;
     updateTimerDisplay();
   }
-
+  function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+  }
   function startTimer() {
-    if (timerInt) return;
-    timerInt = setInterval(() => {
-      if (timerSec > 0) {
-        timerSec--;
+    if(timerInterval) return;
+    timerInterval = setInterval(() => {
+      if(timeLeft > 0) {
+        timeLeft--;
         updateTimerDisplay();
       } else {
         pauseTimer();
-        appData.minutes += selectedMins;
-        checkAndUpdateStreak(); // टाइमर पूरा होने पर स्ट्रीक अपडेट होगी
+        alert("Focus session completed! Great job.");
+        studyMins += 25;
         saveData();
-        alert(`🎉 Great job! ${selectedMins} minutes added to your dashboard!`);
       }
     }, 1000);
   }
+  function pauseTimer() { clearInterval(timerInterval); timerInterval = null; }
+  function resetTimer() { pauseTimer(); timeLeft = 25 * 60; updateTimerDisplay(); }
 
-  function pauseTimer() {
-    clearInterval(timerInt);
-    timerInt = null;
-  }
-
-  function resetTimer() {
-    pauseTimer();
-    timerSec = selectedMins * 60;
-    updateTimerDisplay();
-  }
-
-  // Daily Planner
-  function addTask() {
-    const inp = document.getElementById('taskInput');
-    if (!inp.value.trim()) return;
-    appData.tasks.push({ text: inp.value.trim(), done: false });
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function toggleTask(idx) {
-    appData.tasks[idx].done = !appData.tasks[idx].done;
-    if (appData.tasks[idx].done) {
-      checkAndUpdateStreak(); // टास्क टिक करने पर स्ट्रीक बढ़ेगी
-    }
-    saveData();
-    renderLists();
-  }
-
-  function delTask(idx) {
-    appData.tasks.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // Revision Tracker
-  function addRevision() {
-    const inp = document.getElementById('revInput');
-    if (!inp.value.trim()) return;
-    appData.revisions.push({ text: inp.value.trim(), count: 1 });
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function incRev(idx) {
-    appData.revisions[idx].count++;
-    checkAndUpdateStreak();
-    saveData();
-    renderLists();
-  }
-
-  function delRev(idx) {
-    appData.revisions.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // Digital Notes
-  function addNote() {
-    const inp = document.getElementById('noteInput');
-    if (!inp.value.trim()) return;
-    appData.notes.push(inp.value.trim());
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function delNote(idx) {
-    appData.notes.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // Daily Goals
-  function addGoal() {
-    const inp = document.getElementById('goalInput');
-    if (!inp.value.trim()) return;
-    appData.goals.push({ text: inp.value.trim(), done: false });
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function toggleGoal(idx) {
-    appData.goals[idx].done = !appData.goals[idx].done;
-    if (appData.goals[idx].done) {
-      checkAndUpdateStreak(); // गोल पूरा होने पर स्ट्रीक बढ़ेगी
-    }
-    saveData();
-    renderLists();
-  }
-
-  function delGoal(idx) {
-    appData.goals.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // Study Books Hub Data
-  function loadBook(sub) {
-    const viewer = document.getElementById('bookContentViewer');
-    if (sub === 'math') {
-      viewer.innerHTML = "📐 **Mathematics Quick Reference:**\n• Calculus Formulas (Derivatives & Integrals)\n• Algebra & Quadratic Equations shortcuts\n• Trigonometric Identities summary notes.";
-    } else if (sub === 'physics') {
-      viewer.innerHTML = "⚡ **Physics Quick Notes:**\n• Mechanics & Kinematics laws\n• Electrostatics & Current Electricity formulas\n• Optics & Ray diagrams summary.";
-    } else if (sub === 'chemistry') {
-      viewer.innerHTML = "🧪 **Chemistry Cheat Sheet:**\n• Periodic Table trends & properties\n• Organic Name Reactions\n• Physical Chemistry key formulas.";
-    } else if (sub === 'nda') {
-      viewer.innerHTML = "🎖️ **NDA / Defence Exam Focus:**\n• Mathematics (Algebra, Matrices, Calculus)\n• General Ability Test (GAT): English, Physics, Chemistry, History & Geography PYQs.";
-    }
-  }
-
-  // Render All Lists & Dashboard
-  function renderLists() {
-    const tList = document.getElementById('taskList');
-    tList.innerHTML = appData.tasks.map((t, i) => `
-      <li class="${t.done ? 'done' : ''}">
-        <span onclick="toggleTask(${i})" style="cursor:pointer;flex:1;">${t.done ? '✅' : '⬜'} ${t.text}</span>
+  // Tasks / Planner
+  function renderTasks() {
+    const list = document.getElementById('taskList');
+    list.innerHTML = '';
+    tasks.forEach((t, i) => {
+      list.innerHTML += `<li class="${t.done ? 'done' : ''}">
+        <span onclick="toggleTask(${i})" style="cursor:pointer;">${t.text}</span>
         <button class="del-btn" onclick="delTask(${i})">✕</button>
-      </li>
-    `).join('');
-
-    const rList = document.getElementById('revList');
-    rList.containerHTML = '';
-    rList.innerHTML = appData.revisions.map((r, i) => `
-      <li>
-        <span>📖 ${r.text} <strong>(Revised: ${r.count}x)</strong></span>
-        <div>
-          <button class="action-btn gray" style="padding:4px 8px;font-size:11px;" onclick="incRev(${i})">+1</button>
-          <button class="del-btn" onclick="delRev(${i})">✕</button>
-        </div>
-      </li>
-    `).join('');
-
-    const nList = document.getElementById('noteList');
-    nList.innerHTML = appData.notes.map((n, i) => `
-      <li>
-        <span style="white-space:pre-wrap;">📝 ${n}</span>
-        <button class="del-btn" onclick="delNote(${i})">✕</button>
-      </li>
-    `).join('');
-
-    const gList = document.getElementById('goalList');
-    gList.innerHTML = appData.goals.map((g, i) => `
-      <li class="${g.done ? 'done' : ''}">
-        <span onclick="toggleGoal(${i})" style="cursor:pointer;flex:1;">${g.done ? '🏆' : '🎯'} ${g.text}</span>
-        <button class="del-btn" onclick="delGoal(${i})">✕</button>
-      </li>
-    `).join('');
+      </li>`;
+    });
+    saveData();
   }
-
-  function updateDashboard() {
-    const pending = appData.tasks.filter(t => !t.done).length;
-    const completed = appData.tasks.filter(t => t.done).length;
-    document.getElementById('statPending').textContent = pending;
-    document.getElementById('statCompleted').textContent = completed;
-    document.getElementById('statMinutes').textContent = appData.minutes;
-    document.getElementById('statStreak').textContent = appData.streak; // स्ट्रीक वैल्यू अपडेट होगी
+  function addTask() {
+    const val = document.getElementById('taskInput').value.trim();
+    if(!val) return;
+    tasks.push({ text: val, done: false });
+    document.getElementById('taskInput').value = '';
+    renderTasks();
   }
+  function toggleTask(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
+  function delTask(i) { tasks.splice(i, 1); renderTasks(); }
 
-  function exportBackup() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ansh_study_backup.json");
-    document.body.appendChild(dlAnchor);
-    dlAnchor.click();
-    dlAnchor.remove();
+  // Revisions
+  function renderRevisions() {
+    const list = document.getElementById('revList');
+    list.innerHTML = '';
+    revisions.forEach((r, i) => {
+      list.innerHTML += `<li><span>${r.text}</span><button class="del-btn" onclick="delRev(${i})">✕</button></li>`;
+    });
+    saveData();
   }
+  function addRevision() {
+    const val = document.getElementById('revInput').value.trim();
+    if(!val) return;
+    revisions.push({ text: val });
+    document.getElementById('revInput').value = '';
+    renderRevisions();
+  }
+  function delRev(i) { revisions.splice(i, 1); renderRevisions(); }
 
-  // Initialize
-  renderLists();
-  renderExam();
-  updateDashboard();
+  // Notes
+  function renderNotes() {
+    const list = document.getElementById('noteList');
+    list.innerHTML = '';
+    notes.forEach((n, i) => {
+      list.innerHTML += `<li><span style="white-space:pre-wrap;">${n.text}</span><button class="del-btn" onclick="delNote(${i})">✕</button></li>`;
+    });
+    saveData();
+  }
+  function addNote() {
+    const val = document.getElementById('noteInput').value.trim();
+    if(!val) return;
+    notes.push({ text: val });
+    document.getElementById('noteInput').value = '';
+    renderNotes();
+  }
+  function delNote(i) { notes.splice(i, 1); renderNotes(); }
+
+  // Goals
+  function renderGoals() {
+    const list = document.getElementById('goalList');
+    list.innerHTML = '';
+    goals.forEach((g, i) => {
+      list.innerHTML += `<li><span>${g.text}</span><button class="del-btn" onclick="delGoal(${i})">✕</button></li>`;
+    });
+    saveData();
+  }
+  function addGoal() {
+    const val = document.getElementById('goalInput').value.trim();
+    if(!val) return;
+    goals.push({ text: val });
+    document.getElementById('goalInput').value = '';
+    renderGoals();
+  }
+  function delGoal(i) { goals.splice(i, 1); renderGoals(); }
+
+  // Initial load
+  renderTasks();
+  renderRevisions();
+  renderNotes();
+  renderGoals();
+  updateDashboardStats();
+  updateTimerDisplay();
 </script>
 </body>
-</html.
+</html>
