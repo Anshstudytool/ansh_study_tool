@@ -779,3 +779,511 @@
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANSH.STUDY - Study Smart. Achieve More.</title>
+<style>
+  :root {
+    --bg: #0b1120;
+    --panel: #131c31;
+    --panel2: #1a2642;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --blue: #3b82f6;
+    --blue-hover: #2563eb;
+    --green: #10b981;
+    --red: #ef4444;
+    --line: #1e293b;
+    --orange: #f59e0b;
+  }
+  body.light {
+    --bg: #f8fafc;
+    --panel: #ffffff;
+    --panel2: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
+  
+  /* Header */
+  header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px; border-bottom: 1px solid var(--line);
+    background: var(--panel); position: sticky; top: 0; z-index: 100;
+  }
+  .brand { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
+  .brand span { color: var(--blue); }
+  .nav-btns { display: flex; gap: 10px; }
+  .icon-btn {
+    background: var(--panel2); border: 1px solid var(--line); color: var(--text);
+    padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
+  }
+
+  /* Container */
+  .wrap { max-width: 1050px; margin: 0 auto; padding: 20px 16px; }
+
+  /* Hero Section */
+  .hero {
+    text-align: center; padding: 35px 15px;
+    background: radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 70%);
+    border-radius: 16px; margin-bottom: 20px;
+  }
+  .badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    background: rgba(59,130,246,0.15); color: #60a5fa;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .hero h1 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  .hero h1 span { color: #60a5fa; }
+  .hero p { color: var(--muted); font-size: 14px; max-width: 450px; margin: 0 auto; }
+
+  /* News Ticker Bar */
+  .news-ticker {
+    background: var(--panel); border: 1px solid var(--orange);
+    border-radius: 12px; padding: 12px 16px; margin-bottom: 22px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .news-tag { background: var(--orange); color: #000; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; white-space: nowrap; }
+  .news-content { font-size: 13px; color: var(--text); font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+  /* Section Title */
+  .sec-title { font-size: 17px; font-weight: 700; margin: 22px 0 12px; display: flex; align-items: center; gap: 8px; }
+
+  /* Stats Dashboard */
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+  .stat-card {
+    background: var(--panel); border: 1px solid var(--line);
+    padding: 16px; border-radius: 12px;
+  }
+  .stat-icon { font-size: 20px; margin-bottom: 6px; }
+  .stat-val { font-size: 24px; font-weight: 800; }
+  .stat-lbl { font-size: 12px; color: var(--muted); }
+
+  /* Search Bar */
+  .search-box { display: flex; gap: 8px; margin-bottom: 18px; }
+  .search-box input {
+    flex: 1; padding: 11px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--text);
+    font-size: 14px; outline: none;
+  }
+  .search-box button {
+    padding: 0 18px; border-radius: 10px; border: none;
+    background: var(--blue); color: white; font-weight: 600; cursor: pointer;
+  }
+
+  /* Tools & Books Grid */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .tool-card {
+    background: var(--panel); border: 1px solid var(--line);
+    padding: 16px; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .tool-card.hidden { display: none !important; }
+  .t-icon { font-size: 24px; margin-bottom: 10px; }
+  .t-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+  .t-desc { font-size: 12px; color: var(--muted); margin-bottom: 15px; flex: 1; }
+  .open-btn {
+    width: 100%; padding: 9px; border-radius: 8px; border: none;
+    background: var(--blue); color: white; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: 0.2s;
+  }
+  .open-btn:hover { background: var(--blue-hover); }
+  .open-btn.green { background: var(--green); }
+
+  /* Active Tool Workspace */
+  .tool-area {
+    display: none; background: var(--panel); border: 2px solid var(--blue);
+    border-radius: 16px; padding: 20px; margin: 20px 0;
+    animation: fadeIn 0.25s ease;
+  }
+  .tool-area.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  
+  .tool-header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px;
+  }
+  .tool-header h2 { font-size: 18px; }
+  .close-btn {
+    background: var(--red); color: white; border: none;
+    padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+
+  /* Forms & Inputs */
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .form-control {
+    width: 100%; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--panel2); color: var(--text);
+    font-size: 14px; outline: none;
+  }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .action-btn {
+    padding: 10px 16px; border-radius: 8px; border: none;
+    background: var(--blue); color: white; font-weight: 600; font-size: 13px; cursor: pointer;
+  }
+  .action-btn.green { background: var(--green); }
+  .action-btn.gray { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
+  
+  .result-box {
+    margin-top: 14px; padding: 12px; border-radius: 8px;
+    background: var(--panel2); border-left: 4px solid var(--blue);
+    font-weight: 600; font-size: 14px;
+  }
+
+  /* Lists */
+  .item-list { list-style: none; margin-top: 12px; }
+  .item-list li {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--panel2); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .item-list li.done span { text-decoration: line-through; color: var(--muted); }
+  .del-btn { background: transparent; border: none; color: var(--red); font-weight: bold; cursor: pointer; padding: 4px 8px; }
+
+  /* Timer */
+  .timer-display { font-size: 48px; font-weight: 900; text-align: center; margin: 15px 0; font-variant-numeric: tabular-nums; }
+
+  footer {
+    text-align: center; padding: 30px 15px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12px; margin-top: 35px;
+  }
+
+  @media (min-width: 650px) {
+    .stats { grid-template-columns: repeat(4, 1fr); }
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 360px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">ANSH<span>.STUDY</span></div>
+  <div class="nav-btns">
+    <button class="icon-btn" onclick="toggleTheme()" title="Change Theme">🌓 Theme</button>
+    <button class="icon-btn" onclick="exportBackup()">💾 Backup</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="badge">✨ YOUR PERSONAL STUDY PARTNER</div>
+    <h1>Study Smart.<br><span>Achieve More.</span></h1>
+    <p>Plan better. Focus deeper, read news & access study books in one place.</p>
+  </div>
+
+  <!-- 📰 Live News / Exam Update Ticker -->
+  <div class="news-ticker">
+    <div class="news-tag">🔥 Flash News</div>
+    <div class="news-content" id="newsTickerText">UPSC NDA & B.Sc. Exam preparation tips updated. Check study tools & free books below!</div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="sec-title">📊 Your Dashboard</div>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-icon">📚</div>
+      <div class="stat-val" id="statPending">0</div>
+      <div class="stat-lbl">Pending Tasks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-val" id="statCompleted">0</div>
+      <div class="stat-lbl">Completed Tasks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⏱️</div>
+      <div class="stat-val" id="statMinutes">0</div>
+      <div class="stat-lbl">Study Mins Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-val" id="statStreak">1</div>
+      <div class="stat-lbl">Day Streak</div>
+    </div>
+  </div>
+
+  <!-- ACTIVE TOOL WORKSPACE -->
+  <div id="workspace">
+
+    <!-- Percentage Calculator -->
+    <div id="tool-percentage" class="tool-area">
+      <div class="tool-header">
+        <h2>📈 Percentage Calculator</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="form-group">
+        <label>Obtained Marks (प्राप्त अंक)</label>
+        <input type="number" id="obtMarks" class="form-control" placeholder="e.g. 425">
+      </div>
+      <div class="form-group">
+        <label>Total Marks (कुल अंक)</label>
+        <input type="number" id="totMarks" class="form-control" placeholder="e.g. 500">
+      </div>
+      <button class="action-btn" onclick="calcPercentage()">Calculate Percentage</button>
+      <div class="result-box" id="resPercentage">Result will appear here...</div>
+    </div>
+
+    <!-- Smart Calculator -->
+    <div id="tool-calculator" class="tool-area">
+      <div class="tool-header">
+        <h2>🧮 Smart Calculator</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="form-group">
+        <label>First Number</label>
+        <input type="number" id="calcA" class="form-control" placeholder="Enter first number">
+      </div>
+      <div class="form-group">
+        <label>Second Number</label>
+        <input type="number" id="calcB" class="form-control" placeholder="Enter second number">
+      </div>
+      <div class="btn-row">
+        <button class="action-btn" onclick="runCalc('+')">+ Add</button>
+        <button class="action-btn" onclick="runCalc('-')">- Subtract</button>
+        <button class="action-btn" onclick="runCalc('*')">× Multiply</button>
+        <button class="action-btn" onclick="runCalc('/')">÷ Divide</button>
+      </div>
+      <div class="result-box" id="resCalc">Answer: 0</div>
+    </div>
+
+    <!-- Study Time Calculator -->
+    <div id="tool-studytime" class="tool-area">
+      <div class="tool-header">
+        <h2>⌚ Study Time Calculator</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="form-group">
+        <label>Start Time</label>
+        <input type="time" id="stStart" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>End Time</label>
+        <input type="time" id="stEnd" class="form-control">
+      </div>
+      <button class="action-btn" onclick="calcStudyTime()">Calculate Duration</button>
+      <div class="result-box" id="resStudyTime">Select start and end time.</div>
+    </div>
+
+    <!-- Exam Countdown -->
+    <div id="tool-countdown" class="tool-area">
+      <div class="tool-header">
+        <h2>🎯 Exam Countdown</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="form-group">
+        <label>Exam Name</label>
+        <input type="text" id="examName" class="form-control" placeholder="Enter exam name (e.g. NDA Exam)">
+      </div>
+      <div class="form-group">
+        <label>Exam Date</label>
+        <input type="date" id="examDate" class="form-control">
+      </div>
+      <button class="action-btn" onclick="saveExam()">Set Countdown</button>
+      <div class="result-box" id="resExam">No exam date set yet.</div>
+    </div>
+
+    <!-- Focus Timer -->
+    <div id="tool-timer" class="tool-area">
+      <div class="tool-header">
+        <h2>⏳ Focus Timer (Pomodoro)</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="btn-row" style="justify-content:center;">
+        <button class="action-btn gray" onclick="setTimer(25)">25 Min</button>
+        <button class="action-btn gray" onclick="setTimer(45)">45 Min</button>
+        <button class="action-btn gray" onclick="setTimer(60)">60 Min</button>
+      </div>
+      <div class="timer-display" id="timerDisplay">25:00</div>
+      <div class="btn-row" style="justify-content:center;">
+        <button class="action-btn green" onclick="startTimer()">▶ Start</button>
+        <button class="action-btn gray" onclick="pauseTimer()">⏸ Pause</button>
+        <button class="action-btn" onclick="resetTimer()">🔄 Reset</button>
+      </div>
+    </div>
+
+    <!-- Daily Planner -->
+    <div id="tool-planner" class="tool-area">
+      <div class="tool-header">
+        <h2>📋 Daily Planner</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="taskInput" placeholder="Add a new study task...">
+        <button onclick="addTask()">Add</button>
+      </div>
+      <ul class="item-list" id="taskList"></ul>
+    </div>
+
+    <!-- Revision Tracker -->
+    <div id="tool-revision" class="tool-area">
+      <div class="tool-header">
+        <h2>📖 Revision Tracker</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="revInput" placeholder="Subject / Chapter name...">
+        <button onclick="addRevision()">Add</button>
+      </div>
+      <ul class="item-list" id="revList"></ul>
+    </div>
+
+    <!-- Digital Notes -->
+    <div id="tool-notes" class="tool-area">
+      <div class="tool-header">
+        <h2>📝 Digital Notes</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="form-group">
+        <textarea id="noteInput" rows="3" class="form-control" placeholder="Write your formula or note..."></textarea>
+      </div>
+      <button class="action-btn" onclick="addNote()">Save Note</button>
+      <ul class="item-list" id="noteList"></ul>
+    </div>
+
+    <!-- Daily Goals -->
+    <div id="tool-goals" class="tool-area">
+      <div class="tool-header">
+        <h2>🏆 Daily Goals</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="goalInput" placeholder="Set today's main target...">
+        <button onclick="addGoal()">Add</button>
+      </div>
+      <ul class="item-list" id="goalList"></ul>
+    </div>
+
+    <!-- 📚 Study Books & Materials Hub -->
+    <div id="tool-books" class="tool-area">
+      <div class="tool-header">
+        <h2>📚 Free Study Books & PDFs</h2>
+        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select a subject to read important notes & reference books:</p>
+      <div class="btn-row">
+        <button class="action-btn" onclick="loadBook('math')">📐 Mathematics</button>
+        <button class="action-btn" onclick="loadBook('physics')">⚡ Physics</button>
+        <button class="action-btn" onclick="loadBook('chemistry')">🧪 Chemistry</button>
+        <button class="action-btn green" onclick="loadBook('nda')">🎖️ NDA / Defence</button>
+      </div>
+      <div class="result-box" id="bookContentViewer" style="margin-top:15px; white-space:pre-wrap; font-weight:normal; font-size:13px;">
+        Click any category above to view quick formulas and book resources.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Explore Study Tools & Books -->
+  <div class="sec-title">🚀 Explore Study Tools & Books</div>
+  <div class="search-box">
+    <input type="text" id="searchInput" onkeyup="filterTools()" placeholder="Search tools, calculators, books...">
+    <button onclick="filterTools()">Search</button>
+  </div>
+
+  <div class="grid" id="toolsGrid">
+    <div class="tool-card" data-search="percentage calculator marks">
+      <div>
+        <div class="t-icon">📈</div>
+        <div class="t-title">Percentage Calculator</div>
+        <div class="t-desc">Calculate percentage and exam scores easily.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('percentage')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="smart calculator math">
+      <div>
+        <div class="t-icon">🧮</div>
+        <div class="t-title">Smart Calculator</div>
+        <div class="t-desc">Perform everyday mathematical calculations.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('calculator')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="study time duration hours">
+      <div>
+        <div class="t-icon">⌚</div>
+        <div class="t-title">Study Time Calculator</div>
+        <div class="t-desc">Find your total study duration per day.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('studytime')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="exam countdown days">
+      <div>
+        <div class="t-icon">🎯</div>
+        <div class="t-title">Exam Countdown</div>
+        <div class="t-desc">Track remaining days for your target exams.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('countdown')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="focus timer pomodoro">
+      <div>
+        <div class="t-icon">⏳</div>
+        <div class="t-title">Focus Timer</div>
+        <div class="t-desc">Stay focused using timed study sessions.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('timer')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="daily planner todo tasks">
+      <div>
+        <div class="t-icon">📋</div>
+        <div class="t-title">Daily Planner</div>
+        <div class="t-desc">Organize and complete your daily tasks.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('planner')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="revision tracker chapters">
+      <div>
+        <div class="t-icon">📖</div>
+        <div class="t-title">Revision Tracker</div>
+        <div class="t-desc">Track chapters and revision progress.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('revision')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="digital notes write">
+      <div>
+        <div class="t-icon">📝</div>
+        <div class="t-title">Digital Notes</div>
+        <div class="t-desc">Write and save your important study notes.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('notes')">Open Tool →</button>
+    </div>
+
+    <div class="tool-card" data-search="daily goals targets">
+      <div>
+        <div class="t-icon">🏆</div>
+        <div class="t-title">Daily Goals</div>
+        <div class="t-desc">Set targets and monitor your progress.</div>
+      </div>
+      <button class="open-btn" onclick="openTool('goals')">Open Tool →</button>
+    </div>
+
+    <!-- New Books Card -->
+    <div class="tool-card" data-search="books pdf notes library">
+      <div>
+        <div class="t-icon">📚</div>
+        <div class="t-title">Study Books Hub</div>
+        <div class="t-desc">Access quick reference books, formulas & notes.</div>
+      </div>
+      <button class="open-btn green" onclick="openTool('books')">Explore Books →</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>ANSH STUDY TOOLS</strong><br>
+  Study • Focus • Revise • Succeed<br>
+  Made for 
