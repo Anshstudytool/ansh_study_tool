@@ -531,8 +531,40 @@
     revisions: [],
     notes: [],
     goals: [],
-    exam: null
+    exam: null,
+    streak: 1,
+    lastActiveDate: null
   };
+
+  // Streak Calculation Function
+  function checkAndUpdateStreak() {
+    const todayStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    
+    if (!appData.lastActiveDate) {
+      appData.lastActiveDate = todayStr;
+      appData.streak = 1;
+    } else {
+      const lastDate = new Date(appData.lastActiveDate);
+      const currentDate = new Date(todayStr);
+      
+      const diffTime = currentDate - lastDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 1) {
+        // Next consecutive day
+        appData.streak += 1;
+        appData.lastActiveDate = todayStr;
+      } else if (diffDays > 1) {
+        // Streak broken
+        appData.streak = 1;
+        appData.lastActiveDate = todayStr;
+      }
+      // If diffDays === 0 (same day), streak remains unchanged
+    }
+  }
+
+  // Run streak check on load
+  checkAndUpdateStreak();
 
   function saveData() {
     localStorage.setItem('anshStudyData', JSON.stringify(appData));
@@ -671,6 +703,7 @@
       } else {
         pauseTimer();
         appData.minutes += selectedMins;
+        checkAndUpdateStreak(); // टाइमर पूरा होने पर स्ट्रीक अपडेट होगी
         saveData();
         alert(`🎉 Great job! ${selectedMins} minutes added to your dashboard!`);
       }
@@ -700,6 +733,9 @@
 
   function toggleTask(idx) {
     appData.tasks[idx].done = !appData.tasks[idx].done;
+    if (appData.tasks[idx].done) {
+      checkAndUpdateStreak(); // टास्क टिक करने पर स्ट्रीक बढ़ेगी
+    }
     saveData();
     renderLists();
   }
@@ -722,6 +758,7 @@
 
   function incRev(idx) {
     appData.revisions[idx].count++;
+    checkAndUpdateStreak();
     saveData();
     renderLists();
   }
@@ -760,6 +797,9 @@
 
   function toggleGoal(idx) {
     appData.goals[idx].done = !appData.goals[idx].done;
+    if (appData.goals[idx].done) {
+      checkAndUpdateStreak(); // गोल पूरा होने पर स्ट्रीक बढ़ेगी
+    }
     saveData();
     renderLists();
   }
@@ -795,6 +835,7 @@
     `).join('');
 
     const rList = document.getElementById('revList');
+    rList.containerHTML = '';
     rList.innerHTML = appData.revisions.map((r, i) => `
       <li>
         <span>📖 ${r.text} <strong>(Revised: ${r.count}x)</strong></span>
@@ -828,6 +869,7 @@
     document.getElementById('statPending').textContent = pending;
     document.getElementById('statCompleted').textContent = completed;
     document.getElementById('statMinutes').textContent = appData.minutes;
+    document.getElementById('statStreak').textContent = appData.streak; // स्ट्रीक वैल्यू अपडेट होगी
   }
 
   function exportBackup() {
