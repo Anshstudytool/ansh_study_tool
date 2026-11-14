@@ -16,787 +16,6 @@
     --green: #10b981;
     --red: #ef4444;
     --line: #1e293b;
-  }
-  body.light {
-    --bg: #f8fafc;
-    --panel: #ffffff;
-    --panel2: #f1f5f9;
-    --text: #0f172a;
-    --muted: #64748b;
-    --line: #e2e8f0;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
-  
-  /* Header */
-  header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 20px; border-bottom: 1px solid var(--line);
-    background: var(--panel); position: sticky; top: 0; z-index: 100;
-  }
-  .brand { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
-  .brand span { color: var(--blue); }
-  .nav-btns { display: flex; gap: 10px; }
-  .icon-btn {
-    background: var(--panel2); border: 1px solid var(--line); color: var(--text);
-    padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
-  }
-
-  /* Container */
-  .wrap { max-width: 1050px; margin: 0 auto; padding: 20px 16px; }
-
-  /* Hero Section */
-  .hero {
-    text-align: center; padding: 35px 15px;
-    background: radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 70%);
-    border-radius: 16px; margin-bottom: 25px;
-  }
-  .badge {
-    display: inline-block; padding: 4px 12px; border-radius: 20px;
-    background: rgba(59,130,246,0.15); color: #60a5fa;
-    font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px;
-  }
-  .hero h1 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
-  .hero h1 span { color: #60a5fa; }
-  .hero p { color: var(--muted); font-size: 14px; max-width: 450px; margin: 0 auto; }
-
-  /* Section Title */
-  .sec-title { font-size: 17px; font-weight: 700; margin: 22px 0 12px; display: flex; align-items: center; gap: 8px; }
-
-  /* Stats Dashboard */
-  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
-  .stat-card {
-    background: var(--panel); border: 1px solid var(--line);
-    padding: 16px; border-radius: 12px;
-  }
-  .stat-icon { font-size: 20px; margin-bottom: 6px; }
-  .stat-val { font-size: 24px; font-weight: 800; }
-  .stat-lbl { font-size: 12px; color: var(--muted); }
-
-  /* Search Bar */
-  .search-box { display: flex; gap: 8px; margin-bottom: 18px; }
-  .search-box input {
-    flex: 1; padding: 11px 14px; border-radius: 10px;
-    border: 1px solid var(--line); background: var(--panel); color: var(--text);
-    font-size: 14px; outline: none;
-  }
-  .search-box button {
-    padding: 0 18px; border-radius: 10px; border: none;
-    background: var(--blue); color: white; font-weight: 600; cursor: pointer;
-  }
-
-  /* Tools Grid */
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .tool-card {
-    background: var(--panel); border: 1px solid var(--line);
-    padding: 16px; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between;
-  }
-  .tool-card.hidden { display: none !important; }
-  .t-icon { font-size: 24px; margin-bottom: 10px; }
-  .t-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
-  .t-desc { font-size: 12px; color: var(--muted); margin-bottom: 15px; flex: 1; }
-  .open-btn {
-    width: 100%; padding: 9px; border-radius: 8px; border: none;
-    background: var(--blue); color: white; font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: 0.2s;
-  }
-  .open-btn:hover { background: var(--blue-hover); }
-
-  /* Active Tool Workspace */
-  .tool-area {
-    display: none; background: var(--panel); border: 2px solid var(--blue);
-    border-radius: 16px; padding: 20px; margin: 20px 0;
-    animation: fadeIn 0.25s ease;
-  }
-  .tool-area.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-  
-  .tool-header {
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px;
-  }
-  .tool-header h2 { font-size: 18px; }
-  .close-btn {
-    background: var(--red); color: white; border: none;
-    padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
-  }
-
-  /* Forms & Inputs inside Tools */
-  .form-group { margin-bottom: 12px; }
-  .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  .form-control {
-    width: 100%; padding: 10px 12px; border-radius: 8px;
-    border: 1px solid var(--line); background: var(--panel2); color: var(--text);
-    font-size: 14px; outline: none;
-  }
-  .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .action-btn {
-    padding: 10px 16px; border-radius: 8px; border: none;
-    background: var(--blue); color: white; font-weight: 600; font-size: 13px; cursor: pointer;
-  }
-  .action-btn.green { background: var(--green); }
-  .action-btn.gray { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
-  
-  .result-box {
-    margin-top: 14px; padding: 12px; border-radius: 8px;
-    background: var(--panel2); border-left: 4px solid var(--blue);
-    font-weight: 600; font-size: 14px;
-  }
-
-  /* List Items (Planner, Revision, Goals, Notes) */
-  .item-list { list-style: none; margin-top: 12px; }
-  .item-list li {
-    display: flex; justify-content: space-between; align-items: center;
-    background: var(--panel2); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
-    font-size: 14px;
-  }
-  .item-list li.done span { text-decoration: line-through; color: var(--muted); }
-  .del-btn { background: transparent; border: none; color: var(--red); font-weight: bold; cursor: pointer; padding: 4px 8px; }
-
-  /* Timer */
-  .timer-display { font-size: 48px; font-weight: 900; text-align: center; margin: 15px 0; font-variant-numeric: tabular-nums; }
-
-  footer {
-    text-align: center; padding: 30px 15px; border-top: 1px solid var(--line);
-    color: var(--muted); font-size: 12px; margin-top: 35px;
-  }
-
-  @media (min-width: 650px) {
-    .stats { grid-template-columns: repeat(4, 1fr); }
-    .grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 360px) {
-    .grid { grid-template-columns: 1fr; }
-  }
-</style>
-</head>
-<body>
-
-<header>
-  <div class="brand">ANSH<span>.STUDY</span></div>
-  <div class="nav-btns">
-    <button class="icon-btn" onclick="toggleTheme()" title="Change Theme">🌓 Theme</button>
-    <button class="icon-btn" onclick="exportBackup()">💾 Backup</button>
-  </div>
-</header>
-
-<div class="wrap">
-  <!-- Hero -->
-  <div class="hero">
-    <div class="badge">✨ YOUR PERSONAL STUDY PARTNER</div>
-    <h1>Study Smart.<br><span>Achieve More.</span></h1>
-    <p>Plan better. Focus deeper. Track your progress. Everything a student needs in one place.</p>
-  </div>
-
-  <!-- Dashboard -->
-  <div class="sec-title">📊 Your Dashboard</div>
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-icon">📚</div>
-      <div class="stat-val" id="statPending">0</div>
-      <div class="stat-lbl">Pending Tasks</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">✅</div>
-      <div class="stat-val" id="statCompleted">0</div>
-      <div class="stat-lbl">Completed Tasks</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">⏱️</div>
-      <div class="stat-val" id="statMinutes">0</div>
-      <div class="stat-lbl">Study Minutes Today</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">🔥</div>
-      <div class="stat-val" id="statStreak">1</div>
-      <div class="stat-lbl">Study Day Streak</div>
-    </div>
-  </div>
-
-  <!-- ACTIVE TOOL WORKSPACE (Opens here when you click any tool) -->
-  <div id="workspace">
-
-    <!-- 1. Percentage Calculator -->
-    <div id="tool-percentage" class="tool-area">
-      <div class="tool-header">
-        <h2>📈 Percentage Calculator</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group">
-        <label>Obtained Marks (प्राप्त अंक)</label>
-        <input type="number" id="obtMarks" class="form-control" placeholder="e.g. 425">
-      </div>
-      <div class="form-group">
-        <label>Total Marks (कुल अंक)</label>
-        <input type="number" id="totMarks" class="form-control" placeholder="e.g. 500">
-      </div>
-      <button class="action-btn" onclick="calcPercentage()">Calculate Percentage</button>
-      <div class="result-box" id="resPercentage">Result will appear here...</div>
-    </div>
-
-    <!-- 2. Smart Calculator -->
-    <div id="tool-calculator" class="tool-area">
-      <div class="tool-header">
-        <h2>🧮 Smart Calculator</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group">
-        <label>First Number</label>
-        <input type="number" id="calcA" class="form-control" placeholder="Enter first number">
-      </div>
-      <div class="form-group">
-        <label>Second Number</label>
-        <input type="number" id="calcB" class="form-control" placeholder="Enter second number">
-      </div>
-      <div class="btn-row">
-        <button class="action-btn" onclick="runCalc('+')">+ Add</button>
-        <button class="action-btn" onclick="runCalc('-')">- Subtract</button>
-        <button class="action-btn" onclick="runCalc('*')">× Multiply</button>
-        <button class="action-btn" onclick="runCalc('/')">÷ Divide</button>
-      </div>
-      <div class="result-box" id="resCalc">Answer: 0</div>
-    </div>
-
-    <!-- 3. Study Time Calculator -->
-    <div id="tool-studytime" class="tool-area">
-      <div class="tool-header">
-        <h2>⌚ Study Time Calculator</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group">
-        <label>Start Time</label>
-        <input type="time" id="stStart" class="form-control">
-      </div>
-      <div class="form-group">
-        <label>End Time</label>
-        <input type="time" id="stEnd" class="form-control">
-      </div>
-      <button class="action-btn" onclick="calcStudyTime()">Calculate Duration</button>
-      <div class="result-box" id="resStudyTime">Select start and end time.</div>
-    </div>
-
-    <!-- 4. Exam Countdown -->
-    <div id="tool-countdown" class="tool-area">
-      <div class="tool-header">
-        <h2>🎯 Exam Countdown</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group">
-        <label>Exam Name (e.g. NDA / B.Sc. Exam)</label>
-        <input type="text" id="examName" class="form-control" placeholder="Enter exam name">
-      </div>
-      <div class="form-group">
-        <label>Exam Date</label>
-        <input type="date" id="examDate" class="form-control">
-      </div>
-      <button class="action-btn" onclick="saveExam()">Set Countdown</button>
-      <div class="result-box" id="resExam">No exam date set yet.</div>
-    </div>
-
-    <!-- 5. Focus Timer -->
-    <div id="tool-timer" class="tool-area">
-      <div class="tool-header">
-        <h2>⏳ Focus Timer (Pomodoro)</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="btn-row" style="justify-content:center;">
-        <button class="action-btn gray" onclick="setTimer(25)">25 Min</button>
-        <button class="action-btn gray" onclick="setTimer(45)">45 Min</button>
-        <button class="action-btn gray" onclick="setTimer(60)">60 Min</button>
-      </div>
-      <div class="timer-display" id="timerDisplay">25:00</div>
-      <div class="btn-row" style="justify-content:center;">
-        <button class="action-btn green" onclick="startTimer()">▶ Start</button>
-        <button class="action-btn gray" onclick="pauseTimer()">⏸ Pause</button>
-        <button class="action-btn" onclick="resetTimer()">🔄 Reset</button>
-      </div>
-    </div>
-
-    <!-- 6. Daily Planner -->
-    <div id="tool-planner" class="tool-area">
-      <div class="tool-header">
-        <h2>📋 Daily Planner</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="search-box">
-        <input type="text" id="taskInput" placeholder="Add a new study task...">
-        <button onclick="addTask()">Add</button>
-      </div>
-      <ul class="item-list" id="taskList"></ul>
-    </div>
-
-    <!-- 7. Revision Tracker -->
-    <div id="tool-revision" class="tool-area">
-      <div class="tool-header">
-        <h2>📖 Revision Tracker</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="search-box">
-        <input type="text" id="revInput" placeholder="Subject / Chapter name...">
-        <button onclick="addRevision()">Add</button>
-      </div>
-      <ul class="item-list" id="revList"></ul>
-    </div>
-
-    <!-- 8. Digital Notes -->
-    <div id="tool-notes" class="tool-area">
-      <div class="tool-header">
-        <h2>📝 Digital Notes</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group">
-        <textarea id="noteInput" rows="3" class="form-control" placeholder="Write your formula, trick, or important note..."></textarea>
-      </div>
-      <button class="action-btn" onclick="addNote()">Save Note</button>
-      <ul class="item-list" id="noteList"></ul>
-    </div>
-
-    <!-- 9. Daily Goals -->
-    <div id="tool-goals" class="tool-area">
-      <div class="tool-header">
-        <h2>🏆 Daily Goals</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="search-box">
-        <input type="text" id="goalInput" placeholder="Set today's main target...">
-        <button onclick="addGoal()">Add</button>
-      </div>
-      <ul class="item-list" id="goalList"></ul>
-    </div>
-
-  </div>
-
-  <!-- Explore Study Tools -->
-  <div class="sec-title">🚀 Explore Study Tools</div>
-  <div class="search-box">
-    <input type="text" id="searchInput" onkeyup="filterTools()" placeholder="Search tools (e.g. calculator, timer, notes)...">
-    <button onclick="filterTools()">Search</button>
-  </div>
-
-  <div class="grid" id="toolsGrid">
-    <div class="tool-card" data-search="percentage calculator marks">
-      <div>
-        <div class="t-icon">📈</div>
-        <div class="t-title">Percentage Calculator</div>
-        <div class="t-desc">Calculate percentage, scores and performance.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('percentage')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="smart calculator math">
-      <div>
-        <div class="t-icon">🧮</div>
-        <div class="t-title">Smart Calculator</div>
-        <div class="t-desc">Perform everyday mathematical calculations.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('calculator')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="study time duration hours">
-      <div>
-        <div class="t-icon">⌚</div>
-        <div class="t-title">Study Time Calculator</div>
-        <div class="t-desc">Find your total study duration.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('studytime')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="exam countdown days">
-      <div>
-        <div class="t-icon">🎯</div>
-        <div class="t-title">Exam Countdown</div>
-        <div class="t-desc">Know how many days remain until your exam.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('countdown')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="focus timer pomodoro">
-      <div>
-        <div class="t-icon">⏳</div>
-        <div class="t-title">Focus Timer</div>
-        <div class="t-desc">Stay focused using timed study sessions.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('timer')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="daily planner todo tasks">
-      <div>
-        <div class="t-icon">📋</div>
-        <div class="t-title">Daily Planner</div>
-        <div class="t-desc">Organize and complete your daily tasks.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('planner')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="revision tracker chapters">
-      <div>
-        <div class="t-icon">📖</div>
-        <div class="t-title">Revision Tracker</div>
-        <div class="t-desc">Track chapters and revision progress.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('revision')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="digital notes write">
-      <div>
-        <div class="t-icon">📝</div>
-        <div class="t-title">Digital Notes</div>
-        <div class="t-desc">Write and save your important study notes.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('notes')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="daily goals targets">
-      <div>
-        <div class="t-icon">🏆</div>
-        <div class="t-title">Daily Goals</div>
-        <div class="t-desc">Set targets and monitor your progress.</div>
-      </div>
-      <button class="open-btn" onclick="openTool('goals')">Open Tool →</button>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <strong>ANSH STUDY TOOLS</strong><br>
-  Study • Focus • Revise • Succeed<br>
-  Made for Students ❤️<br><br>
-  © 2026 Ansh Study Tools. All rights reserved.
-</footer>
-
-<script>
-  // Load Saved Data from LocalStorage
-  let appData = JSON.parse(localStorage.getItem('anshStudyData')) || {
-    theme: 'dark',
-    minutes: 0,
-    tasks: [],
-    revisions: [],
-    notes: [],
-    goals: [],
-    exam: null
-  };
-
-  function saveData() {
-    localStorage.setItem('anshStudyData', JSON.stringify(appData));
-    updateDashboard();
-  }
-
-  // Theme Toggle
-  if (appData.theme === 'light') document.body.classList.add('light');
-  function toggleTheme() {
-    document.body.classList.toggle('light');
-    appData.theme = document.body.classList.contains('light') ? 'light' : 'dark';
-    saveData();
-  }
-
-  // Open & Close Tools
-  function openTool(name) {
-    closeTools();
-    const el = document.getElementById('tool-' + name);
-    if (el) {
-      el.classList.add('active');
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }
-
-  function closeTools() {
-    document.querySelectorAll('.tool-area').forEach(el => el.classList.remove('active'));
-  }
-
-  // Search Filter
-  function filterTools() {
-    const q = document.getElementById('searchInput').value.toLowerCase().trim();
-    document.querySelectorAll('.tool-card').forEach(card => {
-      const text = (card.innerText + ' ' + card.dataset.search).toLowerCase();
-      card.classList.toggle('hidden', !text.includes(q));
-    });
-  }
-
-  // 1. Percentage Calculator
-  function calcPercentage() {
-    const obt = parseFloat(document.getElementById('obtMarks').value);
-    const tot = parseFloat(document.getElementById('totMarks').value);
-    const res = document.getElementById('resPercentage');
-    if (isNaN(obt) || isNaN(tot) || tot <= 0) {
-      res.textContent = "⚠️ Please enter valid obtained and total marks.";
-      return;
-    }
-    const pct = ((obt / tot) * 100).toFixed(2);
-    res.textContent = `✅ Your Percentage: ${pct}%`;
-  }
-
-  // 2. Smart Calculator
-  function runCalc(op) {
-    const a = parseFloat(document.getElementById('calcA').value);
-    const b = parseFloat(document.getElementById('calcB').value);
-    const res = document.getElementById('resCalc');
-    if (isNaN(a) || isNaN(b)) {
-      res.textContent = "⚠️ Please enter both numbers.";
-      return;
-    }
-    let ans = 0;
-    if (op === '+') ans = a + b;
-    if (op === '-') ans = a - b;
-    if (op === '*') ans = a * b;
-    if (op === '/') {
-      if (b === 0) { res.textContent = "⚠️ Cannot divide by zero."; return; }
-      ans = (a / b).toFixed(4);
-    }
-    res.textContent = `✅ Answer: ${ans}`;
-  }
-
-  // 3. Study Time Calculator
-  function calcStudyTime() {
-    const s = document.getElementById('stStart').value;
-    const e = document.getElementById('stEnd').value;
-    const res = document.getElementById('resStudyTime');
-    if (!s || !e) { res.textContent = "⚠️ Please select both times."; return; }
-    const [sh, sm] = s.split(':').map(Number);
-    const [eh, em] = e.split(':').map(Number);
-    let diff = (eh * 60 + em) - (sh * 60 + sm);
-    if (diff < 0) diff += 1440; // Handles midnight crossover
-    const hrs = Math.floor(diff / 60);
-    const mins = diff % 60;
-    res.textContent = `✅ Total Study Duration: ${hrs} Hours ${mins} Minutes (${diff} mins)`;
-  }
-
-  // 4. Exam Countdown
-  function saveExam() {
-    const name = document.getElementById('examName').value.trim();
-    const date = document.getElementById('examDate').value;
-    if (!name || !date) return;
-    appData.exam = { name, date };
-    saveData();
-    renderExam();
-  }
-
-  function renderExam() {
-    const res = document.getElementById('resExam');
-    if (!appData.exam) return;
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const target = new Date(appData.exam.date);
-    const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
-    if (diffDays > 0) {
-      res.textContent = `🎯 ${diffDays} Days remaining for ${appData.exam.name}!`;
-    } else if (diffDays === 0) {
-      res.textContent = `🔥 Today is your ${appData.exam.name} exam! Best of Luck!`;
-    } else {
-      res.textContent = `✅ ${appData.exam.name} exam date has passed.`;
-    }
-  }
-
-  // 5. Focus Timer
-  let timerSec = 25 * 60;
-  let timerInt = null;
-  let selectedMins = 25;
-
-  function updateTimerDisplay() {
-    const m = String(Math.floor(timerSec / 60)).padStart(2, '0');
-    const s = String(timerSec % 60).padStart(2, '0');
-    document.getElementById('timerDisplay').textContent = `${m}:${s}`;
-  }
-
-  function setTimer(mins) {
-    pauseTimer();
-    selectedMins = mins;
-    timerSec = mins * 60;
-    updateTimerDisplay();
-  }
-
-  function startTimer() {
-    if (timerInt) return;
-    timerInt = setInterval(() => {
-      if (timerSec > 0) {
-        timerSec--;
-        updateTimerDisplay();
-      } else {
-        pauseTimer();
-        appData.minutes += selectedMins;
-        saveData();
-        alert(`🎉 Great job! ${selectedMins} minutes added to your dashboard!`);
-      }
-    }, 1000);
-  }
-
-  function pauseTimer() {
-    clearInterval(timerInt);
-    timerInt = null;
-  }
-
-  function resetTimer() {
-    pauseTimer();
-    timerSec = selectedMins * 60;
-    updateTimerDisplay();
-  }
-
-  // 6. Daily Planner
-  function addTask() {
-    const inp = document.getElementById('taskInput');
-    if (!inp.value.trim()) return;
-    appData.tasks.push({ text: inp.value.trim(), done: false });
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function toggleTask(idx) {
-    appData.tasks[idx].done = !appData.tasks[idx].done;
-    saveData();
-    renderLists();
-  }
-
-  function delTask(idx) {
-    appData.tasks.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // 7. Revision Tracker
-  function addRevision() {
-    const inp = document.getElementById('revInput');
-    if (!inp.value.trim()) return;
-    appData.revisions.push({ text: inp.value.trim(), count: 1 });
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function incRev(idx) {
-    appData.revisions[idx].count++;
-    saveData();
-    renderLists();
-  }
-
-  function delRev(idx) {
-    appData.revisions.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // 8. Digital Notes
-  function addNote() {
-    const inp = document.getElementById('noteInput');
-    if (!inp.value.trim()) return;
-    appData.notes.push(inp.value.trim());
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function delNote(idx) {
-    appData.notes.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // 9. Daily Goals
-  function addGoal() {
-    const inp = document.getElementById('goalInput');
-    if (!inp.value.trim()) return;
-    appData.goals.push({ text: inp.value.trim(), done: false });
-    inp.value = '';
-    saveData();
-    renderLists();
-  }
-
-  function toggleGoal(idx) {
-    appData.goals[idx].done = !appData.goals[idx].done;
-    saveData();
-    renderLists();
-  }
-
-  function delGoal(idx) {
-    appData.goals.splice(idx, 1);
-    saveData();
-    renderLists();
-  }
-
-  // Render All Lists & Dashboard
-  function renderLists() {
-    // Tasks
-    const tList = document.getElementById('taskList');
-    tList.innerHTML = appData.tasks.map((t, i) => `
-      <li class="${t.done ? 'done' : ''}">
-        <span onclick="toggleTask(${i})" style="cursor:pointer;flex:1;">${t.done ? '✅' : '⬜'} ${t.text}</span>
-        <button class="del-btn" onclick="delTask(${i})">✕</button>
-      </li>
-    `).join('');
-
-    // Revisions
-    const rList = document.getElementById('revList');
-    rList.innerHTML = appData.revisions.map((r, i) => `
-      <li>
-        <span>📖 ${r.text} <strong>(Revised: ${r.count}x)</strong></span>
-        <div>
-          <button class="action-btn gray" style="padding:4px 8px;font-size:11px;" onclick="incRev(${i})">+1</button>
-          <button class="del-btn" onclick="delRev(${i})">✕</button>
-        </div>
-      </li>
-    `).join('');
-
-    // Notes
-    const nList = document.getElementById('noteList');
-    nList.innerHTML = appData.notes.map((n, i) => `
-      <li>
-        <span style="white-space:pre-wrap;">📝 ${n}</span>
-        <button class="del-btn" onclick="delNote(${i})">✕</button>
-      </li>
-    `).join('');
-
-    // Goals
-    const gList = document.getElementById('goalList');
-    gList.innerHTML = appData.goals.map((g, i) => `
-      <li class="${g.done ? 'done' : ''}">
-        <span onclick="toggleGoal(${i})" style="cursor:pointer;flex:1;">${g.done ? '🏆' : '🎯'} ${g.text}</span>
-        <button class="del-btn" onclick="delGoal(${i})">✕</button>
-      </li>
-    `).join('');
-  }
-
-  function updateDashboard() {
-    const pending = appData.tasks.filter(t => !t.done).length;
-    const completed = appData.tasks.filter(t => t.done).length;
-    document.getElementById('statPending').textContent = pending;
-    document.getElementById('statCompleted').textContent = completed;
-    document.getElementById('statMinutes').textContent = appData.minutes;
-  }
-
-  function exportBackup() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "ansh_study_backup.json");
-    document.body.appendChild(dlAnchor);
-    dlAnchor.click();
-    dlAnchor.remove();
-  }
-
-  // Initialize on Page Load
-  renderLists();
-  renderExam();
-  updateDashboard();
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANSH.STUDY - Study Smart. Achieve More.</title>
-<style>
-  :root {
-    --bg: #0b1120;
-    --panel: #131c31;
-    --panel2: #1a2642;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --blue: #3b82f6;
-    --blue-hover: #2563eb;
-    --green: #10b981;
-    --red: #ef4444;
-    --line: #1e293b;
     --orange: #f59e0b;
   }
   body.light {
@@ -1286,4 +505,345 @@
 <footer>
   <strong>ANSH STUDY TOOLS</strong><br>
   Study • Focus • Revise • Succeed<br>
-  Made for 
+  Made for Students ❤️<br><br>
+  © 2026 Ansh Study Tools. All rights reserved.
+</footer>
+
+<script>
+  // Dynamic News Ticker Carousel
+  const newsList = [
+    "🔥 Latest Update: UPSC NDA & Defence exam notifications & strategy tips active.",
+    "💡 Tip of the Day: Consistent 5-hour focused study beats 10-hour distracted reading.",
+    "📚 New Additions: Check out the 'Study Books Hub' for quick formulas and subject notes.",
+    "🎯 Stay Focused: Use the Focus Timer tool daily to improve your productivity score!"
+  ];
+  let newsIdx = 0;
+  setInterval(() => {
+    newsIdx = (newsIdx + 1) % newsList.length;
+    document.getElementById('newsTickerText').textContent = newsList[newsIdx];
+  }, 4000);
+
+  // Load Saved Data from LocalStorage
+  let appData = JSON.parse(localStorage.getItem('anshStudyData')) || {
+    theme: 'dark',
+    minutes: 0,
+    tasks: [],
+    revisions: [],
+    notes: [],
+    goals: [],
+    exam: null
+  };
+
+  function saveData() {
+    localStorage.setItem('anshStudyData', JSON.stringify(appData));
+    updateDashboard();
+  }
+
+  // Theme Toggle
+  if (appData.theme === 'light') document.body.classList.add('light');
+  function toggleTheme() {
+    document.body.classList.toggle('light');
+    appData.theme = document.body.classList.contains('light') ? 'light' : 'dark';
+    saveData();
+  }
+
+  // Open & Close Tools
+  function openTool(name) {
+    closeTools();
+    const el = document.getElementById('tool-' + name);
+    if (el) {
+      el.classList.add('active');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function closeTools() {
+    document.querySelectorAll('.tool-area').forEach(el => el.classList.remove('active'));
+  }
+
+  // Search Filter
+  function filterTools() {
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
+    document.querySelectorAll('.tool-card').forEach(card => {
+      const text = (card.innerText + ' ' + card.dataset.search).toLowerCase();
+      card.classList.toggle('hidden', !text.includes(q));
+    });
+  }
+
+  // Percentage Calculator
+  function calcPercentage() {
+    const obt = parseFloat(document.getElementById('obtMarks').value);
+    const tot = parseFloat(document.getElementById('totMarks').value);
+    const res = document.getElementById('resPercentage');
+    if (isNaN(obt) || isNaN(tot) || tot <= 0) {
+      res.textContent = "⚠️ Please enter valid obtained and total marks.";
+      return;
+    }
+    const pct = ((obt / tot) * 100).toFixed(2);
+    res.textContent = `✅ Your Percentage: ${pct}%`;
+  }
+
+  // Smart Calculator
+  function runCalc(op) {
+    const a = parseFloat(document.getElementById('calcA').value);
+    const b = parseFloat(document.getElementById('calcB').value);
+    const res = document.getElementById('resCalc');
+    if (isNaN(a) || isNaN(b)) {
+      res.textContent = "⚠️ Please enter both numbers.";
+      return;
+    }
+    let ans = 0;
+    if (op === '+') ans = a + b;
+    if (op === '-') ans = a - b;
+    if (op === '*') ans = a * b;
+    if (op === '/') {
+      if (b === 0) { res.textContent = "⚠️ Cannot divide by zero."; return; }
+      ans = (a / b).toFixed(4);
+    }
+    res.textContent = `✅ Answer: ${ans}`;
+  }
+
+  // Study Time Calculator
+  function calcStudyTime() {
+    const s = document.getElementById('stStart').value;
+    const e = document.getElementById('stEnd').value;
+    const res = document.getElementById('resStudyTime');
+    if (!s || !e) { res.textContent = "⚠️ Please select both times."; return; }
+    const [sh, sm] = s.split(':').map(Number);
+    const [eh, em] = e.split(':').map(Number);
+    let diff = (eh * 60 + em) - (sh * 60 + sm);
+    if (diff < 0) diff += 1440;
+    const hrs = Math.floor(diff / 60);
+    const mins = diff % 60;
+    res.textContent = `✅ Total Duration: ${hrs} Hours ${mins} Minutes`;
+  }
+
+  // Exam Countdown
+  function saveExam() {
+    const name = document.getElementById('examName').value.trim();
+    const date = document.getElementById('examDate').value;
+    if (!name || !date) return;
+    appData.exam = { name, date };
+    saveData();
+    renderExam();
+  }
+
+  function renderExam() {
+    const res = document.getElementById('resExam');
+    if (!appData.exam) return;
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const target = new Date(appData.exam.date);
+    const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+    if (diffDays > 0) {
+      res.textContent = `🎯 ${diffDays} Days remaining for ${appData.exam.name}!`;
+    } else if (diffDays === 0) {
+      res.textContent = `🔥 Today is your ${appData.exam.name} exam! Best of Luck!`;
+    } else {
+      res.textContent = `✅ ${appData.exam.name} exam date has passed.`;
+    }
+  }
+
+  // Focus Timer
+  let timerSec = 25 * 60;
+  let timerInt = null;
+  let selectedMins = 25;
+
+  function updateTimerDisplay() {
+    const m = String(Math.floor(timerSec / 60)).padStart(2, '0');
+    const s = String(timerSec % 60).padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+  }
+
+  function setTimer(mins) {
+    pauseTimer();
+    selectedMins = mins;
+    timerSec = mins * 60;
+    updateTimerDisplay();
+  }
+
+  function startTimer() {
+    if (timerInt) return;
+    timerInt = setInterval(() => {
+      if (timerSec > 0) {
+        timerSec--;
+        updateTimerDisplay();
+      } else {
+        pauseTimer();
+        appData.minutes += selectedMins;
+        saveData();
+        alert(`🎉 Great job! ${selectedMins} minutes added to your dashboard!`);
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    clearInterval(timerInt);
+    timerInt = null;
+  }
+
+  function resetTimer() {
+    pauseTimer();
+    timerSec = selectedMins * 60;
+    updateTimerDisplay();
+  }
+
+  // Daily Planner
+  function addTask() {
+    const inp = document.getElementById('taskInput');
+    if (!inp.value.trim()) return;
+    appData.tasks.push({ text: inp.value.trim(), done: false });
+    inp.value = '';
+    saveData();
+    renderLists();
+  }
+
+  function toggleTask(idx) {
+    appData.tasks[idx].done = !appData.tasks[idx].done;
+    saveData();
+    renderLists();
+  }
+
+  function delTask(idx) {
+    appData.tasks.splice(idx, 1);
+    saveData();
+    renderLists();
+  }
+
+  // Revision Tracker
+  function addRevision() {
+    const inp = document.getElementById('revInput');
+    if (!inp.value.trim()) return;
+    appData.revisions.push({ text: inp.value.trim(), count: 1 });
+    inp.value = '';
+    saveData();
+    renderLists();
+  }
+
+  function incRev(idx) {
+    appData.revisions[idx].count++;
+    saveData();
+    renderLists();
+  }
+
+  function delRev(idx) {
+    appData.revisions.splice(idx, 1);
+    saveData();
+    renderLists();
+  }
+
+  // Digital Notes
+  function addNote() {
+    const inp = document.getElementById('noteInput');
+    if (!inp.value.trim()) return;
+    appData.notes.push(inp.value.trim());
+    inp.value = '';
+    saveData();
+    renderLists();
+  }
+
+  function delNote(idx) {
+    appData.notes.splice(idx, 1);
+    saveData();
+    renderLists();
+  }
+
+  // Daily Goals
+  function addGoal() {
+    const inp = document.getElementById('goalInput');
+    if (!inp.value.trim()) return;
+    appData.goals.push({ text: inp.value.trim(), done: false });
+    inp.value = '';
+    saveData();
+    renderLists();
+  }
+
+  function toggleGoal(idx) {
+    appData.goals[idx].done = !appData.goals[idx].done;
+    saveData();
+    renderLists();
+  }
+
+  function delGoal(idx) {
+    appData.goals.splice(idx, 1);
+    saveData();
+    renderLists();
+  }
+
+  // Study Books Hub Data
+  function loadBook(sub) {
+    const viewer = document.getElementById('bookContentViewer');
+    if (sub === 'math') {
+      viewer.innerHTML = "📐 **Mathematics Quick Reference:**\n• Calculus Formulas (Derivatives & Integrals)\n• Algebra & Quadratic Equations shortcuts\n• Trigonometric Identities summary notes.";
+    } else if (sub === 'physics') {
+      viewer.innerHTML = "⚡ **Physics Quick Notes:**\n• Mechanics & Kinematics laws\n• Electrostatics & Current Electricity formulas\n• Optics & Ray diagrams summary.";
+    } else if (sub === 'chemistry') {
+      viewer.innerHTML = "🧪 **Chemistry Cheat Sheet:**\n• Periodic Table trends & properties\n• Organic Name Reactions\n• Physical Chemistry key formulas.";
+    } else if (sub === 'nda') {
+      viewer.innerHTML = "🎖️ **NDA / Defence Exam Focus:**\n• Mathematics (Algebra, Matrices, Calculus)\n• General Ability Test (GAT): English, Physics, Chemistry, History & Geography PYQs.";
+    }
+  }
+
+  // Render All Lists & Dashboard
+  function renderLists() {
+    const tList = document.getElementById('taskList');
+    tList.innerHTML = appData.tasks.map((t, i) => `
+      <li class="${t.done ? 'done' : ''}">
+        <span onclick="toggleTask(${i})" style="cursor:pointer;flex:1;">${t.done ? '✅' : '⬜'} ${t.text}</span>
+        <button class="del-btn" onclick="delTask(${i})">✕</button>
+      </li>
+    `).join('');
+
+    const rList = document.getElementById('revList');
+    rList.innerHTML = appData.revisions.map((r, i) => `
+      <li>
+        <span>📖 ${r.text} <strong>(Revised: ${r.count}x)</strong></span>
+        <div>
+          <button class="action-btn gray" style="padding:4px 8px;font-size:11px;" onclick="incRev(${i})">+1</button>
+          <button class="del-btn" onclick="delRev(${i})">✕</button>
+        </div>
+      </li>
+    `).join('');
+
+    const nList = document.getElementById('noteList');
+    nList.innerHTML = appData.notes.map((n, i) => `
+      <li>
+        <span style="white-space:pre-wrap;">📝 ${n}</span>
+        <button class="del-btn" onclick="delNote(${i})">✕</button>
+      </li>
+    `).join('');
+
+    const gList = document.getElementById('goalList');
+    gList.innerHTML = appData.goals.map((g, i) => `
+      <li class="${g.done ? 'done' : ''}">
+        <span onclick="toggleGoal(${i})" style="cursor:pointer;flex:1;">${g.done ? '🏆' : '🎯'} ${g.text}</span>
+        <button class="del-btn" onclick="delGoal(${i})">✕</button>
+      </li>
+    `).join('');
+  }
+
+  function updateDashboard() {
+    const pending = appData.tasks.filter(t => !t.done).length;
+    const completed = appData.tasks.filter(t => t.done).length;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statCompleted').textContent = completed;
+    document.getElementById('statMinutes').textContent = appData.minutes;
+  }
+
+  function exportBackup() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", "ansh_study_backup.json");
+    document.body.appendChild(dlAnchor);
+    dlAnchor.click();
+    dlAnchor.remove();
+  }
+
+  // Initialize
+  renderLists();
+  renderExam();
+  updateDashboard();
+</script>
+</body>
+</html>
