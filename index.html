@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Ansh Study Tools - Free student productivity, exam preparation and study management tools.">
+<title>Ansh Study Tools | Student Dashboard</title>
+
+<style>
+:root{
+ --bg:#080e1d;
+ --panel:#111b30;
+ --panel2:#17243c;
+ --text:#f4f7ff;
+ --muted:#9cabc4;
+ --line:#263753;
+ --blue:#5594ff;
+ --purple:#a78bfa;
+ --green:#38d99b;
+ --red:#ff7185;
+ --yellow:#f9c75e;
+ --shadow:0 10px 35px #0003;
+}
+body.light{
+ --bg:#f3f6fc;
+ --panel:#ffffff;
+ --panel2:#edf2fb;
+ --text:#17233c;
+ --muted:#64748b;
+ --line:#dce4f0;
+ --blue:#2563eb;
+ --purple:#7c3aed;
+ --green:#059669;
+ --red:#e54860;
+ --yellow:#b7791f;
+ --shadow:0 8px 25px #24334b12;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;background:var(--bg);color:var(--text);
+ font-family:Inter,Arial,sans-serif;
+ transition:background .2s,color .2s;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.topbar{
+ position:sticky;top:0;z-index:20;
+ display:flex;align-items:center;justify-content:space-between;
+ padding:14px 5%;background:var(--panel);
+ border-bottom:1px solid var(--line);
+}
+.brand{font-size:22px;font-weight:900;letter-spacing:-1px}
+.brand span{color:var(--blue)}
+.top-actions{display:flex;gap:9px}
+.icon-btn{
+ border:1px solid var(--line);background:var(--panel2);
+ color:var(--text);border-radius:10px;padding:9px 12px;
+}
+.hero{
+ padding:42px 18px 35px;text-align:center;
+ background:radial-gradient(ellipse at top,#294b83 0%,var(--bg) 72%);
+}
+.hero-tag{
+ display:inline-block;padding:7px 13px;border-radius:30px;
+ background:#3678df22;color:#8dbaff;font-size:12px;
+ border:1px solid #5594ff55;
+}
+.hero h1{font-size:clamp(30px,7vw,52px);margin:19px 0 10px}
+.gradient{
+ background:linear-gradient(90deg,#62a4ff,#b28aff);
+ -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{color:var(--muted);line-height:1.7}
+.date-line{color:var(--muted);font-size:13px;margin-top:15px}
+.wrap{max-width:1120px;margin:auto;padding:22px 16px}
+.stats{
+ display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+}
+.stat{
+ background:var(--panel);border:1px solid var(--line);
+ border-radius:15px;padding:17px;box-shadow:var(--shadow);
+}
+.stat-icon{font-size:23px}
+.stat strong{display:block;font-size:25px;margin:9px 0 4px}
+.stat small{color:var(--muted)}
+.section-head{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:10px;margin:30px 0 15px;
+}
+.section-head h2{font-size:21px;margin:0}
+.muted{color:var(--muted)}
+.search{
+ display:flex;gap:8px;margin:18px 0 22px;
+}
+.search input{flex:1;min-width:0}
+input,textarea,select{
+ width:100%;padding:12px 13px;
+ border-radius:10px;border:1px solid var(--line);
+ background:var(--panel2);color:var(--text);
+ outline:none;
+}
+input:focus,textarea:focus,select:focus{
+ border-color:var(--blue);
+ box-shadow:0 0 0 3px #5594ff20;
+}
+textarea{resize:vertical;min-height:110px}
+.grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+}
+.tool-card{
+ background:var(--panel);border:1px solid var(--line);
+ padding:17px;border-radius:15px;
+ transition:.2s;min-width:0;
+}
+.tool-card:active{transform:scale(.98)}
+.tool-icon{font-size:29px}
+.tool-card h3{font-size:16px;margin:12px 0 7px}
+.tool-card p{font-size:12px;color:var(--muted);line-height:1.6;min-height:37px}
+.btn{
+ display:inline-block;padding:11px 15px;border:0;
+ border-radius:9px;background:var(--blue);color:white;
+ font-weight:700;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.full{width:100%;margin-top:10px}
+.btn.secondary{
+ background:var(--panel2);color:var(--text);
+ border:1px solid var(--line);
+}
+.btn.danger{background:#e5486030;color:var(--red)}
+.btn.small{padding:8px 11px;font-size:12px}
+.tool-area{
+ display:none;margin-top:24px;padding:20px;
+ background:var(--panel);border:1px solid var(--line);
+ border-radius:17px;box-shadow:var(--shadow);
+ scroll-margin-top:85px;
+}
+.tool-area.active{display:block}
+.tool-title{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.tool-title h2{font-size:21px}
+.form-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.field label{display:block;color:var(--muted);font-size:13px;margin-bottom:7px}
+.result{
+ margin-top:14px;padding:14px;border-radius:10px;
+ background:var(--panel2);color:var(--green);
+ font-weight:700;line-height:1.6;overflow-wrap:anywhere;
+}
+.list{display:grid;gap:9px;margin-top:15px}
+.list-item{
+ display:flex;align-items:center;gap:10px;
+ padding:12px;background:var(--panel2);
+ border:1px solid var(--line);border-radius:10px;
+}
+.list-item .item-text{flex:1;min-width:0;overflow-wrap:anywhere}
+.list-item.done .item-text{text-decoration:line-through;opacity:.55}
+.list-item input[type=checkbox]{width:auto;accent-color:var(--green)}
+.empty{color:var(--muted);text-align:center;padding:15px}
+.timer-display{
+ font-size:clamp(45px,12vw,75px);font-weight:900;
+ text-align:center;letter-spacing:3px;margin:22px 0;
+ font-variant-numeric:tabular-nums;
+}
+.timer-buttons{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.progress{
+ width:100%;height:9px;background:var(--panel2);
+ border-radius:20px;overflow:hidden;margin:14px 0;
+}
+.progress span{display:block;height:100%;width:0;background:var(--green);transition:.3s}
+.pills{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.pill{
+ border:1px solid var(--line);background:var(--panel2);
+ color:var(--text);padding:8px 11px;border-radius:30px;font-size:12px;
+}
+.pill.active{background:var(--blue);color:white;border-color:var(--blue)}
+footer{
+ text-align:center;padding:30px 15px;
+ border-top:1px solid var(--line);color:var(--muted);
+ font-size:13px;margin-top:35px;
+}
+.hidden{display:none!important}
+@media(min-width:650px){
+ .stats{grid-template-columns:repeat(4,1fr)}
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .form-grid.two{grid-template-columns:1fr 1fr}
+ .wrap{padding-left:24px;padding-right:24px}
+}
+@media(max-width:370px){
+ .grid{grid-template-columns:1fr}
+ .brand{font-size:19px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+ <div class="brand">ANSH<span>.</span>STUDY</div>
+ <div class="top-actions">
+  <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle theme">☀️</button>
+  <button class="icon-btn" onclick="exportData()">⬇️ Backup</button>
+ </div>
+</header>
+
+<section class="hero">
+ <span class="hero-tag">✦ YOUR PERSONAL STUDY PARTNER</span>
+ <h1>Study Smart.<br><span class="gradient">Achieve More.</span></h1>
+ <p>Plan better. Focus deeper. Track your progress.<br>
+ Everything a student needs in one place.</p>
+ <div class="date-line" id="today"></div>
+</section>
+
+<main class="wrap">
+
+ <div class="section-head">
+  <h2>📊 Your Dashboard</h2>
+ </div>
+
+ <div class="stats">
+  <div class="stat">
+   <div class="stat-icon">📚</div>
+   <strong id="taskStat">0</strong>
+   <small>Pending Tasks</small>
+  </div>
+  <div class="stat">
+   <div class="stat-icon">✅</div>
+   <strong id="doneStat">0</strong>
+   <small>Completed Tasks</small>
+  </div>
+  <div class="stat">
+   <div class="stat-icon">⏱️</div>
+   <strong id="minuteStat">0</strong>
+   <small>Study Minutes Today</small>
+  </div>
+  <div class="stat">
+   <div class="stat-icon">🔥</div>
+   <strong id="streakStat">0</strong>
+   <small>Study Day Streak</small>
+  </div>
+ </div>
+
+ <div class="section-head">
+  <h2>🚀 Explore Study Tools</h2>
+ </div>
+ <div class="search">
+  <input id="searchInput" placeholder="Search tools..." oninput="filterTools()">
+  <button class="btn" onclick="filterTools()">Search</button>
+ </div>
+
+ <div class="grid" id="toolGrid">
+  <div class="tool-card" data-search="percentage marks calculator result">
+   <div class="tool-icon">📈</div>
+   <h3>Percentage Calculator</h3>
+   <p>Calculate percentage, marks and performance.</p>
+   <button class="btn full" onclick="openTool('percentage')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="calculator maths arithmetic">
+   <div class="tool-icon">🧮</div>
+   <h3>Smart Calculator</h3>
+   <p>Perform everyday mathematical calculations.</p>
+   <button class="btn full" onclick="openTool('calculator')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="study time hours schedule">
+   <div class="tool-icon">⌚</div>
+   <h3>Study Time Calculator</h3>
+   <p>Find your total study duration.</p>
+   <button class="btn full" onclick="openTool('studytime')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="exam countdown days date">
+   <div class="tool-icon">🎯</div>
+   <h3>Exam Countdown</h3>
+   <p>Know how many days remain until your exam.</p>
+   <button class="btn full" onclick="openTool('countdown')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="pomodoro focus timer">
+   <div class="tool-icon">⏳</div>
+   <h3>Focus Timer</h3>
+   <p>Use focused sessions and breaks to study.</p>
+   <button class="btn full" onclick="openTool('timer')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="daily planner tasks to do">
+   <div class="tool-icon">📋</div>
+   <h3>Daily Planner</h3>
+   <p>Organize and complete your daily tasks.</p>
+   <button class="btn full" onclick="openTool('planner')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="revision chapter subject tracker">
+   <div class="tool-icon">📖</div>
+   <h3>Revision Tracker</h3>
+   <p>Track chapters and revision progress.</p>
+   <button class="btn full" onclick="openTool('revision')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="notes notebook writing">
+   <div class="tool-icon">📝</div>
+   <h3>Digital Notes</h3>
+   <p>Write and save your important study notes.</p>
+   <button class="btn full" onclick="openTool('notes')">Open Tool →</button>
+  </div>
+
+  <div class="tool-card" data-search="goal target daily">
+   <div class="tool-icon">🏆</div>
+   <h3>Daily Goals</h3>
+   <p>Set targets and measure your progress.</p>
+   <button class="btn full" onclick="openTool('goals')">Open Tool →</button>
+  </div>
+ </div>
+
+ <div id="noTools" class="empty hidden">No matching tools found.</div>
+
+ <!-- PERCENTAGE -->
+ <section class="tool-area" id="tool-percentage">
+  <div class="tool-title"><h2>📈 Percentage Calculator</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="form-grid two">
+   <div class="field"><label>Obtained Marks</label><input type="number" id="obtained" min="0" placeholder="e.g. 450"></div>
+   <div class="field"><label>Total Marks</label><input type="number" id="totalMarks" min="1" placeholder="e.g. 600"></div>
+  </div>
+  <button class="btn full" onclick="calculatePercentage()">Calculate Percentage</button>
+  <div class="result" id="percentageResult">Your result will appear here.</div>
+ </section>
+
+ <!-- CALCULATOR -->
+ <section class="tool-area" id="tool-calculator">
+  <div class="tool-title"><h2>🧮 Smart Calculator</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="field"><label>First Number</label><input type="number" id="calcA" placeholder="Enter first number"></div>
+  <div class="field"><label>Second Number</label><input type="number" id="calcB" placeholder="Enter second number"></div>
+  <div class="pills">
+   <button class="pill" onclick="calculate('+')">Addition +</button>
+   <button class="pill" onclick="calculate('-')">Subtract −</button>
+   <button class="pill" onclick="calculate('*')">Multiply ×</button>
+   <button class="pill" onclick="calculate('/')">Divide ÷</button>
+   <button class="pill" onclick="calculate('%')">Remainder %</button>
+  </div>
+  <div class="result" id="calcResult">Your answer will appear here.</div>
+ </section>
+
+ <!-- STUDY TIME -->
+ <section class="tool-area" id="tool-studytime">
+  <div class="tool-title"><h2>⌚ Study Time Calculator</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="form-grid two">
+   <div class="field"><label>Start Time</label><input type="time" id="startTime"></div>
+   <div class="field"><label>End Time</label><input type="time" id="endTime"></div>
+  </div>
+  <button class="btn full" onclick="calculateStudyTime()">Calculate Duration</button>
+  <div class="result" id="studyTimeResult">Your study duration will appear here.</div>
+ </section>
+
+ <!-- COUNTDOWN -->
+ <section class="tool-area" id="tool-countdown">
+  <div class="tool-title"><h2>🎯 Exam Countdown</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="field"><label>Exam Name</label><input id="examName" placeholder="e.g. NDA, SSC, College Exam"></div>
+  <div class="field"><label>Exam Date</label><input type="date" id="examDate"></div>
+  <button class="btn full" onclick="saveExam()">Save Exam</button>
+  <div class="result" id="countdownResult">Your exam countdown will appear here.</div>
+ </section>
+
+ <!-- TIMER -->
+ <section class="tool-area" id="tool-timer">
+  <div class="tool-title"><h2>⏳ Focus Timer</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <p class="muted">Choose a focus or break session.</p>
+  <div class="pills">
+   <button class="pill active" id="focusMode" onclick="setTimerMode(25,'focus')">Focus 25 min</button>
+   <button class="pill" id="shortMode" onclick="setTimerMode(5,'short')">Short Break 5 min</button>
+   <button class="pill" id="longMode" onclick="setTimerMode(15,'long')">Long Break 15 min</button>
+  </div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="progress"><span id="timerProgress"></span></div>
+  <div class="timer-buttons">
+   <button class="btn" onclick="startTimer()">▶ Start</button>
+   <button class="btn secondary" onclick="pauseTimer()">Ⅱ Pause</button>
+   <button class="btn secondary" onclick="resetTimer()">↻ Reset</button>
+  </div>
+  <p class="muted" style="text-align:center;margin-top:17px" id="timerStatus">Ready to focus?</p>
+ </section>
+
+ <!-- PLANNER -->
+ <section class="tool-area" id="tool-planner">
+  <div class="tool-title"><h2>📋 Daily Planner</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="field"><label>Study Task</label><input id="taskInput" placeholder="e.g. Complete Physics chapter 1"></div>
+  <div class="form-grid two">
+   <div class="field"><label>Subject</label>
+    <select id="taskSubject">
+     <option>General</option><option>Mathematics</option><option>Physics</option><option>Chemistry</option><option>English</option><option>History</option><option>Geography</option><option>Other</option>
+    </select>
+   </div>
+   <div class="field"><label>Priority</label>
+    <select id="taskPriority"><option>Normal</option><option>High</option></select>
+   </div>
+  </div>
+  <button class="btn full" onclick="addTask()">+ Add Task</button>
+  <div class="section-head"><h3>Your Tasks</h3><span class="muted" id="taskCount"></span></div>
+  <div id="taskList" class="list"></div>
+ </section>
+
+ <!-- REVISION -->
+ <section class="tool-area" id="tool-revision">
+  <div class="tool-title"><h2>📖 Revision Tracker</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="field"><label>Chapter / Topic Name</label><input id="chapterInput" placeholder="e.g. Trigonometry"></div>
+  <div class="field"><label>Subject</label>
+   <select id="chapterSubject"><option>Mathematics</option><option>Physics</option><option>Chemistry</option><option>English</option><option>History</option><option>Geography</option><option>Other</option></select>
+  </div>
+  <button class="btn full" onclick="addChapter()">+ Add Chapter</button>
+  <div id="revisionList" class="list"></div>
+ </section>
+
+ <!-- NOTES -->
+ <section class="tool-area" id="tool-notes">
+  <div class="tool-title"><h2>📝 Digital Notes</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="field"><label>Note Title</label><input id="noteTitle" placeholder="Enter note title"></div>
+  <div class="field"><label>Your Notes</label><textarea id="noteText" placeholder="Write your notes here..."></textarea></div>
+  <button class="btn full" onclick="saveNote()">Save Note</button>
+  <div id="notesList" class="list"></div>
+ </section>
+
+ <!-- GOALS -->
+ <section class="tool-area" id="tool-goals">
+  <div class="tool-title"><h2>🏆 Daily Goals</h2><button class="icon-btn" onclick="closeTools()">✕</button></div>
+  <div class="field"><label>Daily Study Target (minutes)</label><input type="number" id="goalMinutes" min="1" placeholder="e.g. 180"></div>
+  <button class="btn full" onclick="saveGoal()">Set Daily Goal</button>
+  <div class="result" id="goalResult">Set a goal to track your study progress.</div>
+  <div class="progress"><span id="goalProgress"></span></div>
+ </section>
+
+</main>
+
+<footer>
+ <h3>ANSH STUDY TOOLS</h3>
+ <p>Study • Focus • Revise • Succeed</p>
+ <p>Made for Students ❤️</p>
+ <p>© 2026 Ansh Study Tools. All rights reserved.</p>
+</footer>
+
+<script>
+const KEY='anshStudyToolsV2';
+const todayKey=()=>new Date().toLocaleDateString('en-CA');
+const defaultData={
+ tasks:[],chapters:[],notes:[],studyLog:{},
+ exam:null,goal:180,theme:'dark'
+};
+let data=loadData();
+let timerSeconds=1500;
+let timerTotal=1500;
+let timerInterval=null;
+let timerRunning=false;
+
+function loadData(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(KEY)||'null');
+  return saved?{...defaultData,...saved}: {...defaultData};
+ }catch(e){return {...defaultData};}
+}
+function saveData(){
+ try{localStorage.setItem(KEY,JSON.stringify(data));}
+ catch(e){alert('Storage is full. Please export your backup.');}
+}
+function safeDateLabel(){
+ return new Date().toLocaleDateString(undefined,{
+  weekday:'long',day:'numeric',month:'long',year:'numeric'
+ });
+}
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+function show(id,msg){
+ document.getElementById(id).textContent=msg;
+}
+function toggleTheme(){
+ data.theme=data.theme==='dark'?'light':'dark';
+ document.body.classList.toggle('light',data.theme==='light');
+ saveData();
+}
+function applyTheme(){
+ document.body.classList.toggle('light',data.theme==='light');
+}
+function openTool(name){
+ closeTools();
+ const el=document.getElementById('tool-'+name);
+ if(!el)return;
+ el.classList.add('active');
+ el.scrollIntoView({behavior:'smooth',block:'start'});
+ if(name==='planner')renderTasks();
+ if(name==='revision')renderChapters();
+ if(name==='notes')renderNotes();
+ if(name==='countdown')renderExam();
+ if(name==='goals')renderGoal();
+}
+function closeTools(){
+ document.querySelectorAll('.tool-area').forEach(x=>x.classList.remove('active'));
+}
+function filterTools(){
+ const q=document.getElementById('searchInput').value.trim().toLowerCase();
+ let shown=0;
+ document.querySelectorAll('.tool-card').forEach(card=>{
+  const match=(card.innerText+' '+card.dataset.search).toLowerCase().includes(q);
+  card.classList.toggle('hidden',!match);
+  if(match)shown++;
+ });
+ document.getElementById('noTools').classList.toggle('hidden',shown>0);
+}
+function calculatePercentage(){
+ const m=document.getElementById('obtained').value;
+ const t=document.getElementById('totalMarks').value;
+ const out=document.getElementById('percentageResult');
+ if(m===''||t===''||Number(t)<=0||Number(m)<0||Number(m)>Number(t)){
+  out.textContent='Please enter valid marks and total marks.';
+  return;
+ }
+ const p=Number(m)/Number(t)*100;
+ out.textContent='Your Percentage: '+p.toFixed(2)+'%';
+}
+function calculate(op){
+ const a=document.getElementById('calcA').value;
+ const b=document.getElementById('calcB').value;
+ if(a===''||b===''){show('calcResult','Enter both numbers first.');return;}
+ const x=Number(a),y=Number(b);
+ let r;
+ if(op==='+')r=x+y;
+ if(op==='-')r=x-y;
+ if(op==='*')r=x*y;
+ if(op==='/'){
+  if(y===0){show('calcResult','Cannot divide by zero.');return;}
+  r=x/y;
+ }
+ if(op==='%')r=x%y;
+ show('calcResult','Answer: '+Number(r.toPrecision(12)));
+}
+function calculateStudyTime(){
+ const a=document.getElementById('startTime').value;
+ const b=document.getElementByI
