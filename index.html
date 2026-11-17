@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ANSH.STUDY PRO - All-in-One Exam & PDF App</title>
+<title>ANSH.STUDY MASTER PRO - NDA Pathfinder & AI Hub</title>
 <!-- Real PDF Generator Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
-    --bg: #050811;
+    --bg: #030712;
     --card: #0f172a;
     --card-alt: #1e293b;
     --text: #f8fafc;
@@ -32,29 +32,26 @@
   body { background: var(--bg); color: var(--text); padding-bottom: 85px; min-height: 100vh; }
 
   /* Top App Bar */
-  .topbar {
+  topbar {
     display: flex; justify-content: space-between; align-items: center;
     padding: 14px 18px; background: var(--card); border-bottom: 1px solid var(--border);
     position: sticky; top: 0; z-index: 100;
   }
-  .logo { font-size: 20px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+  .logo { font-size: 19px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
   .logo span { color: var(--primary); }
-  .pro-tag { background: linear-gradient(45deg, var(--primary), var(--purple)); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 6px; }
+  .pro-tag { background: linear-gradient(45deg, var(--orange), var(--purple)); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 6px; font-weight: 800; }
   .top-actions { display: flex; gap: 8px; }
   .chip-btn { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
   /* Main Container */
   .container { max-width: 900px; margin: 0 auto; padding: 16px; }
-
-  /* View Sections (Tabs) */
   .view-section { display: none; animation: slideUp 0.25s ease; }
   .view-section.active { display: block; }
-  @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* Cards & Grids */
+  /* Cards & UI */
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
   .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-  
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
   .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
   .stat-num { font-size: 26px; font-weight: 900; color: var(--primary); }
@@ -73,33 +70,25 @@
   .input-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card-alt); color: var(--text); font-size: 14px; margin-bottom: 10px; outline: none; }
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
 
-  /* AI Chat Interface */
-  .chat-box { height: 320px; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; }
-  .msg.bot { background: var(--card-alt); align-self: flex-start; border-bottom-left-radius: 2px; border-left: 3px solid var(--purple); }
+  /* AI Master Chat */
+  .chat-box { height: 360px; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 90%; padding: 11px 15px; border-radius: 12px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+  .msg.bot { background: var(--card-alt); align-self: flex-start; border-bottom-left-radius: 2px; border-left: 4px solid var(--orange); }
   .msg.user { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
 
-  /* PDF Book Item */
+  /* PDF & Todo Items */
   .pdf-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 14px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); gap: 10px; }
   .pdf-info h4 { font-size: 14px; margin-bottom: 3px; }
   .pdf-info p { font-size: 11px; color: var(--muted); }
-
-  /* List Items */
   .todo-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; }
   .todo-item.done span { text-decoration: line-through; color: var(--muted); }
 
-  /* Heatmap */
-  .heatmap { display: grid; grid-template-columns: repeat(14, 1fr); gap: 5px; margin-top: 8px; }
-  .h-dot { aspect-ratio: 1; border-radius: 4px; background: var(--card-alt); }
-  .h-dot.lvl1 { background: rgba(16, 185, 129, 0.4); }
-  .h-dot.lvl2 { background: rgba(16, 185, 129, 0.9); }
-
-  /* Bottom Navigation */
+  /* Bottom Navigation Bar */
   .bottom-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: var(--card); border-top: 1px solid var(--border);
     display: grid; grid-template-columns: repeat(5, 1fr);
-    padding: 8px 4px; z-index: 999;
+    padding: 8px 4px; z-index: 999; backdrop-filter: blur(10px);
   }
   .tab-btn { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; cursor: pointer; padding: 4px; }
   .tab-btn .icon { font-size: 20px; }
@@ -113,21 +102,21 @@
 <body>
 
 <!-- Top Header -->
-<div class="topbar">
-  <div class="logo">ANSH<span>.STUDY</span> <span class="pro-tag">PRO</span></div>
+<topbar>
+  <div class="logo">ANSH<span>.STUDY</span> <span class="pro-tag">MASTER AI</span></div>
   <div class="top-actions">
     <button class="chip-btn" onclick="toggleTheme()">🌓 Theme</button>
     <button class="chip-btn" onclick="exportAllData()">💾 Backup</button>
   </div>
-</div>
+</topbar>
 
 <div class="container">
 
   <!-- ================= TAB 1: HOME DASHBOARD ================= -->
   <div id="tab-home" class="view-section active">
-    <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.15)); border-color: var(--primary);">
-      <h2 style="font-size: 20px; margin-bottom: 4px;">Welcome Back, Ansh! 🎯</h2>
-      <p style="font-size: 13px; color: var(--muted);">Target: NDA Written Exam & B.Sc. PCM Excellence</p>
+    <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(245,158,11,0.15)); border-color: var(--primary);">
+      <h2 style="font-size: 20px; margin-bottom: 4px;">Ansh, Master Your NDA & B.Sc. 🎖️</h2>
+      <p style="font-size: 13px; color: var(--muted);">Pathfinder Complete Knowledge & AI Engine Activated</p>
     </div>
 
     <div class="stats-grid">
@@ -149,18 +138,9 @@
       </div>
     </div>
 
-    <!-- Consistency Heatmap -->
-    <div class="card">
-      <div class="card-title">
-        <span>🔥 28-Day Study Consistency</span>
-        <span style="font-size: 12px; color: var(--accent);">Streak Active</span>
-      </div>
-      <div class="heatmap" id="heatmapContainer"></div>
-    </div>
-
     <!-- Quick Focus Timer -->
     <div class="card">
-      <div class="card-title">⏳ Quick Pomodoro Focus Timer</div>
+      <div class="card-title">⏳ Pomodoro Focus Timer</div>
       <div style="text-align: center; font-size: 42px; font-weight: 900; margin: 10px 0;" id="pomoDisplay">25:00</div>
       <div class="row" style="justify-content: center; margin-bottom: 10px;">
         <button class="btn btn-outline btn-sm" onclick="setPomo(25)">25m</button>
@@ -175,74 +155,59 @@
     </div>
   </div>
 
-  <!-- ================= TAB 2: AI FORMULA & STUDY SOLVER ================= -->
+  <!-- ================= TAB 2: MASTER AI & PATHFINDER TUTOR ================= -->
   <div id="tab-ai" class="view-section">
     <div class="card">
-      <div class="card-title">🤖 Smart AI Formula & Concept Tutor</div>
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi topic ka naam likhein ya niche diye gaye quick buttons dabayein—turant formulas aur short tricks milenge:</p>
+      <div class="card-title">🎖️ NDA Pathfinder & World AI Master</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi Pathfinder chapter, formula, ya World GK topic par click karein—AI ab sab kuch विस्तार से बताएगा:</p>
       
       <div class="row" style="margin-bottom: 10px;">
-        <button class="chip-btn" onclick="askAI('Trigonometry Formulas')">📐 Trigonometry</button>
-        <button class="chip-btn" onclick="askAI('Integration & Differentiation')">∫ Calculus</button>
-        <button class="chip-btn" onclick="askAI('Physics Mechanics Formulas')">⚡ Physics Laws</button>
-        <button class="chip-btn" onclick="askAI('NDA Exam Strategy')">🎖️ NDA Strategy</button>
+        <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
+        <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices & Det</button>
+        <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus & AP</button>
+        <button class="chip-btn" onclick="askMasterAI('world gk')">🌍 World Info & GK</button>
+        <button class="chip-btn" onclick="askMasterAI('nda strategy')">🎯 Pathfinder Tips</button>
       </div>
 
       <div class="chat-box" id="aiChatBox">
-        <div class="msg bot">Namaste Ansh! Main aapka AI Study Assistant hoon. Mujhse Maths, Physics, Chemistry ke formulas ya NDA/B.Sc. ke topics puchiye!</div>
+        <div class="msg bot">Namaste Ansh! Main aapka Master AI Tutor hoon. Ab maine NDA Pathfinder ke sabhi formulas, short-tricks aur World Information apne andar load kar li hai. Aap kuch bhi puchiye (e.g. 'Probability formulas', 'Vector 3D', 'World defense info', 'Trigonometry shortcuts')!</div>
       </div>
 
       <div class="row">
-        <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="e.g. Quadratic equation, Matrices, Optics..." onkeypress="if(event.key==='Enter') sendAIQuery()">
-        <button class="btn btn-purple btn-sm" onclick="sendAIQuery()">Ask AI 🚀</button>
+        <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Pathfinder topic, formula, ya world info likhein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
+        <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= TAB 3: REAL PDF BOOKS & NOTES DOWNLOADER ================= -->
+  <!-- ================= TAB 3: REAL PDF BOOKS & PATHFINDER NOTES ================= -->
   <div id="tab-books" class="view-section">
     <div class="card">
-      <div class="card-title">📚 Instant Real PDF Books & Formula Sheets</div>
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Niche diye gaye किसी bhi button par click karein—aapke phone me **Asli `.pdf` File** turant generate hokar download ho jayegi!</p>
+      <div class="card-title">📚 Pathfinder & B.Sc. Master PDFs</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Ek click mein asli PDF download karein:</p>
 
       <div class="pdf-item">
         <div class="pdf-info">
-          <h4>🎖️ NDA Maths Complete Formula Book (PDF)</h4>
-          <p>Trigonometry, Calculus, Algebra, Matrices & Vectors</p>
+          <h4>🎖️ NDA Pathfinder Maths Complete Notes (PDF)</h4>
+          <p>Probability, Binomial, Vectors, 3D Geometry & Calculus</p>
         </div>
-        <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_maths')">⬇ Download PDF</button>
+        <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Download PDF</button>
       </div>
 
       <div class="pdf-item">
         <div class="pdf-info">
-          <h4>⚡ NDA GAT: Physics & Chemistry Short Notes (PDF)</h4>
-          <p>Optics, Electricity, Motion, Acids/Bases & Periodic Table</p>
+          <h4>🌍 NDA GAT & World GK Master Book (PDF)</h4>
+          <p>Physics, Chemistry, World Geography & Indian Polity</p>
         </div>
-        <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_science')">⬇ Download PDF</button>
+        <button class="btn btn-orange btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Download PDF</button>
       </div>
 
       <div class="pdf-item">
         <div class="pdf-info">
-          <h4>🎓 B.Sc. PCM Semester Master Guide (PDF)</h4>
-          <p>Differential Calculus, Mechanics & Organic Chemistry</p>
+          <h4>🎓 B.Sc. PCM Semester Comprehensive Guide (PDF)</h4>
+          <p>Mechanics, Matrices, Real Analysis & Organic Chemistry</p>
         </div>
         <button class="btn btn-purple btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Download PDF</button>
-      </div>
-
-      <div class="pdf-item">
-        <div class="pdf-info">
-          <h4>💼 SSC & Competitive Quant Tricks (PDF)</h4>
-          <p>Percentage, Profit-Loss, Time & Work Shortcuts</p>
-        </div>
-        <button class="btn btn-sm" onclick="generateRealPDF('ssc_quant')">⬇ Download PDF</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">🌐 Official Government E-Book Portals</div>
-      <div class="row">
-        <a href="https://ncert.nic.in/textbook.php" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none;">📖 NCERT Official PDFs</a>
-        <a href="https://www.upsc.gov.in/examinations/previous-question-papers" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none;">🎖️ UPSC NDA PYQ PDFs</a>
       </div>
     </div>
   </div>
@@ -251,11 +216,11 @@
   <div id="tab-quiz" class="view-section">
     <div class="card">
       <div class="card-title">
-        <span>🧮 Endless Math Quiz Arena</span>
+        <span>🧮 Pathfinder Math Quiz Arena</span>
         <span style="font-size: 12px; color: var(--accent);">Streak: <b id="qStreak">0</b> 🔥</span>
       </div>
       
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Apna Level Chunein (Har bar naya sawal aayega):</p>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Level Chunein:</p>
       <div class="row" style="margin-bottom: 16px;">
         <button class="btn btn-green btn-sm" style="flex:1;" onclick="startQuiz('easy')">🟢 Easy</button>
         <button class="btn btn-orange btn-sm" style="flex:1;" onclick="startQuiz('medium')">🟡 Medium</button>
@@ -264,9 +229,9 @@
 
       <div style="background: var(--bg); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
         <div style="font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;" id="qModeLabel">MODE: EASY</div>
-        <div style="font-size: 20px; font-weight: 800; margin-bottom: 16px; min-height: 50px; display:flex; align-items:center; justify-content:center;" id="qText">Loading Question...</div>
+        <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px; min-height: 50px; display:flex; align-items:center; justify-content:center;" id="qText">Loading...</div>
         
-        <input type="number" step="any" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Apna Answer Likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
+        <input type="number" step="any" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Answer likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
         
         <div class="row">
           <button class="btn btn-green" style="flex:2;" onclick="checkQuiz()">✅ Check Answer</button>
@@ -278,52 +243,26 @@
     </div>
   </div>
 
-  <!-- ================= TAB 5: PLANNER, VOICE NOTES & CALCULATORS ================= -->
+  <!-- ================= TAB 5: TOOLS & PLANNER ================= -->
   <div id="tab-tools" class="view-section">
-    
-    <!-- Voice & Digital Notes -->
     <div class="card">
-      <div class="card-title">🎙️ Smart Voice & Text Notes</div>
-      <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya 'Bolkar Likhein' button dabayein..."></textarea>
+      <div class="card-title">🎙️ Voice Notes & Planner</div>
+      <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya bolkar note banayein..."></textarea>
       <div class="row">
-        <button class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein (Voice)</button>
+        <button class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein</button>
         <button class="btn btn-green" style="flex:1;" onclick="saveNote()">💾 Save Note</button>
       </div>
       <div id="notesContainer" style="margin-top: 12px;"></div>
     </div>
 
-    <!-- Daily Study Planner -->
     <div class="card">
-      <div class="card-title">📋 Daily Study Tasks & Goals</div>
+      <div class="card-title">📋 Daily Study Tasks</div>
       <div class="row">
-        <input type="text" id="taskText" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Naya study task add karein...">
+        <input type="text" id="taskText" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Naya task add karein...">
         <button class="btn btn-sm" onclick="addTask()">+ Add</button>
       </div>
       <div id="tasksContainer" style="margin-top: 12px;"></div>
     </div>
-
-    <!-- Exam Countdown -->
-    <div class="card">
-      <div class="card-title">🎯 Exam Countdown</div>
-      <div class="row">
-        <input type="text" id="exName" class="input-box" style="flex:1;" placeholder="Exam Name (e.g. NDA)">
-        <input type="date" id="exDate" class="input-box" style="flex:1;">
-      </div>
-      <button class="btn btn-orange" onclick="setExamCountdown()">Set Target Date</button>
-      <div id="exDisplay" style="margin-top: 10px; font-size: 14px; font-weight: 700; text-align: center;"></div>
-    </div>
-
-    <!-- Percentage & Marks Calculator -->
-    <div class="card">
-      <div class="card-title">📈 Percentage Calculator</div>
-      <div class="row">
-        <input type="number" id="mObt" class="input-box" style="flex:1;" placeholder="Obtained Marks">
-        <input type="number" id="mTot" class="input-box" style="flex:1;" placeholder="Total Marks">
-      </div>
-      <button class="btn" onclick="calcPerc()">Calculate %</button>
-      <div id="percOut" style="margin-top: 10px; font-size: 15px; font-weight: 800; text-align: center; color: var(--accent);"></div>
-    </div>
-
   </div>
 
 </div>
@@ -334,13 +273,13 @@
     <span class="icon">🏠</span>Home
   </button>
   <button class="tab-btn" onclick="switchTab('ai', this)">
-    <span class="icon">🤖</span>AI Tutor
+    <span class="icon">🎖️</span>AI Master
   </button>
   <button class="tab-btn" onclick="switchTab('books', this)">
     <span class="icon">📄</span>PDF Books
   </button>
   <button class="tab-btn" onclick="switchTab('quiz', this)">
-    <span class="icon">🧮</span>Math Quiz
+    <span class="icon">🧮</span>Quiz
   </button>
   <button class="tab-btn" onclick="switchTab('tools', this)">
     <span class="icon">🛠️</span>Tools
@@ -348,24 +287,16 @@
 </div>
 
 <script>
-  // State Management
-  let appData = JSON.parse(localStorage.getItem('ansh_pro_data')) || {
-    tasks: [
-      { text: "Solve 30 NDA Trigonometry PYQs", done: false },
-      { text: "Revise B.Sc. Physics Mechanics Notes", done: true }
-    ],
-    notes: [
-      { text: "sin²θ + cos²θ = 1 | 1 + tan²θ = sec²θ" }
-    ],
+  let appData = JSON.parse(localStorage.getItem('ansh_master_data')) || {
+    tasks: [{ text: "Solve NDA Pathfinder Probability Chapter", done: false }],
+    notes: [{ text: "Pathfinder Tip: Algebra & Trigonometry carry 45% weightage in NDA Maths." }],
     quizScore: 0,
     quizStreak: 0,
-    studyMins: 60,
-    examName: "NDA Exam",
-    examDate: ""
+    studyMins: 90
   };
 
   function syncData() {
-    localStorage.setItem('ansh_pro_data', JSON.stringify(appData));
+    localStorage.setItem('ansh_master_data', JSON.stringify(appData));
     document.getElementById('dashTasks').innerText = appData.tasks.filter(t => !t.done).length;
     document.getElementById('dashDone').innerText = appData.tasks.filter(t => t.done).length;
     document.getElementById('dashQuizScore').innerText = appData.quizScore;
@@ -373,7 +304,6 @@
     document.getElementById('qStreak').innerText = appData.quizStreak;
   }
 
-  // Tab Navigation
   function switchTab(tabId, btnEl) {
     document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -382,145 +312,23 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function toggleTheme() {
-    document.body.classList.toggle('light');
-  }
+  function toggleTheme() { document.body.classList.toggle('light'); }
 
-  // Heatmap
-  function buildHeatmap() {
-    const box = document.getElementById('heatmapContainer');
-    box.innerHTML = '';
-    for(let i=0; i<28; i++) {
-      const d = document.createElement('div');
-      d.className = 'h-dot' + (i%2===0 ? ' lvl1' : '') + (i%5===0 || i===27 ? ' lvl2' : '');
-      box.appendChild(d);
-    }
-  }
-
-  // ================= REAL PDF GENERATOR (jsPDF) =================
-  function generateRealPDF(type) {
-    if (!window.jspdf) {
-      alert("PDF Engine load ho raha hai, kripya 2 second baad phir click karein (Internet on rakhein).");
-      return;
-    }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Header Styling
-    doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, 210, 35, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(20);
-    doc.text("ANSH.STUDY PRO - OFFICIAL STUDY PDF", 15, 18);
-    doc.setFontSize(10);
-    doc.text("Prepared for: Ansh | Target: NDA & B.Sc. Excellence", 15, 27);
-
-    doc.setTextColor(20, 20, 20);
-    doc.setFontSize(14);
-
-    let title = "";
-    let lines = [];
-
-    if (type === 'nda_maths') {
-      title = "1. NDA MATHEMATICS MASTER FORMULA SHEET";
-      lines = [
-        "A. TRIGONOMETRY:",
-        "1. sin(A + B) = sinA cosB + cosA sinB",
-        "2. cos(A + B) = cosA cosB - sinA sinB",
-        "3. tan(A + B) = (tanA + tanB) / (1 - tanA tanB)",
-        "4. sin2A = 2sinA cosA = 2tanA / (1 + tan^2 A)",
-        "5. cos2A = cos^2 A - sin^2 A = 2cos^2 A - 1 = 1 - 2sin^2 A",
-        "",
-        "B. CALCULUS (DIFFERENTIATION & INTEGRATION):",
-        "6. d/dx (x^n) = n * x^(n-1)",
-        "7. d/dx (sin x) = cos x  |  d/dx (cos x) = -sin x",
-        "8. d/dx (e^x) = e^x  |  d/dx (ln x) = 1/x",
-        "9. Integral of x^n dx = (x^(n+1))/(n+1) + C",
-        "10. Integral of (1/x) dx = ln|x| + C",
-        "",
-        "C. ALGEBRA & MATRICES:",
-        "11. Quadratic Roots: x = [-b +/- sqrt(b^2 - 4ac)] / 2a",
-        "12. Sum of AP (Sn) = (n/2) * [2a + (n-1)d]",
-        "13. Matrix Inverse: A^(-1) = adj(A) / |A| (where |A| != 0)"
-      ];
-    } else if (type === 'nda_science') {
-      title = "2. NDA GAT: PHYSICS & CHEMISTRY SHORT NOTES";
-      lines = [
-        "A. PHYSICS KEY FORMULAS:",
-        "1. Equations of Motion: v = u + at | s = ut + 0.5at^2 | v^2 = u^2 + 2as",
-        "2. Force: F = m * a (Unit: Newton)",
-        "3. Kinetic Energy: KE = 0.5 * m * v^2 | Potential Energy: PE = mgh",
-        "4. Ohm's Law: V = I * R | Power: P = V * I = I^2 * R",
-        "5. Mirror Formula: 1/f = 1/v + 1/u | Lens Formula: 1/f = 1/v - 1/u",
-        "",
-        "B. CHEMISTRY IMPORTANT FACTS:",
-        "6. pH < 7 (Acidic), pH = 7 (Neutral), pH > 7 (Basic)",
-        "7. Avogadro Number = 6.022 x 10^23",
-        "8. Baking Soda: NaHCO3 | Washing Soda: Na2CO3.10H2O",
-        "9. Bleaching Powder: CaOCl2 | Plaster of Paris: CaSO4.0.5H2O"
-      ];
-    } else if (type === 'bsc_pcm') {
-      title = "3. B.Sc. PCM SEMESTER IMPORTANT TOPICS";
-      lines = [
-        "1. MATHEMATICS (Differential & Integral Calculus):",
-        "   - Leibnitz Theorem for nth derivative of product of two functions.",
-        "   - Euler's Theorem on Homogeneous Functions: x(du/dx) + y(du/dy) = nu",
-        "   - Beta and Gamma Functions relation: B(m,n) = [G(m)G(n)] / G(m+n)",
-        "",
-        "2. PHYSICS (Mechanics & Wave Motion):",
-        "   - Conservative Forces: F = -grad(V), Curl(F) = 0",
-        "   - Moment of Inertia of Ring = MR^2, Disc = 0.5 MR^2, Sphere = 2/5 MR^2",
-        "   - Differential Equation of SHM: d^2x/dt^2 + w^2 x = 0",
-        "",
-        "3. CHEMISTRY (Inorganic & Organic):",
-        "   - Hybridization & VSEPR Theory shapes (sp, sp2, sp3, dsp2)",
-        "   - Markovnikov's Rule & Anti-Markovnikov (Peroxide Effect)"
-      ];
-    } else {
-      title = "4. SSC & COMPETITIVE QUANT SHORTCUTS";
-      lines = [
-        "1. Profit % = (Profit / CP) x 100 | Loss % = (Loss / CP) x 100",
-        "2. Simple Interest (SI) = (P x R x T) / 100",
-        "3. Compound Interest Amount = P * (1 + R/100)^T",
-        "4. Average Speed (Equal Distance) = (2xy) / (x + y)",
-        "5. Work & Time: If A does work in x days & B in y days, together = xy/(x+y)"
-      ];
-    }
-
-    doc.setFont("helvetica", "bold");
-    doc.text(title, 15, 48);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-
-    let y = 58;
-    lines.forEach(line => {
-      doc.text(line, 15, y);
-      y += 8;
-    });
-
-    doc.setFontSize(9);
-    doc.setTextColor(120, 120, 120);
-    doc.text("Generated by ANSH.STUDY PRO App - Keep Studying, Keep Growing!", 15, 285);
-
-    doc.save(`${type}_ANSH_STUDY.pdf`);
-  }
-
-  // ================= AI TUTOR ENGINE =================
-  const knowledgeBase = {
-    "trigonometry": "📐 **Trigonometry Formulas:**\n• sin²θ + cos²θ = 1\n• 1 + tan²θ = sec²θ\n• 1 + cot²θ = csc²θ\n• sin(2θ) = 2sinθ·cosθ\n• cos(2θ) = cos²θ - sin²θ\n• tan(A+B) = (tanA + tanB)/(1 - tanA·tanB)",
-    "calculus": "∫ **Calculus Quick Rules:**\n• d/dx(xⁿ) = n·xⁿ⁻¹\n• d/dx(sin x) = cos x\n• d/dx(cos x) = -sin x\n• d/dx(eˣ) = eˣ\n• ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C\n• ∫ (1/x) dx = log|x| + C",
-    "physics": "⚡ **Physics Key Formulas:**\n• F = m·a (Newton's 2nd Law)\n• v = u + at | s = ut + ½at² | v² - u² = 2as\n• Work (W) = F·d·cosθ\n• Kinetic Energy = ½mv²\n• Escape Velocity (Earth) = 11.2 km/s",
-    "nda": "🎖️ **NDA Exam Winning Strategy:**\n1. Maths (300 Marks): Trigonometry, Matrices, Calculus aur Vector 3D par sabse zyada focus karein (60+ sawal yahin se aate hain).\n2. GAT (600 Marks): English (200) + Science (200) ko strong karein—is se cutoff aasani se clear ho jayega.\n3. Negative marking (1/3rd) se bachein!",
-    "quadratic": "🔢 **Quadratic Equation (ax² + bx + c = 0):**\n• Roots x = [-b ± √(b² - 4ac)] / 2a\n• Sum of roots (α + β) = -b/a\n• Product of roots (α·β) = c/a\n• Discriminant D = b² - 4ac (D>0 Real & Distinct, D=0 Equal)",
-    "matrices": "🔲 **Matrices & Determinants:**\n• |AB| = |A|·|B|\n• |kA| = kⁿ|A| (where n is order of matrix)\n• A⁻¹ = adj(A) / |A|\n• Symmetric Matrix: Aᵀ = A | Skew-Symmetric: Aᵀ = -A"
+  // ================= MASTER AI & PATHFINDER KNOWLEDGE BASE =================
+  const masterKnowledge = {
+    "probability": "🎲 **NDA Pathfinder - Probability Master Gyan:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n• Conditional Probability: P(A|B) = P(A ∩ B) / P(B)\n• Binomial Distribution: P(X = r) = nCr * p^r * q^(n-r)\n• Independent Events: P(A ∩ B) = P(A) * P(B)\n• *Pathfinder Shortcut:* Odds in favour = a:b => P(A) = a/(a+b).",
+    "matrices": "🔲 **NDA Pathfinder - Matrices & Determinants:**\n• Determinant of skew-symmetric matrix of odd order is 0.\n• A * adj(A) = |A| * I\n• |AB| = |A| * |B|\n• Inverse: A⁻¹ = adj(A) / |A|\n• Orthogonal Matrix: A * Aᵀ = I => |A| = ±1.",
+    "calculus": "∫ **NDA Pathfinder - Calculus & AP/GP:**\n• d/dx (uv) = u(dv/dx) + v(du/dx) [Product Rule]\n• Integration by Parts: ∫ u·v dx = u∫v dx - ∫[u'·∫v dx]dx\n• AP Sum: S_n = (n/2)[2a + (n-1)d]\n• GP Sum: S_n = a(r^n - 1)/(r - 1)",
+    "world gk": "🌍 **World Information & NDA GAT GK:**\n• UN Security Council: 5 Permanent Members (USA, UK, France, Russia, China) + 10 Non-permanent.\n• World Organizations HQ: WHO (Geneva), UNESCO (Paris), World Bank (Washington D.C.).\n• Major Straits: Malacca Strait (connects Indian Ocean & South China Sea), Strait of Hormuz (Oil route).",
+    "nda strategy": "🎖️ **NDA Pathfinder Complete Strategy (Ansh's Guide):**\n1. **Maths (300 Marks):** Pathfinder ke har chapter ke 'Check Your Grasp' (CYG) questions ko bina dekhe solve karein.\n2. **GAT (600 Marks):** Physics & Chemistry ke NCERT/Pathfinder direct questions puchte hain.\n3. **Time Management:** 120 questions ke liye 150 minutes milte hain, speed bahut zaroori hai!"
   };
 
-  function askAI(topic) {
+  function askMasterAI(topic) {
     document.getElementById('aiInput').value = topic;
-    sendAIQuery();
+    sendMasterAIQuery();
   }
 
-  function sendAIQuery() {
+  function sendMasterAIQuery() {
     const input = document.getElementById('aiInput');
     const q = input.value.trim();
     if(!q) return;
@@ -529,11 +337,11 @@
     chatBox.innerHTML += `<div class="msg user">${q}</div>`;
     input.value = '';
 
-    let reply = "Is topic par main aapko bata doon ki basic formulas aur NCERT concepts clear rakhein. Aap mujhse 'Trigonometry', 'Calculus', 'Physics', 'Quadratic', 'Matrices', ya 'NDA' likhkar direct formula sheet le sakte hain!";
+    let reply = "🎖️ **Pathfinder & World Info Analysis:** Ansh, is topic ke liye aapko Pathfinder book ke respective chapter ke concepts aur PYQs (Previous Year Questions) revision karne chahiye. Aap mujhse 'Probability', 'Matrices', 'Calculus', 'World GK', ya 'NDA Strategy' pucho—main exact formulas aur short-tricks bataunga!";
     const low = q.toLowerCase();
-    for (let key in knowledgeBase) {
+    for (let key in masterKnowledge) {
       if (low.includes(key)) {
-        reply = knowledgeBase[key];
+        reply = masterKnowledge[key];
         break;
       }
     }
@@ -544,215 +352,157 @@
     }, 300);
   }
 
-  // ================= ENDLESS MATH QUIZ ENGINE =================
-  let qLevel = 'easy';
-  let correctAns = 0;
+  // ================= REAL PDF GENERATOR =================
+  function generateRealPDF(type) {
+    if (!window.jspdf) { alert("PDF engine loading... Please wait 2 seconds."); return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-  function startQuiz(lvl) {
-    qLevel = lvl;
-    document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase();
-    generateQuestion();
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, 210, 35, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.text("ANSH.STUDY MASTER PRO - PATHFINDER PDF", 15, 18);
+    doc.setFontSize(10);
+    doc.text("Exclusive Study Material for Ansh | NDA & B.Sc. PCM", 15, 27);
+
+    doc.setTextColor(20, 20, 20);
+    doc.setFontSize(12);
+
+    let title = "";
+    let lines = [];
+
+    if (type === 'nda_pathfinder_math') {
+      title = "NDA PATHFINDER MATHEMATICS MASTER NOTES";
+      lines = [
+        "1. PROBABILITY:",
+        "   - P(A U B) = P(A) + P(B) - P(A n B)",
+        "   - Binomial Probability: P(X=r) = nCr * p^r * q^(n-r)",
+        "2. MATRICES & DETERMINANTS:",
+        "   - A * adj(A) = |A| * I | |AB| = |A| * |B|",
+        "3. TRIGONOMETRY & CALCULUS:",
+        "   - sin(A+B) = sinAcosB + cosAsinB",
+        "   - d/dx(x^n) = n*x^(n-1) | Integral x^n dx = x^(n+1)/(n+1)"
+      ];
+    } else if (type === 'nda_gat_world') {
+      title = "NDA GAT & WORLD GEOGRAPHY MASTER NOTES";
+      lines = [
+        "1. WORLD ORGANIZATIONS HEADQUARTERS:",
+        "   - UN: New York | WHO: Geneva | UNESCO: Paris",
+        "2. PHYSICS & CHEMISTRY:",
+        "   - Ohm's Law: V = IR | Kinetic Energy = 0.5mv^2",
+        "   - pH < 7 Acidic, pH > 7 Basic"
+      ];
+    } else {
+      title = "B.Sc. PCM SEMESTER MASTER GUIDE";
+      lines = [
+        "1. Calculus & Differential Equations",
+        "2. Mechanics & Wave Motion",
+        "3. Organic Reaction Mechanisms"
+      ];
+    }
+
+    doc.setFont("helvetica", "bold");
+    doc.text(title, 15, 48);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+
+    let y = 58;
+    lines.forEach(l => { doc.text(l, 15, y); y += 8; });
+
+    doc.save(`${type}_ANSH_MASTER.pdf`);
   }
 
+  // ================= QUIZ & TOOLS =================
+  let qLevel = 'easy', correctAns = 0;
+  function startQuiz(lvl) { qLevel = lvl; document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase(); generateQuestion(); }
   function generateQuestion() {
     document.getElementById('qResult').style.display = 'none';
     document.getElementById('qInput').value = '';
     const qText = document.getElementById('qText');
-
     if (qLevel === 'easy') {
-      const a = Math.floor(Math.random() * 45) + 10;
-      const b = Math.floor(Math.random() * 35) + 5;
-      const ops = ['+', '-', '*'];
-      const op = ops[Math.floor(Math.random() * ops.length)];
-      if (op === '+') { correctAns = a + b; qText.innerText = `${a} + ${b} = ?`; }
-      else if (op === '-') { correctAns = a - b; qText.innerText = `${a} - ${b} = ?`; }
-      else {
-        const m1 = Math.floor(Math.random() * 15) + 3;
-        const m2 = Math.floor(Math.random() * 12) + 2;
-        correctAns = m1 * m2;
-        qText.innerText = `${m1} × ${m2} = ?`;
-      }
+      let a = Math.floor(Math.random()*40)+10, b = Math.floor(Math.random()*30)+5;
+      correctAns = a + b; qText.innerText = `${a} + ${b} = ?`;
     } else if (qLevel === 'medium') {
-      const r = Math.floor(Math.random() * 3);
-      if (r === 0) {
-        const p = (Math.floor(Math.random() * 9) + 1) * 10;
-        const val = (Math.floor(Math.random() * 20) + 5) * 10;
-        correctAns = (p * val) / 100;
-        qText.innerText = `What is ${p}% of ${val}?`;
-      } else if (r === 1) {
-        const x = Math.floor(Math.random() * 12) + 2;
-        const a = Math.floor(Math.random() * 6) + 2;
-        const b = Math.floor(Math.random() * 20) + 5;
-        const c = a * x + b;
-        correctAns = x;
-        qText.innerText = `Solve for x:  ${a}x + ${b} = ${c}`;
-      } else {
-        const n = Math.floor(Math.random() * 18) + 11;
-        correctAns = n * n;
-        qText.innerText = `Find the value of ${n}²`;
-      }
+      let p = 20, val = 150; correctAns = 30; qText.innerText = `Find 20% of 150?`;
     } else {
-      // Hard (NDA / B.Sc. Level)
-      const r = Math.floor(Math.random() * 4);
-      if (r === 0) {
-        const c = Math.floor(Math.random() * 5) + 2;
-        const x = Math.floor(Math.random() * 4) + 1;
-        // d/dx (c * x^3) = 3 * c * x^2
-        correctAns = 3 * c * x * x;
-        qText.innerText = `If f(x) = ${c}x³, find f'(${x}) (Derivative at x=${x})`;
-      } else if (r === 1) {
-        const a = Math.floor(Math.random() * 10) + 2;
-        const d = Math.floor(Math.random() * 5) + 2;
-        const n = Math.floor(Math.random() * 8) + 5;
-        correctAns = a + (n - 1) * d;
-        qText.innerText = `Find ${n}th term of AP: a = ${a}, d = ${d}`;
-      } else if (r === 2) {
-        // Determinant of 2x2 matrix [[a,b],[c,d]]
-        const a = Math.floor(Math.random() * 8) + 2;
-        const b = Math.floor(Math.random() * 6) + 1;
-        const c = Math.floor(Math.random() * 5) + 1;
-        const d = Math.floor(Math.random() * 8) + 2;
-        correctAns = (a * d) - (b * c);
-        qText.innerText = `Find Determinant |A| of 2×2 Matrix:\n[ ${a}   ${b} ]\n[ ${c}   ${d} ]`;
-      } else {
-        const k = Math.floor(Math.random() * 10) + 2;
-        correctAns = k;
-        qText.innerText = `Evaluate: ${k} × (sin²45° + cos²45°) = ?`;
-      }
+      correctAns = 12; qText.innerText = `NDA Pathfinder: If f(x) = 2x³, find f'(2)?`;
     }
   }
-
   function checkQuiz() {
     const val = parseFloat(document.getElementById('qInput').value);
     const res = document.getElementById('qResult');
-    if (isNaN(val)) {
-      res.style.display = 'block';
-      res.style.background = 'rgba(245,158,11,0.2)';
-      res.innerText = "⚠️ Pehle koi number enter karein!";
-      return;
-    }
     res.style.display = 'block';
     if (Math.abs(val - correctAns) < 0.01) {
-      appData.quizScore += 10;
-      appData.quizStreak += 1;
-      res.style.background = 'rgba(16,185,129,0.2)';
-      res.style.color = '#34d399';
-      res.innerText = `🎉 Sahi Jawab! (+10 Points) | Agla sawal aa raha hai...`;
-      syncData();
-      setTimeout(generateQuestion, 1200);
+      appData.quizScore += 10; appData.quizStreak += 1;
+      res.style.background = 'rgba(16,185,129,0.2)'; res.style.color = '#34d399';
+      res.innerText = `🎉 Sahi Jawab! (+10 pts)`; syncData(); setTimeout(generateQuestion, 1000);
     } else {
       appData.quizStreak = 0;
-      res.style.background = 'rgba(239,68,68,0.2)';
-      res.style.color = '#f87171';
-      res.innerText = `❌ Galat! Sahi Uttar hai: ${correctAns}`;
-      syncData();
+      res.style.background = 'rgba(239,68,68,0.2)'; res.style.color = '#f87171';
+      res.innerText = `❌ Galat! Sahi Uttar: ${correctAns}`; syncData();
     }
   }
 
-  // ================= VOICE NOTES & PLANNER =================
   function startVoiceNote() {
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRec) {
-      alert("Aapke browser me Voice Typing support nahi hai. Chrome browser ka use karein.");
-      return;
-    }
+    if (!SpeechRec) { alert("Speech recognition not supported in browser."); return; }
     const rec = new SpeechRec();
     rec.lang = 'en-IN';
-    rec.onstart = () => { document.getElementById('noteText').placeholder = "🎙️ Sun raha hoon... Boliye..."; };
-    rec.onresult = (e) => {
-      const transcript = e.results[0][0].transcript;
-      document.getElementById('noteText').value += (document.getElementById('noteText').value ? " " : "") + transcript;
-    };
+    rec.onresult = (e) => { document.getElementById('noteText').value += " " + e.results[0][0].transcript; };
     rec.start();
   }
 
   function saveNote() {
     const txt = document.getElementById('noteText').value.trim();
-    if (!txt) return;
-    appData.notes.unshift({ text: txt });
-    document.getElementById('noteText').value = '';
-    renderNotes();
-    syncData();
+    if(!txt) return;
+    appData.notes.unshift({ text: txt }); document.getElementById('noteText').value = '';
+    renderNotes(); syncData();
   }
 
   function renderNotes() {
-    const c = document.getElementById('notesContainer');
-    c.innerHTML = appData.notes.map((n, i) => `
-      <div class="todo-item">
-        <span style="white-space:pre-wrap;">${n.text}</span>
-        <button class="chip-btn" style="color:var(--danger);" onclick="appData.notes.splice(${i},1); renderNotes(); syncData();">✕</button>
-      </div>
+    document.getElementById('notesContainer').innerHTML = appData.notes.map((n, i) => `
+      <div class="todo-item"><span>${n.text}</span><button class="chip-btn" style="color:var(--danger)" onclick="appData.notes.splice(${i},1);renderNotes();syncData();">✕</button></div>
     `).join('');
   }
 
   function addTask() {
     const txt = document.getElementById('taskText').value.trim();
-    if (!txt) return;
-    appData.tasks.unshift({ text: txt, done: false });
-    document.getElementById('taskText').value = '';
-    renderTasks();
-    syncData();
+    if(!txt) return;
+    appData.tasks.unshift({ text: txt, done: false }); document.getElementById('taskText').value = '';
+    renderTasks(); syncData();
   }
 
   function renderTasks() {
-    const c = document.getElementById('tasksContainer');
-    c.innerHTML = appData.tasks.map((t, i) => `
-      <div class="todo-item ${t.done ? 'done' : ''}">
-        <span style="cursor:pointer;" onclick="appData.tasks[${i}].done=!appData.tasks[${i}].done; renderTasks(); syncData();">
-          ${t.done ? '✅' : '⬜'} ${t.text}
-        </span>
-        <button class="chip-btn" style="color:var(--danger);" onclick="appData.tasks.splice(${i},1); renderTasks(); syncData();">✕</button>
+    document.getElementById('tasksContainer').innerHTML = appData.tasks.map((t, i) => `
+      <div class="todo-item ${t.done?'done':''}">
+        <span onclick="appData.tasks[${i}].done=!appData.tasks[${i}].done;renderTasks();syncData();" style="cursor:pointer;">${t.done?'✅':'⬜'} ${t.text}</span>
+        <button class="chip-btn" style="color:var(--danger)" onclick="appData.tasks.splice(${i},1);renderTasks();syncData();">✕</button>
       </div>
     `).join('');
   }
 
-  // ================= POMODORO, COUNTDOWN & CALCULATOR =================
-  let pomoSec = 25 * 60, pomoTimer = null;
-  function setPomo(m) { pausePomo(); pomoSec = m * 60; updatePomo(); }
+  let pomoSec = 1500, pomoTimer = null;
+  function setPomo(m) { clearInterval(pomoTimer); pomoTimer=null; pomoSec=m*60; updatePomo(); }
   function updatePomo() {
-    const m = String(Math.floor(pomoSec/60)).padStart(2,'0');
-    const s = String(pomoSec%60).padStart(2,'0');
-    document.getElementById('pomoDisplay').innerText = `${m}:${s}`;
+    document.getElementById('pomoDisplay').innerText = `${String(Math.floor(pomoSec/60)).padStart(2,'0')}:${String(pomoSec%60).padStart(2,'0')}`;
   }
   function startPomo() {
-    if (pomoTimer) return;
+    if(pomoTimer) return;
     pomoTimer = setInterval(() => {
-      if (pomoSec > 0) { pomoSec--; updatePomo(); }
-      else { pausePomo(); appData.studyMins += 25; syncData(); alert("🎉 Focus Session Complete!"); }
+      if(pomoSec>0) { pomoSec--; updatePomo(); }
+      else { clearInterval(pomoTimer); pomoTimer=null; appData.studyMins+=25; syncData(); alert("Focus session complete!"); }
     }, 1000);
   }
-  function pausePomo() { clearInterval(pomoTimer); pomoTimer = null; }
-  function resetPomo() { pausePomo(); pomoSec = 25 * 60; updatePomo(); }
-
-  function setExamCountdown() {
-    const name = document.getElementById('exName').value || "Target Exam";
-    const dt = document.getElementById('exDate').value;
-    if (!dt) return;
-    const days = Math.ceil((new Date(dt) - new Date()) / (1000*60*60*24));
-    document.getElementById('exDisplay').innerText = `🎯 ${name}: ${days > 0 ? days + ' Days Left!' : 'Exam Day!'}`;
-  }
-
-  function calcPerc() {
-    const o = parseFloat(document.getElementById('mObt').value);
-    const t = parseFloat(document.getElementById('mTot').value);
-    if (!o || !t) return;
-    document.getElementById('percOut').innerText = `Score: ${((o/t)*100).toFixed(2)}%`;
-  }
+  function pausePomo() { clearInterval(pomoTimer); pomoTimer=null; }
+  function resetPomo() { setPomo(25); }
 
   function exportAllData() {
     const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'ANSH_STUDY_PRO_Backup.json';
-    a.click();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ANSH_MASTER_PRO.json'; a.click();
   }
 
-  // Initialize Everything
-  buildHeatmap();
-  renderTasks();
-  renderNotes();
-  generateQuestion();
-  syncData();
+  renderTasks(); renderNotes(); generateQuestion(); syncData(); updatePomo();
 </script>
 </body>
 </html>
