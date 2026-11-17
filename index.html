@@ -1,197 +1,217 @@
-import streamlit as st
-import random
-import time
-from fpdf import FPDF
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-# पेज सेटिंग्स
-st.set_page_config(page_title="ANSH.STUDY MASTER PRO", page_icon="🎖️", layout="wide")
+public class AnshStudyMasterPro {
+    // डेटा स्टोर करने के लिए लिस्ट्स
+    static ArrayList<String> tasks = new ArrayList<>();
+    static ArrayList<String> notes = new ArrayList<>();
+    static int quizScore = 0;
+    static int studyMins = 90;
+    static Scanner scanner = new Scanner(System.in);
 
-# डेटा सेव रखने के लिए Session State (LocalStorage का विकल्प)
-if 'tasks' not in st.session_state:
-    st.session_state.tasks = [{"text": "Solve NDA Pathfinder Probability Chapter", "done": False}]
-if 'notes' not in st.session_state:
-    st.session_state.notes = ["Pathfinder Tip: Algebra & Trigonometry carry 45% weightage in NDA Maths."]
-if 'quiz_score' not in st.session_state:
-    st.session_state.quiz_score = 0
-if 'quiz_streak' not in st.session_state:
-    st.session_state.quiz_streak = 0
-if 'study_mins' not in st.session_state:
-    st.session_state.study_mins = 90
-if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = [
-        {"role": "assistant", "content": "Namaste Ansh! Main aapka Python Smart AI Tutor hoon. Koi bhi math calculation (jaise '2+2') ya NDA Pathfinder ka formula puchein!"}
-    ]
+    public static void main(String[] args) {
+        // शुरुआती डिफ़ॉल्ट डेटा
+        tasks.add("Solve NDA Pathfinder Probability Chapter");
+        notes.add("Pathfinder Tip: Algebra & Trigonometry carry 45% weightage in NDA Maths.");
 
-# हेडर
-st.title("🎖️ ANSH.STUDY MASTER PRO - NDA Pathfinder & AI Hub")
-st.caption("Powered by Python | Exclusive Study Engine for NDA & B.Sc. (PCM)")
+        boolean running = true;
+        while (running) {
+            System.out.println("\n==================================================");
+            System.out.println("🎖️ ANSH.STUDY MASTER PRO - NDA PATHFINDER & AI HUB");
+            System.out.println("==================================================");
+            System.out.println("1. 🏠 View Dashboard & Stats");
+            System.out.println("2. 🎖️ Smart AI Pathfinder Tutor (Formulas & Calc)");
+            System.out.println("3. 📚 Generate Master Study Notes (Save as TXT)");
+            System.out.println("4. 🧮 Math Quiz Arena (NDA & General)");
+            System.out.println("5. 🛠️ Manage Tasks & Quick Notes");
+            System.out.println("6. 🚪 Exit / Close App");
+            System.out.print("\nApna option chunein (1-6): ");
 
-# 5 मुख्य टैब्स (आपके HTML ऐप के Bottom Bar की तरह)
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🏠 Home", "🎖️ Smart AI", "📄 PDF Books", "🧮 Math Quiz", "🛠️ Tools & Tasks"])
+            int choice = -1;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Kripya 1 se 6 ke beech mein hi koi sankhya (number) dalein.");
+                continue;
+            }
 
-# ================= TAB 1: HOME DASHBOARD =================
-with tab1:
-    st.subheader("Ansh, Master Your NDA & B.Sc. Dashboard")
-    
-    # Stats Grid
-    col1, col2, col3, col4 = st.columns(4)
-    pending_tasks = len([t for t in st.session_state.tasks if not t['done']])
-    done_tasks = len([t for t in st.session_state.tasks if t['done']])
-    
-    col1.metric("Pending Tasks", pending_tasks)
-    col2.metric("Completed Tasks", done_tasks)
-    col3.metric("Quiz Score", st.session_state.quiz_score)
-    col4.metric("Study Mins", f"{st.session_state.study_mins}m")
-    
-    st.divider()
-    
-    # Pomodoro Focus Timer
-    st.subheader("⏳ Pomodoro Focus Timer")
-    mins = st.selectbox("Focus Time Chunein (Minutes):", [25, 45, 60])
-    if st.button("▶ Start Focus Session"):
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        total_secs = mins * 60
-        # डेमो के लिए तेज़ काउंटडाउन (असली टाइमर के लिए time.sleep(1) उपयोग करें)
-        for i in range(100):
-            time.sleep(0.02) 
-            progress_bar.progress(i + 1)
-            status_text.text(f"Focus Session Chal Raha Hai... {i+1}%")
-        st.session_state.study_mins += mins
-        st.success(f"🎉 Badhai ho Ansh! {mins} minutes ka focus session pura hua!")
-        st.rerun()
+            switch (choice) {
+                case 1:
+                    showDashboard();
+                    break;
+                case 2:
+                    smartAITutor();
+                    break;
+                case 3:
+                    generateTextNotesFile();
+                    break;
+                case 4:
+                    mathQuizArena();
+                    break;
+                case 5:
+                    manageTasksAndNotes();
+                    break;
+                case 6:
+                    running = false;
+                    System.out.println("\n👋 Dhanyawad Ansh! Apni padhai jari rakhein. Jai Hind! 🇮🇳");
+                    break;
+                default:
+                    System.out.println("❌ Galat विकल्प! Kripya sahi option chunein.");
+            }
+        }
+    }
 
-# ================= TAB 2: SMART AI TUTOR =================
-with tab2:
-    st.subheader("🎖️ NDA Pathfinder & Smart AI Tutor")
-    
-    # क्विक टॉपिक्स बटन
-    c1, c2, c3, c4 = st.columns(4)
-    quick_q = None
-    if c1.button("🎲 Probability"): quick_q = "probability"
-    if c2.button("🔲 Matrices"): quick_q = "matrices"
-    if c3.button("∫ Calculus"): quick_q = "calculus"
-    if c4.button("🎯 NDA Strategy"): quick_q = "nda strategy"
+    // 1. डैशबोर्ड और स्टेट्स
+    public static void showDashboard() {
+        System.out.println("\n--- 🏠 DASHBOARD & STATS ---");
+        System.out.println("👤 User: Ansh (NDA & B.Sc. PCM Aspirant)");
+        System.out.println("📋 Pending Tasks: " + tasks.size());
+        System.out.println("⭐ Total Quiz Score: " + quizScore + " Points");
+        System.out.println("⏱️ Total Study Minutes: " + studyMins + " Mins");
+        System.out.println("----------------------------------");
+        System.out.print("Wapas main menu jaane ke liye Enter dabayein...");
+        scanner.nextLine();
+    }
 
-    # चैट इतिहास दिखाएं
-    for msg in st.session_state.chat_history:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
+    // 2. स्मार्ट AI ट्यूटर और फॉर्मूला फाइंडर
+    public static void smartAITutor() {
+        System.out.println("\n--- 🎖️ SMART AI PATHFINDER TUTOR ---");
+        System.out.println("Topics: 1. Probability  2. Matrices  3. Calculus  4. NDA Strategy");
+        System.out.print("Kiske baare mein janna chahte hain ya calculation likhein (jaise 15*4): ");
+        String query = scanner.nextLine().toLowerCase().trim();
 
-    # यूज़र इनपुट
-    user_input = st.chat_input("Yahan sawal ya math expression likhein (jaise 15*4)...")
-    query = quick_q if quick_q else user_input
+        System.out.println("\n[AI Tutor Response]:");
+        if (query.matches("^[0-9+\\-*/().\\s]+$")) {
+            try {
+                // सरल कैलकुलेशन सॉल्व करने के लिए
+                javax.script.ScriptEngineManager mgr = new javax.script.ScriptEngineManager();
+                javax.script.ScriptEngine engine = mgr.getEngineByName("JavaScript");
+                if(engine != null) {
+                    Object result = engine.eval(query);
+                    System.out.println("🧮 Calculation Result: " + query + " = " + result);
+                } else {
+                    System.out.println("Calculation engine uplabdh nahi hai.");
+                }
+            } catch (Exception e) {
+                System.out.println("Kripya sahi mathematical expression likhein.");
+            }
+        } else if (query.contains("probability")) {
+            System.out.println("🎲 NDA Pathfinder - Probability:");
+            System.out.println("• P(A U B) = P(A) + P(B) - P(A n B)");
+            System.out.println("• Conditional Probability: P(A|B) = P(A n B) / P(B)");
+            System.out.println("• Binomial Distribution: P(X = r) = nCr * p^r * q^(n-r)");
+        } else if (query.contains("matrices") || query.contains("matrix")) {
+            System.out.println("🔲 NDA Pathfinder - Matrices:");
+            System.out.println("• Skew-symmetric matrix of odd order ka determinant 0 hota hai.");
+            System.out.println("• A * adj(A) = |A| * I");
+            System.out.println("• Inverse: A^(-1) = adj(A) / |A|");
+        } else if (query.contains("calculus")) {
+            System.out.println("∫ NDA Pathfinder - Calculus:");
+            System.out.println("• Product Rule: d/dx(uv) = u(dv/dx) + v(du/dx)");
+            System.out.println("• Integration by Parts: int u*v dx = u*int v dx - int[u'*int v dx]dx");
+        } else {
+            System.out.println("🎖️ Ansh, NDA Pathfinder ke core formulas revise karte rahein. Math, Physics aur GAT par poora focus rakhein!");
+        }
+        System.out.print("\nPress Enter to continue...");
+        scanner.nextLine();
+    }
 
-    if query:
-        st.session_state.chat_history.append({"role": "user", "content": query})
-        low = query.lower()
+    // 3. फ़ाइल जनरेटर (TXT नोट्स सेव करना)
+    public static void generateTextNotesFile() {
+        System.out.println("\n--- 📚 GENERATING MASTER STUDY NOTES ---");
+        try {
+            FileWriter writer = new FileWriter("ANSH_NDA_Pathfinder_Notes.txt");
+            writer.write("=========================================\r\n");
+            writer.write("ANSH.STUDY MASTER PRO - STUDY NOTES\r\n");
+            writer.write("=========================================\r\n\n");
+            writer.write("--- SAVED NOTES & TIPS ---\r\n");
+            for (int i = 0; i < notes.size(); i++) {
+                writer.write((i + 1) + ". " + notes.get(i) + "\r\n");
+            }
+            writer.write("\r\n--- PENDING TASKS ---\r\n");
+            for (int i = 0; i < tasks.size(); i++) {
+                writer.write("- " + tasks.get(i) + "\r\n");
+            }
+            writer.close();
+            System.out.println("✅ Success! Aapke notes 'ANSH_NDA_Pathfinder_Notes.txt' file ke रूप mein successfully save ho gaye hain.");
+        } catch (IOException e) {
+            System.out.println("❌ File save karne mein error aayi.");
+        }
+        System.out.print("\nPress Enter to continue...");
+        scanner.nextLine();
+    }
+
+    // 4. मैथ क्विज़ एरिना
+    public static void mathQuizArena() {
+        System.out.println("\n--- 🧮 MATH QUIZ ARENA ---");
+        System.out.println("Sawal: NDA Pathfinder ke anusaar, agar f(x) = 2x^3 hai, toh f'(2) kya hoga?");
+        System.out.print("Apna answer likhein: ");
         
-        # Smart AI लॉजिक
-        if all(c in "0123456789+-*/(). " for c in query):
-            try:
-                ans = eval(query)
-                reply = f"🧮 **Calculation Result:** `{query}` = **{ans}**"
-            except:
-                reply = "Kripya sahi mathematical expression likhein."
-        elif "probability" in low:
-            reply = "🎲 **NDA Pathfinder - Probability:**\n- P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n- Conditional: P(A|B) = P(A ∩ B) / P(B)\n- Binomial: P(X = r) = nCr * p^r * q^(n-r)"
-        elif "matrices" in low:
-            reply = "🔲 **NDA Pathfinder - Matrices:**\n- Skew-symmetric matrix (odd order) ka determinant 0 hota hai.\n- A * adj(A) = |A| * I\n- Inverse: A⁻¹ = adj(A) / |A|"
-        elif "calculus" in low:
-            reply = "∫ **NDA Pathfinder - Calculus:**\n- Product Rule: d/dx(uv) = u(dv/dx) + v(du/dx)\n- Integration by parts: ∫ u·v dx = u∫v dx - ∫[u'·∫v dx]dx"
-        elif "nda strategy" in low:
-            reply = "🎖️ **NDA Strategy:** Maths (300 Marks) ke liye Pathfinder ke har chapter ke CYG questions solve karein. GAT (600 Marks) ke liye NCERT Physics & Chemistry best hai."
-        else:
-            reply = f"🎖️ Ansh, '{query}' ke liye Pathfinder ke core formulas revise karein. Aap 'Probability', 'Matrices', 'Calculus' ya koi calculation puch sakte hain."
+        try {
+            double ans = Double.parseDouble(scanner.nextLine());
+            if (Math.abs(ans - 24.0) < 0.01) {
+                quizScore += 10;
+                System.out.println("🎉 Sahi Jawab! (+10 Points Added). Derivative 6x^2 hota hai, toh 6*(2)^2 = 24.");
+            } else {
+                System.out.println("❌ Galat Jawab! Sahi Uttar 24 hai.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("❌ Kripya ek valid sankhya dalein.");
+        }
+        System.out.print("\nPress Enter to continue...");
+        scanner.nextLine();
+    }
 
-        st.session_state.chat_history.append({"role": "assistant", "content": reply})
-        st.rerun()
+    // 5. टास्क और नोट्स मैनेजर
+    public static void manageTasksAndNotes() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n--- 🛠️ MANAGE TASKS & NOTES ---");
+            System.out.println("1. View All Tasks (" + tasks.size() + ")");
+            System.out.println("2. Add New Task");
+            System.out.println("3. View Quick Notes (" + notes.size() + ")");
+            System.out.println("4. Add New Quick Note");
+            System.out.println("5. Back to Main Menu");
+            System.out.print("Option chunein: ");
 
-# ================= TAB 3: REAL PDF GENERATOR =================
-with tab3:
-    st.subheader("📚 Detailed Pathfinder & B.Sc. Master PDFs")
-    
-    def create_pdf(title, lines):
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", 'B', 14)
-        pdf.cell(200, 10, txt="ANSH.STUDY MASTER PRO - PATHFINDER NOTES", ln=True, align='C')
-        pdf.set_font("Arial", 'B', 12)
-        pdf.cell(200, 10, txt=title, ln=True, align='L')
-        pdf.ln(5)
-        pdf.set_font("Arial", size=11)
-        for line in lines:
-            pdf.cell(200, 8, txt=line, ln=True)
-        return pdf.output(dest="S").encode("latin-1")
-
-    pdf1_data = create_pdf("NDA PATHFINDER MATHEMATICS NOTES", [
-        "1. Addition Theorem: P(A U B) = P(A) + P(B) - P(A n B)",
-        "2. Inverse Matrix: A^(-1) = adj(A) / |A|",
-        "3. Derivatives: d/dx(x^n) = n*x^(n-1)"
-    ])
-    st.download_button("⬇ Download NDA Maths Notes (PDF)", data=pdf1_data, file_name="NDA_Maths_Ansh.pdf", mime="application/pdf")
-
-    pdf2_data = create_pdf("NDA GAT & SCIENCE COMPENDIUM", [
-        "1. UN Headquarters: New York, USA",
-        "2. Ohm's Law: V = IR | Kinetic Energy = 0.5 * m * v^2",
-        "3. pH < 7 is Acidic, pH > 7 is Basic"
-    ])
-    st.download_button("⬇ Download NDA GAT Notes (PDF)", data=pdf2_data, file_name="NDA_GAT_Ansh.pdf", mime="application/pdf")
-
-# ================= TAB 4: MATH QUIZ ARENA =================
-with tab4:
-    st.subheader(f"🧮 Pathfinder Math Quiz Arena | Streak: {st.session_state.quiz_streak} 🔥")
-    level = st.radio("Level Chunein:", ["Easy", "Medium", "Hard (NDA)"], horizontal=True)
-    
-    if 'q_text' not in st.session_state or st.button("🔄 Naya Sawal (Skip)"):
-        if level == "Easy":
-            a, b = random.randint(10, 50), random.randint(5, 30)
-            st.session_state.q_text = f"{a} + {b} = ?"
-            st.session_state.q_ans = a + b
-        elif level == "Medium":
-            st.session_state.q_text = "Find 20% of 150?"
-            st.session_state.q_ans = 30
-        else:
-            st.session_state.q_text = "NDA Pathfinder: If f(x) = 2x³, find f'(2)?"
-            st.session_state.q_ans = 24 # 6 * (2^2) = 24
-
-    st.info(f"**Sawal:** {st.session_state.q_text}")
-    user_ans = st.number_input("Apna Answer Likhein:", step=1.0)
-    
-    if st.button("✅ Check Answer"):
-        if abs(user_ans - st.session_state.q_ans) < 0.01:
-            st.session_state.quiz_score += 10
-            st.session_state.quiz_streak += 1
-            st.success("🎉 Sahi Jawab! (+10 Points)")
-            del st.session_state.q_text # अगला सवाल लाने के लिए
-            time.sleep(1)
-            st.rerun()
-        else:
-            st.session_state.quiz_streak = 0
-            st.error(f"❌ Galat! Sahi Uttar: {st.session_state.q_ans}")
-
-# ================= TAB 5: TOOLS & PLANNER =================
-with tab5:
-    col_a, col_b = st.columns(2)
-    
-    with col_a:
-        st.subheader("📝 Quick Study Notes")
-        new_note = st.text_area("Naya Note Likhein:")
-        if st.button("💾 Save Note") and new_note:
-            st.session_state.notes.insert(0, new_note)
-            st.rerun()
-        for i, n in enumerate(st.session_state.notes):
-            st.info(n)
-            
-    with col_b:
-        st.subheader("📋 Daily Study Tasks")
-        new_task = st.text_input("Naya Task Add Karein:")
-        if st.button("+ Add Task") and new_task:
-            st.session_state.tasks.insert(0, {"text": new_task, "done": False})
-            st.rerun()
-            
-        for i, t in enumerate(st.session_state.tasks):
-            checked = st.checkbox(t["text"], value=t["done"], key=f"task_{i}")
-            if checked != t["done"]:
-                st.session_state.tasks[i]["done"] = checked
-                st.rerun()
+            String opt = scanner.nextLine();
+            switch (opt) {
+                case "1":
+                    System.out.println("\n[Your Tasks]:");
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + ". " + tasks.get(i));
+                    }
+                    break;
+                case "2":
+                    System.out.print("Naya task likhein: ");
+                    String t = scanner.nextLine();
+                    if (!t.isEmpty()) {
+                        tasks.add(t);
+                        System.out.println("✅ Task successfully added!");
+                    }
+                    break;
+                case "3":
+                    System.out.println("\n[Your Notes]:");
+                    for (int i = 0; i < notes.size(); i++) {
+                        System.out.println((i + 1) + ". " + notes.get(i));
+                    }
+                    break;
+                case "4":
+                    System.out.print("Naya note likhein: ");
+                    String n = scanner.nextLine();
+                    if (!n.isEmpty()) {
+                        notes.add(n);
+                        System.out.println("✅ Note successfully saved!");
+                    }
+                    break;
+                case "5":
+                    back = true;
+                    break;
+                default:
+                    System.out.println("❌ Aamanya विकल्प!");
+            }
+        }
+    }
+}
