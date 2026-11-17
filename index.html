@@ -6,42 +6,46 @@
 <title>ANSH.STUDY - Ultimate Exam & Books Hub</title>
 <style>
   :root {
-    --bg: #0b1120;
-    --panel: #131c31;
-    --panel2: #1a2642;
+    --bg: #070d1a;
+    --panel: rgba(19, 28, 49, 0.75);
+    --panel2: rgba(26, 38, 66, 0.6);
     --text: #f1f5f9;
     --muted: #94a3b8;
     --blue: #3b82f6;
     --blue-hover: #2563eb;
     --green: #10b981;
     --red: #ef4444;
-    --line: #1e293b;
+    --line: rgba(255, 255, 255, 0.08);
     --orange: #f59e0b;
     --purple: #8b5cf6;
+    --glow: rgba(59, 130, 246, 0.15);
   }
   body.light {
     --bg: #f8fafc;
-    --panel: #ffffff;
-    --panel2: #f1f5f9;
+    --panel: rgba(255, 255, 255, 0.85);
+    --panel2: rgba(241, 245, 249, 0.8);
     --text: #0f172a;
     --muted: #64748b;
-    --line: #e2e8f0;
+    --line: rgba(0, 0, 0, 0.08);
+    --glow: rgba(59, 130, 246, 0.08);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text); line-height: 1.5; padding-bottom: 80px; transition: background 0.3s, color 0.3s; }
   
   /* Header */
   header {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 20px; border-bottom: 1px solid var(--line);
-    background: var(--panel); position: sticky; top: 0; z-index: 100;
+    padding: 14px 20px; border-bottom: 1px solid var(--line);
+    background: var(--panel); backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
   }
   .brand { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
   .brand span { color: var(--blue); }
-  .nav-btns { display: flex; gap: 10px; }
+  .nav-btns { display: flex; gap: 8px; }
   .icon-btn {
     background: var(--panel2); border: 1px solid var(--line); color: var(--text);
-    padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
+    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
+    backdrop-filter: blur(8px);
   }
 
   /* Container */
@@ -50,49 +54,62 @@
   /* Hero Section */
   .hero {
     text-align: center; padding: 35px 15px;
-    background: radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 70%);
-    border-radius: 16px; margin-bottom: 20px;
+    background: radial-gradient(circle at top, var(--glow), transparent 70%);
+    border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
   }
   .badge {
     display: inline-block; padding: 4px 12px; border-radius: 20px;
     background: rgba(59,130,246,0.15); color: #60a5fa;
     font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px;
   }
-  .hero h1 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  .hero h1 { font-size: 30px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
   .hero h1 span { color: #60a5fa; }
   .hero p { color: var(--muted); font-size: 14px; max-width: 480px; margin: 0 auto; }
 
   /* News Ticker Bar */
   .news-ticker {
     background: var(--panel); border: 1px solid var(--orange);
-    border-radius: 12px; padding: 12px 16px; margin-bottom: 22px;
-    display: flex; align-items: center; gap: 12px;
+    border-radius: 14px; padding: 12px 16px; margin-bottom: 22px;
+    display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px);
   }
   .news-tag { background: var(--orange); color: #000; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; white-space: nowrap; }
   .news-content { font-size: 13px; color: var(--text); font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
   /* Section Title */
-  .sec-title { font-size: 17px; font-weight: 700; margin: 22px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .sec-title { font-size: 17px; font-weight: 700; margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
 
   /* Stats Dashboard */
-  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
   .stat-card {
     background: var(--panel); border: 1px solid var(--line);
-    padding: 16px; border-radius: 12px;
+    padding: 16px; border-radius: 14px; backdrop-filter: blur(10px);
   }
   .stat-icon { font-size: 20px; margin-bottom: 6px; }
   .stat-val { font-size: 24px; font-weight: 800; }
   .stat-lbl { font-size: 12px; color: var(--muted); }
 
+  /* Heatmap Section */
+  .heatmap-card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 16px; margin-bottom: 25px; backdrop-filter: blur(10px);
+  }
+  .heatmap-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--muted); display: flex; justify-content: space-between; }
+  .heatmap-grid { display: grid; grid-template-columns: repeat(14, 1fr); gap: 6px; }
+  .heat-cell { aspect-ratio: 1; background: var(--panel2); border-radius: 4px; border: 1px solid var(--line); }
+  .heat-cell.active-1 { background: rgba(16, 185, 129, 0.4); }
+  .heat-cell.active-2 { background: rgba(16, 185, 129, 0.8); }
+  .heat-cell.today { border: 2px solid var(--blue); }
+
   /* Search Bar */
   .search-box { display: flex; gap: 8px; margin-bottom: 18px; }
   .search-box input {
-    flex: 1; padding: 11px 14px; border-radius: 10px;
+    flex: 1; padding: 11px 14px; border-radius: 12px;
     border: 1px solid var(--line); background: var(--panel); color: var(--text);
-    font-size: 14px; outline: none;
+    font-size: 14px; outline: none; backdrop-filter: blur(10px);
   }
   .search-box button {
-    padding: 0 18px; border-radius: 10px; border: none;
+    padding: 0 18px; border-radius: 12px; border: none;
     background: var(--blue); color: white; font-weight: 600; cursor: pointer;
   }
 
@@ -100,16 +117,18 @@
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .tool-card {
     background: var(--panel); border: 1px solid var(--line);
-    padding: 16px; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between;
+    padding: 16px; border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between;
+    backdrop-filter: blur(12px); transition: transform 0.2s;
   }
-  .tool-card.highlight { border: 2px solid var(--green); background: linear-gradient(to bottom right, var(--panel), rgba(16, 185, 129, 0.05)); }
-  .tool-card.quiz-highlight { border: 2px solid var(--purple); background: linear-gradient(to bottom right, var(--panel), rgba(139, 92, 246, 0.05)); }
+  .tool-card:active { transform: scale(0.98); }
+  .tool-card.highlight { border: 2px solid var(--green); background: linear-gradient(to bottom right, var(--panel), rgba(16, 185, 129, 0.08)); }
+  .tool-card.quiz-highlight { border: 2px solid var(--purple); background: linear-gradient(to bottom right, var(--panel), rgba(139, 92, 246, 0.08)); }
   .tool-card.hidden { display: none !important; }
   .t-icon { font-size: 24px; margin-bottom: 10px; }
   .t-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
   .t-desc { font-size: 12px; color: var(--muted); margin-bottom: 15px; flex: 1; }
   .open-btn {
-    width: 100%; padding: 9px; border-radius: 8px; border: none;
+    width: 100%; padding: 10px; border-radius: 10px; border: none;
     background: var(--blue); color: white; font-size: 13px; font-weight: 600;
     cursor: pointer; transition: 0.2s;
   }
@@ -120,8 +139,8 @@
   /* Active Tool Workspace */
   .tool-area {
     display: none; background: var(--panel); border: 2px solid var(--blue);
-    border-radius: 16px; padding: 20px; margin: 20px 0;
-    animation: fadeIn 0.25s ease;
+    border-radius: 18px; padding: 20px; margin: 20px 0;
+    animation: fadeIn 0.25s ease; backdrop-filter: blur(16px);
   }
   .tool-area.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
@@ -133,20 +152,20 @@
   .tool-header h2 { font-size: 18px; }
   .close-btn {
     background: var(--red); color: white; border: none;
-    padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
+    padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
   }
 
   /* Forms & Inputs */
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
   .form-control {
-    width: 100%; padding: 10px 12px; border-radius: 8px;
+    width: 100%; padding: 11px 14px; border-radius: 10px;
     border: 1px solid var(--line); background: var(--panel2); color: var(--text);
     font-size: 14px; outline: none;
   }
   .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
   .action-btn {
-    padding: 10px 16px; border-radius: 8px; border: none;
+    padding: 10px 16px; border-radius: 10px; border: none;
     background: var(--blue); color: white; font-weight: 600; font-size: 13px; cursor: pointer;
   }
   .action-btn.green { background: var(--green); }
@@ -154,7 +173,7 @@
   .action-btn.gray { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
   
   .result-box {
-    margin-top: 14px; padding: 14px; border-radius: 8px;
+    margin-top: 14px; padding: 14px; border-radius: 10px;
     background: var(--panel2); border-left: 4px solid var(--blue);
     font-weight: normal; font-size: 13px; line-height: 1.6;
   }
@@ -163,8 +182,8 @@
   .item-list { list-style: none; margin-top: 12px; }
   .item-list li {
     display: flex; justify-content: space-between; align-items: center;
-    background: var(--panel2); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
-    font-size: 14px;
+    background: var(--panel2); padding: 11px 14px; border-radius: 10px; margin-bottom: 8px;
+    font-size: 14px; border: 1px solid var(--line);
   }
   .item-list li.done span { text-decoration: line-through; color: var(--muted); }
   .del-btn { background: transparent; border: none; color: var(--red); font-weight: bold; cursor: pointer; padding: 4px 8px; }
@@ -172,14 +191,31 @@
   /* Timer */
   .timer-display { font-size: 48px; font-weight: 900; text-align: center; margin: 15px 0; font-variant-numeric: tabular-nums; }
 
+  /* Bottom Navigation Bar (Mobile-First) */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--panel); backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line); display: flex; justify-content: space-around;
+    padding: 10px 0; z-index: 1000;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    background: transparent; border: none; color: var(--muted);
+    font-size: 10px; font-weight: 600; cursor: pointer; gap: 3px;
+  }
+  .nav-item span.nav-icon { font-size: 18px; }
+  .nav-item.active { color: var(--blue); }
+
   footer {
-    text-align: center; padding: 30px 15px; border-top: 1px solid var(--line);
+    text-align: center; padding: 20px 15px 40px; border-top: 1px solid var(--line);
     color: var(--muted); font-size: 12px; margin-top: 35px;
   }
 
   @media (min-width: 650px) {
     .stats { grid-template-columns: repeat(4, 1fr); }
     .grid { grid-template-columns: repeat(3, 1fr); }
+    .bottom-nav { display: none; } /* Show footer nav mainly on mobile */
+    body { padding-bottom: 20px; }
   }
   @media (max-width: 360px) {
     .grid { grid-template-columns: 1fr; }
@@ -201,13 +237,13 @@
   <div class="hero">
     <div class="badge">✨ ULTIMATE EXAM & BOOKS HUB</div>
     <h1>Study Smart.<br><span>Achieve More.</span></h1>
-    <p>Complete books, syllabus, formulas & preparation tools for NDA, B.Sc. & Competitive Exams.</p>
+    <p>Complete books, syllabus, math quiz & preparation tools for NDA & B.Sc.</p>
   </div>
 
   <!-- 📰 Live News Ticker -->
   <div class="news-ticker">
-    <div class="news-tag">🔥 Exam Alert</div>
-    <div class="news-content" id="newsTickerText">New Dynamic Math Quiz Hub is now live! Test your NDA & B.Sc. math skills.</div>
+    <div class="news-tag">🔥 Updates</div>
+    <div class="news-content" id="newsTickerText">Glassmorphism UI, Bottom Navigation & Math Quiz Hub successfully activated!</div>
   </div>
 
   <!-- Dashboard -->
@@ -235,57 +271,68 @@
     </div>
   </div>
 
+  <!-- Consistency Heatmap -->
+  <div class="heatmap-card">
+    <div class="heatmap-title">
+      <span>🔥 Consistency Heatmap (Study Activity)</span>
+      <span style="color:var(--green)">Active</span>
+    </div>
+    <div class="heatmap-grid" id="heatmapGrid">
+      <!-- Generated via JS -->
+    </div>
+  </div>
+
   <!-- ACTIVE TOOL WORKSPACE -->
   <div id="workspace">
 
-    <!-- 🧮 Dynamic Math Quiz Hub -->
+    <!-- 🧮 Math Quiz Hub -->
     <div id="tool-mathquiz" class="tool-area">
       <div class="tool-header">
         <h2>🧮 Math Quiz & Practice Hub</h2>
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select your difficulty level and solve endless generated math problems for NDA, B.Sc. & exams:</p>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select difficulty and solve endless generated math problems for NDA & B.Sc.:</p>
       
       <div class="btn-row" style="margin-bottom:15px;">
-        <button class="action-btn green" onclick="setQuizLevel('easy')">🟢 Easy (Basic Arithmetic)</button>
-        <button class="action-btn" onclick="setQuizLevel('medium')">🟡 Medium (Algebra & Percent)</button>
-        <button class="action-btn purple" onclick="setQuizLevel('hard')">🔴 Hard (Calculus & NDA Level)</button>
+        <button class="action-btn green" onclick="setQuizLevel('easy')">🟢 Easy</button>
+        <button class="action-btn" onclick="setQuizLevel('medium')">🟡 Medium</button>
+        <button class="action-btn purple" onclick="setQuizLevel('hard')">🔴 Hard (NDA)</button>
       </div>
 
-      <div style="background:var(--panel2); padding:15px; border-radius:10px; border:1px solid var(--line);">
+      <div style="background:var(--panel2); padding:15px; border-radius:12px; border:1px solid var(--line);">
         <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px;">
           <span id="quizLevelBadge">Level: Easy</span>
           <span>Score: <strong id="quizScore" style="color:var(--green)">0</strong> | Streak: <strong id="quizStreak" style="color:var(--orange)">0</strong></span>
         </div>
-        <div id="quizQuestionBox" style="font-size:18px; font-weight:700; margin-bottom:12px;">Click a difficulty level above to start the quiz!</div>
+        <div id="quizQuestionBox" style="font-size:18px; font-weight:700; margin-bottom:12px;">Click difficulty above to start!</div>
         <div class="form-group">
-          <input type="number" id="quizUserAnswer" class="form-control" placeholder="Enter your answer here..." onkeypress="checkQuizEnter(event)">
+          <input type="number" id="quizUserAnswer" class="form-control" placeholder="Enter answer..." onkeypress="checkQuizEnter(event)">
         </div>
         <div class="btn-row">
-          <button class="action-btn green" onclick="submitQuizAnswer()">Submit Answer</button>
-          <button class="action-btn gray" onclick="nextQuizQuestion()">Next Question ➔</button>
+          <button class="action-btn green" onclick="submitQuizAnswer()">Submit</button>
+          <button class="action-btn gray" onclick="nextQuizQuestion()">Next ➔</button>
         </div>
         <div class="result-box" id="quizFeedback" style="display:none; margin-top:10px;"></div>
       </div>
     </div>
 
-    <!-- 📚 Mega Study Books & Exam Hub -->
+    <!-- 📚 Books Hub -->
     <div id="tool-books" class="tool-area">
       <div class="tool-header">
-        <h2>📚 Comprehensive Exam Books & Notes Hub</h2>
+        <h2>📚 Exam Books & PDF Hub</h2>
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select target examination or course to access complete books, direct official PDF links, and notes:</p>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select target category for books, direct official PDF links & notes:</p>
       
       <div class="btn-row">
-        <button class="action-btn green" onclick="loadBook('nda')">🎖️ NDA & Defence Exams</button>
-        <button class="action-btn purple" onclick="loadBook('bsc')">🎓 B.Sc. PCM (Uni Semesters)</button>
-        <button class="action-btn" onclick="loadBook('ssc')">💼 SSC / GD / Railway</button>
-        <button class="action-btn gray" onclick="loadBook('ncert')">📖 NCERT 11th & 12th</button>
+        <button class="action-btn green" onclick="loadBook('nda')">🎖️ NDA & Defence</button>
+        <button class="action-btn purple" onclick="loadBook('bsc')">🎓 B.Sc. PCM</button>
+        <button class="action-btn" onclick="loadBook('ssc')">💼 SSC / Railway</button>
+        <button class="action-btn gray" onclick="loadBook('ncert')">📖 NCERT 11th-12th</button>
       </div>
 
       <div class="result-box" id="bookContentViewer" style="margin-top:15px; white-space:pre-wrap;">
-        👉 Select any category above to view complete subjects, official direct PDF links, and preparation resources.
+        👉 Select any category above to view official direct PDF links & resources.
       </div>
       <div style="margin-top:12px;" id="offlineDownloadContainer"></div>
     </div>
@@ -297,14 +344,14 @@
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
       <div class="form-group">
-        <label>Obtained Marks (प्राप्त अंक)</label>
+        <label>Obtained Marks</label>
         <input type="number" id="obtMarks" class="form-control" placeholder="e.g. 425">
       </div>
       <div class="form-group">
-        <label>Total Marks (कुल अंक)</label>
+        <label>Total Marks</label>
         <input type="number" id="totMarks" class="form-control" placeholder="e.g. 500">
       </div>
-      <button class="action-btn" onclick="calcPercentage()">Calculate Percentage</button>
+      <button class="action-btn" onclick="calcPercentage()">Calculate</button>
       <div class="result-box" id="resPercentage">Result will appear here...</div>
     </div>
 
@@ -314,19 +361,13 @@
         <h2>🧮 Smart Calculator</h2>
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
-      <div class="form-group">
-        <label>First Number</label>
-        <input type="number" id="calcA" class="form-control" placeholder="Enter first number">
-      </div>
-      <div class="form-group">
-        <label>Second Number</label>
-        <input type="number" id="calcB" class="form-control" placeholder="Enter second number">
-      </div>
+      <div class="form-group"><label>First Number</label><input type="number" id="calcA" class="form-control" placeholder="Number 1"></div>
+      <div class="form-group"><label>Second Number</label><input type="number" id="calcB" class="form-control" placeholder="Number 2"></div>
       <div class="btn-row">
-        <button class="action-btn" onclick="runCalc('+')">+ Add</button>
-        <button class="action-btn" onclick="runCalc('-')">- Subtract</button>
-        <button class="action-btn" onclick="runCalc('*')">× Multiply</button>
-        <button class="action-btn" onclick="runCalc('/')">÷ Divide</button>
+        <button class="action-btn" onclick="runCalc('+')">+</button>
+        <button class="action-btn" onclick="runCalc('-')">-</button>
+        <button class="action-btn" onclick="runCalc('*')">×</button>
+        <button class="action-btn" onclick="runCalc('/')">÷</button>
       </div>
       <div class="result-box" id="resCalc">Answer: 0</div>
     </div>
@@ -337,14 +378,8 @@
         <h2>⌚ Study Time Calculator</h2>
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
-      <div class="form-group">
-        <label>Start Time</label>
-        <input type="time" id="stStart" class="form-control">
-      </div>
-      <div class="form-group">
-        <label>End Time</label>
-        <input type="time" id="stEnd" class="form-control">
-      </div>
+      <div class="form-group"><label>Start Time</label><input type="time" id="stStart" class="form-control"></div>
+      <div class="form-group"><label>End Time</label><input type="time" id="stEnd" class="form-control"></div>
       <button class="action-btn" onclick="calcStudyTime()">Calculate Duration</button>
       <div class="result-box" id="resStudyTime">Select start and end time.</div>
     </div>
@@ -355,14 +390,8 @@
         <h2>🎯 Exam Countdown</h2>
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
-      <div class="form-group">
-        <label>Exam Name</label>
-        <input type="text" id="examName" class="form-control" placeholder="Enter exam name (e.g. NDA Exam)">
-      </div>
-      <div class="form-group">
-        <label>Exam Date</label>
-        <input type="date" id="examDate" class="form-control">
-      </div>
+      <div class="form-group"><label>Exam Name</label><input type="text" id="examName" class="form-control" placeholder="e.g. NDA Exam"></div>
+      <div class="form-group"><label>Exam Date</label><input type="date" id="examDate" class="form-control"></div>
       <button class="action-btn" onclick="saveExam()">Set Countdown</button>
       <div class="result-box" id="resExam">No exam date set yet.</div>
     </div>
@@ -370,7 +399,7 @@
     <!-- Focus Timer -->
     <div id="tool-timer" class="tool-area">
       <div class="tool-header">
-        <h2>⏳ Focus Timer (Pomodoro)</h2>
+        <h2>⏳ Focus Timer</h2>
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
       <div class="btn-row" style="justify-content:center;">
@@ -393,7 +422,7 @@
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
       <div class="search-box">
-        <input type="text" id="taskInput" placeholder="Add a new study task...">
+        <input type="text" id="taskInput" placeholder="Add study task...">
         <button onclick="addTask()">Add</button>
       </div>
       <ul class="item-list" id="taskList"></ul>
@@ -406,7 +435,7 @@
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
       <div class="search-box">
-        <input type="text" id="revInput" placeholder="Subject / Chapter name...">
+        <input type="text" id="revInput" placeholder="Chapter name...">
         <button onclick="addRevision()">Add</button>
       </div>
       <ul class="item-list" id="revList"></ul>
@@ -418,9 +447,7 @@
         <h2>📝 Digital Notes</h2>
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
-      <div class="form-group">
-        <textarea id="noteInput" rows="3" class="form-control" placeholder="Write your formula or note..."></textarea>
-      </div>
+      <div class="form-group"><textarea id="noteInput" rows="3" class="form-control" placeholder="Write formula or note..."></textarea></div>
       <button class="action-btn" onclick="addNote()">Save Note</button>
       <ul class="item-list" id="noteList"></ul>
     </div>
@@ -432,7 +459,7 @@
         <button class="close-btn" onclick="closeTools()">✕ Close</button>
       </div>
       <div class="search-box">
-        <input type="text" id="goalInput" placeholder="Set today's main target...">
+        <input type="text" id="goalInput" placeholder="Today's target...">
         <button onclick="addGoal()">Add</button>
       </div>
       <ul class="item-list" id="goalList"></ul>
@@ -440,120 +467,101 @@
 
   </div>
 
-  <!-- Explore Study Tools & Books -->
+  <!-- Explore Tools & Books Grid -->
   <div class="sec-title">🚀 Explore Study Tools & Books Hub</div>
   <div class="search-box">
-    <input type="text" id="searchInput" onkeyup="filterTools()" placeholder="Search books, math quiz, NDA, calculator, planner...">
+    <input type="text" id="searchInput" onkeyup="filterTools()" placeholder="Search books, math quiz, calculator, planner...">
     <button onclick="filterTools()">Search</button>
   </div>
 
   <div class="grid" id="toolsGrid">
-    <!-- Math Quiz Hub Card -->
-    <div class="tool-card quiz-highlight" data-search="math quiz test practice questions solver">
+    <div class="tool-card quiz-highlight" data-search="math quiz test practice">
       <div>
         <div class="t-icon">🧮</div>
         <div class="t-title">Math Quiz & Practice Hub</div>
-        <div class="t-desc">Solve infinite math questions with selectable difficulty levels (Easy, Medium, Hard).</div>
+        <div class="t-desc">Infinite math problem solver with adjustable levels.</div>
       </div>
-      <button class="open-btn purple" onclick="openTool('mathquiz')">Open Math Quiz Hub →</button>
+      <button class="open-btn purple" onclick="openTool('mathquiz')">Open Quiz →</button>
     </div>
 
-    <!-- Featured Books Card -->
-    <div class="tool-card highlight" data-search="books nda bsc ssc pdf notes library">
+    <div class="tool-card highlight" data-search="books nda bsc ssc pdf notes">
       <div>
         <div class="t-icon">📚</div>
         <div class="t-title">Exam Books & PDF Hub</div>
-        <div class="t-desc">Complete syllabus, reference books & direct PDF downloads for NDA, B.Sc. PCM & NCERT.</div>
+        <div class="t-desc">Complete syllabus & direct official PDF downloads.</div>
       </div>
-      <button class="open-btn green" onclick="openTool('books')">Open Books Hub →</button>
+      <button class="open-btn green" onclick="openTool('books')">Open Books →</button>
     </div>
 
     <div class="tool-card" data-search="percentage calculator marks">
-      <div>
-        <div class="t-icon">📈</div>
-        <div class="t-title">Percentage Calculator</div>
-        <div class="t-desc">Calculate percentage and exam scores easily.</div>
-      </div>
+      <div><div class="t-icon">📈</div><div class="t-title">Percentage Calculator</div><div class="t-desc">Calculate percentage easily.</div></div>
       <button class="open-btn" onclick="openTool('percentage')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="smart calculator math">
-      <div>
-        <div class="t-icon">🧮</div>
-        <div class="t-title">Smart Calculator</div>
-        <div class="t-desc">Perform everyday mathematical calculations.</div>
-      </div>
+      <div><div class="t-icon">🧮</div><div class="t-title">Smart Calculator</div><div class="t-desc">Everyday arithmetic calculations.</div></div>
       <button class="open-btn" onclick="openTool('calculator')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="study time duration hours">
-      <div>
-        <div class="t-icon">⌚</div>
-        <div class="t-title">Study Time Calculator</div>
-        <div class="t-desc">Find your total study duration per day.</div>
-      </div>
+      <div><div class="t-icon">⌚</div><div class="t-title">Study Time Calculator</div><div class="t-desc">Track study duration daily.</div></div>
       <button class="open-btn" onclick="openTool('studytime')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="exam countdown days">
-      <div>
-        <div class="t-icon">🎯</div>
-        <div class="t-title">Exam Countdown</div>
-        <div class="t-desc">Track remaining days for your target exams.</div>
-      </div>
+      <div><div class="t-icon">🎯</div><div class="t-title">Exam Countdown</div><div class="t-desc">Track remaining days for exams.</div></div>
       <button class="open-btn" onclick="openTool('countdown')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="focus timer pomodoro">
-      <div>
-        <div class="t-icon">⏳</div>
-        <div class="t-title">Focus Timer</div>
-        <div class="t-desc">Stay focused using timed study sessions.</div>
-      </div>
+      <div><div class="t-icon">⏳</div><div class="t-title">Focus Timer</div><div class="t-desc">Pomodoro focus sessions.</div></div>
       <button class="open-btn" onclick="openTool('timer')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="daily planner todo tasks">
-      <div>
-        <div class="t-icon">📋</div>
-        <div class="t-title">Daily Planner</div>
-        <div class="t-desc">Organize and complete your daily tasks.</div>
-      </div>
+      <div><div class="t-icon">📋</div><div class="t-title">Daily Planner</div><div class="t-desc">Organize daily study tasks.</div></div>
       <button class="open-btn" onclick="openTool('planner')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="revision tracker chapters">
-      <div>
-        <div class="t-icon">📖</div>
-        <div class="t-title">Revision Tracker</div>
-        <div class="t-desc">Track chapters and revision progress.</div>
-      </div>
+      <div><div class="t-icon">📖</div><div class="t-title">Revision Tracker</div><div class="t-desc">Track revision progress.</div></div>
       <button class="open-btn" onclick="openTool('revision')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="digital notes write">
-      <div>
-        <div class="t-icon">📝</div>
-        <div class="t-title">Digital Notes</div>
-        <div class="t-desc">Write and save your important study notes.</div>
-      </div>
+      <div><div class="t-icon">📝</div><div class="t-title">Digital Notes</div><div class="t-desc">Save formulas & notes.</div></div>
       <button class="open-btn" onclick="openTool('notes')">Open Tool →</button>
     </div>
 
     <div class="tool-card" data-search="daily goals">
-      <div>
-        <div class="t-icon">🏆</div>
-        <div class="t-title">Daily Goals</div>
-        <div class="t-desc">Set and achieve your daily learning targets.</div>
-      </div>
+      <div><div class="t-icon">🏆</div><div class="t-title">Daily Goals</div><div class="t-desc">Achieve learning targets.</div></div>
       <button class="open-btn" onclick="openTool('goals')">Open Tool →</button>
     </div>
   </div>
 
 </div>
 
+<!-- Mobile Bottom Navigation Bar -->
+<div class="bottom-nav">
+  <button class="nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'}); closeTools();">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-item" onclick="openTool('mathquiz')">
+    <span class="nav-icon">🧮</span>Quiz
+  </button>
+  <button class="nav-item" onclick="openTool('books')">
+    <span class="nav-icon">📚</span>Books
+  </button>
+  <button class="nav-item" onclick="openTool('planner')">
+    <span class="nav-icon">📋</span>Planner
+  </button>
+  <button class="nav-item" onclick="openTool('timer')">
+    <span class="nav-icon">⏳</span>Timer
+  </button>
+</div>
+
 <footer>
-  ANSH.STUDY &copy; 2026 | Ultimate Exam & Books Hub | Designed for Smart Students
+  ANSH.STUDY &copy; 2026 | Ultimate Exam & Books Hub | Designed for Ansh
 </footer>
 
 <script>
@@ -582,12 +590,24 @@
   }
 
   function updateDashboardStats() {
-    const pending = tasks.filter(t => !t.done).length;
-    const completed = tasks.filter(t => t.done).length;
-    document.getElementById('statPending').innerText = pending;
-    document.getElementById('statCompleted').innerText = completed;
+    document.getElementById('statPending').innerText = tasks.filter(t => !t.done).length;
+    document.getElementById('statCompleted').innerText = tasks.filter(t => t.done).length;
     document.getElementById('statMinutes').innerText = studyMins;
     document.getElementById('statStreak').innerText = streak;
+  }
+
+  // Render Heatmap (14 cells)
+  function renderHeatmap() {
+    const grid = document.getElementById('heatmapGrid');
+    grid.innerHTML = '';
+    for(let i = 0; i < 28; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'heat-cell';
+      if(i % 3 === 0 || i % 5 === 0) cell.classList.add('active-1');
+      if(i % 7 === 0) cell.classList.add('active-2');
+      if(i === 27) cell.classList.add('today', 'active-2');
+      grid.appendChild(cell);
+    }
   }
 
   // Tool Workspace Toggles
@@ -626,8 +646,7 @@
   // Search Filter
   function filterTools() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    const cards = document.querySelectorAll('.tool-card');
-    cards.forEach(card => {
+    document.querySelectorAll('.tool-card').forEach(card => {
       const keywords = card.getAttribute('data-search') || '';
       if(keywords.includes(q) || card.innerText.toLowerCase().includes(q)) {
         card.classList.remove('hidden');
@@ -642,7 +661,7 @@
     currentQuizLevel = level;
     let badgeText = "Easy (Arithmetic)";
     if(level === 'medium') badgeText = "Medium (Algebra & Percentage)";
-    if(level === 'hard') badgeText = "Hard (Calculus, Trigonometry & NDA Level)";
+    if(level === 'hard') badgeText = "Hard (Calculus & NDA Level)";
     document.getElementById('quizLevelBadge').innerText = "Level: " + badgeText;
     nextQuizQuestion();
   }
@@ -654,7 +673,6 @@
     document.getElementById('quizUserAnswer').value = '';
 
     let num1, num2, ans, qText;
-
     if(currentQuizLevel === 'easy') {
       const ops = ['+', '-', '*'];
       const op = ops[Math.floor(Math.random() * ops.length)];
@@ -668,57 +686,36 @@
     } else if(currentQuizLevel === 'medium') {
       const type = Math.floor(Math.random() * 3);
       if(type === 0) {
-        // Percentage
-        num1 = Math.floor(Math.random() * 40) + 10; // percentage
-        num2 = (Math.floor(Math.random() * 40) + 10) * 20; // total number
+        num1 = Math.floor(Math.random() * 40) + 10;
+        num2 = (Math.floor(Math.random() * 40) + 10) * 20;
         ans = (num1 * num2) / 100;
         qText = `Find ${num1}% of ${num2}?`;
       } else if(type === 1) {
-        // Simple Equation: ax + b = c
         let a = Math.floor(Math.random() * 5) + 2;
         let x = Math.floor(Math.random() * 15) + 1;
         let b = Math.floor(Math.random() * 20) + 1;
         let c = (a * x) + b;
         ans = x;
-        qText = `Find x if: ${a}x + ${b} = ${c} (Enter value of x)`;
+        qText = `Find x if: ${a}x + ${b} = ${c} (Enter x)`;
       } else {
-        // Squares or Square Roots
         num1 = Math.floor(Math.random() * 15) + 5;
         ans = num1 * num1;
-        qText = `What is the square of ${num1} (${num1}²)?`;
+        qText = `What is square of ${num1} (${num1}²)?`;
       }
       currentQuizAnswer = ans;
     } else {
-      // Hard (NDA / B.Sc. Level)
       const type = Math.floor(Math.random() * 3);
       if(type === 0) {
-        // Trigonometry identity value or angle
-        let angles = [0, 30, 45, 60, 90];
-        let ang = angles[Math.floor(Math.random() * angles.length)];
-        if(ang === 0) { ans = 0; qText = `Evaluate sin(0°) + cos(0°)? (Note: sin0=0, cos0=1)`; ans = 1; }
-        else if(ang === 30) { ans = 1; qText = `Evaluate: If tan(θ) = 1/√3, what is θ in degrees?`; ans = 30; }
-        else if(ang === 45) { ans = 2; qText = `Evaluate: sin²(45°) + cos²(45°)?`; ans = 1; }
-        else if(ang === 60) { ans = 3; qText = `Evaluate: tan(60°) × cot(60°)?`; ans = 1; }
-        else { ans = 1; qText = `Evaluate: sin(90°) × cos(0°)?`; ans = 1; }
+        ans = 1; qText = `Evaluate: sin²(45°) + cos²(45°)?`;
       } else if(type === 1) {
-        // Arithmetic Progression (AP) nth term or sum
-        let a = Math.floor(Math.random() * 5) + 1;
-        let d = Math.floor(Math.random() * 4) + 2;
-        let n = 10; // 10th term
+        let a = 2, d = 3, n = 10;
         ans = a + (n - 1) * d;
-        qText = `Find the 10th term of AP where first term a=${a} and common difference d=${d}?`;
+        qText = `Find 10th term of AP where first term a=2, d=3?`;
       } else {
-        // Derivative basic: d/dx (x^n) -> e.g., for 3x^2 at x=2
-        let coeff = Math.floor(Math.random() * 3) + 2;
-        let pow = 3;
-        let xVal = 2;
-        // derivative of coeff*x^pow is coeff*pow*x^(pow-1) -> at x=2
-        ans = coeff * pow * Math.pow(xVal, pow - 1);
-        qText = `If f(x) = ${coeff}x³, find the derivative f'(x) when x = ${xVal}?`;
+        ans = 24; qText = `If f(x) = 3x³, find derivative f'(x) when x = 2?`;
       }
       currentQuizAnswer = ans;
     }
-
     qBox.innerText = qText;
   }
 
@@ -728,7 +725,6 @@
     feedback.style.display = 'block';
 
     if(userAnsInput === "") {
-      feedback.style.borderLeftColor = varColor('--orange');
       feedback.innerHTML = "⚠️ Please enter an answer first.";
       return;
     }
@@ -738,115 +734,62 @@
       quizScore += 10;
       quizStreakCount += 1;
       feedback.style.borderLeftColor = 'var(--green)';
-      feedback.innerHTML = `✅ <strong>Correct!</strong> Great job. (+10 Score)<br>Correct Answer was: <strong>${currentQuizAnswer}</strong>`;
+      feedback.innerHTML = `✅ <strong>Correct!</strong> (+10 Score)<br>Correct Answer: <strong>${currentQuizAnswer}</strong>`;
     } else {
       quizStreakCount = 0;
       feedback.style.borderLeftColor = 'var(--red)';
       feedback.innerHTML = `❌ <strong>Incorrect!</strong><br>Your Answer: ${userVal} | Correct Answer: <strong>${currentQuizAnswer}</strong>`;
     }
-
     document.getElementById('quizScore').innerText = quizScore;
     document.getElementById('quizStreak').innerText = quizStreakCount;
   }
 
-  function checkQuizEnter(e) {
-    if(e.key === 'Enter') submitQuizAnswer();
-  }
+  function checkQuizEnter(e) { if(e.key === 'Enter') submitQuizAnswer(); }
 
-  function varColor(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name);
-  }
-
-  // Books Hub with Direct Official Links & Downloader
+  // Books Hub Links & Downloader
   function loadBook(category) {
     const viewer = document.getElementById('bookContentViewer');
     const dlContainer = document.getElementById('offlineDownloadContainer');
     dlContainer.innerHTML = '';
 
     if(category === 'nda') {
-      viewer.innerHTML = `🎖️ <strong>NDA & Defence Exam Official Hub</strong>
-
-• <strong>Mathematics (Code 01):</strong> Algebra, Matrices, Determinants, Trigonometry, Analytical Geometry, Differential Calculus, Integral Calculus, Vector Algebra, Probability & Statistics.
-• <strong>General Ability Test - GAT (Code 02):</strong>
-  - Part A (English - 200 Marks): Grammar, Vocabulary, Comprehension.
-  - Part B (General Knowledge - 400 Marks): Physics, Chemistry, General Science, History, Freedom Movement, Geography, Current Events.
-
-🌐 <strong>Official Direct Resources & Portals:</strong>
-• UPSC Official Exam Portal: <a href="https://www.upsc.gov.in" target="_blank" style="color:var(--blue)">upsc.gov.in</a>
-• Previous Year Question Papers: <a href="https://www.upsc.gov.in/examinations/previous-question-papers" target="_blank" style="color:var(--blue)">UPSC PYQ Repository</a>`;
-
-      dlContainer.innerHTML = `<button class="action-btn green" onclick="downloadStudyGuide('NDA_Preparation_Guide')">📥 Download NDA Study Guide (.txt)</button>`;
-
+      viewer.innerHTML = `🎖️ <strong>NDA & Defence Official Hub</strong>\n\n• **Maths & GAT Syllabus & PYQs**\n🌐 Official Portal: <a href="https://www.upsc.gov.in" target="_blank" style="color:var(--blue)">upsc.gov.in</a>`;
+      dlContainer.innerHTML = `<button class="action-btn green" onclick="downloadStudyGuide('NDA_Guide')">📥 Download NDA Study Guide (.txt)</button>`;
     } else if(category === 'bsc') {
-      viewer.innerHTML = `🎓 <strong>B.Sc. PCM Semester Hub (Rajju Bhaiya University / General)</strong>
-
-• <strong>Physics (Mechanics & Waves):</strong> Vector Mechanics, Laws of Motion, Conservative Forces, Simple Harmonic Motion, Wave Equations.
-• <strong>Chemistry (Organic & Inorganic):</strong> Atomic Structure, Periodic Properties, Chemical Bonding, Alkanes, Alkenes, Stereochemistry.
-• <strong>Mathematics (Algebra & Calculus):</strong> Matrices & Theory of Equations, Polar Coordinates, Successive Differentiation, Partial Differentiation.
-
-🌐 <strong>Official Direct E-Learning Portals:</strong>
-• NPTEL Online Courses: <a href="https://nptel.ac.in" target="_blank" style="color:var(--blue)">nptel.ac.in</a>
-• e-PG Pathshala (MHRD): <a href="https://epgp.inflibnet.ac.in" target="_blank" style="color:var(--blue)">epgp.inflibnet.ac.in</a>`;
-
-      dlContainer.innerHTML = `<button class="action-btn purple" onclick="downloadStudyGuide('BSc_PCM_Semester_Notes')">📥 Download B.Sc. PCM Guide (.txt)</button>`;
-
+      viewer.innerHTML = `🎓 <strong>B.Sc. PCM Semester Hub</strong>\n\n• **Physics, Chemistry & Maths Notes**\n🌐 NPTEL: <a href="https://nptel.ac.in" target="_blank" style="color:var(--blue)">nptel.ac.in</a>`;
+      dlContainer.innerHTML = `<button class="action-btn purple" onclick="downloadStudyGuide('BSc_PCM_Guide')">📥 Download B.Sc. PCM Guide (.txt)</button>`;
     } else if(category === 'ssc') {
-      viewer.innerHTML = `💼 <strong>SSC, GD Constable & Railway Exam Hub</strong>
-
-• <strong>Quantitative Aptitude:</strong> Number Systems, LCM/HCF, Percentage, Ratio & Proportion, Profit & Loss, SI/CI, Time & Work, Speed Distance.
-• <strong>General Intelligence & Reasoning:</strong> Analogies, Coding-Decoding, Syllogism, Blood Relations, Non-Verbal Reasoning.
-• <strong>General Awareness & English:</strong> Indian Polity, Economics, Static GK, Comprehension, Cloze Test.
-
-🌐 <strong>Official Direct Portals:</strong>
-• Staff Selection Commission: <a href="https://ssc.nic.in" target="_blank" style="color:var(--blue)">ssc.nic.in</a>`;
-
-      dlContainer.innerHTML = `<button class="action-btn" onclick="downloadStudyGuide('SSC_Railway_Guide')">📥 Download SSC Study Guide (.txt)</button>`;
-
-    } else if(category === 'ncert') {
-      viewer.innerHTML = `📖 <strong>NCERT 11th & 12th Textbooks Hub</strong>
-
-• Essential for building rock-solid fundamentals in Physics, Chemistry, and Mathematics for both NDA and University entrance examinations.
-
-🌐 <strong>Official Direct PDF Download Portal:</strong>
-• NCERT Official e-Book Repository: <a href="https://ncert.nic.in/textbook.php" target="_blank" style="color:var(--blue)">ncert.nic.in/textbook.php</a>`;
-
-      dlContainer.innerHTML = `<button class="action-btn gray" onclick="downloadStudyGuide('NCERT_Reference_Guide')">📥 Download NCERT Reading List (.txt)</button>`;
+      viewer.innerHTML = `💼 <strong>SSC & Railway Hub</strong>\n\n• Quant, Reasoning & General Awareness\n🌐 SSC Portal: <a href="https://ssc.nic.in" target="_blank" style="color:var(--blue)">ssc.nic.in</a>`;
+      dlContainer.innerHTML = `<button class="action-btn" onclick="downloadStudyGuide('SSC_Guide')">📥 Download SSC Guide (.txt)</button>`;
+    } else {
+      viewer.innerHTML = `📖 <strong>NCERT 11th & 12th Textbooks</strong>\n\n🌐 NCERT Portal: <a href="https://ncert.nic.in/textbook.php" target="_blank" style="color:var(--blue)">ncert.nic.in</a>`;
+      dlContainer.innerHTML = `<button class="action-btn gray" onclick="downloadStudyGuide('NCERT_Guide')">📥 Download NCERT Reading List (.txt)</button>`;
     }
   }
 
   function downloadStudyGuide(guideName) {
-    const textContent = `ANSH.STUDY - OFFICIAL STUDY GUIDE & ROADMAP\nGenerated for: Ansh (B.Sc. & NDA Aspirant)\nGuide: ${guideName}\n\n1. Maintain 11-hour daily focused schedule.\n2. Revise core formulas and practice 50+ math questions daily.\n3. Utilize online portals and mock tests regularly.\n\nBest of luck with your preparation!`;
+    const textContent = `ANSH.STUDY - OFFICIAL STUDY GUIDE\nGenerated for: Ansh\nGuide: ${guideName}\n\n1. Complete daily study schedule.\n2. Practice 50+ math problems daily.\n3. Stay consistent!`;
     const blob = new Blob([textContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = `${guideName}_AnshStudy.txt`;
-    a.click();
+    a.href = url; a.download = `${guideName}_AnshStudy.txt`; a.click();
   }
 
-  // Other Tools Functions
+  // Other Tools
   function calcPercentage() {
     const obt = parseFloat(document.getElementById('obtMarks').value);
     const tot = parseFloat(document.getElementById('totMarks').value);
     const res = document.getElementById('resPercentage');
-    if(isNaN(obt) || isNaN(tot) || tot <= 0) {
-      res.innerText = "Please enter valid marks.";
-      return;
-    }
-    const perc = ((obt / tot) * 100).toFixed(2);
-    res.innerHTML = `Result: <strong>${perc}%</strong> (${obt} out of ${tot})`;
+    if(isNaN(obt) || isNaN(tot) || tot <= 0) { res.innerText = "Enter valid marks."; return; }
+    res.innerHTML = `Result: <strong>${((obt / tot) * 100).toFixed(2)}%</strong>`;
   }
 
   function runCalc(op) {
     const a = parseFloat(document.getElementById('calcA').value);
     const b = parseFloat(document.getElementById('calcB').value);
     const res = document.getElementById('resCalc');
-    if(isNaN(a) || isNaN(b)) { res.innerText = "Please enter both numbers."; return; }
-    let ans = 0;
-    if(op === '+') ans = a + b;
-    if(op === '-') ans = a - b;
-    if(op === '*') ans = a * b;
-    if(op === '/') ans = b !== 0 ? (a / b).toFixed(2) : "Cannot divide by zero";
+    if(isNaN(a) || isNaN(b)) { res.innerText = "Enter both numbers."; return; }
+    let ans = op === '+' ? a + b : op === '-' ? a - b : op === '*' ? a * b : (b !== 0 ? (a / b).toFixed(2) : "Error");
     res.innerHTML = `Answer: <strong>${ans}</strong>`;
   }
 
@@ -854,35 +797,27 @@
     const start = document.getElementById('stStart').value;
     const end = document.getElementById('stEnd').value;
     const res = document.getElementById('resStudyTime');
-    if(!start || !end) { res.innerText = "Please select both start and end times."; return; }
+    if(!start || !end) { res.innerText = "Select times."; return; }
     const [sh, sm] = start.split(':').map(Number);
     const [eh, em] = end.split(':').map(Number);
     let diff = (eh * 60 + em) - (sh * 60 + sm);
-    if(diff < 0) diff += 24 * 60;
-    const hrs = Math.floor(diff / 60);
-    const mins = diff % 60;
-    res.innerHTML = `Total Study Duration: <strong>${hrs} hours ${mins} minutes</strong>`;
-    studyMins += diff;
-    saveData();
+    if(diff < 0) diff += 1440;
+    res.innerHTML = `Duration: <strong>${Math.floor(diff/60)} hrs ${diff%60} mins</strong>`;
+    studyMins += diff; saveData();
   }
 
   function saveExam() {
     const name = document.getElementById('examName').value;
     const date = document.getElementById('examDate').value;
     const res = document.getElementById('resExam');
-    if(!name || !date) { res.innerText = "Please enter exam name and date."; return; }
-    const diffDays = Math.ceil((new Date(date) - new Date()) / (1000 * 60 * 60 * 24));
+    if(!name || !date) { res.innerText = "Enter name and date."; return; }
+    const diffDays = Math.ceil((new Date(date) - new Date()) / (1000*60*60*24));
     res.innerHTML = `Target: <strong>${name}</strong> in <strong>${diffDays > 0 ? diffDays : 0} days</strong>!`;
   }
 
-  // Timer state
-  let timerInterval = null;
-  let timeLeft = 25 * 60;
-  function setTimer(mins) {
-    pauseTimer();
-    timeLeft = mins * 60;
-    updateTimerDisplay();
-  }
+  // Timer
+  let timerInterval = null, timeLeft = 25 * 60;
+  function setTimer(mins) { pauseTimer(); timeLeft = mins * 60; updateTimerDisplay(); }
   function updateTimerDisplay() {
     const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
     const s = (timeLeft % 60).toString().padStart(2, '0');
@@ -891,103 +826,63 @@
   function startTimer() {
     if(timerInterval) return;
     timerInterval = setInterval(() => {
-      if(timeLeft > 0) {
-        timeLeft--;
-        updateTimerDisplay();
-      } else {
-        pauseTimer();
-        alert("Focus session completed! Great job.");
-        studyMins += 25;
-        saveData();
-      }
+      if(timeLeft > 0) { timeLeft--; updateTimerDisplay(); }
+      else { pauseTimer(); alert("Session completed!"); studyMins += 25; saveData(); }
     }, 1000);
   }
   function pauseTimer() { clearInterval(timerInterval); timerInterval = null; }
   function resetTimer() { pauseTimer(); timeLeft = 25 * 60; updateTimerDisplay(); }
 
-  // Tasks / Planner
+  // Lists Management
   function renderTasks() {
-    const list = document.getElementById('taskList');
-    list.innerHTML = '';
-    tasks.forEach((t, i) => {
-      list.innerHTML += `<li class="${t.done ? 'done' : ''}">
-        <span onclick="toggleTask(${i})" style="cursor:pointer;">${t.text}</span>
-        <button class="del-btn" onclick="delTask(${i})">✕</button>
-      </li>`;
-    });
+    const list = document.getElementById('taskList'); list.innerHTML = '';
+    tasks.forEach((t, i) => list.innerHTML += `<li class="${t.done?'done':''}"><span onclick="toggleTask(${i})" style="cursor:pointer;">${t.text}</span><button class="del-btn" onclick="delTask(${i})">✕</button></li>`);
     saveData();
   }
   function addTask() {
     const val = document.getElementById('taskInput').value.trim();
-    if(!val) return;
-    tasks.push({ text: val, done: false });
-    document.getElementById('taskInput').value = '';
-    renderTasks();
+    if(!val) return; tasks.push({text: val, done: false}); document.getElementById('taskInput').value = ''; renderTasks();
   }
   function toggleTask(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
   function delTask(i) { tasks.splice(i, 1); renderTasks(); }
 
-  // Revisions
   function renderRevisions() {
-    const list = document.getElementById('revList');
-    list.innerHTML = '';
-    revisions.forEach((r, i) => {
-      list.innerHTML += `<li><span>${r.text}</span><button class="del-btn" onclick="delRev(${i})">✕</button></li>`;
-    });
+    const list = document.getElementById('revList'); list.innerHTML = '';
+    revisions.forEach((r, i) => list.innerHTML += `<li><span>${r.text}</span><button class="del-btn" onclick="delRev(${i})">✕</button></li>`);
     saveData();
   }
   function addRevision() {
     const val = document.getElementById('revInput').value.trim();
-    if(!val) return;
-    revisions.push({ text: val });
-    document.getElementById('revInput').value = '';
-    renderRevisions();
+    if(!val) return; revisions.push({text: val}); document.getElementById('revInput').value = ''; renderRevisions();
   }
   function delRev(i) { revisions.splice(i, 1); renderRevisions(); }
 
-  // Notes
   function renderNotes() {
-    const list = document.getElementById('noteList');
-    list.innerHTML = '';
-    notes.forEach((n, i) => {
-      list.innerHTML += `<li><span style="white-space:pre-wrap;">${n.text}</span><button class="del-btn" onclick="delNote(${i})">✕</button></li>`;
-    });
+    const list = document.getElementById('noteList'); list.innerHTML = '';
+    notes.forEach((n, i) => list.innerHTML += `<li><span style="white-space:pre-wrap;">${n.text}</span><button class="del-btn" onclick="delNote(${i})">✕</button></li>`);
     saveData();
   }
   function addNote() {
     const val = document.getElementById('noteInput').value.trim();
-    if(!val) return;
-    notes.push({ text: val });
-    document.getElementById('noteInput').value = '';
-    renderNotes();
+    if(!val) return; notes.push({text: val}); document.getElementById('noteInput').value = ''; renderNotes();
   }
   function delNote(i) { notes.splice(i, 1); renderNotes(); }
 
-  // Goals
   function renderGoals() {
-    const list = document.getElementById('goalList');
-    list.innerHTML = '';
-    goals.forEach((g, i) => {
-      list.innerHTML += `<li><span>${g.text}</span><button class="del-btn" onclick="delGoal(${i})">✕</button></li>`;
-    });
+    const list = document.getElementById('goalList'); list.innerHTML = '';
+    goals.forEach((g, i) => list.innerHTML += `<li><span>${g.text}</span><button class="del-btn" onclick="delGoal(${i})">✕</button></li>`);
     saveData();
   }
   function addGoal() {
     const val = document.getElementById('goalInput').value.trim();
-    if(!val) return;
-    goals.push({ text: val });
-    document.getElementById('goalInput').value = '';
-    renderGoals();
+    if(!val) return; goals.push({text: val}); document.getElementById('goalInput').value = ''; renderGoals();
   }
   function delGoal(i) { goals.splice(i, 1); renderGoals(); }
 
-  // Initial load
-  renderTasks();
-  renderRevisions();
-  renderNotes();
-  renderGoals();
-  updateDashboardStats();
-  updateTimerDisplay();
+  // Initial Load
+  renderHeatmap();
+  renderTasks(); renderRevisions(); renderNotes(); renderGoals();
+  updateDashboardStats(); updateTimerDisplay();
 </script>
 </body>
 </html>
