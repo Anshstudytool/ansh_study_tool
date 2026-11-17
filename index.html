@@ -159,7 +159,7 @@
   <div id="tab-ai" class="view-section">
     <div class="card">
       <div class="card-title">🎖️ NDA Pathfinder & World AI Master</div>
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi Pathfinder chapter, formula, ya World GK topic par click karein—AI ab sab kuch विस्तार से बताएगा:</p>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi Pathfinder chapter, formula, ya World GK topic par click karein:</p>
       
       <div class="row" style="margin-bottom: 10px;">
         <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
@@ -170,7 +170,7 @@
       </div>
 
       <div class="chat-box" id="aiChatBox">
-        <div class="msg bot">Namaste Ansh! Main aapka Master AI Tutor hoon. Ab maine NDA Pathfinder ke sabhi formulas, short-tricks aur World Information apne andar load kar li hai. Aap kuch bhi puchiye (e.g. 'Probability formulas', 'Vector 3D', 'World defense info', 'Trigonometry shortcuts')!</div>
+        <div class="msg bot">Namaste Ansh! Main aapka Master AI Tutor hoon. Ab maine NDA Pathfinder ke sabhi formulas, short-tricks aur World Information apne andar load kar li hai. Aap kuch bhi puchiye!</div>
       </div>
 
       <div class="row">
@@ -249,7 +249,7 @@
       <div class="card-title">🎙️ Voice Notes & Planner</div>
       <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya bolkar note banayein..."></textarea>
       <div class="row">
-        <button class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein</button>
+        <button id="micBtn" class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein</button>
         <button class="btn btn-green" style="flex:1;" onclick="saveNote()">💾 Save Note</button>
       </div>
       <div id="notesContainer" style="margin-top: 12px;"></div>
@@ -337,7 +337,7 @@
     chatBox.innerHTML += `<div class="msg user">${q}</div>`;
     input.value = '';
 
-    let reply = "🎖️ **Pathfinder & World Info Analysis:** Ansh, is topic ke liye aapko Pathfinder book ke respective chapter ke concepts aur PYQs (Previous Year Questions) revision karne chahiye. Aap mujhse 'Probability', 'Matrices', 'Calculus', 'World GK', ya 'NDA Strategy' pucho—main exact formulas aur short-tricks bataunga!";
+    let reply = "🎖️ **Pathfinder & World Info Analysis:** Ansh, is topic ke liye aapko Pathfinder book ke respective chapter ke concepts aur PYQs revision karne chahiye. Aap mujhse 'Probability', 'Matrices', 'Calculus', 'World GK', ya 'NDA Strategy' pucho!";
     const low = q.toLowerCase();
     for (let key in masterKnowledge) {
       if (low.includes(key)) {
@@ -354,7 +354,10 @@
 
   // ================= REAL PDF GENERATOR =================
   function generateRealPDF(type) {
-    if (!window.jspdf) { alert("PDF engine loading... Please wait 2 seconds."); return; }
+    if (!window.jspdf) { 
+      alert("PDF engine abhi load nahi hua hai. Kripya 2 second rukkar dobara prayas karein."); 
+      return; 
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
@@ -382,7 +385,7 @@
         "   - A * adj(A) = |A| * I | |AB| = |A| * |B|",
         "3. TRIGONOMETRY & CALCULUS:",
         "   - sin(A+B) = sinAcosB + cosAsinB",
-        "   - d/dx(x^n) = n*x^(n-1) | Integral x^n dx = x^(n+1)/(n+1)"
+        "   - d/dx(x^n) = n*x^(n-1)"
       ];
     } else if (type === 'nda_gat_world') {
       title = "NDA GAT & WORLD GEOGRAPHY MASTER NOTES";
@@ -413,6 +416,41 @@
     doc.save(`${type}_ANSH_MASTER.pdf`);
   }
 
+  // ================= IMPROVED VOICE RECOGNITION =================
+  function startVoiceNote() {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) { 
+      alert("Aapka browser Voice Recognition support nahi karta. Kripya Google Chrome ka upyog karein."); 
+      return; 
+    }
+    
+    const rec = new SpeechRec();
+    rec.lang = 'hi-IN'; // Hindi/English mix support ke liye
+    const micBtn = document.getElementById('micBtn');
+    
+    rec.onstart = () => {
+      micBtn.style.background = 'var(--danger)';
+      micBtn.innerText = '🔴 Sun raha hoon...';
+    };
+
+    rec.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      const noteInput = document.getElementById('noteText');
+      noteInput.value += (noteInput.value ? " " : "") + transcript;
+    };
+
+    rec.onerror = () => {
+      alert("Voice recognition mein kuch error aayi. Dobara try karein.");
+    };
+
+    rec.onend = () => {
+      micBtn.style.background = 'var(--purple)';
+      micBtn.innerText = '🎤 Bolkar Likhein';
+    };
+
+    rec.start();
+  }
+
   // ================= QUIZ & TOOLS =================
   let qLevel = 'easy', correctAns = 0;
   function startQuiz(lvl) { qLevel = lvl; document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase(); generateQuestion(); }
@@ -424,7 +462,7 @@
       let a = Math.floor(Math.random()*40)+10, b = Math.floor(Math.random()*30)+5;
       correctAns = a + b; qText.innerText = `${a} + ${b} = ?`;
     } else if (qLevel === 'medium') {
-      let p = 20, val = 150; correctAns = 30; qText.innerText = `Find 20% of 150?`;
+      let val = 150; correctAns = 30; qText.innerText = `Find 20% of 150?`;
     } else {
       correctAns = 12; qText.innerText = `NDA Pathfinder: If f(x) = 2x³, find f'(2)?`;
     }
@@ -433,7 +471,7 @@
     const val = parseFloat(document.getElementById('qInput').value);
     const res = document.getElementById('qResult');
     res.style.display = 'block';
-    if (Math.abs(val - correctAns) < 0.01) {
+    if (!isNaN(val) && Math.abs(val - correctAns) < 0.01) {
       appData.quizScore += 10; appData.quizStreak += 1;
       res.style.background = 'rgba(16,185,129,0.2)'; res.style.color = '#34d399';
       res.innerText = `🎉 Sahi Jawab! (+10 pts)`; syncData(); setTimeout(generateQuestion, 1000);
@@ -444,19 +482,11 @@
     }
   }
 
-  function startVoiceNote() {
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRec) { alert("Speech recognition not supported in browser."); return; }
-    const rec = new SpeechRec();
-    rec.lang = 'en-IN';
-    rec.onresult = (e) => { document.getElementById('noteText').value += " " + e.results[0][0].transcript; };
-    rec.start();
-  }
-
   function saveNote() {
     const txt = document.getElementById('noteText').value.trim();
     if(!txt) return;
-    appData.notes.unshift({ text: txt }); document.getElementById('noteText').value = '';
+    appData.notes.unshift({ text: txt }); 
+    document.getElementById('noteText').value = '';
     renderNotes(); syncData();
   }
 
@@ -469,7 +499,8 @@
   function addTask() {
     const txt = document.getElementById('taskText').value.trim();
     if(!txt) return;
-    appData.tasks.unshift({ text: txt, done: false }); document.getElementById('taskText').value = '';
+    appData.tasks.unshift({ text: txt, done: false }); 
+    document.getElementById('taskText').value = '';
     renderTasks(); syncData();
   }
 
