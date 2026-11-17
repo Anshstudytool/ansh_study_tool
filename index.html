@@ -116,7 +116,7 @@
   <div id="tab-home" class="view-section active">
     <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(245,158,11,0.15)); border-color: var(--primary);">
       <h2 style="font-size: 20px; margin-bottom: 4px;">Ansh, Master Your NDA & B.Sc. 🎖️</h2>
-      <p style="font-size: 13px; color: var(--muted);">Pathfinder Complete Knowledge & AI Engine Activated</p>
+      <p style="font-size: 13px; color: var(--muted);">Pathfinder Complete Knowledge & Online AI Engine Activated</p>
     </div>
 
     <div class="stats-grid">
@@ -155,49 +155,49 @@
     </div>
   </div>
 
-  <!-- ================= TAB 2: MASTER AI & PATHFINDER TUTOR ================= -->
+  <!-- ================= TAB 2: MASTER AI & ONLINE INTERNET SEARCH ================= -->
   <div id="tab-ai" class="view-section">
     <div class="card">
-      <div class="card-title">🎖️ NDA Pathfinder & World AI Master</div>
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi Pathfinder chapter, formula, ya World GK topic par click karein:</p>
+      <div class="card-title">🎖️ Online AI & Pathfinder Live Search</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi topic par click karein—AI internet se live data fetch karke dega:</p>
       
       <div class="row" style="margin-bottom: 10px;">
         <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
         <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices & Det</button>
-        <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus & AP</button>
-        <button class="chip-btn" onclick="askMasterAI('world gk')">🌍 World Info & GK</button>
+        <button class="chip-btn" onclick="askMasterAI('current affairs')">🌐 Live GK & News</button>
+        <button class="chip-btn" onclick="askMasterAI('world gk')">🌍 World Info</button>
         <button class="chip-btn" onclick="askMasterAI('nda strategy')">🎯 Pathfinder Tips</button>
       </div>
 
       <div class="chat-box" id="aiChatBox">
-        <div class="msg bot">Namaste Ansh! Main aapka Master AI Tutor hoon. Ab maine NDA Pathfinder ke sabhi formulas, short-tricks aur World Information apne andar load kar li hai. Aap kuch bhi puchiye!</div>
+        <div class="msg bot">Namaste Ansh! Main aapka Online AI Tutor hoon. Aap koi bhi topic search karenge, toh main Wikipedia aur live internet sources se information fetch karke bataunga!</div>
       </div>
 
       <div class="row">
-        <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Pathfinder topic, formula, ya world info likhein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
-        <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
+        <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Internet par kuch bhi search karein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
+        <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Search Live 🌍</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= TAB 3: REAL PDF BOOKS & PATHFINDER NOTES ================= -->
+  <!-- ================= TAB 3: DETAILED REAL PDF BOOKS ================= -->
   <div id="tab-books" class="view-section">
     <div class="card">
-      <div class="card-title">📚 Pathfinder & B.Sc. Master PDFs</div>
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Ek click mein asli PDF download karein:</p>
+      <div class="card-title">📚 Detailed Pathfinder & B.Sc. Master PDFs</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Ek click mein comprehensive (विस्तृत) PDF download karein:</p>
 
       <div class="pdf-item">
         <div class="pdf-info">
           <h4>🎖️ NDA Pathfinder Maths Complete Notes (PDF)</h4>
-          <p>Probability, Binomial, Vectors, 3D Geometry & Calculus</p>
+          <p>Probability, Binomial, Vectors, 3D Geometry & Full Formulas</p>
         </div>
         <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Download PDF</button>
       </div>
 
       <div class="pdf-item">
         <div class="pdf-info">
-          <h4>🌍 NDA GAT & World GK Master Book (PDF)</h4>
-          <p>Physics, Chemistry, World Geography & Indian Polity</p>
+          <h4>🌍 NDA GAT & World Geography Master Book (PDF)</h4>
+          <p>World Organizations, Physics, Chemistry & Indian Polity</p>
         </div>
         <button class="btn btn-orange btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Download PDF</button>
       </div>
@@ -273,7 +273,7 @@
     <span class="icon">🏠</span>Home
   </button>
   <button class="tab-btn" onclick="switchTab('ai', this)">
-    <span class="icon">🎖️</span>AI Master
+    <span class="icon">🌐</span>Online AI
   </button>
   <button class="tab-btn" onclick="switchTab('books', this)">
     <span class="icon">📄</span>PDF Books
@@ -314,21 +314,13 @@
 
   function toggleTheme() { document.body.classList.toggle('light'); }
 
-  // ================= MASTER AI & PATHFINDER KNOWLEDGE BASE =================
-  const masterKnowledge = {
-    "probability": "🎲 **NDA Pathfinder - Probability Master Gyan:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n• Conditional Probability: P(A|B) = P(A ∩ B) / P(B)\n• Binomial Distribution: P(X = r) = nCr * p^r * q^(n-r)\n• Independent Events: P(A ∩ B) = P(A) * P(B)\n• *Pathfinder Shortcut:* Odds in favour = a:b => P(A) = a/(a+b).",
-    "matrices": "🔲 **NDA Pathfinder - Matrices & Determinants:**\n• Determinant of skew-symmetric matrix of odd order is 0.\n• A * adj(A) = |A| * I\n• |AB| = |A| * |B|\n• Inverse: A⁻¹ = adj(A) / |A|\n• Orthogonal Matrix: A * Aᵀ = I => |A| = ±1.",
-    "calculus": "∫ **NDA Pathfinder - Calculus & AP/GP:**\n• d/dx (uv) = u(dv/dx) + v(du/dx) [Product Rule]\n• Integration by Parts: ∫ u·v dx = u∫v dx - ∫[u'·∫v dx]dx\n• AP Sum: S_n = (n/2)[2a + (n-1)d]\n• GP Sum: S_n = a(r^n - 1)/(r - 1)",
-    "world gk": "🌍 **World Information & NDA GAT GK:**\n• UN Security Council: 5 Permanent Members (USA, UK, France, Russia, China) + 10 Non-permanent.\n• World Organizations HQ: WHO (Geneva), UNESCO (Paris), World Bank (Washington D.C.).\n• Major Straits: Malacca Strait (connects Indian Ocean & South China Sea), Strait of Hormuz (Oil route).",
-    "nda strategy": "🎖️ **NDA Pathfinder Complete Strategy (Ansh's Guide):**\n1. **Maths (300 Marks):** Pathfinder ke har chapter ke 'Check Your Grasp' (CYG) questions ko bina dekhe solve karein.\n2. **GAT (600 Marks):** Physics & Chemistry ke NCERT/Pathfinder direct questions puchte hain.\n3. **Time Management:** 120 questions ke liye 150 minutes milte hain, speed bahut zaroori hai!"
-  };
-
-  function askMasterAI(topic) {
+  // ================= ONLINE WIKIPEDIA / INTERNET SEARCH AI =================
+  async function askMasterAI(topic) {
     document.getElementById('aiInput').value = topic;
-    sendMasterAIQuery();
+    await sendMasterAIQuery();
   }
 
-  function sendMasterAIQuery() {
+  async function sendMasterAIQuery() {
     const input = document.getElementById('aiInput');
     const q = input.value.trim();
     if(!q) return;
@@ -337,83 +329,119 @@
     chatBox.innerHTML += `<div class="msg user">${q}</div>`;
     input.value = '';
 
-    let reply = "🎖️ **Pathfinder & World Info Analysis:** Ansh, is topic ke liye aapko Pathfinder book ke respective chapter ke concepts aur PYQs revision karne chahiye. Aap mujhse 'Probability', 'Matrices', 'Calculus', 'World GK', ya 'NDA Strategy' pucho!";
-    const low = q.toLowerCase();
-    for (let key in masterKnowledge) {
-      if (low.includes(key)) {
-        reply = masterKnowledge[key];
-        break;
-      }
-    }
+    chatBox.innerHTML += `<div class="msg bot" id="loadingMsg">🌐 Internet se live data fetch kiya ja raha hai...</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-    setTimeout(() => {
-      chatBox.innerHTML += `<div class="msg bot">${reply}</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }, 300);
+    try {
+      // Fetching live data from Wikipedia Public API
+      const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&origin=*`);
+      const data = await response.json();
+      
+      document.getElementById('loadingMsg').remove();
+
+      if (data.query && data.query.search.length > 0) {
+        let snippet = data.query.search[0].snippet.replace(/(<([^>]+)>)/gi, "");
+        let title = data.query.search[0].title;
+        let reply = `🌍 **Live Internet Search Result (${title}):**\n\n${snippet}...\n\n👉 *Ansh, yeh jankari seedhi internet se fetch ki gayi hai!*`;
+        chatBox.innerHTML += `<div class="msg bot">${reply}</div>`;
+      } else {
+        chatBox.innerHTML += `<div class="msg bot">🎖️ **Pathfinder Master Info:** Is topic par NDA syllabus ke anusar basic formulas aur PYQs revise karein. (Live result not found, try searching 'Probability', 'Matrices', or 'Physics').</div>`;
+      }
+    } catch (error) {
+      document.getElementById('loadingMsg').remove();
+      chatBox.innerHTML += `<div class="msg bot">⚠️ Internet connection mein kuch dikkat hai. Kripya apna connection check karein.</div>`;
+    }
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  // ================= REAL PDF GENERATOR =================
+  // ================= DETAILED REAL PDF GENERATOR =================
   function generateRealPDF(type) {
     if (!window.jspdf) { 
-      alert("PDF engine abhi load nahi hua hai. Kripya 2 second rukkar dobara prayas karein."); 
+      alert("PDF engine abhi load ho raha hai. 2 second baad try karein."); 
       return; 
     }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
+    // Header Background
     doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, 210, 35, 'F');
+    doc.rect(0, 0, 210, 40, 'F');
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
-    doc.text("ANSH.STUDY MASTER PRO - PATHFINDER PDF", 15, 18);
+    doc.setFontSize(16);
+    doc.text("ANSH.STUDY MASTER PRO - PATHFINDER MASTER BOOK", 15, 20);
     doc.setFontSize(10);
-    doc.text("Exclusive Study Material for Ansh | NDA & B.Sc. PCM", 15, 27);
+    doc.text("Exclusive Comprehensive Study Material | Prepared for Ansh (NDA & B.Sc.)", 15, 30);
 
     doc.setTextColor(20, 20, 20);
-    doc.setFontSize(12);
+    doc.setFontSize(11);
 
     let title = "";
-    let lines = [];
+    let contentLines = [];
 
     if (type === 'nda_pathfinder_math') {
-      title = "NDA PATHFINDER MATHEMATICS MASTER NOTES";
-      lines = [
-        "1. PROBABILITY:",
-        "   - P(A U B) = P(A) + P(B) - P(A n B)",
-        "   - Binomial Probability: P(X=r) = nCr * p^r * q^(n-r)",
+      title = "NDA PATHFINDER MATHEMATICS - COMPLETE MASTER NOTES";
+      contentLines = [
+        "1. PROBABILITY & STATISTICS:",
+        "   - Addition Theorem: P(A U B) = P(A) + P(B) - P(A n B)",
+        "   - Conditional Probability: P(A|B) = P(A n B) / P(B)",
+        "   - Binomial Distribution: P(X=r) = nCr * p^r * q^(n-r)",
+        "   - Mean, Variance & Standard Deviation formulas for NDA.",
+        "",
         "2. MATRICES & DETERMINANTS:",
-        "   - A * adj(A) = |A| * I | |AB| = |A| * |B|",
+        "   - Determinant of skew-symmetric matrix of odd order is 0.",
+        "   - A * adj(A) = |A| * I | Inverse A^(-1) = adj(A) / |A|",
+        "   - Properties of Determinants and Matrix multiplication.",
+        "",
         "3. TRIGONOMETRY & CALCULUS:",
         "   - sin(A+B) = sinAcosB + cosAsinB",
-        "   - d/dx(x^n) = n*x^(n-1)"
+        "   - Derivatives: d/dx(x^n) = n*x^(n-1), d/dx(sinx) = cosx",
+        "   - Integration by Parts: int u*v dx = u*int v dx - int[u'*int v dx]dx"
       ];
     } else if (type === 'nda_gat_world') {
-      title = "NDA GAT & WORLD GEOGRAPHY MASTER NOTES";
-      lines = [
-        "1. WORLD ORGANIZATIONS HEADQUARTERS:",
-        "   - UN: New York | WHO: Geneva | UNESCO: Paris",
-        "2. PHYSICS & CHEMISTRY:",
-        "   - Ohm's Law: V = IR | Kinetic Energy = 0.5mv^2",
-        "   - pH < 7 Acidic, pH > 7 Basic"
+      title = "NDA GAT & WORLD GEOGRAPHY - MASTER COMPENDIUM";
+      contentLines = [
+        "1. INTERNATIONAL ORGANIZATIONS & HEADQUARTERS:",
+        "   - United Nations (UN): New York, USA",
+        "   - World Health Organization (WHO): Geneva, Switzerland",
+        "   - UNESCO: Paris, France | World Bank: Washington D.C.",
+        "",
+        "2. PHYSICS & CHEMISTRY CORE CONCEPTS:",
+        "   - Ohm's Law: V = IR | Kinetic Energy = 0.5 * m * v^2",
+        "   - Newton's Laws of Motion & Gravitation.",
+        "   - Acids, Bases & Salts: pH < 7 is Acidic, pH > 7 is Basic.",
+        "   - Periodic Table trends and atomic structures."
       ];
     } else {
-      title = "B.Sc. PCM SEMESTER MASTER GUIDE";
-      lines = [
-        "1. Calculus & Differential Equations",
-        "2. Mechanics & Wave Motion",
-        "3. Organic Reaction Mechanisms"
+      title = "B.Sc. PCM SEMESTER COMPREHENSIVE GUIDE";
+      contentLines = [
+        "1. CALCULUS & DIFFERENTIAL EQUATIONS:",
+        "   - Partial differentiation, Euler's theorem.",
+        "   - First order and higher degree differential equations.",
+        "",
+        "2. MECHANICS & WAVES:",
+        "   - Laws of motion, frames of reference, Coriolis force.",
+        "   - Simple harmonic motion (SHM) and wave equations."
       ];
     }
 
     doc.setFont("helvetica", "bold");
-    doc.text(title, 15, 48);
+    doc.text(title, 15, 52);
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
+    doc.setFontSize(9);
 
-    let y = 58;
-    lines.forEach(l => { doc.text(l, 15, y); y += 8; });
+    let y = 62;
+    contentLines.forEach(l => {
+      if (y > 280) { doc.addPage(); y = 20; }
+      doc.text(l, 15, y);
+      y += 7;
+    });
 
-    doc.save(`${type}_ANSH_MASTER.pdf`);
+    // Footer on pages
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Generated via ANSH.STUDY MASTER PRO AI Engine", 15, 290);
+
+    doc.save(`${type}_ANSH_COMPREHENSIVE.pdf`);
   }
 
   // ================= IMPROVED VOICE RECOGNITION =================
@@ -425,7 +453,7 @@
     }
     
     const rec = new SpeechRec();
-    rec.lang = 'hi-IN'; // Hindi/English mix support ke liye
+    rec.lang = 'hi-IN';
     const micBtn = document.getElementById('micBtn');
     
     rec.onstart = () => {
@@ -440,7 +468,7 @@
     };
 
     rec.onerror = () => {
-      alert("Voice recognition mein kuch error aayi. Dobara try karein.");
+      alert("Voice recognition mein error aayi. Dobara try karein.");
     };
 
     rec.onend = () => {
