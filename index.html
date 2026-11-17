@@ -1,217 +1,573 @@
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ANSH.STUDY MASTER PRO - NDA Pathfinder & AI Hub</title>
+<!-- Real PDF Generator Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #030712;
+    --card: #0f172a;
+    --card-alt: #1e293b;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --primary: #3b82f6;
+    --accent: #10b981;
+    --purple: #8b5cf6;
+    --orange: #f59e0b;
+    --danger: #ef4444;
+    --border: rgba(255, 255, 255, 0.1);
+  }
+  body.light {
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --card-alt: #e2e8f0;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: rgba(0, 0, 0, 0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 85px; min-height: 100vh; }
 
-public class AnshStudyMasterPro {
-    // डेटा स्टोर करने के लिए लिस्ट्स
-    static ArrayList<String> tasks = new ArrayList<>();
-    static ArrayList<String> notes = new ArrayList<>();
-    static int quizScore = 0;
-    static int studyMins = 90;
-    static Scanner scanner = new Scanner(System.in);
+  /* Top App Bar */
+  topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; background: var(--card); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-size: 19px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+  .logo span { color: var(--primary); }
+  .pro-tag { background: linear-gradient(45deg, var(--orange), var(--purple)); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 6px; font-weight: 800; }
+  .top-actions { display: flex; gap: 8px; }
+  .chip-btn { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
-    public static void main(String[] args) {
-        // शुरुआती डिफ़ॉल्ट डेटा
-        tasks.add("Solve NDA Pathfinder Probability Chapter");
-        notes.add("Pathfinder Tip: Algebra & Trigonometry carry 45% weightage in NDA Maths.");
+  /* Main Container */
+  .container { max-width: 900px; margin: 0 auto; padding: 16px; }
+  .view-section { display: none; animation: slideUp 0.25s ease; }
+  .view-section.active { display: block; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        boolean running = true;
-        while (running) {
-            System.out.println("\n==================================================");
-            System.out.println("🎖️ ANSH.STUDY MASTER PRO - NDA PATHFINDER & AI HUB");
-            System.out.println("==================================================");
-            System.out.println("1. 🏠 View Dashboard & Stats");
-            System.out.println("2. 🎖️ Smart AI Pathfinder Tutor (Formulas & Calc)");
-            System.out.println("3. 📚 Generate Master Study Notes (Save as TXT)");
-            System.out.println("4. 🧮 Math Quiz Arena (NDA & General)");
-            System.out.println("5. 🛠️ Manage Tasks & Quick Notes");
-            System.out.println("6. 🚪 Exit / Close App");
-            System.out.print("\nApna option chunein (1-6): ");
+  /* Cards & UI */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
+  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
+  .stat-num { font-size: 26px; font-weight: 900; color: var(--primary); }
+  .stat-label { font-size: 12px; color: var(--muted); }
 
-            int choice = -1;
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("❌ Kripya 1 se 6 ke beech mein hi koi sankhya (number) dalein.");
-                continue;
-            }
+  /* Buttons & Inputs */
+  .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--primary); transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn:active { transform: scale(0.98); }
+  .btn-green { background: var(--accent); }
+  .btn-purple { background: var(--purple); }
+  .btn-orange { background: var(--orange); color: #000; }
+  .btn-danger { background: var(--danger); }
+  .btn-outline { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
+  .btn-sm { width: auto; padding: 8px 14px; font-size: 12px; }
 
-            switch (choice) {
-                case 1:
-                    showDashboard();
-                    break;
-                case 2:
-                    smartAITutor();
-                    break;
-                case 3:
-                    generateTextNotesFile();
-                    break;
-                case 4:
-                    mathQuizArena();
-                    break;
-                case 5:
-                    manageTasksAndNotes();
-                    break;
-                case 6:
-                    running = false;
-                    System.out.println("\n👋 Dhanyawad Ansh! Apni padhai jari rakhein. Jai Hind! 🇮🇳");
-                    break;
-                default:
-                    System.out.println("❌ Galat विकल्प! Kripya sahi option chunein.");
-            }
-        }
-    }
+  .input-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card-alt); color: var(--text); font-size: 14px; margin-bottom: 10px; outline: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    // 1. डैशबोर्ड और स्टेट्स
-    public static void showDashboard() {
-        System.out.println("\n--- 🏠 DASHBOARD & STATS ---");
-        System.out.println("👤 User: Ansh (NDA & B.Sc. PCM Aspirant)");
-        System.out.println("📋 Pending Tasks: " + tasks.size());
-        System.out.println("⭐ Total Quiz Score: " + quizScore + " Points");
-        System.out.println("⏱️ Total Study Minutes: " + studyMins + " Mins");
-        System.out.println("----------------------------------");
-        System.out.print("Wapas main menu jaane ke liye Enter dabayein...");
-        scanner.nextLine();
-    }
+  /* AI Master Chat */
+  .chat-box { height: 360px; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 90%; padding: 11px 15px; border-radius: 12px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+  .msg.bot { background: var(--card-alt); align-self: flex-start; border-bottom-left-radius: 2px; border-left: 4px solid var(--orange); }
+  .msg.user { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
 
-    // 2. स्मार्ट AI ट्यूटर और फॉर्मूला फाइंडर
-    public static void smartAITutor() {
-        System.out.println("\n--- 🎖️ SMART AI PATHFINDER TUTOR ---");
-        System.out.println("Topics: 1. Probability  2. Matrices  3. Calculus  4. NDA Strategy");
-        System.out.print("Kiske baare mein janna chahte hain ya calculation likhein (jaise 15*4): ");
-        String query = scanner.nextLine().toLowerCase().trim();
+  /* PDF & Todo Items */
+  .pdf-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 14px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); gap: 10px; }
+  .pdf-info h4 { font-size: 14px; margin-bottom: 3px; }
+  .pdf-info p { font-size: 11px; color: var(--muted); }
+  .todo-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; }
+  .todo-item.done span { text-decoration: line-through; color: var(--muted); }
 
-        System.out.println("\n[AI Tutor Response]:");
-        if (query.matches("^[0-9+\\-*/().\\s]+$")) {
-            try {
-                // सरल कैलकुलेशन सॉल्व करने के लिए
-                javax.script.ScriptEngineManager mgr = new javax.script.ScriptEngineManager();
-                javax.script.ScriptEngine engine = mgr.getEngineByName("JavaScript");
-                if(engine != null) {
-                    Object result = engine.eval(query);
-                    System.out.println("🧮 Calculation Result: " + query + " = " + result);
-                } else {
-                    System.out.println("Calculation engine uplabdh nahi hai.");
-                }
-            } catch (Exception e) {
-                System.out.println("Kripya sahi mathematical expression likhein.");
-            }
-        } else if (query.contains("probability")) {
-            System.out.println("🎲 NDA Pathfinder - Probability:");
-            System.out.println("• P(A U B) = P(A) + P(B) - P(A n B)");
-            System.out.println("• Conditional Probability: P(A|B) = P(A n B) / P(B)");
-            System.out.println("• Binomial Distribution: P(X = r) = nCr * p^r * q^(n-r)");
-        } else if (query.contains("matrices") || query.contains("matrix")) {
-            System.out.println("🔲 NDA Pathfinder - Matrices:");
-            System.out.println("• Skew-symmetric matrix of odd order ka determinant 0 hota hai.");
-            System.out.println("• A * adj(A) = |A| * I");
-            System.out.println("• Inverse: A^(-1) = adj(A) / |A|");
-        } else if (query.contains("calculus")) {
-            System.out.println("∫ NDA Pathfinder - Calculus:");
-            System.out.println("• Product Rule: d/dx(uv) = u(dv/dx) + v(du/dx)");
-            System.out.println("• Integration by Parts: int u*v dx = u*int v dx - int[u'*int v dx]dx");
-        } else {
-            System.out.println("🎖️ Ansh, NDA Pathfinder ke core formulas revise karte rahein. Math, Physics aur GAT par poora focus rakhein!");
-        }
-        System.out.print("\nPress Enter to continue...");
-        scanner.nextLine();
-    }
+  /* Bottom Navigation Bar */
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--card); border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 8px 4px; z-index: 999; backdrop-filter: blur(10px);
+  }
+  .tab-btn { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; cursor: pointer; padding: 4px; }
+  .tab-btn .icon { font-size: 20px; }
+  .tab-btn.active { color: var(--primary); }
 
-    // 3. फ़ाइल जनरेटर (TXT नोट्स सेव करना)
-    public static void generateTextNotesFile() {
-        System.out.println("\n--- 📚 GENERATING MASTER STUDY NOTES ---");
-        try {
-            FileWriter writer = new FileWriter("ANSH_NDA_Pathfinder_Notes.txt");
-            writer.write("=========================================\r\n");
-            writer.write("ANSH.STUDY MASTER PRO - STUDY NOTES\r\n");
-            writer.write("=========================================\r\n\n");
-            writer.write("--- SAVED NOTES & TIPS ---\r\n");
-            for (int i = 0; i < notes.size(); i++) {
-                writer.write((i + 1) + ". " + notes.get(i) + "\r\n");
-            }
-            writer.write("\r\n--- PENDING TASKS ---\r\n");
-            for (int i = 0; i < tasks.size(); i++) {
-                writer.write("- " + tasks.get(i) + "\r\n");
-            }
-            writer.close();
-            System.out.println("✅ Success! Aapke notes 'ANSH_NDA_Pathfinder_Notes.txt' file ke रूप mein successfully save ho gaye hain.");
-        } catch (IOException e) {
-            System.out.println("❌ File save karne mein error aayi.");
-        }
-        System.out.print("\nPress Enter to continue...");
-        scanner.nextLine();
-    }
+  @media (min-width: 650px) {
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
 
-    // 4. मैथ क्विज़ एरिना
-    public static void mathQuizArena() {
-        System.out.println("\n--- 🧮 MATH QUIZ ARENA ---");
-        System.out.println("Sawal: NDA Pathfinder ke anusaar, agar f(x) = 2x^3 hai, toh f'(2) kya hoga?");
-        System.out.print("Apna answer likhein: ");
+<!-- Top Header -->
+<topbar>
+  <div class="logo">ANSH<span>.STUDY</span> <span class="pro-tag">MASTER AI</span></div>
+  <div class="top-actions">
+    <button class="chip-btn" onclick="toggleTheme()">🌓 Theme</button>
+    <button class="chip-btn" onclick="exportAllData()">💾 Backup</button>
+  </div>
+</topbar>
+
+<div class="container">
+
+  <!-- ================= TAB 1: HOME DASHBOARD ================= -->
+  <div id="tab-home" class="view-section active">
+    <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(245,158,11,0.15)); border-color: var(--primary);">
+      <h2 style="font-size: 20px; margin-bottom: 4px;">Ansh, Master Your NDA & B.Sc. 🎖️</h2>
+      <p style="font-size: 13px; color: var(--muted);">Pathfinder Complete Knowledge & Smart AI Engine Activated</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num" id="dashTasks">0</div>
+        <div class="stat-label">Pending Tasks</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--accent);" id="dashDone">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--purple);" id="dashQuizScore">0</div>
+        <div class="stat-label">Quiz Score</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--orange);" id="dashMins">0</div>
+        <div class="stat-label">Study Mins</div>
+      </div>
+    </div>
+
+    <!-- Quick Focus Timer -->
+    <div class="card">
+      <div class="card-title">⏳ Pomodoro Focus Timer</div>
+      <div style="text-align: center; font-size: 42px; font-weight: 900; margin: 10px 0;" id="pomoDisplay">25:00</div>
+      <div class="row" style="justify-content: center; margin-bottom: 10px;">
+        <button class="btn btn-outline btn-sm" onclick="setPomo(25)">25m</button>
+        <button class="btn btn-outline btn-sm" onclick="setPomo(45)">45m</button>
+        <button class="btn btn-outline btn-sm" onclick="setPomo(60)">60m</button>
+      </div>
+      <div class="row">
+        <button class="btn btn-green" style="flex:1;" onclick="startPomo()">▶ Start</button>
+        <button class="btn btn-outline" style="flex:1;" onclick="pausePomo()">⏸ Pause</button>
+        <button class="btn btn-danger" style="flex:1;" onclick="resetPomo()">🔄 Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 2: SMART AI & PATHFINDER TUTOR ================= -->
+  <div id="tab-ai" class="view-section">
+    <div class="card">
+      <div class="card-title">🎖️ NDA Pathfinder & Smart AI Tutor</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi topic par click karein ya apna sawal puchein:</p>
+      
+      <div class="row" style="margin-bottom: 10px;">
+        <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
+        <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices & Det</button>
+        <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus</button>
+        <button class="chip-btn" onclick="askMasterAI('capital')">🇮🇳 India Capital</button>
+        <button class="chip-btn" onclick="askMasterAI('nda strategy')">🎯 Pathfinder Tips</button>
+      </div>
+
+      <div class="chat-box" id="aiChatBox">
+        <div class="msg bot">Namaste Ansh! Main aapka Smart AI Tutor hoon. Aap mujhse koi bhi math calculation (jaise '2+2'), general knowledge, ya NDA Pathfinder ka formula puch sakte hain!</div>
+      </div>
+
+      <div class="row">
+        <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Yahan sawal ya formula likhein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
+        <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 3: DETAILED REAL PDF BOOKS ================= -->
+  <div id="tab-books" class="view-section">
+    <div class="card">
+      <div class="card-title">📚 Detailed Pathfinder & B.Sc. Master PDFs</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Ek click mein comprehensive (विस्तृत) PDF download karein:</p>
+
+      <div class="pdf-item">
+        <div class="pdf-info">
+          <h4>🎖️ NDA Pathfinder Maths Complete Notes (PDF)</h4>
+          <p>Probability, Binomial, Vectors, 3D Geometry & Full Formulas</p>
+        </div>
+        <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Download PDF</button>
+      </div>
+
+      <div class="pdf-item">
+        <div class="pdf-info">
+          <h4>🌍 NDA GAT & World Geography Master Book (PDF)</h4>
+          <p>World Organizations, Physics, Chemistry & Indian Polity</p>
+        </div>
+        <button class="btn btn-orange btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Download PDF</button>
+      </div>
+
+      <div class="pdf-item">
+        <div class="pdf-info">
+          <h4>🎓 B.Sc. PCM Semester Comprehensive Guide (PDF)</h4>
+          <p>Mechanics, Matrices, Real Analysis & Organic Chemistry</p>
+        </div>
+        <button class="btn btn-purple btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 4: ENDLESS MATH QUIZ HUB ================= -->
+  <div id="tab-quiz" class="view-section">
+    <div class="card">
+      <div class="card-title">
+        <span>🧮 Pathfinder Math Quiz Arena</span>
+        <span style="font-size: 12px; color: var(--accent);">Streak: <b id="qStreak">0</b> 🔥</span>
+      </div>
+      
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Level Chunein:</p>
+      <div class="row" style="margin-bottom: 16px;">
+        <button class="btn btn-green btn-sm" style="flex:1;" onclick="startQuiz('easy')">🟢 Easy</button>
+        <button class="btn btn-orange btn-sm" style="flex:1;" onclick="startQuiz('medium')">🟡 Medium</button>
+        <button class="btn btn-purple btn-sm" style="flex:1;" onclick="startQuiz('hard')">🔴 Hard (NDA)</button>
+      </div>
+
+      <div style="background: var(--bg); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
+        <div style="font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;" id="qModeLabel">MODE: EASY</div>
+        <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px; min-height: 50px; display:flex; align-items:center; justify-content:center;" id="qText">Loading...</div>
         
-        try {
-            double ans = Double.parseDouble(scanner.nextLine());
-            if (Math.abs(ans - 24.0) < 0.01) {
-                quizScore += 10;
-                System.out.println("🎉 Sahi Jawab! (+10 Points Added). Derivative 6x^2 hota hai, toh 6*(2)^2 = 24.");
-            } else {
-                System.out.println("❌ Galat Jawab! Sahi Uttar 24 hai.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("❌ Kripya ek valid sankhya dalein.");
-        }
-        System.out.print("\nPress Enter to continue...");
-        scanner.nextLine();
+        <input type="number" step="any" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Answer likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
+        
+        <div class="row">
+          <button class="btn btn-green" style="flex:2;" onclick="checkQuiz()">✅ Check Answer</button>
+          <button class="btn btn-outline" style="flex:1;" onclick="generateQuestion()">Skip ➔</button>
+        </div>
+
+        <div id="qResult" style="margin-top: 14px; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 5: TOOLS & PLANNER ================= -->
+  <div id="tab-tools" class="view-section">
+    <div class="card">
+      <div class="card-title">🎙️ Voice Notes & Planner</div>
+      <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya bolkar note banayein..."></textarea>
+      <div class="row">
+        <button id="micBtn" class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein</button>
+        <button class="btn btn-green" style="flex:1;" onclick="saveNote()">💾 Save Note</button>
+      </div>
+      <div id="notesContainer" style="margin-top: 12px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Daily Study Tasks</div>
+      <div class="row">
+        <input type="text" id="taskText" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Naya task add karein...">
+        <button class="btn btn-sm" onclick="addTask()">+ Add</button>
+      </div>
+      <div id="tasksContainer" style="margin-top: 12px;"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Mobile Bottom App Navigation -->
+<div class="bottom-bar">
+  <button class="tab-btn active" onclick="switchTab('home', this)">
+    <span class="icon">🏠</span>Home
+  </button>
+  <button class="tab-btn" onclick="switchTab('ai', this)">
+    <span class="icon">🎖️</span>Smart AI
+  </button>
+  <button class="tab-btn" onclick="switchTab('books', this)">
+    <span class="icon">📄</span>PDF Books
+  </button>
+  <button class="tab-btn" onclick="switchTab('quiz', this)">
+    <span class="icon">🧮</span>Quiz
+  </button>
+  <button class="tab-btn" onclick="switchTab('tools', this)">
+    <span class="icon">🛠️</span>Tools
+  </button>
+</div>
+
+<script>
+  let appData = JSON.parse(localStorage.getItem('ansh_master_data')) || {
+    tasks: [{ text: "Solve NDA Pathfinder Probability Chapter", done: false }],
+    notes: [{ text: "Pathfinder Tip: Algebra & Trigonometry carry 45% weightage in NDA Maths." }],
+    quizScore: 0,
+    quizStreak: 0,
+    studyMins: 90
+  };
+
+  function syncData() {
+    localStorage.setItem('ansh_master_data', JSON.stringify(appData));
+    document.getElementById('dashTasks').innerText = appData.tasks.filter(t => !t.done).length;
+    document.getElementById('dashDone').innerText = appData.tasks.filter(t => t.done).length;
+    document.getElementById('dashQuizScore').innerText = appData.quizScore;
+    document.getElementById('dashMins').innerText = appData.studyMins;
+    document.getElementById('qStreak').innerText = appData.quizStreak;
+  }
+
+  function switchTab(tabId, btnEl) {
+    document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    btnEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleTheme() { document.body.classList.toggle('light'); }
+
+  // ================= SMART HYBRID AI ENGINE =================
+  function askMasterAI(topic) {
+    document.getElementById('aiInput').value = topic;
+    sendMasterAIQuery();
+  }
+
+  function sendMasterAIQuery() {
+    const input = document.getElementById('aiInput');
+    const q = input.value.trim();
+    if(!q) return;
+
+    const chatBox = document.getElementById('aiChatBox');
+    chatBox.innerHTML += `<div class="msg user">${q}</div>`;
+    input.value = '';
+
+    let reply = "";
+    const low = q.toLowerCase();
+
+    // Smart Math Calculation Resolver (jaise 2+2, 5*5 etc.)
+    if (/^[\d\+\-\*\/\.\(\)\s]+$/.test(q)) {
+      try {
+        let ans = eval(q);
+        reply = `🧮 **Calculation Result:**\n${q} = **${ans}**\n\n👉 *Sahi jawab calculation ke anusaar yahi hai!*`;
+      } catch(e) {
+        reply = "Kripya sahi mathematical expression likhein.";
+      }
+    } 
+    else if (low.includes('probability') || low.includes('प्रॉबेबिलिटी')) {
+      reply = "🎲 **NDA Pathfinder - Probability Master Gyan:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n• Conditional Probability: P(A|B) = P(A ∩ B) / P(B)\n• Binomial Distribution: P(X = r) = nCr * p^r * q^(n-r)\n• Independent Events: P(A ∩ B) = P(A) * P(B)";
+    }
+    else if (low.includes('matrices') || low.includes('matrix')) {
+      reply = "🔲 **NDA Pathfinder - Matrices & Determinants:**\n• Determinant of skew-symmetric matrix of odd order is 0.\n• A * adj(A) = |A| * I\n• |AB| = |A| * |B|\n• Inverse: A⁻¹ = adj(A) / |A|";
+    }
+    else if (low.includes('calculus') || low.includes('integration')) {
+      reply = "∫ **NDA Pathfinder - Calculus Formulas:**\n• d/dx (uv) = u(dv/dx) + v(du/dx)\n• Integration by Parts: ∫ u·v dx = u∫v dx - ∫[u'·∫v dx]dx\n• AP Sum: S_n = (n/2)[2a + (n-1)d]";
+    }
+    else if (low.includes('capital') || low.includes('india')) {
+      reply = "🇮🇳 **General Knowledge Info:**\n• India ki Capital (Rajdhani) **New Delhi** hai.\n• Yeh Yamuna nadi ke kinare sthit hai aur 1911 mein Kalkatta se yahan shift ki gayi thi.";
+    }
+    else if (low.includes('nda strategy') || low.includes('tips')) {
+      reply = "🎖️ **NDA Pathfinder Complete Strategy (Ansh's Guide):**\n1. **Maths (300 Marks):** Pathfinder ke har chapter ke CYG questions solve karein.\n2. **GAT (600 Marks):** Physics & Chemistry ke NCERT/Pathfinder direct questions puchte hain.\n3. **Time Management:** 120 questions ke liye 150 minutes milte hain!";
+    }
+    else {
+      reply = `🎖️ **Smart AI Pathfinder Response:** Ansh, aapke sawal ("${q}") ke liye Pathfinder ke core concepts revise karein. Aap mujhse 'Probability', 'Matrices', 'Calculus', ya koi math calculation (jaise '15*4') puch sakte hain!`;
     }
 
-    // 5. टास्क और नोट्स मैनेजर
-    public static void manageTasksAndNotes() {
-        boolean back = false;
-        while (!back) {
-            System.out.println("\n--- 🛠️ MANAGE TASKS & NOTES ---");
-            System.out.println("1. View All Tasks (" + tasks.size() + ")");
-            System.out.println("2. Add New Task");
-            System.out.println("3. View Quick Notes (" + notes.size() + ")");
-            System.out.println("4. Add New Quick Note");
-            System.out.println("5. Back to Main Menu");
-            System.out.print("Option chunein: ");
+    setTimeout(() => {
+      chatBox.innerHTML += `<div class="msg bot">${reply}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 200);
+  }
 
-            String opt = scanner.nextLine();
-            switch (opt) {
-                case "1":
-                    System.out.println("\n[Your Tasks]:");
-                    for (int i = 0; i < tasks.size(); i++) {
-                        System.out.println((i + 1) + ". " + tasks.get(i));
-                    }
-                    break;
-                case "2":
-                    System.out.print("Naya task likhein: ");
-                    String t = scanner.nextLine();
-                    if (!t.isEmpty()) {
-                        tasks.add(t);
-                        System.out.println("✅ Task successfully added!");
-                    }
-                    break;
-                case "3":
-                    System.out.println("\n[Your Notes]:");
-                    for (int i = 0; i < notes.size(); i++) {
-                        System.out.println((i + 1) + ". " + notes.get(i));
-                    }
-                    break;
-                case "4":
-                    System.out.print("Naya note likhein: ");
-                    String n = scanner.nextLine();
-                    if (!n.isEmpty()) {
-                        notes.add(n);
-                        System.out.println("✅ Note successfully saved!");
-                    }
-                    break;
-                case "5":
-                    back = true;
-                    break;
-                default:
-                    System.out.println("❌ Aamanya विकल्प!");
-            }
-        }
+  // ================= DETAILED REAL PDF GENERATOR =================
+  function generateRealPDF(type) {
+    if (!window.jspdf) { 
+      alert("PDF engine abhi load ho raha hai. 2 second baad try karein."); 
+      return; 
     }
-}
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.text("ANSH.STUDY MASTER PRO - PATHFINDER MASTER BOOK", 15, 20);
+    doc.setFontSize(10);
+    doc.text("Exclusive Comprehensive Study Material | Prepared for Ansh (NDA & B.Sc.)", 15, 30);
+
+    doc.setTextColor(20, 20, 20);
+    doc.setFontSize(11);
+
+    let title = "";
+    let contentLines = [];
+
+    if (type === 'nda_pathfinder_math') {
+      title = "NDA PATHFINDER MATHEMATICS - COMPLETE MASTER NOTES";
+      contentLines = [
+        "1. PROBABILITY & STATISTICS:",
+        "   - Addition Theorem: P(A U B) = P(A) + P(B) - P(A n B)",
+        "   - Conditional Probability: P(A|B) = P(A n B) / P(B)",
+        "   - Binomial Distribution: P(X=r) = nCr * p^r * q^(n-r)",
+        "",
+        "2. MATRICES & DETERMINANTS:",
+        "   - Determinant of skew-symmetric matrix of odd order is 0.",
+        "   - A * adj(A) = |A| * I | Inverse A^(-1) = adj(A) / |A|",
+        "",
+        "3. TRIGONOMETRY & CALCULUS:",
+        "   - sin(A+B) = sinAcosB + cosAsinB",
+        "   - Derivatives: d/dx(x^n) = n*x^(n-1)",
+        "   - Integration by Parts: int u*v dx = u*int v dx - int[u'*int v dx]dx"
+      ];
+    } else if (type === 'nda_gat_world') {
+      title = "NDA GAT & WORLD GEOGRAPHY - MASTER COMPENDIUM";
+      contentLines = [
+        "1. INTERNATIONAL ORGANIZATIONS & HEADQUARTERS:",
+        "   - United Nations (UN): New York, USA",
+        "   - World Health Organization (WHO): Geneva, Switzerland",
+        "   - UNESCO: Paris, France | World Bank: Washington D.C.",
+        "",
+        "2. PHYSICS & CHEMISTRY CORE CONCEPTS:",
+        "   - Ohm's Law: V = IR | Kinetic Energy = 0.5 * m * v^2",
+        "   - Acids, Bases & Salts: pH < 7 is Acidic, pH > 7 is Basic."
+      ];
+    } else {
+      title = "B.Sc. PCM SEMESTER COMPREHENSIVE GUIDE";
+      contentLines = [
+        "1. CALCULUS & DIFFERENTIAL EQUATIONS:",
+        "   - Partial differentiation, Euler's theorem.",
+        "   - First order and higher degree differential equations.",
+        "",
+        "2. MECHANICS & WAVES:",
+        "   - Laws of motion, frames of reference, Coriolis force.",
+        "   - Simple harmonic motion (SHM) and wave equations."
+      ];
+    }
+
+    doc.setFont("helvetica", "bold");
+    doc.text(title, 15, 52);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+
+    let y = 62;
+    contentLines.forEach(l => {
+      if (y > 280) { doc.addPage(); y = 20; }
+      doc.text(l, 15, y);
+      y += 7;
+    });
+
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Generated via ANSH.STUDY MASTER PRO AI Engine", 15, 290);
+
+    doc.save(`${type}_ANSH_COMPREHENSIVE.pdf`);
+  }
+
+  // ================= IMPROVED VOICE RECOGNITION =================
+  function startVoiceNote() {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) { 
+      alert("Aapka browser Voice Recognition support nahi karta. Kripya Google Chrome ka upyog karein."); 
+      return; 
+    }
+    
+    const rec = new SpeechRec();
+    rec.lang = 'hi-IN';
+    const micBtn = document.getElementById('micBtn');
+    
+    rec.onstart = () => {
+      micBtn.style.background = 'var(--danger)';
+      micBtn.innerText = '🔴 Sun raha hoon...';
+    };
+
+    rec.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      const noteInput = document.getElementById('noteText');
+      noteInput.value += (noteInput.value ? " " : "") + transcript;
+    };
+
+    rec.onerror = () => {
+      alert("Voice recognition mein error aayi. Dobara try karein.");
+    };
+
+    rec.onend = () => {
+      micBtn.style.background = 'var(--purple)';
+      micBtn.innerText = '🎤 Bolkar Likhein';
+    };
+
+    rec.start();
+  }
+
+  // ================= QUIZ & TOOLS =================
+  let qLevel = 'easy', correctAns = 0;
+  function startQuiz(lvl) { qLevel = lvl; document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase(); generateQuestion(); }
+  function generateQuestion() {
+    document.getElementById('qResult').style.display = 'none';
+    document.getElementById('qInput').value = '';
+    const qText = document.getElementById('qText');
+    if (qLevel === 'easy') {
+      let a = Math.floor(Math.random()*40)+10, b = Math.floor(Math.random()*30)+5;
+      correctAns = a + b; qText.innerText = `${a} + ${b} = ?`;
+    } else if (qLevel === 'medium') {
+      let val = 150; correctAns = 30; qText.innerText = `Find 20% of 150?`;
+    } else {
+      correctAns = 12; qText.innerText = `NDA Pathfinder: If f(x) = 2x³, find f'(2)?`;
+    }
+  }
+  function checkQuiz() {
+    const val = parseFloat(document.getElementById('qInput').value);
+    const res = document.getElementById('qResult');
+    res.style.display = 'block';
+    if (!isNaN(val) && Math.abs(val - correctAns) < 0.01) {
+      appData.quizScore += 10; appData.quizStreak += 1;
+      res.style.background = 'rgba(16,185,129,0.2)'; res.style.color = '#34d399';
+      res.innerText = `🎉 Sahi Jawab! (+10 pts)`; syncData(); setTimeout(generateQuestion, 1000);
+    } else {
+      appData.quizStreak = 0;
+      res.style.background = 'rgba(239,68,68,0.2)'; res.style.color = '#f87171';
+      res.innerText = `❌ Galat! Sahi Uttar: ${correctAns}`; syncData();
+    }
+  }
+
+  function saveNote() {
+    const txt = document.getElementById('noteText').value.trim();
+    if(!txt) return;
+    appData.notes.unshift({ text: txt }); 
+    document.getElementById('noteText').value = '';
+    renderNotes(); syncData();
+  }
+
+  function renderNotes() {
+    document.getElementById('notesContainer').innerHTML = appData.notes.map((n, i) => `
+      <div class="todo-item"><span>${n.text}</span><button class="chip-btn" style="color:var(--danger)" onclick="appData.notes.splice(${i},1);renderNotes();syncData();">✕</button></div>
+    `).join('');
+  }
+
+  function addTask() {
+    const txt = document.getElementById('taskText').value.trim();
+    if(!txt) return;
+    appData.tasks.unshift({ text: txt, done: false }); 
+    document.getElementById('taskText').value = '';
+    renderTasks(); syncData();
+  }
+
+  function renderTasks() {
+    document.getElementById('tasksContainer').innerHTML = appData.tasks.map((t, i) => `
+      <div class="todo-item ${t.done?'done':''}">
+        <span onclick="appData.tasks[${i}].done=!appData.tasks[${i}].done;renderTasks();syncData();" style="cursor:pointer;">${t.done?'✅':'⬜'} ${t.text}</span>
+        <button class="chip-btn" style="color:var(--danger)" onclick="appData.tasks.splice(${i},1);renderTasks();syncData();">✕</button>
+      </div>
+    `).join('');
+  }
+
+  let pomoSec = 1500, pomoTimer = null;
+  function setPomo(m) { clearInterval(pomoTimer); pomoTimer=null; pomoSec=m*60; updatePomo(); }
+  function updatePomo() {
+    document.getElementById('pomoDisplay').innerText = `${String(Math.floor(pomoSec/60)).padStart(2,'0')}:${String(pomoSec%60).padStart(2,'0')}`;
+  }
+  function startPomo() {
+    if(pomoTimer) return;
+    pomoTimer = setInterval(() => {
+      if(pomoSec>0) { pomoSec--; updatePomo(); }
+      else { clearInterval(pomoTimer); pomoTimer=null; appData.studyMins+=25; syncData(); alert("Focus session complete!"); }
+    }, 1000);
+  }
+  function pausePomo() { clearInterval(pomoTimer); pomoTimer=null; }
+  function resetPomo() { setPomo(25); }
+
+  function exportAllData() {
+    const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ANSH_MASTER_PRO.json'; a.click();
+  }
+
+  renderTasks(); renderNotes(); generateQuestion(); syncData(); updatePomo();
+</script>
+</body>
+</html>
