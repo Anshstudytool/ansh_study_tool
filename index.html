@@ -2,887 +2,757 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANSH.STUDY - Ultimate Exam & Books Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ANSH.STUDY PRO - All-in-One Exam & PDF App</title>
+<!-- Real PDF Generator Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
-    --bg: #070d1a;
-    --panel: rgba(19, 28, 49, 0.75);
-    --panel2: rgba(26, 38, 66, 0.6);
-    --text: #f1f5f9;
+    --bg: #050811;
+    --card: #0f172a;
+    --card-alt: #1e293b;
+    --text: #f8fafc;
     --muted: #94a3b8;
-    --blue: #3b82f6;
-    --blue-hover: #2563eb;
-    --green: #10b981;
-    --red: #ef4444;
-    --line: rgba(255, 255, 255, 0.08);
-    --orange: #f59e0b;
+    --primary: #3b82f6;
+    --accent: #10b981;
     --purple: #8b5cf6;
-    --glow: rgba(59, 130, 246, 0.15);
+    --orange: #f59e0b;
+    --danger: #ef4444;
+    --border: rgba(255, 255, 255, 0.1);
   }
   body.light {
-    --bg: #f8fafc;
-    --panel: rgba(255, 255, 255, 0.85);
-    --panel2: rgba(241, 245, 249, 0.8);
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --card-alt: #e2e8f0;
     --text: #0f172a;
-    --muted: #64748b;
-    --line: rgba(0, 0, 0, 0.08);
-    --glow: rgba(59, 130, 246, 0.08);
+    --muted: #475569;
+    --border: rgba(0, 0, 0, 0.1);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: var(--text); line-height: 1.5; padding-bottom: 80px; transition: background 0.3s, color 0.3s; }
-  
-  /* Header */
-  header {
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body { background: var(--bg); color: var(--text); padding-bottom: 85px; min-height: 100vh; }
+
+  /* Top App Bar */
+  .topbar {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 20px; border-bottom: 1px solid var(--line);
-    background: var(--panel); backdrop-filter: blur(12px);
+    padding: 14px 18px; background: var(--card); border-bottom: 1px solid var(--border);
     position: sticky; top: 0; z-index: 100;
   }
-  .brand { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
-  .brand span { color: var(--blue); }
-  .nav-btns { display: flex; gap: 8px; }
-  .icon-btn {
-    background: var(--panel2); border: 1px solid var(--line); color: var(--text);
-    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
-    backdrop-filter: blur(8px);
-  }
+  .logo { font-size: 20px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+  .logo span { color: var(--primary); }
+  .pro-tag { background: linear-gradient(45deg, var(--primary), var(--purple)); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 6px; }
+  .top-actions { display: flex; gap: 8px; }
+  .chip-btn { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
-  /* Container */
-  .wrap { max-width: 1050px; margin: 0 auto; padding: 20px 16px; }
+  /* Main Container */
+  .container { max-width: 900px; margin: 0 auto; padding: 16px; }
 
-  /* Hero Section */
-  .hero {
-    text-align: center; padding: 35px 15px;
-    background: radial-gradient(circle at top, var(--glow), transparent 70%);
-    border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--line);
-    backdrop-filter: blur(10px);
-  }
-  .badge {
-    display: inline-block; padding: 4px 12px; border-radius: 20px;
-    background: rgba(59,130,246,0.15); color: #60a5fa;
-    font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px;
-  }
-  .hero h1 { font-size: 30px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
-  .hero h1 span { color: #60a5fa; }
-  .hero p { color: var(--muted); font-size: 14px; max-width: 480px; margin: 0 auto; }
+  /* View Sections (Tabs) */
+  .view-section { display: none; animation: slideUp 0.25s ease; }
+  .view-section.active { display: block; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* News Ticker Bar */
-  .news-ticker {
-    background: var(--panel); border: 1px solid var(--orange);
-    border-radius: 14px; padding: 12px 16px; margin-bottom: 22px;
-    display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px);
-  }
-  .news-tag { background: var(--orange); color: #000; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; white-space: nowrap; }
-  .news-content { font-size: 13px; color: var(--text); font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-
-  /* Section Title */
-  .sec-title { font-size: 17px; font-weight: 700; margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
-
-  /* Stats Dashboard */
-  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
-  .stat-card {
-    background: var(--panel); border: 1px solid var(--line);
-    padding: 16px; border-radius: 14px; backdrop-filter: blur(10px);
-  }
-  .stat-icon { font-size: 20px; margin-bottom: 6px; }
-  .stat-val { font-size: 24px; font-weight: 800; }
-  .stat-lbl { font-size: 12px; color: var(--muted); }
-
-  /* Heatmap Section */
-  .heatmap-card {
-    background: var(--panel); border: 1px solid var(--line);
-    border-radius: 14px; padding: 16px; margin-bottom: 25px; backdrop-filter: blur(10px);
-  }
-  .heatmap-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--muted); display: flex; justify-content: space-between; }
-  .heatmap-grid { display: grid; grid-template-columns: repeat(14, 1fr); gap: 6px; }
-  .heat-cell { aspect-ratio: 1; background: var(--panel2); border-radius: 4px; border: 1px solid var(--line); }
-  .heat-cell.active-1 { background: rgba(16, 185, 129, 0.4); }
-  .heat-cell.active-2 { background: rgba(16, 185, 129, 0.8); }
-  .heat-cell.today { border: 2px solid var(--blue); }
-
-  /* Search Bar */
-  .search-box { display: flex; gap: 8px; margin-bottom: 18px; }
-  .search-box input {
-    flex: 1; padding: 11px 14px; border-radius: 12px;
-    border: 1px solid var(--line); background: var(--panel); color: var(--text);
-    font-size: 14px; outline: none; backdrop-filter: blur(10px);
-  }
-  .search-box button {
-    padding: 0 18px; border-radius: 12px; border: none;
-    background: var(--blue); color: white; font-weight: 600; cursor: pointer;
-  }
-
-  /* Tools & Books Grid */
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .tool-card {
-    background: var(--panel); border: 1px solid var(--line);
-    padding: 16px; border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between;
-    backdrop-filter: blur(12px); transition: transform 0.2s;
-  }
-  .tool-card:active { transform: scale(0.98); }
-  .tool-card.highlight { border: 2px solid var(--green); background: linear-gradient(to bottom right, var(--panel), rgba(16, 185, 129, 0.08)); }
-  .tool-card.quiz-highlight { border: 2px solid var(--purple); background: linear-gradient(to bottom right, var(--panel), rgba(139, 92, 246, 0.08)); }
-  .tool-card.hidden { display: none !important; }
-  .t-icon { font-size: 24px; margin-bottom: 10px; }
-  .t-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
-  .t-desc { font-size: 12px; color: var(--muted); margin-bottom: 15px; flex: 1; }
-  .open-btn {
-    width: 100%; padding: 10px; border-radius: 10px; border: none;
-    background: var(--blue); color: white; font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: 0.2s;
-  }
-  .open-btn:hover { background: var(--blue-hover); }
-  .open-btn.green { background: var(--green); }
-  .open-btn.purple { background: var(--purple); }
-
-  /* Active Tool Workspace */
-  .tool-area {
-    display: none; background: var(--panel); border: 2px solid var(--blue);
-    border-radius: 18px; padding: 20px; margin: 20px 0;
-    animation: fadeIn 0.25s ease; backdrop-filter: blur(16px);
-  }
-  .tool-area.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  /* Cards & Grids */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
+  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
   
-  .tool-header {
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px;
-  }
-  .tool-header h2 { font-size: 18px; }
-  .close-btn {
-    background: var(--red); color: white; border: none;
-    padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
-  }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
+  .stat-num { font-size: 26px; font-weight: 900; color: var(--primary); }
+  .stat-label { font-size: 12px; color: var(--muted); }
 
-  /* Forms & Inputs */
-  .form-group { margin-bottom: 12px; }
-  .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  .form-control {
-    width: 100%; padding: 11px 14px; border-radius: 10px;
-    border: 1px solid var(--line); background: var(--panel2); color: var(--text);
-    font-size: 14px; outline: none;
-  }
-  .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .action-btn {
-    padding: 10px 16px; border-radius: 10px; border: none;
-    background: var(--blue); color: white; font-weight: 600; font-size: 13px; cursor: pointer;
-  }
-  .action-btn.green { background: var(--green); }
-  .action-btn.purple { background: var(--purple); }
-  .action-btn.gray { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
-  
-  .result-box {
-    margin-top: 14px; padding: 14px; border-radius: 10px;
-    background: var(--panel2); border-left: 4px solid var(--blue);
-    font-weight: normal; font-size: 13px; line-height: 1.6;
-  }
+  /* Buttons & Inputs */
+  .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--primary); transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn:active { transform: scale(0.98); }
+  .btn-green { background: var(--accent); }
+  .btn-purple { background: var(--purple); }
+  .btn-orange { background: var(--orange); color: #000; }
+  .btn-danger { background: var(--danger); }
+  .btn-outline { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
+  .btn-sm { width: auto; padding: 8px 14px; font-size: 12px; }
 
-  /* Lists */
-  .item-list { list-style: none; margin-top: 12px; }
-  .item-list li {
-    display: flex; justify-content: space-between; align-items: center;
-    background: var(--panel2); padding: 11px 14px; border-radius: 10px; margin-bottom: 8px;
-    font-size: 14px; border: 1px solid var(--line);
-  }
-  .item-list li.done span { text-decoration: line-through; color: var(--muted); }
-  .del-btn { background: transparent; border: none; color: var(--red); font-weight: bold; cursor: pointer; padding: 4px 8px; }
+  .input-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card-alt); color: var(--text); font-size: 14px; margin-bottom: 10px; outline: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
 
-  /* Timer */
-  .timer-display { font-size: 48px; font-weight: 900; text-align: center; margin: 15px 0; font-variant-numeric: tabular-nums; }
+  /* AI Chat Interface */
+  .chat-box { height: 320px; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; }
+  .msg.bot { background: var(--card-alt); align-self: flex-start; border-bottom-left-radius: 2px; border-left: 3px solid var(--purple); }
+  .msg.user { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
 
-  /* Bottom Navigation Bar (Mobile-First) */
-  .bottom-nav {
+  /* PDF Book Item */
+  .pdf-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 14px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); gap: 10px; }
+  .pdf-info h4 { font-size: 14px; margin-bottom: 3px; }
+  .pdf-info p { font-size: 11px; color: var(--muted); }
+
+  /* List Items */
+  .todo-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; }
+  .todo-item.done span { text-decoration: line-through; color: var(--muted); }
+
+  /* Heatmap */
+  .heatmap { display: grid; grid-template-columns: repeat(14, 1fr); gap: 5px; margin-top: 8px; }
+  .h-dot { aspect-ratio: 1; border-radius: 4px; background: var(--card-alt); }
+  .h-dot.lvl1 { background: rgba(16, 185, 129, 0.4); }
+  .h-dot.lvl2 { background: rgba(16, 185, 129, 0.9); }
+
+  /* Bottom Navigation */
+  .bottom-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--panel); backdrop-filter: blur(16px);
-    border-top: 1px solid var(--line); display: flex; justify-content: space-around;
-    padding: 10px 0; z-index: 1000;
+    background: var(--card); border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 8px 4px; z-index: 999;
   }
-  .nav-item {
-    display: flex; flex-direction: column; align-items: center;
-    background: transparent; border: none; color: var(--muted);
-    font-size: 10px; font-weight: 600; cursor: pointer; gap: 3px;
-  }
-  .nav-item span.nav-icon { font-size: 18px; }
-  .nav-item.active { color: var(--blue); }
-
-  footer {
-    text-align: center; padding: 20px 15px 40px; border-top: 1px solid var(--line);
-    color: var(--muted); font-size: 12px; margin-top: 35px;
-  }
+  .tab-btn { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; cursor: pointer; padding: 4px; }
+  .tab-btn .icon { font-size: 20px; }
+  .tab-btn.active { color: var(--primary); }
 
   @media (min-width: 650px) {
-    .stats { grid-template-columns: repeat(4, 1fr); }
-    .grid { grid-template-columns: repeat(3, 1fr); }
-    .bottom-nav { display: none; } /* Show footer nav mainly on mobile */
-    body { padding-bottom: 20px; }
-  }
-  @media (max-width: 360px) {
-    .grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">ANSH<span>.STUDY</span></div>
-  <div class="nav-btns">
-    <button class="icon-btn" onclick="toggleTheme()" title="Change Theme">🌓 Theme</button>
-    <button class="icon-btn" onclick="exportBackup()">💾 Backup</button>
+<!-- Top Header -->
+<div class="topbar">
+  <div class="logo">ANSH<span>.STUDY</span> <span class="pro-tag">PRO</span></div>
+  <div class="top-actions">
+    <button class="chip-btn" onclick="toggleTheme()">🌓 Theme</button>
+    <button class="chip-btn" onclick="exportAllData()">💾 Backup</button>
   </div>
-</header>
+</div>
 
-<div class="wrap">
-  <!-- Hero -->
-  <div class="hero">
-    <div class="badge">✨ ULTIMATE EXAM & BOOKS HUB</div>
-    <h1>Study Smart.<br><span>Achieve More.</span></h1>
-    <p>Complete books, syllabus, math quiz & preparation tools for NDA & B.Sc.</p>
-  </div>
+<div class="container">
 
-  <!-- 📰 Live News Ticker -->
-  <div class="news-ticker">
-    <div class="news-tag">🔥 Updates</div>
-    <div class="news-content" id="newsTickerText">Glassmorphism UI, Bottom Navigation & Math Quiz Hub successfully activated!</div>
-  </div>
+  <!-- ================= TAB 1: HOME DASHBOARD ================= -->
+  <div id="tab-home" class="view-section active">
+    <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.15)); border-color: var(--primary);">
+      <h2 style="font-size: 20px; margin-bottom: 4px;">Welcome Back, Ansh! 🎯</h2>
+      <p style="font-size: 13px; color: var(--muted);">Target: NDA Written Exam & B.Sc. PCM Excellence</p>
+    </div>
 
-  <!-- Dashboard -->
-  <div class="sec-title">📊 Your Dashboard</div>
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-icon">📚</div>
-      <div class="stat-val" id="statPending">0</div>
-      <div class="stat-lbl">Pending Tasks</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">✅</div>
-      <div class="stat-val" id="statCompleted">0</div>
-      <div class="stat-lbl">Completed Tasks</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">⏱️</div>
-      <div class="stat-val" id="statMinutes">0</div>
-      <div class="stat-lbl">Study Mins Today</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">🔥</div>
-      <div class="stat-val" id="statStreak">1</div>
-      <div class="stat-lbl">Day Streak</div>
-    </div>
-  </div>
-
-  <!-- Consistency Heatmap -->
-  <div class="heatmap-card">
-    <div class="heatmap-title">
-      <span>🔥 Consistency Heatmap (Study Activity)</span>
-      <span style="color:var(--green)">Active</span>
-    </div>
-    <div class="heatmap-grid" id="heatmapGrid">
-      <!-- Generated via JS -->
-    </div>
-  </div>
-
-  <!-- ACTIVE TOOL WORKSPACE -->
-  <div id="workspace">
-
-    <!-- 🧮 Math Quiz Hub -->
-    <div id="tool-mathquiz" class="tool-area">
-      <div class="tool-header">
-        <h2>🧮 Math Quiz & Practice Hub</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num" id="dashTasks">0</div>
+        <div class="stat-label">Pending Tasks</div>
       </div>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select difficulty and solve endless generated math problems for NDA & B.Sc.:</p>
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--accent);" id="dashDone">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--purple);" id="dashQuizScore">0</div>
+        <div class="stat-label">Quiz Score</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color: var(--orange);" id="dashMins">0</div>
+        <div class="stat-label">Study Mins</div>
+      </div>
+    </div>
+
+    <!-- Consistency Heatmap -->
+    <div class="card">
+      <div class="card-title">
+        <span>🔥 28-Day Study Consistency</span>
+        <span style="font-size: 12px; color: var(--accent);">Streak Active</span>
+      </div>
+      <div class="heatmap" id="heatmapContainer"></div>
+    </div>
+
+    <!-- Quick Focus Timer -->
+    <div class="card">
+      <div class="card-title">⏳ Quick Pomodoro Focus Timer</div>
+      <div style="text-align: center; font-size: 42px; font-weight: 900; margin: 10px 0;" id="pomoDisplay">25:00</div>
+      <div class="row" style="justify-content: center; margin-bottom: 10px;">
+        <button class="btn btn-outline btn-sm" onclick="setPomo(25)">25m</button>
+        <button class="btn btn-outline btn-sm" onclick="setPomo(45)">45m</button>
+        <button class="btn btn-outline btn-sm" onclick="setPomo(60)">60m</button>
+      </div>
+      <div class="row">
+        <button class="btn btn-green" style="flex:1;" onclick="startPomo()">▶ Start</button>
+        <button class="btn btn-outline" style="flex:1;" onclick="pausePomo()">⏸ Pause</button>
+        <button class="btn btn-danger" style="flex:1;" onclick="resetPomo()">🔄 Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 2: AI FORMULA & STUDY SOLVER ================= -->
+  <div id="tab-ai" class="view-section">
+    <div class="card">
+      <div class="card-title">🤖 Smart AI Formula & Concept Tutor</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi topic ka naam likhein ya niche diye gaye quick buttons dabayein—turant formulas aur short tricks milenge:</p>
       
-      <div class="btn-row" style="margin-bottom:15px;">
-        <button class="action-btn green" onclick="setQuizLevel('easy')">🟢 Easy</button>
-        <button class="action-btn" onclick="setQuizLevel('medium')">🟡 Medium</button>
-        <button class="action-btn purple" onclick="setQuizLevel('hard')">🔴 Hard (NDA)</button>
+      <div class="row" style="margin-bottom: 10px;">
+        <button class="chip-btn" onclick="askAI('Trigonometry Formulas')">📐 Trigonometry</button>
+        <button class="chip-btn" onclick="askAI('Integration & Differentiation')">∫ Calculus</button>
+        <button class="chip-btn" onclick="askAI('Physics Mechanics Formulas')">⚡ Physics Laws</button>
+        <button class="chip-btn" onclick="askAI('NDA Exam Strategy')">🎖️ NDA Strategy</button>
       </div>
 
-      <div style="background:var(--panel2); padding:15px; border-radius:12px; border:1px solid var(--line);">
-        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px;">
-          <span id="quizLevelBadge">Level: Easy</span>
-          <span>Score: <strong id="quizScore" style="color:var(--green)">0</strong> | Streak: <strong id="quizStreak" style="color:var(--orange)">0</strong></span>
+      <div class="chat-box" id="aiChatBox">
+        <div class="msg bot">Namaste Ansh! Main aapka AI Study Assistant hoon. Mujhse Maths, Physics, Chemistry ke formulas ya NDA/B.Sc. ke topics puchiye!</div>
+      </div>
+
+      <div class="row">
+        <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="e.g. Quadratic equation, Matrices, Optics..." onkeypress="if(event.key==='Enter') sendAIQuery()">
+        <button class="btn btn-purple btn-sm" onclick="sendAIQuery()">Ask AI 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 3: REAL PDF BOOKS & NOTES DOWNLOADER ================= -->
+  <div id="tab-books" class="view-section">
+    <div class="card">
+      <div class="card-title">📚 Instant Real PDF Books & Formula Sheets</div>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Niche diye gaye किसी bhi button par click karein—aapke phone me **Asli `.pdf` File** turant generate hokar download ho jayegi!</p>
+
+      <div class="pdf-item">
+        <div class="pdf-info">
+          <h4>🎖️ NDA Maths Complete Formula Book (PDF)</h4>
+          <p>Trigonometry, Calculus, Algebra, Matrices & Vectors</p>
         </div>
-        <div id="quizQuestionBox" style="font-size:18px; font-weight:700; margin-bottom:12px;">Click difficulty above to start!</div>
-        <div class="form-group">
-          <input type="number" id="quizUserAnswer" class="form-control" placeholder="Enter answer..." onkeypress="checkQuizEnter(event)">
+        <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_maths')">⬇ Download PDF</button>
+      </div>
+
+      <div class="pdf-item">
+        <div class="pdf-info">
+          <h4>⚡ NDA GAT: Physics & Chemistry Short Notes (PDF)</h4>
+          <p>Optics, Electricity, Motion, Acids/Bases & Periodic Table</p>
         </div>
-        <div class="btn-row">
-          <button class="action-btn green" onclick="submitQuizAnswer()">Submit</button>
-          <button class="action-btn gray" onclick="nextQuizQuestion()">Next ➔</button>
+        <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_science')">⬇ Download PDF</button>
+      </div>
+
+      <div class="pdf-item">
+        <div class="pdf-info">
+          <h4>🎓 B.Sc. PCM Semester Master Guide (PDF)</h4>
+          <p>Differential Calculus, Mechanics & Organic Chemistry</p>
         </div>
-        <div class="result-box" id="quizFeedback" style="display:none; margin-top:10px;"></div>
+        <button class="btn btn-purple btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Download PDF</button>
+      </div>
+
+      <div class="pdf-item">
+        <div class="pdf-info">
+          <h4>💼 SSC & Competitive Quant Tricks (PDF)</h4>
+          <p>Percentage, Profit-Loss, Time & Work Shortcuts</p>
+        </div>
+        <button class="btn btn-sm" onclick="generateRealPDF('ssc_quant')">⬇ Download PDF</button>
       </div>
     </div>
 
-    <!-- 📚 Books Hub -->
-    <div id="tool-books" class="tool-area">
-      <div class="tool-header">
-        <h2>📚 Exam Books & PDF Hub</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+    <div class="card">
+      <div class="card-title">🌐 Official Government E-Book Portals</div>
+      <div class="row">
+        <a href="https://ncert.nic.in/textbook.php" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none;">📖 NCERT Official PDFs</a>
+        <a href="https://www.upsc.gov.in/examinations/previous-question-papers" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none;">🎖️ UPSC NDA PYQ PDFs</a>
       </div>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Select target category for books, direct official PDF links & notes:</p>
+    </div>
+  </div>
+
+  <!-- ================= TAB 4: ENDLESS MATH QUIZ HUB ================= -->
+  <div id="tab-quiz" class="view-section">
+    <div class="card">
+      <div class="card-title">
+        <span>🧮 Endless Math Quiz Arena</span>
+        <span style="font-size: 12px; color: var(--accent);">Streak: <b id="qStreak">0</b> 🔥</span>
+      </div>
       
-      <div class="btn-row">
-        <button class="action-btn green" onclick="loadBook('nda')">🎖️ NDA & Defence</button>
-        <button class="action-btn purple" onclick="loadBook('bsc')">🎓 B.Sc. PCM</button>
-        <button class="action-btn" onclick="loadBook('ssc')">💼 SSC / Railway</button>
-        <button class="action-btn gray" onclick="loadBook('ncert')">📖 NCERT 11th-12th</button>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Apna Level Chunein (Har bar naya sawal aayega):</p>
+      <div class="row" style="margin-bottom: 16px;">
+        <button class="btn btn-green btn-sm" style="flex:1;" onclick="startQuiz('easy')">🟢 Easy</button>
+        <button class="btn btn-orange btn-sm" style="flex:1;" onclick="startQuiz('medium')">🟡 Medium</button>
+        <button class="btn btn-purple btn-sm" style="flex:1;" onclick="startQuiz('hard')">🔴 Hard (NDA)</button>
       </div>
 
-      <div class="result-box" id="bookContentViewer" style="margin-top:15px; white-space:pre-wrap;">
-        👉 Select any category above to view official direct PDF links & resources.
+      <div style="background: var(--bg); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
+        <div style="font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;" id="qModeLabel">MODE: EASY</div>
+        <div style="font-size: 20px; font-weight: 800; margin-bottom: 16px; min-height: 50px; display:flex; align-items:center; justify-content:center;" id="qText">Loading Question...</div>
+        
+        <input type="number" step="any" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Apna Answer Likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
+        
+        <div class="row">
+          <button class="btn btn-green" style="flex:2;" onclick="checkQuiz()">✅ Check Answer</button>
+          <button class="btn btn-outline" style="flex:1;" onclick="generateQuestion()">Skip ➔</button>
+        </div>
+
+        <div id="qResult" style="margin-top: 14px; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; display: none;"></div>
       </div>
-      <div style="margin-top:12px;" id="offlineDownloadContainer"></div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 5: PLANNER, VOICE NOTES & CALCULATORS ================= -->
+  <div id="tab-tools" class="view-section">
+    
+    <!-- Voice & Digital Notes -->
+    <div class="card">
+      <div class="card-title">🎙️ Smart Voice & Text Notes</div>
+      <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya 'Bolkar Likhein' button dabayein..."></textarea>
+      <div class="row">
+        <button class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein (Voice)</button>
+        <button class="btn btn-green" style="flex:1;" onclick="saveNote()">💾 Save Note</button>
+      </div>
+      <div id="notesContainer" style="margin-top: 12px;"></div>
     </div>
 
-    <!-- Percentage Calculator -->
-    <div id="tool-percentage" class="tool-area">
-      <div class="tool-header">
-        <h2>📈 Percentage Calculator</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+    <!-- Daily Study Planner -->
+    <div class="card">
+      <div class="card-title">📋 Daily Study Tasks & Goals</div>
+      <div class="row">
+        <input type="text" id="taskText" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Naya study task add karein...">
+        <button class="btn btn-sm" onclick="addTask()">+ Add</button>
       </div>
-      <div class="form-group">
-        <label>Obtained Marks</label>
-        <input type="number" id="obtMarks" class="form-control" placeholder="e.g. 425">
-      </div>
-      <div class="form-group">
-        <label>Total Marks</label>
-        <input type="number" id="totMarks" class="form-control" placeholder="e.g. 500">
-      </div>
-      <button class="action-btn" onclick="calcPercentage()">Calculate</button>
-      <div class="result-box" id="resPercentage">Result will appear here...</div>
-    </div>
-
-    <!-- Smart Calculator -->
-    <div id="tool-calculator" class="tool-area">
-      <div class="tool-header">
-        <h2>🧮 Smart Calculator</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group"><label>First Number</label><input type="number" id="calcA" class="form-control" placeholder="Number 1"></div>
-      <div class="form-group"><label>Second Number</label><input type="number" id="calcB" class="form-control" placeholder="Number 2"></div>
-      <div class="btn-row">
-        <button class="action-btn" onclick="runCalc('+')">+</button>
-        <button class="action-btn" onclick="runCalc('-')">-</button>
-        <button class="action-btn" onclick="runCalc('*')">×</button>
-        <button class="action-btn" onclick="runCalc('/')">÷</button>
-      </div>
-      <div class="result-box" id="resCalc">Answer: 0</div>
-    </div>
-
-    <!-- Study Time Calculator -->
-    <div id="tool-studytime" class="tool-area">
-      <div class="tool-header">
-        <h2>⌚ Study Time Calculator</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group"><label>Start Time</label><input type="time" id="stStart" class="form-control"></div>
-      <div class="form-group"><label>End Time</label><input type="time" id="stEnd" class="form-control"></div>
-      <button class="action-btn" onclick="calcStudyTime()">Calculate Duration</button>
-      <div class="result-box" id="resStudyTime">Select start and end time.</div>
+      <div id="tasksContainer" style="margin-top: 12px;"></div>
     </div>
 
     <!-- Exam Countdown -->
-    <div id="tool-countdown" class="tool-area">
-      <div class="tool-header">
-        <h2>🎯 Exam Countdown</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+    <div class="card">
+      <div class="card-title">🎯 Exam Countdown</div>
+      <div class="row">
+        <input type="text" id="exName" class="input-box" style="flex:1;" placeholder="Exam Name (e.g. NDA)">
+        <input type="date" id="exDate" class="input-box" style="flex:1;">
       </div>
-      <div class="form-group"><label>Exam Name</label><input type="text" id="examName" class="form-control" placeholder="e.g. NDA Exam"></div>
-      <div class="form-group"><label>Exam Date</label><input type="date" id="examDate" class="form-control"></div>
-      <button class="action-btn" onclick="saveExam()">Set Countdown</button>
-      <div class="result-box" id="resExam">No exam date set yet.</div>
+      <button class="btn btn-orange" onclick="setExamCountdown()">Set Target Date</button>
+      <div id="exDisplay" style="margin-top: 10px; font-size: 14px; font-weight: 700; text-align: center;"></div>
     </div>
 
-    <!-- Focus Timer -->
-    <div id="tool-timer" class="tool-area">
-      <div class="tool-header">
-        <h2>⏳ Focus Timer</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
+    <!-- Percentage & Marks Calculator -->
+    <div class="card">
+      <div class="card-title">📈 Percentage Calculator</div>
+      <div class="row">
+        <input type="number" id="mObt" class="input-box" style="flex:1;" placeholder="Obtained Marks">
+        <input type="number" id="mTot" class="input-box" style="flex:1;" placeholder="Total Marks">
       </div>
-      <div class="btn-row" style="justify-content:center;">
-        <button class="action-btn gray" onclick="setTimer(25)">25 Min</button>
-        <button class="action-btn gray" onclick="setTimer(45)">45 Min</button>
-        <button class="action-btn gray" onclick="setTimer(60)">60 Min</button>
-      </div>
-      <div class="timer-display" id="timerDisplay">25:00</div>
-      <div class="btn-row" style="justify-content:center;">
-        <button class="action-btn green" onclick="startTimer()">▶ Start</button>
-        <button class="action-btn gray" onclick="pauseTimer()">⏸ Pause</button>
-        <button class="action-btn" onclick="resetTimer()">🔄 Reset</button>
-      </div>
+      <button class="btn" onclick="calcPerc()">Calculate %</button>
+      <div id="percOut" style="margin-top: 10px; font-size: 15px; font-weight: 800; text-align: center; color: var(--accent);"></div>
     </div>
 
-    <!-- Daily Planner -->
-    <div id="tool-planner" class="tool-area">
-      <div class="tool-header">
-        <h2>📋 Daily Planner</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="search-box">
-        <input type="text" id="taskInput" placeholder="Add study task...">
-        <button onclick="addTask()">Add</button>
-      </div>
-      <ul class="item-list" id="taskList"></ul>
-    </div>
-
-    <!-- Revision Tracker -->
-    <div id="tool-revision" class="tool-area">
-      <div class="tool-header">
-        <h2>📖 Revision Tracker</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="search-box">
-        <input type="text" id="revInput" placeholder="Chapter name...">
-        <button onclick="addRevision()">Add</button>
-      </div>
-      <ul class="item-list" id="revList"></ul>
-    </div>
-
-    <!-- Digital Notes -->
-    <div id="tool-notes" class="tool-area">
-      <div class="tool-header">
-        <h2>📝 Digital Notes</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="form-group"><textarea id="noteInput" rows="3" class="form-control" placeholder="Write formula or note..."></textarea></div>
-      <button class="action-btn" onclick="addNote()">Save Note</button>
-      <ul class="item-list" id="noteList"></ul>
-    </div>
-
-    <!-- Daily Goals -->
-    <div id="tool-goals" class="tool-area">
-      <div class="tool-header">
-        <h2>🏆 Daily Goals</h2>
-        <button class="close-btn" onclick="closeTools()">✕ Close</button>
-      </div>
-      <div class="search-box">
-        <input type="text" id="goalInput" placeholder="Today's target...">
-        <button onclick="addGoal()">Add</button>
-      </div>
-      <ul class="item-list" id="goalList"></ul>
-    </div>
-
-  </div>
-
-  <!-- Explore Tools & Books Grid -->
-  <div class="sec-title">🚀 Explore Study Tools & Books Hub</div>
-  <div class="search-box">
-    <input type="text" id="searchInput" onkeyup="filterTools()" placeholder="Search books, math quiz, calculator, planner...">
-    <button onclick="filterTools()">Search</button>
-  </div>
-
-  <div class="grid" id="toolsGrid">
-    <div class="tool-card quiz-highlight" data-search="math quiz test practice">
-      <div>
-        <div class="t-icon">🧮</div>
-        <div class="t-title">Math Quiz & Practice Hub</div>
-        <div class="t-desc">Infinite math problem solver with adjustable levels.</div>
-      </div>
-      <button class="open-btn purple" onclick="openTool('mathquiz')">Open Quiz →</button>
-    </div>
-
-    <div class="tool-card highlight" data-search="books nda bsc ssc pdf notes">
-      <div>
-        <div class="t-icon">📚</div>
-        <div class="t-title">Exam Books & PDF Hub</div>
-        <div class="t-desc">Complete syllabus & direct official PDF downloads.</div>
-      </div>
-      <button class="open-btn green" onclick="openTool('books')">Open Books →</button>
-    </div>
-
-    <div class="tool-card" data-search="percentage calculator marks">
-      <div><div class="t-icon">📈</div><div class="t-title">Percentage Calculator</div><div class="t-desc">Calculate percentage easily.</div></div>
-      <button class="open-btn" onclick="openTool('percentage')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="smart calculator math">
-      <div><div class="t-icon">🧮</div><div class="t-title">Smart Calculator</div><div class="t-desc">Everyday arithmetic calculations.</div></div>
-      <button class="open-btn" onclick="openTool('calculator')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="study time duration hours">
-      <div><div class="t-icon">⌚</div><div class="t-title">Study Time Calculator</div><div class="t-desc">Track study duration daily.</div></div>
-      <button class="open-btn" onclick="openTool('studytime')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="exam countdown days">
-      <div><div class="t-icon">🎯</div><div class="t-title">Exam Countdown</div><div class="t-desc">Track remaining days for exams.</div></div>
-      <button class="open-btn" onclick="openTool('countdown')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="focus timer pomodoro">
-      <div><div class="t-icon">⏳</div><div class="t-title">Focus Timer</div><div class="t-desc">Pomodoro focus sessions.</div></div>
-      <button class="open-btn" onclick="openTool('timer')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="daily planner todo tasks">
-      <div><div class="t-icon">📋</div><div class="t-title">Daily Planner</div><div class="t-desc">Organize daily study tasks.</div></div>
-      <button class="open-btn" onclick="openTool('planner')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="revision tracker chapters">
-      <div><div class="t-icon">📖</div><div class="t-title">Revision Tracker</div><div class="t-desc">Track revision progress.</div></div>
-      <button class="open-btn" onclick="openTool('revision')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="digital notes write">
-      <div><div class="t-icon">📝</div><div class="t-title">Digital Notes</div><div class="t-desc">Save formulas & notes.</div></div>
-      <button class="open-btn" onclick="openTool('notes')">Open Tool →</button>
-    </div>
-
-    <div class="tool-card" data-search="daily goals">
-      <div><div class="t-icon">🏆</div><div class="t-title">Daily Goals</div><div class="t-desc">Achieve learning targets.</div></div>
-      <button class="open-btn" onclick="openTool('goals')">Open Tool →</button>
-    </div>
   </div>
 
 </div>
 
-<!-- Mobile Bottom Navigation Bar -->
-<div class="bottom-nav">
-  <button class="nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'}); closeTools();">
-    <span class="nav-icon">🏠</span>Home
+<!-- Mobile Bottom App Navigation -->
+<div class="bottom-bar">
+  <button class="tab-btn active" onclick="switchTab('home', this)">
+    <span class="icon">🏠</span>Home
   </button>
-  <button class="nav-item" onclick="openTool('mathquiz')">
-    <span class="nav-icon">🧮</span>Quiz
+  <button class="tab-btn" onclick="switchTab('ai', this)">
+    <span class="icon">🤖</span>AI Tutor
   </button>
-  <button class="nav-item" onclick="openTool('books')">
-    <span class="nav-icon">📚</span>Books
+  <button class="tab-btn" onclick="switchTab('books', this)">
+    <span class="icon">📄</span>PDF Books
   </button>
-  <button class="nav-item" onclick="openTool('planner')">
-    <span class="nav-icon">📋</span>Planner
+  <button class="tab-btn" onclick="switchTab('quiz', this)">
+    <span class="icon">🧮</span>Math Quiz
   </button>
-  <button class="nav-item" onclick="openTool('timer')">
-    <span class="nav-icon">⏳</span>Timer
+  <button class="tab-btn" onclick="switchTab('tools', this)">
+    <span class="icon">🛠️</span>Tools
   </button>
 </div>
-
-<footer>
-  ANSH.STUDY &copy; 2026 | Ultimate Exam & Books Hub | Designed for Ansh
-</footer>
 
 <script>
-  // Global State
-  let tasks = JSON.parse(localStorage.getItem('ans_tasks')) || [];
-  let revisions = JSON.parse(localStorage.getItem('ans_revisions')) || [];
-  let notes = JSON.parse(localStorage.getItem('ans_notes')) || [];
-  let goals = JSON.parse(localStorage.getItem('ans_goals')) || [];
-  let studyMins = parseInt(localStorage.getItem('ans_mins')) || 45;
-  let streak = parseInt(localStorage.getItem('ans_streak')) || 5;
+  // State Management
+  let appData = JSON.parse(localStorage.getItem('ansh_pro_data')) || {
+    tasks: [
+      { text: "Solve 30 NDA Trigonometry PYQs", done: false },
+      { text: "Revise B.Sc. Physics Mechanics Notes", done: true }
+    ],
+    notes: [
+      { text: "sin²θ + cos²θ = 1 | 1 + tan²θ = sec²θ" }
+    ],
+    quizScore: 0,
+    quizStreak: 0,
+    studyMins: 60,
+    examName: "NDA Exam",
+    examDate: ""
+  };
 
-  // Math Quiz State
-  let currentQuizLevel = 'easy';
-  let currentQuizAnswer = 0;
-  let quizScore = 0;
-  let quizStreakCount = 0;
-
-  function saveData() {
-    localStorage.setItem('ans_tasks', JSON.stringify(tasks));
-    localStorage.setItem('ans_revisions', JSON.stringify(revisions));
-    localStorage.setItem('ans_notes', JSON.stringify(notes));
-    localStorage.setItem('ans_goals', JSON.stringify(goals));
-    localStorage.setItem('ans_mins', studyMins);
-    localStorage.setItem('ans_streak', streak);
-    updateDashboardStats();
+  function syncData() {
+    localStorage.setItem('ansh_pro_data', JSON.stringify(appData));
+    document.getElementById('dashTasks').innerText = appData.tasks.filter(t => !t.done).length;
+    document.getElementById('dashDone').innerText = appData.tasks.filter(t => t.done).length;
+    document.getElementById('dashQuizScore').innerText = appData.quizScore;
+    document.getElementById('dashMins').innerText = appData.studyMins;
+    document.getElementById('qStreak').innerText = appData.quizStreak;
   }
 
-  function updateDashboardStats() {
-    document.getElementById('statPending').innerText = tasks.filter(t => !t.done).length;
-    document.getElementById('statCompleted').innerText = tasks.filter(t => t.done).length;
-    document.getElementById('statMinutes').innerText = studyMins;
-    document.getElementById('statStreak').innerText = streak;
+  // Tab Navigation
+  function switchTab(tabId, btnEl) {
+    document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    btnEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Render Heatmap (14 cells)
-  function renderHeatmap() {
-    const grid = document.getElementById('heatmapGrid');
-    grid.innerHTML = '';
-    for(let i = 0; i < 28; i++) {
-      const cell = document.createElement('div');
-      cell.className = 'heat-cell';
-      if(i % 3 === 0 || i % 5 === 0) cell.classList.add('active-1');
-      if(i % 7 === 0) cell.classList.add('active-2');
-      if(i === 27) cell.classList.add('today', 'active-2');
-      grid.appendChild(cell);
-    }
-  }
-
-  // Tool Workspace Toggles
-  function openTool(toolName) {
-    document.querySelectorAll('.tool-area').forEach(el => el.classList.remove('active'));
-    const target = document.getElementById('tool-' + toolName);
-    if(target) {
-      target.classList.add('active');
-      window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
-    }
-    if(toolName === 'mathquiz' && document.getElementById('quizQuestionBox').innerText.includes('Click')) {
-      setQuizLevel('easy');
-    }
-  }
-
-  function closeTools() {
-    document.querySelectorAll('.tool-area').forEach(el => el.classList.remove('active'));
-  }
-
-  // Theme Toggle
   function toggleTheme() {
     document.body.classList.toggle('light');
   }
 
-  // Backup & Export
-  function exportBackup() {
-    const backupData = { tasks, revisions, notes, goals, studyMins, streak, date: new Date().toISOString() };
-    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
+  // Heatmap
+  function buildHeatmap() {
+    const box = document.getElementById('heatmapContainer');
+    box.innerHTML = '';
+    for(let i=0; i<28; i++) {
+      const d = document.createElement('div');
+      d.className = 'h-dot' + (i%2===0 ? ' lvl1' : '') + (i%5===0 || i===27 ? ' lvl2' : '');
+      box.appendChild(d);
+    }
+  }
+
+  // ================= REAL PDF GENERATOR (jsPDF) =================
+  function generateRealPDF(type) {
+    if (!window.jspdf) {
+      alert("PDF Engine load ho raha hai, kripya 2 second baad phir click karein (Internet on rakhein).");
+      return;
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Header Styling
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, 210, 35, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.text("ANSH.STUDY PRO - OFFICIAL STUDY PDF", 15, 18);
+    doc.setFontSize(10);
+    doc.text("Prepared for: Ansh | Target: NDA & B.Sc. Excellence", 15, 27);
+
+    doc.setTextColor(20, 20, 20);
+    doc.setFontSize(14);
+
+    let title = "";
+    let lines = [];
+
+    if (type === 'nda_maths') {
+      title = "1. NDA MATHEMATICS MASTER FORMULA SHEET";
+      lines = [
+        "A. TRIGONOMETRY:",
+        "1. sin(A + B) = sinA cosB + cosA sinB",
+        "2. cos(A + B) = cosA cosB - sinA sinB",
+        "3. tan(A + B) = (tanA + tanB) / (1 - tanA tanB)",
+        "4. sin2A = 2sinA cosA = 2tanA / (1 + tan^2 A)",
+        "5. cos2A = cos^2 A - sin^2 A = 2cos^2 A - 1 = 1 - 2sin^2 A",
+        "",
+        "B. CALCULUS (DIFFERENTIATION & INTEGRATION):",
+        "6. d/dx (x^n) = n * x^(n-1)",
+        "7. d/dx (sin x) = cos x  |  d/dx (cos x) = -sin x",
+        "8. d/dx (e^x) = e^x  |  d/dx (ln x) = 1/x",
+        "9. Integral of x^n dx = (x^(n+1))/(n+1) + C",
+        "10. Integral of (1/x) dx = ln|x| + C",
+        "",
+        "C. ALGEBRA & MATRICES:",
+        "11. Quadratic Roots: x = [-b +/- sqrt(b^2 - 4ac)] / 2a",
+        "12. Sum of AP (Sn) = (n/2) * [2a + (n-1)d]",
+        "13. Matrix Inverse: A^(-1) = adj(A) / |A| (where |A| != 0)"
+      ];
+    } else if (type === 'nda_science') {
+      title = "2. NDA GAT: PHYSICS & CHEMISTRY SHORT NOTES";
+      lines = [
+        "A. PHYSICS KEY FORMULAS:",
+        "1. Equations of Motion: v = u + at | s = ut + 0.5at^2 | v^2 = u^2 + 2as",
+        "2. Force: F = m * a (Unit: Newton)",
+        "3. Kinetic Energy: KE = 0.5 * m * v^2 | Potential Energy: PE = mgh",
+        "4. Ohm's Law: V = I * R | Power: P = V * I = I^2 * R",
+        "5. Mirror Formula: 1/f = 1/v + 1/u | Lens Formula: 1/f = 1/v - 1/u",
+        "",
+        "B. CHEMISTRY IMPORTANT FACTS:",
+        "6. pH < 7 (Acidic), pH = 7 (Neutral), pH > 7 (Basic)",
+        "7. Avogadro Number = 6.022 x 10^23",
+        "8. Baking Soda: NaHCO3 | Washing Soda: Na2CO3.10H2O",
+        "9. Bleaching Powder: CaOCl2 | Plaster of Paris: CaSO4.0.5H2O"
+      ];
+    } else if (type === 'bsc_pcm') {
+      title = "3. B.Sc. PCM SEMESTER IMPORTANT TOPICS";
+      lines = [
+        "1. MATHEMATICS (Differential & Integral Calculus):",
+        "   - Leibnitz Theorem for nth derivative of product of two functions.",
+        "   - Euler's Theorem on Homogeneous Functions: x(du/dx) + y(du/dy) = nu",
+        "   - Beta and Gamma Functions relation: B(m,n) = [G(m)G(n)] / G(m+n)",
+        "",
+        "2. PHYSICS (Mechanics & Wave Motion):",
+        "   - Conservative Forces: F = -grad(V), Curl(F) = 0",
+        "   - Moment of Inertia of Ring = MR^2, Disc = 0.5 MR^2, Sphere = 2/5 MR^2",
+        "   - Differential Equation of SHM: d^2x/dt^2 + w^2 x = 0",
+        "",
+        "3. CHEMISTRY (Inorganic & Organic):",
+        "   - Hybridization & VSEPR Theory shapes (sp, sp2, sp3, dsp2)",
+        "   - Markovnikov's Rule & Anti-Markovnikov (Peroxide Effect)"
+      ];
+    } else {
+      title = "4. SSC & COMPETITIVE QUANT SHORTCUTS";
+      lines = [
+        "1. Profit % = (Profit / CP) x 100 | Loss % = (Loss / CP) x 100",
+        "2. Simple Interest (SI) = (P x R x T) / 100",
+        "3. Compound Interest Amount = P * (1 + R/100)^T",
+        "4. Average Speed (Equal Distance) = (2xy) / (x + y)",
+        "5. Work & Time: If A does work in x days & B in y days, together = xy/(x+y)"
+      ];
+    }
+
+    doc.setFont("helvetica", "bold");
+    doc.text(title, 15, 48);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+
+    let y = 58;
+    lines.forEach(line => {
+      doc.text(line, 15, y);
+      y += 8;
+    });
+
+    doc.setFontSize(9);
+    doc.setTextColor(120, 120, 120);
+    doc.text("Generated by ANSH.STUDY PRO App - Keep Studying, Keep Growing!", 15, 285);
+
+    doc.save(`${type}_ANSH_STUDY.pdf`);
+  }
+
+  // ================= AI TUTOR ENGINE =================
+  const knowledgeBase = {
+    "trigonometry": "📐 **Trigonometry Formulas:**\n• sin²θ + cos²θ = 1\n• 1 + tan²θ = sec²θ\n• 1 + cot²θ = csc²θ\n• sin(2θ) = 2sinθ·cosθ\n• cos(2θ) = cos²θ - sin²θ\n• tan(A+B) = (tanA + tanB)/(1 - tanA·tanB)",
+    "calculus": "∫ **Calculus Quick Rules:**\n• d/dx(xⁿ) = n·xⁿ⁻¹\n• d/dx(sin x) = cos x\n• d/dx(cos x) = -sin x\n• d/dx(eˣ) = eˣ\n• ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C\n• ∫ (1/x) dx = log|x| + C",
+    "physics": "⚡ **Physics Key Formulas:**\n• F = m·a (Newton's 2nd Law)\n• v = u + at | s = ut + ½at² | v² - u² = 2as\n• Work (W) = F·d·cosθ\n• Kinetic Energy = ½mv²\n• Escape Velocity (Earth) = 11.2 km/s",
+    "nda": "🎖️ **NDA Exam Winning Strategy:**\n1. Maths (300 Marks): Trigonometry, Matrices, Calculus aur Vector 3D par sabse zyada focus karein (60+ sawal yahin se aate hain).\n2. GAT (600 Marks): English (200) + Science (200) ko strong karein—is se cutoff aasani se clear ho jayega.\n3. Negative marking (1/3rd) se bachein!",
+    "quadratic": "🔢 **Quadratic Equation (ax² + bx + c = 0):**\n• Roots x = [-b ± √(b² - 4ac)] / 2a\n• Sum of roots (α + β) = -b/a\n• Product of roots (α·β) = c/a\n• Discriminant D = b² - 4ac (D>0 Real & Distinct, D=0 Equal)",
+    "matrices": "🔲 **Matrices & Determinants:**\n• |AB| = |A|·|B|\n• |kA| = kⁿ|A| (where n is order of matrix)\n• A⁻¹ = adj(A) / |A|\n• Symmetric Matrix: Aᵀ = A | Skew-Symmetric: Aᵀ = -A"
+  };
+
+  function askAI(topic) {
+    document.getElementById('aiInput').value = topic;
+    sendAIQuery();
+  }
+
+  function sendAIQuery() {
+    const input = document.getElementById('aiInput');
+    const q = input.value.trim();
+    if(!q) return;
+
+    const chatBox = document.getElementById('aiChatBox');
+    chatBox.innerHTML += `<div class="msg user">${q}</div>`;
+    input.value = '';
+
+    let reply = "Is topic par main aapko bata doon ki basic formulas aur NCERT concepts clear rakhein. Aap mujhse 'Trigonometry', 'Calculus', 'Physics', 'Quadratic', 'Matrices', ya 'NDA' likhkar direct formula sheet le sakte hain!";
+    const low = q.toLowerCase();
+    for (let key in knowledgeBase) {
+      if (low.includes(key)) {
+        reply = knowledgeBase[key];
+        break;
+      }
+    }
+
+    setTimeout(() => {
+      chatBox.innerHTML += `<div class="msg bot">${reply}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 300);
+  }
+
+  // ================= ENDLESS MATH QUIZ ENGINE =================
+  let qLevel = 'easy';
+  let correctAns = 0;
+
+  function startQuiz(lvl) {
+    qLevel = lvl;
+    document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase();
+    generateQuestion();
+  }
+
+  function generateQuestion() {
+    document.getElementById('qResult').style.display = 'none';
+    document.getElementById('qInput').value = '';
+    const qText = document.getElementById('qText');
+
+    if (qLevel === 'easy') {
+      const a = Math.floor(Math.random() * 45) + 10;
+      const b = Math.floor(Math.random() * 35) + 5;
+      const ops = ['+', '-', '*'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      if (op === '+') { correctAns = a + b; qText.innerText = `${a} + ${b} = ?`; }
+      else if (op === '-') { correctAns = a - b; qText.innerText = `${a} - ${b} = ?`; }
+      else {
+        const m1 = Math.floor(Math.random() * 15) + 3;
+        const m2 = Math.floor(Math.random() * 12) + 2;
+        correctAns = m1 * m2;
+        qText.innerText = `${m1} × ${m2} = ?`;
+      }
+    } else if (qLevel === 'medium') {
+      const r = Math.floor(Math.random() * 3);
+      if (r === 0) {
+        const p = (Math.floor(Math.random() * 9) + 1) * 10;
+        const val = (Math.floor(Math.random() * 20) + 5) * 10;
+        correctAns = (p * val) / 100;
+        qText.innerText = `What is ${p}% of ${val}?`;
+      } else if (r === 1) {
+        const x = Math.floor(Math.random() * 12) + 2;
+        const a = Math.floor(Math.random() * 6) + 2;
+        const b = Math.floor(Math.random() * 20) + 5;
+        const c = a * x + b;
+        correctAns = x;
+        qText.innerText = `Solve for x:  ${a}x + ${b} = ${c}`;
+      } else {
+        const n = Math.floor(Math.random() * 18) + 11;
+        correctAns = n * n;
+        qText.innerText = `Find the value of ${n}²`;
+      }
+    } else {
+      // Hard (NDA / B.Sc. Level)
+      const r = Math.floor(Math.random() * 4);
+      if (r === 0) {
+        const c = Math.floor(Math.random() * 5) + 2;
+        const x = Math.floor(Math.random() * 4) + 1;
+        // d/dx (c * x^3) = 3 * c * x^2
+        correctAns = 3 * c * x * x;
+        qText.innerText = `If f(x) = ${c}x³, find f'(${x}) (Derivative at x=${x})`;
+      } else if (r === 1) {
+        const a = Math.floor(Math.random() * 10) + 2;
+        const d = Math.floor(Math.random() * 5) + 2;
+        const n = Math.floor(Math.random() * 8) + 5;
+        correctAns = a + (n - 1) * d;
+        qText.innerText = `Find ${n}th term of AP: a = ${a}, d = ${d}`;
+      } else if (r === 2) {
+        // Determinant of 2x2 matrix [[a,b],[c,d]]
+        const a = Math.floor(Math.random() * 8) + 2;
+        const b = Math.floor(Math.random() * 6) + 1;
+        const c = Math.floor(Math.random() * 5) + 1;
+        const d = Math.floor(Math.random() * 8) + 2;
+        correctAns = (a * d) - (b * c);
+        qText.innerText = `Find Determinant |A| of 2×2 Matrix:\n[ ${a}   ${b} ]\n[ ${c}   ${d} ]`;
+      } else {
+        const k = Math.floor(Math.random() * 10) + 2;
+        correctAns = k;
+        qText.innerText = `Evaluate: ${k} × (sin²45° + cos²45°) = ?`;
+      }
+    }
+  }
+
+  function checkQuiz() {
+    const val = parseFloat(document.getElementById('qInput').value);
+    const res = document.getElementById('qResult');
+    if (isNaN(val)) {
+      res.style.display = 'block';
+      res.style.background = 'rgba(245,158,11,0.2)';
+      res.innerText = "⚠️ Pehle koi number enter karein!";
+      return;
+    }
+    res.style.display = 'block';
+    if (Math.abs(val - correctAns) < 0.01) {
+      appData.quizScore += 10;
+      appData.quizStreak += 1;
+      res.style.background = 'rgba(16,185,129,0.2)';
+      res.style.color = '#34d399';
+      res.innerText = `🎉 Sahi Jawab! (+10 Points) | Agla sawal aa raha hai...`;
+      syncData();
+      setTimeout(generateQuestion, 1200);
+    } else {
+      appData.quizStreak = 0;
+      res.style.background = 'rgba(239,68,68,0.2)';
+      res.style.color = '#f87171';
+      res.innerText = `❌ Galat! Sahi Uttar hai: ${correctAns}`;
+      syncData();
+    }
+  }
+
+  // ================= VOICE NOTES & PLANNER =================
+  function startVoiceNote() {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) {
+      alert("Aapke browser me Voice Typing support nahi hai. Chrome browser ka use karein.");
+      return;
+    }
+    const rec = new SpeechRec();
+    rec.lang = 'en-IN';
+    rec.onstart = () => { document.getElementById('noteText').placeholder = "🎙️ Sun raha hoon... Boliye..."; };
+    rec.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      document.getElementById('noteText').value += (document.getElementById('noteText').value ? " " : "") + transcript;
+    };
+    rec.start();
+  }
+
+  function saveNote() {
+    const txt = document.getElementById('noteText').value.trim();
+    if (!txt) return;
+    appData.notes.unshift({ text: txt });
+    document.getElementById('noteText').value = '';
+    renderNotes();
+    syncData();
+  }
+
+  function renderNotes() {
+    const c = document.getElementById('notesContainer');
+    c.innerHTML = appData.notes.map((n, i) => `
+      <div class="todo-item">
+        <span style="white-space:pre-wrap;">${n.text}</span>
+        <button class="chip-btn" style="color:var(--danger);" onclick="appData.notes.splice(${i},1); renderNotes(); syncData();">✕</button>
+      </div>
+    `).join('');
+  }
+
+  function addTask() {
+    const txt = document.getElementById('taskText').value.trim();
+    if (!txt) return;
+    appData.tasks.unshift({ text: txt, done: false });
+    document.getElementById('taskText').value = '';
+    renderTasks();
+    syncData();
+  }
+
+  function renderTasks() {
+    const c = document.getElementById('tasksContainer');
+    c.innerHTML = appData.tasks.map((t, i) => `
+      <div class="todo-item ${t.done ? 'done' : ''}">
+        <span style="cursor:pointer;" onclick="appData.tasks[${i}].done=!appData.tasks[${i}].done; renderTasks(); syncData();">
+          ${t.done ? '✅' : '⬜'} ${t.text}
+        </span>
+        <button class="chip-btn" style="color:var(--danger);" onclick="appData.tasks.splice(${i},1); renderTasks(); syncData();">✕</button>
+      </div>
+    `).join('');
+  }
+
+  // ================= POMODORO, COUNTDOWN & CALCULATOR =================
+  let pomoSec = 25 * 60, pomoTimer = null;
+  function setPomo(m) { pausePomo(); pomoSec = m * 60; updatePomo(); }
+  function updatePomo() {
+    const m = String(Math.floor(pomoSec/60)).padStart(2,'0');
+    const s = String(pomoSec%60).padStart(2,'0');
+    document.getElementById('pomoDisplay').innerText = `${m}:${s}`;
+  }
+  function startPomo() {
+    if (pomoTimer) return;
+    pomoTimer = setInterval(() => {
+      if (pomoSec > 0) { pomoSec--; updatePomo(); }
+      else { pausePomo(); appData.studyMins += 25; syncData(); alert("🎉 Focus Session Complete!"); }
+    }, 1000);
+  }
+  function pausePomo() { clearInterval(pomoTimer); pomoTimer = null; }
+  function resetPomo() { pausePomo(); pomoSec = 25 * 60; updatePomo(); }
+
+  function setExamCountdown() {
+    const name = document.getElementById('exName').value || "Target Exam";
+    const dt = document.getElementById('exDate').value;
+    if (!dt) return;
+    const days = Math.ceil((new Date(dt) - new Date()) / (1000*60*60*24));
+    document.getElementById('exDisplay').innerText = `🎯 ${name}: ${days > 0 ? days + ' Days Left!' : 'Exam Day!'}`;
+  }
+
+  function calcPerc() {
+    const o = parseFloat(document.getElementById('mObt').value);
+    const t = parseFloat(document.getElementById('mTot').value);
+    if (!o || !t) return;
+    document.getElementById('percOut').innerText = `Score: ${((o/t)*100).toFixed(2)}%`;
+  }
+
+  function exportAllData() {
+    const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'ansh_study_backup.json';
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ANSH_STUDY_PRO_Backup.json';
     a.click();
   }
 
-  // Search Filter
-  function filterTools() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('.tool-card').forEach(card => {
-      const keywords = card.getAttribute('data-search') || '';
-      if(keywords.includes(q) || card.innerText.toLowerCase().includes(q)) {
-        card.classList.remove('hidden');
-      } else {
-        card.classList.add('hidden');
-      }
-    });
-  }
-
-  // Math Quiz Logic
-  function setQuizLevel(level) {
-    currentQuizLevel = level;
-    let badgeText = "Easy (Arithmetic)";
-    if(level === 'medium') badgeText = "Medium (Algebra & Percentage)";
-    if(level === 'hard') badgeText = "Hard (Calculus & NDA Level)";
-    document.getElementById('quizLevelBadge').innerText = "Level: " + badgeText;
-    nextQuizQuestion();
-  }
-
-  function nextQuizQuestion() {
-    const qBox = document.getElementById('quizQuestionBox');
-    const feedback = document.getElementById('quizFeedback');
-    feedback.style.display = 'none';
-    document.getElementById('quizUserAnswer').value = '';
-
-    let num1, num2, ans, qText;
-    if(currentQuizLevel === 'easy') {
-      const ops = ['+', '-', '*'];
-      const op = ops[Math.floor(Math.random() * ops.length)];
-      num1 = Math.floor(Math.random() * 50) + 5;
-      num2 = Math.floor(Math.random() * 50) + 5;
-      if(op === '-') { if(num1 < num2) { let temp = num1; num1 = num2; num2 = temp; } ans = num1 - num2; }
-      else if(op === '+') { ans = num1 + num2; }
-      else { num1 = Math.floor(Math.random() * 12) + 2; num2 = Math.floor(Math.random() * 12) + 2; ans = num1 * num2; }
-      qText = `Solve: ${num1} ${op} ${num2} = ?`;
-      currentQuizAnswer = ans;
-    } else if(currentQuizLevel === 'medium') {
-      const type = Math.floor(Math.random() * 3);
-      if(type === 0) {
-        num1 = Math.floor(Math.random() * 40) + 10;
-        num2 = (Math.floor(Math.random() * 40) + 10) * 20;
-        ans = (num1 * num2) / 100;
-        qText = `Find ${num1}% of ${num2}?`;
-      } else if(type === 1) {
-        let a = Math.floor(Math.random() * 5) + 2;
-        let x = Math.floor(Math.random() * 15) + 1;
-        let b = Math.floor(Math.random() * 20) + 1;
-        let c = (a * x) + b;
-        ans = x;
-        qText = `Find x if: ${a}x + ${b} = ${c} (Enter x)`;
-      } else {
-        num1 = Math.floor(Math.random() * 15) + 5;
-        ans = num1 * num1;
-        qText = `What is square of ${num1} (${num1}²)?`;
-      }
-      currentQuizAnswer = ans;
-    } else {
-      const type = Math.floor(Math.random() * 3);
-      if(type === 0) {
-        ans = 1; qText = `Evaluate: sin²(45°) + cos²(45°)?`;
-      } else if(type === 1) {
-        let a = 2, d = 3, n = 10;
-        ans = a + (n - 1) * d;
-        qText = `Find 10th term of AP where first term a=2, d=3?`;
-      } else {
-        ans = 24; qText = `If f(x) = 3x³, find derivative f'(x) when x = 2?`;
-      }
-      currentQuizAnswer = ans;
-    }
-    qBox.innerText = qText;
-  }
-
-  function submitQuizAnswer() {
-    const userAnsInput = document.getElementById('quizUserAnswer').value;
-    const feedback = document.getElementById('quizFeedback');
-    feedback.style.display = 'block';
-
-    if(userAnsInput === "") {
-      feedback.innerHTML = "⚠️ Please enter an answer first.";
-      return;
-    }
-
-    const userVal = parseFloat(userAnsInput);
-    if(Math.abs(userVal - currentQuizAnswer) < 0.001) {
-      quizScore += 10;
-      quizStreakCount += 1;
-      feedback.style.borderLeftColor = 'var(--green)';
-      feedback.innerHTML = `✅ <strong>Correct!</strong> (+10 Score)<br>Correct Answer: <strong>${currentQuizAnswer}</strong>`;
-    } else {
-      quizStreakCount = 0;
-      feedback.style.borderLeftColor = 'var(--red)';
-      feedback.innerHTML = `❌ <strong>Incorrect!</strong><br>Your Answer: ${userVal} | Correct Answer: <strong>${currentQuizAnswer}</strong>`;
-    }
-    document.getElementById('quizScore').innerText = quizScore;
-    document.getElementById('quizStreak').innerText = quizStreakCount;
-  }
-
-  function checkQuizEnter(e) { if(e.key === 'Enter') submitQuizAnswer(); }
-
-  // Books Hub Links & Downloader
-  function loadBook(category) {
-    const viewer = document.getElementById('bookContentViewer');
-    const dlContainer = document.getElementById('offlineDownloadContainer');
-    dlContainer.innerHTML = '';
-
-    if(category === 'nda') {
-      viewer.innerHTML = `🎖️ <strong>NDA & Defence Official Hub</strong>\n\n• **Maths & GAT Syllabus & PYQs**\n🌐 Official Portal: <a href="https://www.upsc.gov.in" target="_blank" style="color:var(--blue)">upsc.gov.in</a>`;
-      dlContainer.innerHTML = `<button class="action-btn green" onclick="downloadStudyGuide('NDA_Guide')">📥 Download NDA Study Guide (.txt)</button>`;
-    } else if(category === 'bsc') {
-      viewer.innerHTML = `🎓 <strong>B.Sc. PCM Semester Hub</strong>\n\n• **Physics, Chemistry & Maths Notes**\n🌐 NPTEL: <a href="https://nptel.ac.in" target="_blank" style="color:var(--blue)">nptel.ac.in</a>`;
-      dlContainer.innerHTML = `<button class="action-btn purple" onclick="downloadStudyGuide('BSc_PCM_Guide')">📥 Download B.Sc. PCM Guide (.txt)</button>`;
-    } else if(category === 'ssc') {
-      viewer.innerHTML = `💼 <strong>SSC & Railway Hub</strong>\n\n• Quant, Reasoning & General Awareness\n🌐 SSC Portal: <a href="https://ssc.nic.in" target="_blank" style="color:var(--blue)">ssc.nic.in</a>`;
-      dlContainer.innerHTML = `<button class="action-btn" onclick="downloadStudyGuide('SSC_Guide')">📥 Download SSC Guide (.txt)</button>`;
-    } else {
-      viewer.innerHTML = `📖 <strong>NCERT 11th & 12th Textbooks</strong>\n\n🌐 NCERT Portal: <a href="https://ncert.nic.in/textbook.php" target="_blank" style="color:var(--blue)">ncert.nic.in</a>`;
-      dlContainer.innerHTML = `<button class="action-btn gray" onclick="downloadStudyGuide('NCERT_Guide')">📥 Download NCERT Reading List (.txt)</button>`;
-    }
-  }
-
-  function downloadStudyGuide(guideName) {
-    const textContent = `ANSH.STUDY - OFFICIAL STUDY GUIDE\nGenerated for: Ansh\nGuide: ${guideName}\n\n1. Complete daily study schedule.\n2. Practice 50+ math problems daily.\n3. Stay consistent!`;
-    const blob = new Blob([textContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `${guideName}_AnshStudy.txt`; a.click();
-  }
-
-  // Other Tools
-  function calcPercentage() {
-    const obt = parseFloat(document.getElementById('obtMarks').value);
-    const tot = parseFloat(document.getElementById('totMarks').value);
-    const res = document.getElementById('resPercentage');
-    if(isNaN(obt) || isNaN(tot) || tot <= 0) { res.innerText = "Enter valid marks."; return; }
-    res.innerHTML = `Result: <strong>${((obt / tot) * 100).toFixed(2)}%</strong>`;
-  }
-
-  function runCalc(op) {
-    const a = parseFloat(document.getElementById('calcA').value);
-    const b = parseFloat(document.getElementById('calcB').value);
-    const res = document.getElementById('resCalc');
-    if(isNaN(a) || isNaN(b)) { res.innerText = "Enter both numbers."; return; }
-    let ans = op === '+' ? a + b : op === '-' ? a - b : op === '*' ? a * b : (b !== 0 ? (a / b).toFixed(2) : "Error");
-    res.innerHTML = `Answer: <strong>${ans}</strong>`;
-  }
-
-  function calcStudyTime() {
-    const start = document.getElementById('stStart').value;
-    const end = document.getElementById('stEnd').value;
-    const res = document.getElementById('resStudyTime');
-    if(!start || !end) { res.innerText = "Select times."; return; }
-    const [sh, sm] = start.split(':').map(Number);
-    const [eh, em] = end.split(':').map(Number);
-    let diff = (eh * 60 + em) - (sh * 60 + sm);
-    if(diff < 0) diff += 1440;
-    res.innerHTML = `Duration: <strong>${Math.floor(diff/60)} hrs ${diff%60} mins</strong>`;
-    studyMins += diff; saveData();
-  }
-
-  function saveExam() {
-    const name = document.getElementById('examName').value;
-    const date = document.getElementById('examDate').value;
-    const res = document.getElementById('resExam');
-    if(!name || !date) { res.innerText = "Enter name and date."; return; }
-    const diffDays = Math.ceil((new Date(date) - new Date()) / (1000*60*60*24));
-    res.innerHTML = `Target: <strong>${name}</strong> in <strong>${diffDays > 0 ? diffDays : 0} days</strong>!`;
-  }
-
-  // Timer
-  let timerInterval = null, timeLeft = 25 * 60;
-  function setTimer(mins) { pauseTimer(); timeLeft = mins * 60; updateTimerDisplay(); }
-  function updateTimerDisplay() {
-    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-    const s = (timeLeft % 60).toString().padStart(2, '0');
-    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
-  }
-  function startTimer() {
-    if(timerInterval) return;
-    timerInterval = setInterval(() => {
-      if(timeLeft > 0) { timeLeft--; updateTimerDisplay(); }
-      else { pauseTimer(); alert("Session completed!"); studyMins += 25; saveData(); }
-    }, 1000);
-  }
-  function pauseTimer() { clearInterval(timerInterval); timerInterval = null; }
-  function resetTimer() { pauseTimer(); timeLeft = 25 * 60; updateTimerDisplay(); }
-
-  // Lists Management
-  function renderTasks() {
-    const list = document.getElementById('taskList'); list.innerHTML = '';
-    tasks.forEach((t, i) => list.innerHTML += `<li class="${t.done?'done':''}"><span onclick="toggleTask(${i})" style="cursor:pointer;">${t.text}</span><button class="del-btn" onclick="delTask(${i})">✕</button></li>`);
-    saveData();
-  }
-  function addTask() {
-    const val = document.getElementById('taskInput').value.trim();
-    if(!val) return; tasks.push({text: val, done: false}); document.getElementById('taskInput').value = ''; renderTasks();
-  }
-  function toggleTask(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
-  function delTask(i) { tasks.splice(i, 1); renderTasks(); }
-
-  function renderRevisions() {
-    const list = document.getElementById('revList'); list.innerHTML = '';
-    revisions.forEach((r, i) => list.innerHTML += `<li><span>${r.text}</span><button class="del-btn" onclick="delRev(${i})">✕</button></li>`);
-    saveData();
-  }
-  function addRevision() {
-    const val = document.getElementById('revInput').value.trim();
-    if(!val) return; revisions.push({text: val}); document.getElementById('revInput').value = ''; renderRevisions();
-  }
-  function delRev(i) { revisions.splice(i, 1); renderRevisions(); }
-
-  function renderNotes() {
-    const list = document.getElementById('noteList'); list.innerHTML = '';
-    notes.forEach((n, i) => list.innerHTML += `<li><span style="white-space:pre-wrap;">${n.text}</span><button class="del-btn" onclick="delNote(${i})">✕</button></li>`);
-    saveData();
-  }
-  function addNote() {
-    const val = document.getElementById('noteInput').value.trim();
-    if(!val) return; notes.push({text: val}); document.getElementById('noteInput').value = ''; renderNotes();
-  }
-  function delNote(i) { notes.splice(i, 1); renderNotes(); }
-
-  function renderGoals() {
-    const list = document.getElementById('goalList'); list.innerHTML = '';
-    goals.forEach((g, i) => list.innerHTML += `<li><span>${g.text}</span><button class="del-btn" onclick="delGoal(${i})">✕</button></li>`);
-    saveData();
-  }
-  function addGoal() {
-    const val = document.getElementById('goalInput').value.trim();
-    if(!val) return; goals.push({text: val}); document.getElementById('goalInput').value = ''; renderGoals();
-  }
-  function delGoal(i) { goals.splice(i, 1); renderGoals(); }
-
-  // Initial Load
-  renderHeatmap();
-  renderTasks(); renderRevisions(); renderNotes(); renderGoals();
-  updateDashboardStats(); updateTimerDisplay();
+  // Initialize Everything
+  buildHeatmap();
+  renderTasks();
+  renderNotes();
+  generateQuestion();
+  syncData();
 </script>
 </body>
 </html>
