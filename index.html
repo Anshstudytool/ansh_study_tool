@@ -1,1260 +1,1681 @@
-<!DOCTYPE html>
-<html lang="hi">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ANSH.STUDY MASTER PRO - NDA Pathfinder & Self-Learning AI Hub</title>
-  <!-- jsPDF CDN for Real PDF Generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    :root {
-      --bg: #030712;
-      --card: #0f172a;
-      --card-alt: #1e293b;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --primary: #3b82f6;
-      --accent: #10b981;
-      --purple: #8b5cf6;
-      --orange: #f59e0b;
-      --danger: #ef4444;
-      --border: rgba(255, 255, 255, 0.1);
-    }
-    body.light {
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --card-alt: #e2e8f0;
-      --text: #0f172a;
-      --muted: #475569;
-      --border: rgba(0, 0, 0, 0.12);
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      padding-bottom: 90px;
-      min-height: 100vh;
-      transition: background 0.25s, color 0.25s;
-    }
-
-    /* Top App Bar */
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 18px;
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: 0.4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .logo span { color: var(--primary); }
-    .pro-tag {
-      background: linear-gradient(45deg, var(--orange), var(--purple));
-      color: #fff;
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 800;
-    }
-    .top-actions { display: flex; gap: 6px; }
-    .chip-btn {
-      background: var(--card-alt);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .chip-btn:hover { border-color: var(--primary); }
-
-    /* Main Container */
-    .container { max-width: 920px; margin: 0 auto; padding: 16px; }
-    .view-section { display: none; animation: slideUp 0.25s ease; }
-    .view-section.active { display: block; }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Cards & UI */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 16px;
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .stat-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      text-align: center;
-    }
-    .stat-num { font-size: 26px; font-weight: 900; color: var(--primary); }
-    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-    /* Buttons & Inputs */
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      color: #fff;
-      background: var(--primary);
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .btn:active { transform: scale(0.98); }
-    .btn-green { background: var(--accent); color: #032219; }
-    .btn-purple { background: var(--purple); }
-    .btn-orange { background: var(--orange); color: #1a1000; }
-    .btn-danger { background: var(--danger); }
-    .btn-outline { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
-    .btn-sm { width: auto; padding: 8px 14px; font-size: 12px; }
-
-    .input-box, textarea.input-box, select.input-box {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--card-alt);
-      color: var(--text);
-      font-size: 14px;
-      margin-bottom: 10px;
-      outline: none;
-    }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-
-    /* AI Master Chat */
-    .chat-box {
-      height: 360px;
-      overflow-y: auto;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .msg {
-      max-width: 88%;
-      padding: 11px 15px;
-      border-radius: 12px;
-      font-size: 13.5px;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    .msg.bot {
-      background: var(--card-alt);
-      align-self: flex-start;
-      border-bottom-left-radius: 2px;
-      border-left: 4px solid var(--orange);
-    }
-    .msg.user {
-      background: var(--primary);
-      color: #fff;
-      align-self: flex-end;
-      border-bottom-right-radius: 2px;
-    }
-
-    /* Mock Test Options */
-    .mcq-option {
-      display: block;
-      width: 100%;
-      text-align: left;
-      padding: 12px 14px;
-      margin-bottom: 8px;
-      background: var(--card-alt);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.15s;
-    }
-    .mcq-option:hover { border-color: var(--primary); }
-    .mcq-option.selected {
-      background: rgba(59, 130, 246, 0.25);
-      border-color: var(--primary);
-      font-weight: 700;
-    }
-
-    /* PDF & Todo Items */
-    .pdf-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card-alt);
-      padding: 14px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      border: 1px solid var(--border);
-      gap: 10px;
-    }
-    .pdf-info h4 { font-size: 14px; margin-bottom: 3px; }
-    .pdf-info p { font-size: 12px; color: var(--muted); }
-    .todo-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card-alt);
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      gap: 10px;
-    }
-    .todo-item.done span { text-decoration: line-through; color: var(--muted); }
-
-    /* Alarm Banner */
-    #alarmBanner {
-      display: none;
-      background: linear-gradient(90deg, var(--danger), var(--orange));
-      color: #fff;
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin-bottom: 14px;
-      align-items: center;
-      justify-content: space-between;
-      font-weight: 700;
-      animation: pulse 1s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.82; }
-    }
-
-    /* Bottom Navigation Bar (6 Tabs) */
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--card);
-      border-top: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      padding: 8px 2px;
-      z-index: 999;
-    }
-    .tab-btn {
-      background: none;
-      border: none;
-      color: var(--muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      font-size: 10.5px;
-      font-weight: 600;
-      cursor: pointer;
-      padding: 4px 2px;
-    }
-    .tab-btn .icon { font-size: 18px; }
-    .tab-btn.active { color: var(--primary); }
-
-    @media (min-width: 650px) {
-      .stats-grid { grid-template-columns: repeat(4, 1fr); }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#081225">
+<meta name="description" content="ANSH.STUDY — NDA and B.Sc. study planner, mock tests, notes and focus alarms.">
+<title>ANSH.STUDY MASTER PRO</title>
+<style>
+:root{color-scheme:dark;--bg:#070d1a;--card:#101a2d;--soft:#1b2940;--text:#f4f7fb;--muted:#a8b4c7;--line:#293850;--blue:#5b9cff;--green:#21c58b;--purple:#a78bfa;--orange:#ffbd59;--red:#fb7185}
+body.light{color-scheme:light;--bg:#edf2f8;--card:#fff;--soft:#e7edf5;--text:#142033;--muted:#59687d;--line:#d5deea;--blue:#2563eb;--green:#059669;--purple:#7c3aed;--orange:#b7791f;--red:#dc2626}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:90px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.brand{font-weight:900;font-size:18px}
+.brand span{color:var(--blue)}
+.tag{font-size:10px;background:linear-gradient(120deg,#db8b27,#8b5cf6);padding:3px 7px;border-radius:7px;color:white}
+.shell{max-width:980px;margin:auto;padding:16px}
+.view{display:none}
+.view.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.hero{background:linear-gradient(125deg,#1d3c71,#32275d);color:white;border-color:#527dcb}
+.hero p{color:#dbeafe}
+.title{font-weight:800;font-size:16px;margin-bottom:12px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.muted,.help{color:var(--muted)}
+.help{font-size:12px}
+.stats,.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px;text-align:center}
+.stat strong{display:block;font-size:25px;color:var(--blue)}
+.stat small{color:var(--muted)}
+.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:750;background:var(--blue);color:white}
+.btn.green{background:var(--green);color:#06291f}
+.btn.purple{background:var(--purple);color:#1a1032}
+.btn.orange{background:var(--orange);color:#30200a}
+.btn.red{background:var(--red);color:#310b13}
+.btn.ghost{background:var(--soft);color:var(--text);border:1px solid var(--line)}
+.btn.small{padding:7px 10px;font-size:12px}
+.btn.full{width:100%}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.field{width:100%;padding:11px 12px;margin:5px 0 10px;background:var(--soft);color:var(--text);border:1px solid var(--line);border-radius:10px;outline:none}
+.field:focus{border-color:var(--blue)}
+label{font-size:13px;font-weight:700;display:block;margin-top:7px}
+.tabs{position:fixed;z-index:8;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(6,1fr);padding:7px 3px calc(7px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--line)}
+.tab{border:0;background:none;color:var(--muted);font-size:10px;font-weight:700;padding:5px 1px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.tab b{font-size:19px}
+.tab.active{color:var(--blue)}
+.timer{font-size:46px;text-align:center;font-weight:900;font-variant-numeric:tabular-nums}
+.chat{height:300px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:9px;margin:10px 0}
+.bubble{max-width:92%;padding:10px 12px;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}
+.bubble.ai{align-self:flex-start;background:var(--soft);border-left:3px solid var(--orange)}
+.bubble.me{align-self:flex-end;background:#245cb5;color:white}
+.chip{background:var(--soft);color:var(--text);border:1px solid var(--line);border-radius:20px;padding:7px 10px;font-size:12px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}
+.item{display:flex;align-items:center;gap:9px;justify-content:space-between;padding:10px;background:var(--soft);border:1px solid var(--line);border-radius:11px;margin:8px 0}
+.item .content{flex:1;min-width:0;overflow-wrap:anywhere}
+.item.done .content{text-decoration:line-through;color:var(--muted)}
+.testbox{background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:13px}
+.option{display:flex;gap:9px;align-items:flex-start;text-align:left;width:100%;background:var(--soft);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;margin:7px 0}
+.option.selected{border-color:var(--blue);background:#245cb533}
+.progress{height:7px;background:var(--soft);border-radius:9px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--green)}
+.book{padding:12px;background:var(--soft);border:1px solid var(--line);border-radius:12px;margin:9px 0}
+.book h3{font-size:14px;margin:0 0 4px}
+.book p{font-size:12px;color:var(--muted);margin:0 0 9px}
+.hidden{display:none!important}
+.toast{position:fixed;z-index:20;left:50%;bottom:95px;transform:translateX(-50%);background:#182943;color:white;padding:10px 14px;border:1px solid #526987;border-radius:11px;max-width:90%;font-size:13px}
+.foot{text-align:center;color:var(--muted);font-size:11px;padding:10px}
+.result{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.result div{background:var(--soft);padding:10px;border-radius:10px;text-align:center}
+.result strong{display:block;font-size:21px}
+.result span{font-size:11px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+@media(min-width:700px){
+.stats{grid-template-columns:repeat(4,1fr)}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.chat{height:410px}
+.shell{padding-top:23px}
+.tabs{left:50%;right:auto;transform:translateX(-50%);width:min(100%,760px);border:1px solid var(--line);border-bottom:0;border-radius:14px 14px 0 0}
+}
+</style>
 </head>
+
 <body>
 
-  <!-- Top Navigation Bar -->
-  <header class="topbar">
-    <div class="logo">ANSH.<span>STUDY</span> <span class="pro-tag">MASTER PRO</span></div>
-    <div class="top-actions">
-      <button class="chip-btn" onclick="requestNotifPermission()" title="Enable Background Alerts">🔔 Alert</button>
-      <button class="chip-btn" onclick="toggleTheme()">🌓 Theme</button>
-      <button class="chip-btn" onclick="exportAllData()">💾 Backup</button>
-    </div>
-  </header>
-
-  <main class="container">
-
-    <!-- Active Alarm Alert Banner -->
-    <div id="alarmBanner">
-      <span>⏰ TIME UP! Focus / Study Session Complete!</span>
-      <button class="btn btn-sm" style="background:#000; color:#fff;" onclick="stopAlarmSound()">🔇 Stop Ringtone</button>
-    </div>
-
-    <!-- ==================== 1. HOME / DASHBOARD TAB ==================== -->
-    <section id="tab-home" class="view-section active">
-      <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(139,92,246,0.18));">
-        <h2 style="font-size: 20px; margin-bottom: 4px;">Ansh, Master Your NDA & B.Sc. 🎖️</h2>
-        <p style="font-size: 13px; color: var(--muted);">Pathfinder Complete Knowledge, Mock Engine & Self-Learning AI Activated</p>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-num" id="dashTasks">0</div>
-          <div class="stat-label">Pending Tasks</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" style="color: var(--accent);" id="dashDone">0</div>
-          <div class="stat-label">Completed</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" style="color: var(--purple);" id="dashQuizScore">0</div>
-          <div class="stat-label">Quiz / Mock Pts</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" style="color: var(--orange);" id="dashMins">0</div>
-          <div class="stat-label">Study Mins</div>
-        </div>
-      </div>
-
-      <!-- Background-Accurate Pomodoro & Alarm Timer -->
-      <div class="card">
-        <div class="card-title">
-          <span>⏳ Smart Focus & Background Alarm Timer</span>
-          <span id="pomoStatus" style="font-size: 11px; color: var(--accent);">Ready</span>
-        </div>
-        <div style="text-align: center; font-size: 46px; font-weight: 900; margin: 10px 0; font-variant-numeric: tabular-nums;" id="pomoDisplay">25:00</div>
-        
-        <div class="row" style="justify-content: center; margin-bottom: 12px;">
-          <button class="chip-btn" onclick="setPomo(1)">1m (Test)</button>
-          <button class="chip-btn" onclick="setPomo(25)">25m</button>
-          <button class="chip-btn" onclick="setPomo(45)">45m</button>
-          <button class="chip-btn" onclick="setPomo(60)">60m</button>
-          <button class="chip-btn" onclick="playAlarmSound(true)">🔊 Test Ringtone</button>
-        </div>
-
-        <div class="row">
-          <button class="btn btn-green" style="flex:1;" onclick="startPomo()">▶ Start</button>
-          <button class="btn btn-outline" style="flex:1;" onclick="pausePomo()">⏸ Pause</button>
-          <button class="btn btn-danger" style="flex:1;" onclick="resetPomo()">🔄 Reset</button>
-        </div>
-        <p style="font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center;">
-          *Background Sync Enabled: Tab minimize karne par bhi exact time par ringtone aur notification bajegi.
-        </p>
-      </div>
-    </section>
-
-    <!-- ==================== 2. SELF-LEARNING SMART AI TAB ==================== -->
-    <section id="tab-ai" class="view-section">
-      <div class="card">
-        <div class="card-title">
-          <span>🎖️ NDA Pathfinder & Self-Learning AI Tutor</span>
-          <span style="font-size: 11px; color: var(--accent);" id="aiBrainCount">Brain: 0 Custom Facts</span>
-        </div>
-        <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">
-          Sawal puchein, math solve karein, ya <b>"learn: sawal = jawab"</b> likhkar AI ko naya gyan sikhayein!
-        </p>
-
-        <div class="row" style="margin-bottom: 10px;">
-          <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
-          <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices</button>
-          <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus</button>
-          <button class="chip-btn" onclick="askMasterAI('trigonometry')">📐 Trigonometry</button>
-          <button class="chip-btn" onclick="askMasterAI('physics')">⚡ GAT Physics</button>
-          <button class="chip-btn" onclick="askMasterAI('nda strategy')">🎯 Strategy</button>
-        </div>
-
-        <div class="chat-box" id="aiChatBox">
-          <div class="msg bot">Namaste Ansh! Main aapka Self-Learning AI Tutor hoon. 
-1️⃣ Mujhse NDA Pathfinder ke formulas (Probability, Matrices, Calculus, Physics, GK) puchein.
-2️⃣ Koi bhi Math expression solve karwayein (jaise: <code>(25*4) + 18/2</code>).
-3️⃣ Mujhe naya knowledge sikhane ke liye likhein: <code>learn: NDA full form = National Defence Academy</code> — main hamesha ke liye yaad rakhunga!</div>
-        </div>
-
-        <div class="row">
-          <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Sawal puchein ya 'learn: topic = answer' likhein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
-          <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 3. ONE-CLICK MOCK TEST ARENA ==================== -->
-    <section id="tab-mock" class="view-section">
-      <div class="card">
-        <div class="card-title">
-          <span>📝 NDA One-Click Mock Test Series</span>
-          <span id="mockTimerBadge" style="font-size: 12px; color: var(--orange); font-weight: 800;">⏱ 00:00</span>
-        </div>
-
-        <!-- Subject Selector -->
-        <div id="mockSetup">
-          <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">
-            Ek click mein subject chunein aur UPSC NDA pattern (Negative Marking ke saath) par Mock Test shuru karein:
-          </p>
-          <div class="stats-grid">
-            <button class="btn btn-primary" onclick="startMockTest('maths')">📐 NDA Mathematics (10 Qs)</button>
-            <button class="btn btn-green" onclick="startMockTest('science')">🔬 GAT General Science (10 Qs)</button>
-            <button class="btn btn-purple" onclick="startMockTest('gk')">🌍 GAT GK & Polity (10 Qs)</button>
-            <button class="btn btn-orange" onclick="startMockTest('full')">🎖️ Full NDA Mixed Mock (15 Qs)</button>
-          </div>
-        </div>
-
-        <!-- Active Test Area -->
-        <div id="mockActiveArea" style="display: none;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px;">
-            <span id="mockSubjectTitle">Subject: Maths</span>
-            <span id="mockProgress">Question 1 / 10</span>
-          </div>
-          <div style="background: var(--bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px;">
-            <h3 id="mockQuestionText" style="font-size: 16px; line-height: 1.5; margin-bottom: 14px;">Question text...</h3>
-            <div id="mockOptionsContainer"></div>
-          </div>
-          <div class="row">
-            <button class="btn btn-outline" style="flex:1;" onclick="prevMockQ()">⬅ Previous</button>
-            <button class="btn btn-primary" style="flex:1;" onclick="nextMockQ()">Next ➔</button>
-            <button class="btn btn-green" style="flex:1;" onclick="submitMockTest()">✅ Submit Test</button>
-          </div>
-        </div>
-
-        <!-- Result Area -->
-        <div id="mockResultArea" style="display: none; text-align: center; padding: 14px; background: var(--bg); border-radius: 12px;">
-          <h3 style="font-size: 20px; color: var(--accent); margin-bottom: 8px;">🏆 Mock Test Scorecard</h3>
-          <p id="mockScoreSummary" style="font-size: 14px; line-height: 1.7; margin-bottom: 14px;"></p>
-          <div id="mockReviewList" style="text-align: left; max-height: 260px; overflow-y: auto; margin-bottom: 14px; font-size: 13px;"></div>
-          <button class="btn btn-orange" onclick="resetMockUI()">🔄 Doosra Subject Test Dein</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 4. PDF BOOKS TAB ==================== -->
-    <section id="tab-pdf" class="view-section">
-      <div class="card">
-        <div class="card-title">📚 Detailed Pathfinder & B.Sc. Master PDFs</div>
-        <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
-          Ek click mein comprehensive formulas, shortcuts aur notes ki real PDF download karein:
-        </p>
-
-        <div class="pdf-item">
-          <div class="pdf-info">
-            <h4>🎖️ NDA Pathfinder Maths Complete Notes (PDF)</h4>
-            <p>Probability, Matrices, Calculus, Trigonometry, Vectors & Short Tricks</p>
-          </div>
-          <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Download PDF</button>
-        </div>
-
-        <div class="pdf-item">
-          <div class="pdf-info">
-            <h4>🌍 NDA GAT Science & World Geography Book (PDF)</h4>
-            <p>Physics Formulas, Chemistry Laws, Indian Polity & World Organizations</p>
-          </div>
-          <button class="btn btn-orange btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Download PDF</button>
-        </div>
-
-        <div class="pdf-item">
-          <div class="pdf-info">
-            <h4>🎓 B.Sc. PCM Semester Comprehensive Guide (PDF)</h4>
-            <p>Mechanics, Differential Equations, Real Analysis & Organic Chemistry</p>
-          </div>
-          <button class="btn btn-purple btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Download PDF</button>
-        </div>
-
-        <div class="pdf-item">
-          <div class="pdf-info">
-            <h4>🧠 My AI Self-Learned Notes & Saved Notes (PDF)</h4>
-            <p>Aapke dwara AI ko sikhaye gaye facts aur saved notes ki personal PDF</p>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="generateRealPDF('personal_ai_notes')">⬇ Export PDF</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 5. SPEED MATH QUIZ ARENA ==================== -->
-    <section id="tab-quiz" class="view-section">
-      <div class="card">
-        <div class="card-title">
-          <span>🧮 Pathfinder Speed Math Quiz Arena</span>
-          <span style="color: var(--orange); font-size: 14px;">Streak: <span id="qStreak">0</span> 🔥</span>
-        </div>
-
-        <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Difficulty Level Chunein (Unlimited Dynamic Questions):</p>
-        <div class="row" style="margin-bottom: 16px;">
-          <button class="btn btn-green btn-sm" style="flex:1;" onclick="startQuiz('easy')">🟢 Easy</button>
-          <button class="btn btn-orange btn-sm" style="flex:1;" onclick="startQuiz('medium')">🟡 Medium</button>
-          <button class="btn btn-purple btn-sm" style="flex:1;" onclick="startQuiz('hard')">🔴 Hard (NDA)</button>
-        </div>
-
-        <div style="background: var(--bg); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
-          <div style="font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;" id="qModeLabel">MODE: EASY</div>
-          <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px; min-height: 54px; display:flex; align-items:center; justify-content:center;" id="qText">Loading...</div>
-          <input type="number" step="any" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Numeric Answer likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
-          <div class="row">
-            <button class="btn btn-green" style="flex:2;" onclick="checkQuiz()">✅ Check Answer</button>
-            <button class="btn btn-outline" style="flex:1;" onclick="generateQuestion()">Skip ➔</button>
-          </div>
-          <div id="qResult" style="margin-top: 14px; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; display: none;"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 6. TOOLS: VOICE NOTES & PLANNER ==================== -->
-    <section id="tab-tools" class="view-section">
-      <div class="card">
-        <div class="card-title">🎙️ Voice Notes & Revision Pad</div>
-        <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya 'Bolkar Likhein' dabakar Hindi/English mein note banayein..."></textarea>
-        <div class="row" style="margin-bottom: 12px;">
-          <button id="micBtn" class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein</button>
-          <button class="btn btn-green" style="flex:1;" onclick="saveNote()">💾 Save Note</button>
-        </div>
-        <div id="notesContainer"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📋 Daily NDA Study Planner</div>
-        <div class="row">
-          <input type="text" id="taskText" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Naya study target add karein..." onkeypress="if(event.key==='Enter') addTask()">
-          <button class="btn btn-sm" onclick="addTask()">+ Add</button>
-        </div>
-        <div id="tasksContainer" style="margin-top: 12px;"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Bottom Navigation Bar -->
-  <nav class="bottom-bar">
-    <button class="tab-btn active" onclick="switchTab('home', this)"><span class="icon">🏠</span>Home</button>
-    <button class="tab-btn" onclick="switchTab('ai', this)"><span class="icon">🎖️</span>Smart AI</button>
-    <button class="tab-btn" onclick="switchTab('mock', this)"><span class="icon">📝</span>Mock Test</button>
-    <button class="tab-btn" onclick="switchTab('pdf', this)"><span class="icon">📄</span>PDFs</button>
-    <button class="tab-btn" onclick="switchTab('quiz', this)"><span class="icon">🧮</span>Quiz</button>
-    <button class="tab-btn" onclick="switchTab('tools', this)"><span class="icon">🛠️</span>Tools</button>
-  </nav>
-
-  <script>
-    // ================= APP STATE & STORAGE =================
-    let appData = JSON.parse(localStorage.getItem('ansh_master_pro_v2')) || {
-      tasks: [
-        { text: "Solve NDA Pathfinder Probability Chapter (50 Qs)", done: false },
-        { text: "Revise Trigonometry Identities & Matrices", done: false }
-      ],
-      notes: [
-        { text: "Pathfinder Tip: Algebra, Trigonometry & Calculus carry 55%+ weightage in NDA Maths." }
-      ],
-      learnedKnowledge: {
-        "nda full form": "National Defence Academy (Khadakwasla, Pune).",
-        "cds full form": "Combined Defence Services.",
-        "value of g": "Acceleration due to gravity g = 9.8 m/s² (approx 10 m/s² for NDA quick calc)."
-      },
-      quizScore: 0,
-      quizStreak: 0,
-      studyMins: 90
-    };
-
-    function syncData() {
-      localStorage.setItem('ansh_master_pro_v2', JSON.stringify(appData));
-      document.getElementById('dashTasks').innerText = appData.tasks.filter(t => !t.done).length;
-      document.getElementById('dashDone').innerText = appData.tasks.filter(t => t.done).length;
-      document.getElementById('dashQuizScore').innerText = appData.quizScore;
-      document.getElementById('dashMins').innerText = appData.studyMins;
-      document.getElementById('qStreak').innerText = appData.quizStreak;
-      const customCount = Object.keys(appData.learnedKnowledge || {}).length;
-      document.getElementById('aiBrainCount').innerText = `Brain: ${customCount} Learned Facts`;
-    }
-
-    function switchTab(tabId, btnEl) {
-      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
-      btnEl.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('light');
-    }
-
-    // ================= BACKGROUND-ACCURATE POMODORO + RINGTONE + NOTIFICATIONS =================
-    let pomoDurationSec = 25 * 60;
-    let pomoRemainingSec = 25 * 60;
-    let pomoEndTime = null;
-    let pomoInterval = null;
-    let audioCtx = null;
-    let alarmLoopInterval = null;
-
-    function requestNotifPermission() {
-      if ("Notification" in window) {
-        Notification.requestPermission().then(perm => {
-          alert(perm === "granted" ? "✅ Background Notifications Enabled!" : "⚠️ Notification permission denied.");
-        });
-      }
-    }
-
-    function setPomo(mins) {
-      pausePomo();
-      pomoDurationSec = mins * 60;
-      pomoRemainingSec = pomoDurationSec;
-      document.getElementById('pomoStatus').innerText = `Set for ${mins} min`;
-      updatePomoDisplay(pomoRemainingSec);
-    }
-
-    function updatePomoDisplay(sec) {
-      const m = Math.floor(sec / 60);
-      const s = sec % 60;
-      document.getElementById('pomoDisplay').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-      document.title = sec > 0 && pomoInterval ? `(${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}) ANSH.STUDY` : "ANSH.STUDY MASTER PRO";
-    }
-
-    function startPomo() {
-      if (pomoInterval) return;
-      if ("Notification" in window && Notification.permission === "default") {
-        Notification.requestPermission();
-      }
-      // Timestamp based target so background tab throttling cannot delay the alarm
-      pomoEndTime = Date.now() + (pomoRemainingSec * 1000);
-      document.getElementById('pomoStatus').innerText = "🔥 Focusing (Background Active)...";
-
-      pomoInterval = setInterval(() => {
-        const left = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
-        pomoRemainingSec = left;
-        updatePomoDisplay(left);
-
-        if (left <= 0) {
-          clearInterval(pomoInterval);
-          pomoInterval = null;
-          pomoEndTime = null;
-          const completedMins = Math.round(pomoDurationSec / 60);
-          appData.studyMins += completedMins;
-          syncData();
-          document.getElementById('pomoStatus').innerText = "✅ Session Complete!";
-          triggerAlarmAndNotification(completedMins);
-          pomoRemainingSec = pomoDurationSec;
-          updatePomoDisplay(pomoRemainingSec);
-        }
-      }, 500);
-    }
-
-    function pausePomo() {
-      if (pomoInterval) {
-        clearInterval(pomoInterval);
-        pomoInterval = null;
-        pomoRemainingSec = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
-        document.getElementById('pomoStatus').innerText = "⏸ Paused";
-      }
-    }
-
-    function resetPomo() {
-      pausePomo();
-      stopAlarmSound();
-      pomoRemainingSec = pomoDurationSec;
-      document.getElementById('pomoStatus').innerText = "Ready";
-      updatePomoDisplay(pomoRemainingSec);
-    }
-
-    // Web Audio API Melody Ringtone (No external file needed, works offline)
-    function playSingleChime() {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-        notes.forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.18);
-          gain.gain.setValueAtTime(0.25, audioCtx.currentTime + idx * 0.18);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.18 + 0.45);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(audioCtx.currentTime + idx * 0.18);
-          osc.stop(audioCtx.currentTime + idx * 0.18 + 0.45);
-        });
-      } catch (e) { console.log("Audio blocked until interaction", e); }
-    }
-
-    function playAlarmSound(isTest = false) {
-      stopAlarmSound();
-      playSingleChime();
-      if (!isTest) {
-        document.getElementById('alarmBanner').style.display = 'flex';
-        alarmLoopInterval = setInterval(playSingleChime, 2200);
-      }
-    }
-
-    function stopAlarmSound() {
-      if (alarmLoopInterval) {
-        clearInterval(alarmLoopInterval);
-        alarmLoopInterval = null;
-      }
-      document.getElementById('alarmBanner').style.display = 'none';
-    }
-
-    function triggerAlarmAndNotification(mins) {
-      playAlarmSound(false);
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("🎖️ ANSH.STUDY MASTER PRO - Time Up!", {
-          body: `Shabash Ansh! Aapka ${mins} minute ka study session complete ho gaya hai.`
-        });
-      }
-    }
-
-    // Check timer immediately when user switches back to tab
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden && pomoInterval && pomoEndTime) {
-        const left = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
-        pomoRemainingSec = left;
-        updatePomoDisplay(left);
-      }
-    });
-
-    // ================= SELF-LEARNING SMART AI ENGINE =================
-    const builtInKnowledge = [
-      { keys: ['probability', 'bayes', 'binomial'], ans: "🎲 **NDA Pathfinder - Probability Master Notes:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n• Conditional: P(A|B) = P(A ∩ B) / P(B)\n• Independent Events: P(A ∩ B) = P(A)·P(B)\n• Binomial Mean = np, Variance = npq (Always Mean > Variance)." },
-      { keys: ['matrices', 'matrix', 'determinant', 'adjoint'], ans: "🔲 **NDA Pathfinder - Matrices & Determinants:**\n• Skew-symmetric matrix of odd order has Determinant = 0.\n• A · adj(A) = |A| · I\n• |adj(A)| = |A|^(n-1)\n• (AB)⁻¹ = B⁻¹ · A⁻¹" },
-      { keys: ['calculus', 'integration', 'derivative', 'differentiation'], ans: "∫ **NDA Pathfinder - Calculus Shortcuts:**\n• ∫ e^x [f(x) + f'(x)] dx = e^x · f(x) + C\n• ∫₀^(π/2) sinⁿx / (sinⁿx + cosⁿx) dx = π/4\n• d/dx (x^x) = x^x (1 + ln x)" },
-      { keys: ['trigonometry', 'sin', 'cos', 'tan'], ans: "📐 **NDA Pathfinder - Trigonometry Formulas:**\n• sin 2θ = 2tanθ / (1 + tan²θ)\n• cos 2θ = (1 - tan²θ) / (1 + tan²θ)\n• Maximum value of a·sinθ + b·cosθ = √(a² + b²)." },
-      { keys: ['physics', 'gat', 'optics', 'motion', 'ohm'], ans: "⚡ **NDA GAT - Physics High-Yield Facts:**\n• Escape Velocity on Earth = 11.2 km/s.\n• Concave mirror forms virtual & magnified image when object is between Pole (P) and Focus (F).\n• Power of Lens P = 1/f (in meters), unit: Dioptre." },
-      { keys: ['strategy', 'tips', 'cutoff', 'marks'], ans: "🎖️ **NDA Exam Strategy (Pathfinder Plan):**\n• **Maths Paper (300 Marks):** 120 Qs (+2.5 / -0.83). Target 65+ accurate Qs.\n• **GAT Paper (600 Marks):** 150 Qs (+4 / -1.33). English (200) + Science & GS (400).\n• **Golden Rule:** Accuracy > Guesswork!" }
-    ];
-
-    function askMasterAI(topic) {
-      document.getElementById('aiInput').value = topic;
-      sendMasterAIQuery();
-    }
-
-    async function sendMasterAIQuery() {
-      const input = document.getElementById('aiInput');
-      const q = input.value.trim();
-      if (!q) return;
-
-      const chatBox = document.getElementById('aiChatBox');
-      chatBox.innerHTML += `<div class="msg user">${escapeHTML(q)}</div>`;
-      input.value = '';
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      const low = q.toLowerCase();
-
-      // 1. Self-Training Command: "learn: question = answer"
-      if (low.startsWith('learn:') && q.includes('=')) {
-        const raw = q.substring(6);
-        const eqIdx = raw.indexOf('=');
-        const key = raw.substring(0, eqIdx).trim().toLowerCase();
-        const val = raw.substring(eqIdx + 1).trim();
-        if (key && val) {
-          appData.learnedKnowledge[key] = val;
-          syncData();
-          appendBotMsg(`🧠 **Memory Updated!** Maine seekh liya hai:\n• **Topic:** ${key}\n• **Answer:** ${val}\n\nAb aap jab bhi iske baare mein puchenge, main turant bataunga!`);
-          return;
-        }
-      }
-
-      // 2. Safe Math Expression Evaluator
-      if (/^[0-9+\-*/().%\s^]+$/.test(q)) {
-        try {
-          const sanitized = q.replace(/\^/g, '**');
-          const result = Function('"use strict";return (' + sanitized + ')')();
-          if (typeof result === 'number' && !isNaN(result)) {
-            appendBotMsg(`🧮 **Calculation Result:**\n\`${q}\` = **${Number(result.toFixed(6))}**`);
-            return;
-          }
-        } catch (e) {}
-      }
-
-      // 3. Check User-Trained Memory First
-      for (const [k, v] of Object.entries(appData.learnedKnowledge)) {
-        if (low.includes(k) || k.includes(low)) {
-          appendBotMsg(`🧠 **Learned Memory Match (${k}):**\n${v}`);
-          return;
-        }
-      }
-
-      // 4. Check Built-in NDA Pathfinder Knowledge
-      for (const item of builtInKnowledge) {
-        if (item.keys.some(k => low.includes(k))) {
-          appendBotMsg(item.ans);
-          return;
-        }
-      }
-
-      // 5. Autonomous Live Knowledge Fetcher (Wikipedia REST API)
-      const loadingId = "bot-load-" + Date.now();
-      chatBox.innerHTML += `<div class="msg bot" id="${loadingId}">🔍 Internet & Knowledge Base se information collect kar raha hoon...</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      try {
-        const cleanTopic = q.replace(/what is|who is|tell me about|kya hai|kaun hai|\?/gi, '').trim();
-        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanTopic)}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.extract) {
-            // Auto-save fetched summary into AI brain for offline future use!
-            appData.learnedKnowledge[cleanTopic.toLowerCase()] = data.extract;
-            syncData();
-            document.getElementById(loadingId).innerText = `🌐 **Live Knowledge Collected & Saved to Brain:**\n**${data.title}:** ${data.extract}`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-            return;
-          }
-        }
-      } catch (e) {}
-
-      document.getElementById(loadingId).innerText = `🤔 Ansh, "${q}" mere database mein abhi nahi hai. Aap mujhe iska jawab sikha sakte hain! Bas type karein:\nlearn: ${q} = [yahan sahi jawab likhein]`;
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function appendBotMsg(text) {
-      const chatBox = document.getElementById('aiChatBox');
-      setTimeout(() => {
-        chatBox.innerHTML += `<div class="msg bot">${text}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 150);
-    }
-
-    function escapeHTML(str) {
-      return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
-    }
-
-    // ================= ONE-CLICK NDA MOCK TEST ENGINE =================
-    const mockQuestionBank = {
-      maths: [
-        { q: "If A and B are two independent events with P(A) = 0.3 and P(B) = 0.4, find P(A ∩ B).", opts: ["0.70", "0.12", "0.10", "0.58"], ans: 1, exp: "For independent events, P(A ∩ B) = P(A) × P(B) = 0.3 × 0.4 = 0.12." },
-        { q: "What is the determinant of any skew-symmetric matrix of order 3?", opts: ["1", "-1", "0", "3"], ans: 2, exp: "Determinant of every skew-symmetric matrix of odd order is always 0." },
-        { q: "Evaluate: lim (x → 0) [ (sin 5x) / x ]", opts: ["1", "0", "5", "1/5"], ans: 2, exp: "lim (x→0) sin(kx)/x = k, so answer is 5." },
-        { q: "What is the value of i^4 + i^8 + i^12 + i^16 (where i = √-1)?", opts: ["0", "4", "-4", "1"], ans: 1, exp: "Every multiple of 4 power of i equals 1. Thus 1 + 1 + 1 + 1 = 4." },
-        { q: "Find the derivative of f(x) = e^(3x) with respect to x.", opts: ["e^(3x)", "3e^(3x)", "e^(3x)/3", "3x·e^(3x)"], ans: 1, exp: "d/dx(e^(kx)) = k·e^(kx) = 3e^(3x)." },
-        { q: "If sin θ + cos θ = √2, what is the value of θ (acute)?", opts: ["30°", "45°", "60°", "90°"], ans: 1, exp: "sin 45° + cos 45° = 1/√2 + 1/√2 = 2/√2 = √2." },
-        { q: "How many 3-digit numbers can be formed using digits 1, 2, 3, 4, 5 without repetition?", opts: ["125", "60", "20", "15"], ans: 1, exp: "5P3 = 5 × 4 × 3 = 60." },
-        { q: "What is the eccentricity of a rectangular hyperbola?", opts: ["1", "√2", "2", "1/√2"], ans: 1, exp: "Eccentricity of rectangular hyperbola is always √2." },
-        { q: "Find the dot product of vectors A = 2i + 3j and B = 4i - 2j.", opts: ["2", "14", "-2", "8"], ans: 0, exp: "A·B = (2)(4) + (3)(-2) = 8 - 6 = 2." },
-        { q: "In a triangle ABC, if a = 3, b = 4, c = 5, what is the area of the triangle?", opts: ["12", "6", "10", "7.5"], ans: 1, exp: "3-4-5 is a right triangle. Area = 1/2 × 3 × 4 = 6." }
-      ],
-      science: [
-        { q: "Which mirror is used by dentists to see an enlarged image of teeth?", opts: ["Convex mirror", "Concave mirror", "Plane mirror", "Cylindrical mirror"], ans: 1, exp: "Concave mirror produces a virtual, erect, and magnified image when object is within focus." },
-        { q: "What is the SI unit of Power of a Lens?", opts: ["Watt", "Joule", "Dioptre", "Newton"], ans: 2, exp: "Power of a lens is measured in Dioptre (D = 1/f in meters)." },
-        { q: "Which gas is mainly responsible for acid rain?", opts: ["Methane", "Sulphur Dioxide (SO2)", "Oxygen", "Helium"], ans: 1, exp: "SO2 and NO2 react with water vapor to form sulphuric and nitric acids." },
-        { q: "What is the chemical formula of Baking Soda?", opts: ["Na2CO3", "NaHCO3", "CaOCl2", "NaOH"], ans: 1, exp: "Sodium Bicarbonate (NaHCO3) is Baking Soda." },
-        { q: "Which cell organelle is known as the 'Powerhouse of the Cell'?", opts: ["Ribosome", "Mitochondria", "Lysosome", "Nucleus"], ans: 1, exp: "Mitochondria generates ATP energy." },
-        { q: "Escape velocity from the surface of the Earth is approximately:", opts: ["9.8 km/s", "11.2 km/s", "7.9 km/s", "15.0 km/s"], ans: 1, exp: "Ve = √(2gR) ≈ 11.2 km/s." },
-        { q: "Which vitamin deficiency causes Night Blindness?", opts: ["Vitamin B1", "Vitamin C", "Vitamin A", "Vitamin D"], ans: 2, exp: "Deficiency of Vitamin A (Retinol) causes night blindness." },
-        { q: "Sound waves cannot travel through:", opts: ["Steel", "Water", "Air", "Vacuum"], ans: 3, exp: "Sound is a mechanical wave and requires a material medium." },
-        { q: "What is the pH value of pure distilled water at 25°C?", opts: ["0", "7", "14", "5.5"], ans: 1, exp: "Pure water is neutral with pH = 7." },
-        { q: "Which metal remains in liquid state at room temperature?", opts: ["Sodium", "Mercury", "Magnesium", "Aluminium"], ans: 1, exp: "Mercury (Hg) is a liquid metal at room temperature." }
-      ],
-      gk: [
-        { q: "Where is the National Defence Academy (NDA) located?", opts: ["Dehradun", "Khadakwasla (Pune)", "Wellington", "Gaya"], ans: 1, exp: "NDA is located at Khadakwasla near Pune, Maharashtra." },
-        { q: "Which Article of the Indian Constitution abolishes Untouchability?", opts: ["Article 14", "Article 17", "Article 19", "Article 21"], ans: 1, exp: "Article 17 abolishes untouchability in any form." },
-        { q: "Where are the headquarters of the World Health Organization (WHO)?", opts: ["New York", "Paris", "Geneva", "Vienna"], ans: 2, exp: "WHO headquarters is in Geneva, Switzerland." },
-        { q: "Which planet is known as the 'Morning Star' or 'Evening Star'?", opts: ["Mars", "Venus", "Jupiter", "Saturn"], ans: 1, exp: "Venus is the brightest planet visible from Earth." },
-        { q: "Who was the first Chief of Defence Staff (CDS) of India?", opts: ["Gen. Manoj Mukund Naravane", "Gen. Bipin Rawat", "Gen. Anil Chauhan", "Field Marshal Sam Manekshaw"], ans: 1, exp: "General Bipin Rawat was India's first CDS." },
-        { q: "The Tropic of Cancer passes through how many Indian states?", opts: ["6", "7", "8", "9"], ans: 2, exp: "It passes through 8 states (Gujarat, Rajasthan, MP, Chhattisgarh, Jharkhand, WB, Tripura, Mizoram)." },
-        { q: "Which strait separates India and Sri Lanka?", opts: ["Malacca Strait", "Palk Strait", "Bering Strait", "Hormuz Strait"], ans: 1, exp: "Palk Strait lies between Tamil Nadu and Sri Lanka." },
-        { q: "Who wrote the book 'Wings of Fire'?", opts: ["Dr. A.P.J. Abdul Kalam", "Jawaharlal Nehru", "Rabindranath Tagore", "Vikram Sarabhai"], ans: 0, exp: "Autobiography of Dr. A.P.J. Abdul Kalam." },
-        { q: "What is the minimum age to become a member of the Lok Sabha?", opts: ["21 years", "25 years", "30 years", "35 years"], ans: 1, exp: "Minimum age for Lok Sabha is 25 years (Rajya Sabha is 30)." },
-        { q: "Which river is known as 'Dakshin Ganga'?", opts: ["Krishna", "Kaveri", "Godavari", "Narmada"], ans: 2, exp: "Godavari is the largest peninsular river, called Dakshin Ganga." }
-      ]
-    };
-
-    let currentMockList = [];
-    let currentMockIndex = 0;
-    let userMockAnswers = [];
-    let mockTimerInterval = null;
-    let mockSeconds = 0;
-    let currentMockSub = '';
-
-    function startMockTest(subject) {
-      currentMockSub = subject;
-      if (subject === 'full') {
-        currentMockList = [
-          ...mockQuestionBank.maths.slice(0, 5),
-          ...mockQuestionBank.science.slice(0, 5),
-          ...mockQuestionBank.gk.slice(0, 5)
-        ];
-      } else {
-        currentMockList = [...mockQuestionBank[subject]];
-      }
-      // Shuffle questions
-      currentMockList.sort(() => Math.random() - 0.5);
-      currentMockIndex = 0;
-      userMockAnswers = new Array(currentMockList.length).fill(null);
-
-      document.getElementById('mockSetup').style.display = 'none';
-      document.getElementById('mockResultArea').style.display = 'none';
-      document.getElementById('mockActiveArea').style.display = 'block';
-      document.getElementById('mockSubjectTitle').innerText = `Subject: ${subject.toUpperCase()}`;
-
-      mockSeconds = currentMockList.length * 60; // 1 min per question
-      clearInterval(mockTimerInterval);
-      mockTimerInterval = setInterval(() => {
-        mockSeconds--;
-        const m = Math.floor(mockSeconds / 60);
-        const s = mockSeconds % 60;
-        document.getElementById('mockTimerBadge').innerText = `⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        if (mockSeconds <= 0) submitMockTest();
-      }, 1000);
-
-      renderMockQuestion();
-    }
-
-    function renderMockQuestion() {
-      const qObj = currentMockList[currentMockIndex];
-      document.getElementById('mockProgress').innerText = `Question ${currentMockIndex + 1} / ${currentMockList.length}`;
-      document.getElementById('mockQuestionText').innerText = `Q${currentMockIndex + 1}. ${qObj.q}`;
-
-      const optsHtml = qObj.opts.map((opt, idx) => `
-        <button class="mcq-option ${userMockAnswers[currentMockIndex] === idx ? 'selected' : ''}" onclick="selectMockOption(${idx})">
-          <b>(${String.fromCharCode(65 + idx)})</b> ${opt}
-        </button>
-      `).join('');
-      document.getElementById('mockOptionsContainer').innerHTML = optsHtml;
-    }
-
-    function selectMockOption(optIdx) {
-      userMockAnswers[currentMockIndex] = optIdx;
-      renderMockQuestion();
-    }
-
-    function nextMockQ() {
-      if (currentMockIndex < currentMockList.length - 1) {
-        currentMockIndex++;
-        renderMockQuestion();
-      }
-    }
-
-    function prevMockQ() {
-      if (currentMockIndex > 0) {
-        currentMockIndex--;
-        renderMockQuestion();
-      }
-    }
-
-    function submitMockTest() {
-      clearInterval(mockTimerInterval);
-      let correct = 0, wrong = 0, unattempted = 0;
-      const posMark = currentMockSub === 'maths' ? 2.5 : 4;
-      const negMark = currentMockSub === 'maths' ? 0.83 : 1.33;
-
-      let reviewHtml = "";
-      currentMockList.forEach((item, i) => {
-        const uAns = userMockAnswers[i];
-        if (uAns === null) {
-          unattempted++;
-          reviewHtml += `<div style="padding:8px; border-bottom:1px solid var(--border);"><b>Q${i+1}:</b> Skipped | ✅ Ans: <b>${item.opts[item.ans]}</b><br><span style="color:var(--muted);">${item.exp}</span></div>`;
-        } else if (uAns === item.ans) {
-          correct++;
-          reviewHtml += `<div style="padding:8px; border-bottom:1px solid var(--border); color:var(--accent);"><b>Q${i+1}:</b> ✅ Correct (${item.opts[uAns]})</div>`;
-        } else {
-          wrong++;
-          reviewHtml += `<div style="padding:8px; border-bottom:1px solid var(--border); color:var(--danger);"><b>Q${i+1}:</b> ❌ Your Ans: ${item.opts[uAns]} | ✅ Correct: <b>${item.opts[item.ans]}</b><br><span style="color:var(--muted);">${item.exp}</span></div>`;
-        }
-      });
-
-      const netScore = Math.max(0, (correct * posMark) - (wrong * negMark)).toFixed(2);
-      appData.quizScore += Math.round(Number(netScore));
-      syncData();
-
-      document.getElementById('mockActiveArea').style.display = 'none';
-      document.getElementById('mockResultArea').style.display = 'block';
-      document.getElementById('mockScoreSummary').innerHTML = `
-        ✅ Correct: <b>${correct}</b> | ❌ Wrong: <b>${wrong}</b> | ⏭ Skipped: <b>${unattempted}</b><br>
-        🎯 <b>NDA Net Score: ${netScore} Marks</b> (+${Math.round(Number(netScore))} pts added to profile!)
-      `;
-      document.getElementById('mockReviewList').innerHTML = reviewHtml;
-    }
-
-    function resetMockUI() {
-      document.getElementById('mockResultArea').style.display = 'none';
-      document.getElementById('mockSetup').style.display = 'block';
-      document.getElementById('mockTimerBadge').innerText = "⏱ 00:00";
-    }
-
-    // ================= REAL MULTI-PAGE PDF GENERATOR =================
-    function generateRealPDF(type) {
-      if (!window.jspdf) {
-        alert("PDF library load ho rahi hai. Internet connection check karke 2 second baad try karein.");
-        return;
-      }
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      doc.setFillColor(15, 23, 42);
-      doc.rect(0, 0, 210, 38, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(16);
-      doc.text("ANSH.STUDY MASTER PRO - PATHFINDER MASTER BOOK", 14, 18);
-      doc.setFontSize(10);
-      doc.text("Comprehensive Study Compendium | Prepared for Ansh (NDA & B.Sc. PCM)", 14, 28);
-
-      doc.setTextColor(20, 20, 20);
-      let title = "";
-      let contentLines = [];
-
-      if (type === 'nda_pathfinder_math') {
-        title = "NDA PATHFINDER MATHEMATICS - COMPLETE MASTER FORMULAS";
-        contentLines = [
-          "1. PROBABILITY & STATISTICS:",
-          " - Addition Theorem: P(A U B) = P(A) + P(B) - P(A n B)",
-          " - Conditional Probability: P(A|B) = P(A n B) / P(B)",
-          " - Binomial Distribution: P(X=r) = nCr * p^r * q^(n-r) | Mean = np, Variance = npq",
-          " - Correlation Coefficient (r) always lies between -1 and +1.",
-          "",
-          "2. MATRICES & DETERMINANTS:",
-          " - Determinant of skew-symmetric matrix of odd order is ALWAYS 0.",
-          " - A * adj(A) = |A| * I  |  |adj(A)| = |A|^(n-1)",
-          " - Inverse Matrix: A^(-1) = adj(A) / |A| (exists only if |A| != 0)",
-          "",
-          "3. TRIGONOMETRY & INVERSE FUNCTIONS:",
-          " - sin(A+B) = sinAcosB + cosAsinB | cos(A+B) = cosAcosB - sinAsinB",
-          " - Max value of (a sinX + b cosX) = +sqrt(a^2 + b^2)",
-          " - sin^(-1)x + cos^(-1)x = pi/2  for all x in [-1, 1]",
-          "",
-          "4. CALCULUS & VECTORS:",
-          " - Integral e^x [f(x) + f'(x)] dx = e^x * f(x) + C",
-          " - Definite Integral: int_0^(pi/2) sin^n(x) / (sin^n(x) + cos^n(x)) dx = pi/4",
-          " - Scalar Triple Product [a b c] = 0 if vectors are coplanar."
-        ];
-      } else if (type === 'nda_gat_world') {
-        title = "NDA GAT SCIENCE & WORLD GEOGRAPHY - MASTER COMPENDIUM";
-        contentLines = [
-          "1. INTERNATIONAL ORGANIZATIONS & HEADQUARTERS:",
-          " - United Nations (UN): New York, USA",
-          " - World Health Organization (WHO): Geneva, Switzerland",
-          " - UNESCO: Paris, France | World Bank & IMF: Washington D.C.",
-          " - International Court of Justice (ICJ): The Hague, Netherlands",
-          "",
-          "2. PHYSICS HIGH-YIELD FORMULAS:",
-          " - Escape Velocity on Earth = 11.2 km/s | Orbital Velocity = 7.92 km/s",
-          " - Mirror Formula: 1/f = 1/v + 1/u | Lens Formula: 1/f = 1/v - 1/u",
-          " - Ohm's Law: V = IR | Electric Power P = VI = I^2R = V^2/R",
-          "",
-          "3. CHEMISTRY & INDIAN POLITY:",
-          " - pH < 7 is Acidic, pH = 7 is Neutral, pH > 7 is Basic.",
-          " - Baking Soda: NaHCO3 | Washing Soda: Na2CO3.10H2O",
-          " - Fundamental Rights: Part III (Articles 12 to 35) of Indian Constitution."
-        ];
-      } else if (type === 'bsc_pcm') {
-        title = "B.Sc. PCM SEMESTER COMPREHENSIVE GUIDE";
-        contentLines = [
-          "1. DIFFERENTIAL CALCULUS & REAL ANALYSIS:",
-          " - Euler's Theorem for Homogeneous Functions: x(du/dx) + y(du/dy) = n*u",
-          " - Rolle's Theorem & Lagrange's Mean Value Theorem conditions.",
-          " - Cauchy's Root Test & D'Alembert's Ratio Test for convergence.",
-          "",
-          "2. MECHANICS & WAVES (PHYSICS):",
-          " - Coriolis Force: F_c = -2m (w x v)",
-          " - Moment of Inertia of Solid Sphere = (2/5)MR^2 | Disc = (1/2)MR^2",
-          " - Simple Harmonic Motion (SHM): d^2x/dt^2 + w^2*x = 0"
-        ];
-      } else {
-        title = "ANSH PERSONAL AI LEARNED BRAIN & REVISION NOTES";
-        contentLines.push("--- SAVED STUDY NOTES ---");
-        appData.notes.forEach((n, idx) => contentLines.push(`${idx + 1}. ${n.text}`));
-        contentLines.push("", "--- AI SELF-LEARNED FACTS ---");
-        Object.entries(appData.learnedKnowledge).forEach(([k, v]) => {
-          contentLines.push(`* ${k.toUpperCase()}: ${v}`);
-        });
-      }
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text(title, 14, 50);
-
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      let y = 60;
-      contentLines.forEach(line => {
-        const wrapped = doc.splitTextToSize(line, 180);
-        wrapped.forEach(wLine => {
-          if (y > 280) {
-            doc.addPage();
-            y = 20;
-          }
-          doc.text(wLine, 14, y);
-          y += 6.5;
-        });
-      });
-
-      doc.setFontSize(8);
-      doc.setTextColor(120, 120, 120);
-      doc.text("Generated via ANSH.STUDY MASTER PRO AI Engine", 14, 290);
-      doc.save(`${type}_ANSH_PRO.pdf`);
-    }
-
-    // ================= DYNAMIC SPEED MATH QUIZ ARENA =================
-    let qLevel = 'easy', correctAns = 0;
-
-    function startQuiz(lvl) {
-      qLevel = lvl;
-      document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase();
-      generateQuestion();
-    }
-
-    function generateQuestion() {
-      document.getElementById('qResult').style.display = 'none';
-      document.getElementById('qInput').value = '';
-      const qText = document.getElementById('qText');
-
-      if (qLevel === 'easy') {
-        const a = Math.floor(Math.random() * 65) + 15;
-        const b = Math.floor(Math.random() * 45) + 10;
-        correctAns = a + b;
-        qText.innerText = `${a} + ${b} = ?`;
-      } else if (qLevel === 'medium') {
-        const pct = [10, 20, 25, 30, 40, 50][Math.floor(Math.random() * 6)];
-        const base = (Math.floor(Math.random() * 18) + 2) * 20;
-        correctAns = (pct / 100) * base;
-        qText.innerText = `Find ${pct}% of ${base}?`;
-      } else {
-        // Dynamic NDA Calculus / Algebra generator
-        const type = Math.floor(Math.random() * 3);
-        if (type === 0) {
-          const coeff = Math.floor(Math.random() * 5) + 2;
-          const xVal = Math.floor(Math.random() * 4) + 1;
-          correctAns = 3 * coeff * xVal * xVal;
-          qText.innerText = `NDA Calculus: If f(x) = ${coeff}x³, find f'(${xVal})?`;
-        } else if (type === 1) {
-          const n = Math.floor(Math.random() * 5) + 5;
-          correctAns = (n * (n - 1)) / 2;
-          qText.innerText = `NDA PnC: Evaluate ${n}C₂ = ?`;
-        } else {
-          const a = Math.floor(Math.random() * 6) + 2;
-          const d = Math.floor(Math.random() * 5) + 2;
-          const term = 10;
-          correctAns = a + (term - 1) * d;
-          qText.innerText = `NDA AP: First term a=${a}, diff d=${d}. Find 10th term?`;
-        }
-      }
-    }
-
-    function checkQuiz() {
-      const val = parseFloat(document.getElementById('qInput').value);
-      const res = document.getElementById('qResult');
-      res.style.display = 'block';
-      if (!isNaN(val) && Math.abs(val - correctAns) < 0.01) {
-        appData.quizScore += 10;
-        appData.quizStreak += 1;
-        res.style.background = 'rgba(16,185,129,0.2)';
-        res.style.color = '#34d399';
-        res.innerText = `🎉 Sahi Jawab! (+10 pts)`;
-        syncData();
-        setTimeout(generateQuestion, 900);
-      } else {
-        appData.quizStreak = 0;
-        res.style.background = 'rgba(239,68,68,0.2)';
-        res.style.color = '#f87171';
-        res.innerText = `❌ Galat! Sahi Uttar: ${correctAns}`;
-        syncData();
-      }
-    }
-
-    // ================= VOICE NOTES & PLANNER =================
-    function startVoiceNote() {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRec) {
-        alert("Aapka browser Voice Recognition support nahi karta. Kripya Google Chrome ka upyog karein.");
-        return;
-      }
-      const rec = new SpeechRec();
-      rec.lang = 'hi-IN';
-      const micBtn = document.getElementById('micBtn');
-      rec.onstart = () => {
-        micBtn.style.background = 'var(--danger)';
-        micBtn.innerText = '🔴 Sun raha hoon...';
-      };
-      rec.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        const noteInput = document.getElementById('noteText');
-        noteInput.value += (noteInput.value ? " " : "") + transcript;
-      };
-      rec.onerror = () => {
-        alert("Mic permission allow karein ya internet check karein.");
-      };
-      rec.onend = () => {
-        micBtn.style.background = 'var(--purple)';
-        micBtn.innerText = '🎤 Bolkar Likhein';
-      };
-      rec.start();
-    }
-
-    function saveNote() {
-      const txt = document.getElementById('noteText').value.trim();
-      if (!txt) return;
-      appData.notes.unshift({ text: txt });
-      document.getElementById('noteText').value = '';
-      renderNotes();
-      syncData();
-    }
-
-    function renderNotes() {
-      document.getElementById('notesContainer').innerHTML = appData.notes.map((n, i) => `
-        <div class="todo-item">
-          <span>📝 ${escapeHTML(n.text)}</span>
-          <button class="chip-btn" style="color:var(--danger)" onclick="appData.notes.splice(${i},1);renderNotes();syncData();">✕</button>
-        </div>
-      `).join('');
-    }
-
-    function addTask() {
-      const txt = document.getElementById('taskText').value.trim();
-      if (!txt) return;
-      appData.tasks.unshift({ text: txt, done: false });
-      document.getElementById('taskText').value = '';
-      renderTasks();
-      syncData();
-    }
-
-    function renderTasks() {
-      document.getElementById('tasksContainer').innerHTML = appData.tasks.map((t, i) => `
-        <div class="todo-item ${t.done ? 'done' : ''}">
-          <span onclick="appData.tasks[${i}].done=!appData.tasks[${i}].done;renderTasks();syncData();" style="cursor:pointer; flex:1;">
-            ${t.done ? '✅' : '⬜'} ${escapeHTML(t.text)}
-          </span>
-          <button class="chip-btn" style="color:var(--danger)" onclick="appData.tasks.splice(${i},1);renderTasks();syncData();">✕</button>
-        </div>
-      `).join('');
-    }
-
-    function exportAllData() {
-      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'ANSH_MASTER_PRO_BACKUP.json';
-      a.click();
-    }
-
-    // Initialize App
-    renderTasks();
-    renderNotes();
-    generateQuestion();
-    syncData();
-    updatePomoDisplay(pomoRemainingSec);
-  </script>
+<header class="top">
+<div class="brand">ANSH<span>.STUDY</span> <span class="tag">MASTER PRO</span></div>
+<div class="row">
+<button class="btn ghost small" id="themeBtn">🌗 Theme</button>
+<button class="btn ghost small" id="backupBtn">💾 Backup</button>
+</div>
+</header>
+
+<main class="shell">
+
+<!-- HOME -->
+<section class="view active" id="view-home">
+
+<div class="card hero">
+<h2 style="margin:0">Study smarter. Stay consistent. 🎖️</h2>
+<p style="margin:5px 0 12px;font-size:13px">NDA + B.Sc. study workspace — core features work in one HTML file.</p>
+<div class="help" style="color:#dbeafe">Offline mode · Data saved on this device</div>
+</div>
+
+<div class="stats">
+<div class="stat"><strong id="dashTasks">0</strong><small>Pending tasks</small></div>
+<div class="stat"><strong id="dashDone">0</strong><small>Completed</small></div>
+<div class="stat"><strong id="dashScore">0</strong><small>Mock points</small></div>
+<div class="stat"><strong id="dashMins">0</strong><small>Study minutes</small></div>
+</div>
+
+<div class="grid two">
+
+<div class="card">
+<div class="title">⏱️ Focus timer <span class="help" id="timerStatus">Ready</span></div>
+<div class="timer" id="timerDisplay">25:00</div>
+<div class="help" style="text-align:center;margin-bottom:10px">Timer is timestamp-based to handle inactive tabs.</div>
+
+<label for="focusLength">Session length</label>
+<select id="focusLength" class="field">
+<option value="25">25 minutes</option>
+<option value="45">45 minutes</option>
+<option value="60">60 minutes</option>
+<option value="90">90 minutes</option>
+</select>
+
+<div class="row">
+<button id="timerStart" class="btn green grow">▶ Start</button>
+<button id="timerPause" class="btn ghost grow">Ⅱ Pause</button>
+<button id="timerReset" class="btn red">↻</button>
+</div>
+</div>
+
+<div class="card">
+<div class="title">🎯 Quick actions</div>
+<div class="row">
+<button class="btn full" data-go="mock">Start mock test</button>
+<button class="btn ghost full" data-go="ai">Ask study tutor</button>
+<button class="btn ghost full" data-go="alarm">Set alarm</button>
+</div>
+</div>
+
+</div>
+
+<div class="card">
+<div class="title">📌 Today's tasks <button class="btn ghost small" data-go="planner">Open planner</button></div>
+<div id="homeTasks" class="help">No tasks yet.</div>
+</div>
+
+</section>
+
+<!-- AI TUTOR -->
+<section class="view" id="view-ai">
+<div class="card">
+
+<div class="title">🎖️ Smart offline study tutor <span class="tag">OFFLINE</span></div>
+
+<p class="help">Topic-based notes, formula explanations and safe arithmetic. This single-file tutor does not browse the internet or train an AI model.</p>
+
+<div class="chips">
+<button class="chip" data-prompt="Probability">Probability</button>
+<button class="chip" data-prompt="Matrices">Matrices</button>
+<button class="chip" data-prompt="Calculus">Calculus</button>
+<button class="chip" data-prompt="NDA strategy">NDA strategy</button>
+<button class="chip" data-prompt="Physics">Physics</button>
+<button class="chip" data-prompt="Chemistry">Chemistry</button>
+<button class="chip" data-prompt="English">English</button>
+<button class="chip" data-prompt="Indian polity">Polity</button>
+</div>
+
+<div class="chat" id="chatBox">
+<div class="bubble ai">Namaste! Probability, Maths, Physics, Chemistry, English, GK ya apna doubt likho. Main built-in study notes se help karunga.</div>
+</div>
+
+<form id="chatForm" class="row">
+<input id="chatInput" class="field grow" style="margin:0" placeholder="Apna sawal likho…" required>
+<button class="btn orange">Ask ↗</button>
+</form>
+
+<div class="help" style="margin-top:8px">
+For current affairs, syllabus changes and verified live research, use official sources. Online AI requires a separate secure backend.
+</div>
+
+</div>
+</section>
+
+<!-- MOCK TEST -->
+<section class="view" id="view-mock">
+<div class="card">
+
+<div class="title">🧮 Mock test arena</div>
+<p class="help">Subject select karo, question count/time set karo, phir test start karo. Practice scoring can include negative marking.</p>
+
+<div id="mockSetup">
+
+<label for="mockSubject">Subject</label>
+<select id="mockSubject" class="field">
+<option>NDA Maths</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>English</option>
+<option>General Knowledge</option>
+<option>B.Sc. Mathematics</option>
+<option>B.Sc. Physics</option>
+<option>B.Sc. Chemistry</option>
+</select>
+
+<div class="grid two">
+<div>
+<label for="mockCount">Questions</label>
+<select id="mockCount" class="field">
+<option>5</option>
+<option selected>10</option>
+<option>15</option>
+<option>20</option>
+</select>
+</div>
+<div>
+<label for="mockMinutes">Time (minutes)</label>
+<select id="mockMinutes" class="field">
+<option>10</option>
+<option selected>15</option>
+<option>20</option>
+<option>30</option>
+<option>45</option>
+</select>
+</div>
+</div>
+
+<label for="negativeMark">Wrong answer penalty</label>
+<select id="negativeMark" class="field">
+<option value="0">No negative marking</option>
+<option value="0.25">−0.25</option>
+<option value="0.33" selected>−0.33</option>
+<option value="0.5">−0.5</option>
+</select>
+
+<button class="btn green full" id="startMock">🚀 Start mock test</button>
+</div>
+
+<div id="mockExam" class="hidden">
+<div class="row" style="justify-content:space-between">
+<b id="examSubject">Subject</b>
+<b id="examClock">15:00</b>
+</div>
+
+<div class="progress"><i id="examProgress"></i></div>
+<div class="help" id="examCounter" style="margin:7px 0">Question 1</div>
+
+<div class="testbox">
+<div id="examQuestion" style="font-weight:800"></div>
+<div id="examOptions"></div>
+</div>
+
+<div class="row" style="margin-top:10px">
+<button class="btn ghost grow" id="examPrev">← Previous</button>
+<button class="btn grow" id="examNext">Next →</button>
+</div>
+
+<button class="btn red full" id="finishMock" style="margin-top:9px">Submit test</button>
+</div>
+
+<div id="mockResult" class="hidden">
+<h3>Test complete 🎉</h3>
+<div class="result">
+<div><strong id="resultScore">0</strong><span>Score</span></div>
+<div><strong id="resultRight">0</strong><span>Correct</span></div>
+<div><strong id="resultWrong">0</strong><span>Wrong</span></div>
+</div>
+<p id="resultSummary" class="help"></p>
+<div id="reviewList"></div>
+<button class="btn full" id="newMock">Take another test</button>
+</div>
+
+</div>
+</section>
+
+<!-- BOOKS -->
+<section class="view" id="view-books">
+<div class="card">
+<div class="title">📚 Revision books & PDF</div>
+<p class="help">Choose a guide, then select Print / Save as PDF in the browser print menu.</p>
+<div id="bookList"></div>
+</div>
+</section>
+
+<!-- PLANNER -->
+<section class="view" id="view-planner">
+
+<div class="card">
+<div class="title">📋 Daily study planner</div>
+<form id="taskForm" class="row">
+<input id="taskInput" class="field grow" style="margin:0" placeholder="Naya task add karo…" required>
+<button class="btn">＋ Add</button>
+</form>
+<div id="taskList" style="margin-top:10px"></div>
+</div>
+
+<div class="card">
+<div class="title">📝 Notes & voice typing</div>
+<textarea id="noteInput" class="field" rows="4" placeholder="Formula, class notes, revision points…"></textarea>
+<div class="row">
+<button id="voiceBtn" class="btn purple grow">🎙️ Voice typing</button>
+<button id="saveNote" class="btn green grow">Save note</button>
+</div>
+<div id="noteList" style="margin-top:10px"></div>
+</div>
+
+<div class="card">
+<div class="title">📦 Backup & restore</div>
+<div class="row">
+<button id="exportBtn" class="btn ghost grow">Download backup</button>
+<label class="btn ghost grow" for="importFile" style="margin:0;text-align:center">Import backup</label>
+<input id="importFile" type="file" accept="application/json" hidden>
+</div>
+</div>
+
+</section>
+
+<!-- ALARMS -->
+<section class="view" id="view-alarm">
+<div class="card">
+
+<div class="title">⏰ Study alarms & reminders</div>
+
+<p class="help">Allow notifications and keep this page open for local alarms. A browser-only HTML page cannot guarantee alarms after the browser/app is closed.</p>
+
+<button id="enableNotifications" class="btn green full">🔔 Enable notifications</button>
+
+<form id="alarmForm">
+<label for="alarmTitle">Alarm label</label>
+<input id="alarmTitle" class="field" maxlength="70" value="Study session" required>
+<label for="alarmDate">Date & time</label>
+<input id="alarmDate" class="field" type="datetime-local" required>
+<button class="btn orange full">＋ Schedule alarm</button>
+</form>
+
+<div id="alarmList"></div>
+
+<hr>
+
+<div class="title">🔊 Ringtone test</div>
+<div class="row">
+<button id="testSound" class="btn ghost grow">▶ Test ringtone</button>
+<button id="stopSound" class="btn red grow">■ Stop sound</button>
+</div>
+
+<p class="help">Ringtone playback is controlled by browser/device audio policy. Notification sound is controlled by Android notification settings.</p>
+</div>
+</section>
+
+<div class="foot">ANSH.STUDY MASTER PRO · Single-file edition · Data stays in this browser</div>
+
+</main>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="tabs">
+<button class="tab active" data-tab="home"><b>🏠</b>Home</button>
+<button class="tab" data-tab="ai"><b>🎖️</b>AI Tutor</button>
+<button class="tab" data-tab="mock"><b>🧮</b>Mock</button>
+<button class="tab" data-tab="books"><b>📚</b>Books</button>
+<button class="tab" data-tab="planner"><b>📝</b>Planner</button>
+<button class="tab" data-tab="alarm"><b>⏰</b>Alarm</button>
+</nav>
+
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script>
+'use strict';
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+
+const uid=()=>window.crypto&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2);
+
+const KEY='ansh_study_master_single_v1';
+
+const fresh={
+tasks:[{id:uid(),text:'Revise NDA Maths basics',done:false}],
+notes:[],
+chat:[],
+alarms:[],
+quizScore:0,
+studyMins:0,
+theme:'dark',
+focus:{
+selected:25,
+remaining:1500,
+running:false,
+endAt:0,
+elapsedSec:0,
+lastTickAt:0,
+countedMin:0
+}
+};
+
+function load(){
+try{
+const x=JSON.parse(localStorage.getItem(KEY)||'null');
+return x&&typeof x==='object'?{
+...fresh,
+...x,
+tasks:Array.isArray(x.tasks)?x.tasks:[],
+notes:Array.isArray(x.notes)?x.notes:[],
+alarms:Array.isArray(x.alarms)?x.alarms:[],
+chat:Array.isArray(x.chat)?x.chat.slice(-30):[],
+focus:{...fresh.focus,...(x.focus||{})}
+}:structuredClone(fresh);
+}catch(e){
+return structuredClone(fresh);
+}
+}
+
+let data=load();
+let timerTick=null;
+let alarmTick=null;
+let exam=null;
+let examTick=null;
+let audioCtx=null;
+let ringTick=null;
+
+function save(){
+try{
+localStorage.setItem(KEY,JSON.stringify(data));
+}catch(e){
+toast('Storage full. Please export a backup.');
+}
+}
+
+function toast(s){
+const el=$('#toast');
+el.textContent=s;
+el.classList.remove('hidden');
+clearTimeout(toast.t);
+toast.t=setTimeout(()=>el.classList.add('hidden'),3000);
+}
+
+function showTab(name){
+$$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));
+$$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+$$('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.go)));
+
+function applyTheme(){
+document.body.classList.toggle('light',data.theme==='light');
+save();
+}
+
+$('#themeBtn').addEventListener('click',()=>{
+data.theme=data.theme==='light'?'dark':'light';
+applyTheme();
+});
+
+function renderDashboard(){
+const n=data.tasks.filter(t=>!t.done).length;
+$('#dashTasks').textContent=n;
+$('#dashDone').textContent=data.tasks.length-n;
+$('#dashScore').textContent=data.quizScore||0;
+$('#dashMins').textContent=data.studyMins||0;
+
+const box=$('#homeTasks');
+box.replaceChildren();
+
+const pending=data.tasks.filter(t=>!t.done).slice(0,4);
+
+if(!pending.length){
+box.textContent='All clear — add a task in the planner.';
+return;
+}
+
+pending.forEach(t=>{
+const row=document.createElement('div');
+row.className='item';
+
+const txt=document.createElement('span');
+txt.className='content';
+txt.textContent=t.text;
+
+const btn=document.createElement('button');
+btn.className='btn green small';
+btn.textContent='Done';
+
+btn.onclick=()=>{
+t.done=true;
+save();
+renderAll();
+};
+
+row.append(txt,btn);
+box.append(row);
+});
+}
+
+function renderTasks(){
+const box=$('#taskList');
+box.replaceChildren();
+
+if(!data.tasks.length){
+box.textContent='No tasks added.';
+return;
+}
+
+data.tasks.forEach(t=>{
+const row=document.createElement('div');
+row.className='item'+(t.done?' done':'');
+
+const label=document.createElement('label');
+label.style.cssText='display:flex;align-items:center;gap:9px;flex:1;margin:0';
+
+const ck=document.createElement('input');
+ck.type='checkbox';
+ck.checked=!!t.done;
+
+ck.onchange=()=>{
+t.done=ck.checked;
+save();
+renderAll();
+};
+
+const text=document.createElement('span');
+text.className='content';
+text.textContent=t.text;
+
+label.append(ck,text);
+
+const del=document.createElement('button');
+del.className='btn red small';
+del.textContent='Delete';
+
+del.onclick=()=>{
+data.tasks=data.tasks.filter(x=>x.id!==t.id);
+save();
+renderAll();
+};
+
+row.append(label,del);
+box.append(row);
+});
+}
+
+$('#taskForm').addEventListener('submit',e=>{
+e.preventDefault();
+const text=$('#taskInput').value.trim();
+if(!text)return;
+
+data.tasks.unshift({id:uid(),text,done:false});
+$('#taskInput').value='';
+save();
+renderAll();
+});
+
+function renderNotes(){
+const box=$('#noteList');
+box.replaceChildren();
+
+if(!data.notes.length){
+box.textContent='No notes saved.';
+return;
+}
+
+data.notes.forEach(n=>{
+const row=document.createElement('div');
+row.className='item';
+
+const text=document.createElement('span');
+text.className='content';
+text.textContent=n.text;
+
+const del=document.createElement('button');
+del.className='btn red small';
+del.textContent='Delete';
+
+del.onclick=()=>{
+data.notes=data.notes.filter(x=>x.id!==n.id);
+save();
+renderNotes();
+};
+
+row.append(text,del);
+box.append(row);
+});
+}
+
+$('#saveNote').onclick=()=>{
+const text=$('#noteInput').value.trim();
+if(!text)return toast('Write a note first.');
+
+data.notes.unshift({id:uid(),text,at:Date.now()});
+$('#noteInput').value='';
+
+save();
+renderNotes();
+toast('Note saved.');
+};
+
+$('#voiceBtn').onclick=()=>{
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+if(!SR)return toast('Voice typing is not supported in this browser.');
+
+const rec=new SR();
+rec.lang='hi-IN';
+rec.interimResults=false;
+
+$('#voiceBtn').textContent='🔴 Listening…';
+
+rec.onresult=e=>{
+$('#noteInput').value+=($('#noteInput').value?' ':'')+e.results[0][0].transcript;
+};
+
+rec.onerror=()=>toast('Microphone error. Check site permission.');
+rec.onend=()=>$('#voiceBtn').textContent='🎙️ Voice typing';
+
+try{
+rec.start();
+}catch(e){
+$('#voiceBtn').textContent='🎙️ Voice typing';
+toast('Voice input could not start.');
+}
+};
+
+function exportBackup(){
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;
+a.download='ANSH_STUDY_BACKUP.json';
+a.click();
+
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+toast('Backup downloaded.');
+}
+
+$('#backupBtn').onclick=exportBackup;
+$('#exportBtn').onclick=exportBackup;
+
+$('#importFile').onchange=async e=>{
+const f=e.target.files[0];
+if(!f)return;
+
+try{
+const x=JSON.parse(await f.text());
+
+if(!x||!Array.isArray(x.tasks)||!Array.isArray(x.notes))throw Error('Invalid backup');
+
+data={
+...fresh,
+...x,
+tasks:x.tasks.map(t=>({
+id:String(t.id||uid()),
+text:String(t.text||'').slice(0,500),
+done:!!t.done
+})),
+notes:x.notes.map(n=>({
+id:String(n.id||uid()),
+text:String(n.text||'').slice(0,5000)
+})),
+alarms:Array.isArray(x.alarms)?x.alarms:[]
+};
+
+save();
+applyTheme();
+renderAll();
+renderAlarms();
+toast('Backup restored.');
+
+}catch(err){
+toast('Invalid ANSH.STUDY backup file.');
+}
+
+e.target.value='';
+};
+
+// OFFLINE AI KNOWLEDGE BASE
+
+const KB=[
+
+{
+keys:['probability','प्रायिकता'],
+title:'Probability — NDA Maths',
+body:'Probability kisi event ke hone ki sambhavana hai. Equally likely outcomes: P(A)=favourable outcomes/total outcomes. 0≤P(A)≤1. Complement: P(Ā)=1−P(A). Addition: P(A∪B)=P(A)+P(B)−P(A∩B). Conditional: P(A|B)=P(A∩B)/P(B), P(B)>0. Independent events: P(A∩B)=P(A)P(B). Example: fair die par even number ki probability 3/6=1/2. Mutually exclusive aur independent events same nahi hote.'
+},
+
+{
+keys:['matrix','matrices','determinant'],
+title:'Matrices & Determinants',
+body:'Matrix ka order rows × columns hota hai. AB defined tab hai jab columns(A)=rows(B); generally AB≠BA. 2×2 determinant |A|=ad−bc. Inverse exists iff |A|≠0. A⁻¹=adj(A)/|A|. A·adj(A)=|A|I. |AB|=|A||B|. Odd-order skew-symmetric matrix ka determinant zero hota hai. Singular: determinant zero; non-singular: non-zero.'
+},
+
+{
+keys:['calculus','derivative','differentiation','limit','integration'],
+title:'Calculus Essentials',
+body:'Continuity at a: lim(x→a)f(x)=f(a). d(xⁿ)/dx=nxⁿ⁻¹. d(sin x)=cos x; d(cos x)=−sin x; d(eˣ)=eˣ; d(ln x)=1/x. Product: (uv)′=u′v+uv′. Quotient: (u/v)′=(u′v−uv′)/v². Chain rule: f′(g(x))g′(x). ∫xⁿdx=xⁿ⁺¹/(n+1)+C, n≠−1. Differentiability implies continuity, but continuity need not imply differentiability.'
+},
+
+{
+keys:['physics','newton','motion','force'],
+title:'Physics — Laws of Motion',
+body:'Newton First Law: net external force zero ho to rest/uniform straight-line motion maintain hota hai. Second Law: F=ma (constant mass). Third Law: action-reaction equal and opposite hote hain, lekin different bodies par act karte hain. Momentum p=mv. Impulse=change in momentum. Work W=Fs cosθ. Kinetic energy=½mv². Power=P=W/t.'
+},
+
+{
+keys:['chemistry','acid','base','ph'],
+title:'Chemistry — Acids, Bases & pH',
+body:'Arrhenius acid aqueous solution mein H⁺ concentration badhata hai; base OH⁻ badhata hai. Brønsted acid proton donor, base proton acceptor hai. 25°C par dilute aqueous context mein pH<7 acidic, pH=7 neutral, pH>7 basic. pH=−log₁₀[H⁺]. Neutralisation: acid+base→salt+water. Strong/weak ionisation batata hai, sirf concentration nahi.'
+},
+
+{
+keys:['english','grammar','tense','article'],
+title:'English Grammar',
+body:'Subject–verb agreement: He studies; They study. A/an singular countable noun ke saath; article sound par depend karta hai: an hour, a university. Present simple habit/fact ke liye. Present continuous am/is/are + V-ing. Present perfect has/have + V3. Passive voice: be-verb + V3. Daily practice: ek rule padho, 5 sentences banao, phir correction karo.'
+},
+
+{
+keys:['nda strategy','nda','exam strategy','pathfinder'],
+title:'NDA Study Strategy',
+body:'Syllabus ko Maths, English, Physics, Chemistry, Biology, History, Geography, Polity aur Current Affairs mein divide karo. Daily concept + solved examples + timed practice. Error notebook mein concept gap, formula recall, calculation aur misreading alag mark karo. Weekly mock ke baad analysis zaroor karo. Current syllabus aur rules ke liye UPSC ki official notification final authority hai.'
+},
+
+{
+keys:['capital','india','new delhi'],
+title:'India — Quick GK',
+body:'India ki capital New Delhi hai. Constitution 26 November 1949 ko adopt hua aur 26 January 1950 ko effective hua. India parliamentary democratic republic hai. Current affairs aur changing facts ko exam se pehle trusted/official reference se verify karo.'
+},
+
+{
+keys:['geography','latitude','monsoon'],
+title:'Geography Basics',
+body:'Latitude Equator se north/south angular distance hai. Longitude Prime Meridian se east/west angular distance hai. Earth ka axial tilt seasons ka major cause hai. Indian monsoon land-sea heating contrast, pressure patterns, moisture-laden winds aur seasonal circulation se linked hai. Blank map par rivers, passes, ranges aur neighbouring countries mark karo.'
+},
+
+{
+keys:['history','gandhi','indian history'],
+title:'Modern Indian History',
+body:'Key chronology: INC 1885; Swadeshi movement 1905; Home Rule Leagues 1916; Champaran 1917; Kheda 1918; Non-Cooperation 1920; Civil Disobedience/Salt March 1930; Quit India 1942; Independence 1947. Har event ke cause, leader, place aur outcome ko saath revise karo.'
+},
+
+{
+keys:['biology','cell','photosynthesis'],
+title:'Biology Basics',
+body:'Cell life ki basic structural and functional unit hai. Eukaryotic cell mein nucleus genetic material rakhta hai; mitochondria aerobic respiration/ATP production se linked hai; ribosomes protein synthesis karte hain; chloroplast photosynthesis ka site hai in plants/algae. Photosynthesis light energy ko chemical energy mein convert karta hai.'
+},
+
+{
+keys:['polity','constitution','fundamental rights'],
+title:'Indian Polity',
+body:'Constitution supreme legal framework hai. Fundamental Rights Part III (Articles 12–35), Directive Principles Part IV (Articles 36–51), Fundamental Duties Part IVA (Article 51A). President constitutional head hain; Council of Ministers, Prime Minister ke leadership mein, President ko aid and advise karti hai. Article details authoritative text se verify karo.'
+},
+
+{
+keys:['bsc','semester','mechanics'],
+title:'B.Sc. PCM Study Method',
+body:'Har topic ko 4 layers mein padho: definitions/assumptions, derivation, solved numerical, previous-year question. Maths mein theorem statement + proof + examples; Physics mein diagram, units, limiting cases; Chemistry mein reaction conditions and mechanism. University syllabus ko priority do.'
+}
+
+];
+
+function arithmetic(s){
+const tokens=s.match(/\d+(?:\.\d+)?|[+*/%-]/g);
+
+if(!tokens||tokens.join('')!==s.replace(/\s/g,''))throw Error('Invalid expression');
+
+let vals=[],ops=[];
+let rank={'+':1,'-':1,'*':2,'/':2,'%':2};
+
+function calc(){
+const op=ops.pop(),b=vals.pop(),a=vals.pop();
+
+if(a===undefined||b===undefined||(op==='/'&&b===0))throw Error('Math error');
+
+vals.push(op==='+'?a+b:op==='-'?a-b:op==='*'?a*b:op==='/'?a/b:a%b);
+}
+
+for(const t of tokens){
+if(!(t in rank)){
+vals.push(Number(t));
+continue;
+}
+
+while(ops.length&&rank[ops.at(-1)]>=rank[t])calc();
+ops.push(t);
+}
+
+while(ops.length)calc();
+
+if(vals.length!==1||!Number.isFinite(vals[0]))throw Error('Invalid');
+
+return vals[0];
+}
+
+function tutor(q){
+
+const clean=q.trim();
+
+const math=/^\s*\d+(?:\.\d+)?(?:\s*[+*/%-]\s*\d+(?:\.\d+)?)+\s*$/.test(clean);
+
+if(math){
+try{
+return '🧮 Calculation: '+clean+' = '+arithmetic(clean);
+}catch(e){
+return 'Please check the arithmetic expression.';
+}
+}
+
+const lower=clean.toLowerCase();
+
+const hit=KB.map(k=>({
+k,
+score:k.keys.reduce((n,key)=>n+(lower.includes(key)?key.length:0),0)
+})).sort((a,b)=>b.score-a.score)[0];
+
+if(hit&&hit.score){
+return '📘 '+hit.k.title+'\n\n'+hit.k.body+'\n\nPractice: is topic se 3 questions solve karo. Jo step unclear ho, woh bhejo.';
+}
+
+return 'Is topic ka detailed offline note abhi available nahi hai. Topic ko specific likho, jaise “conditional probability”, “Newton second law” ya “Fundamental Rights”. Live internet research ke liye secure backend chahiye.';
+}
+
+function addBubble(role,text){
+const b=document.createElement('div');
+b.className='bubble '+(role==='user'?'me':'ai');
+b.textContent=text;
+$('#chatBox').append(b);
+$('#chatBox').scrollTop=$('#chatBox').scrollHeight;
+}
+
+function ask(q){
+if(!q.trim())return;
+addBubble('user',q);
+
+const a=tutor(q);
+addBubble('assistant',a);
+
+data.chat.push(
+{role:'user',content:q},
+{role:'assistant',content:a}
+);
+
+data.chat=data.chat.slice(-30);
+save();
+}
+
+$('#chatForm').onsubmit=e=>{
+e.preventDefault();
+const q=$('#chatInput').value.trim();
+$('#chatInput').value='';
+ask(q);
+};
+
+$$('[data-prompt]').forEach(b=>b.onclick=()=>ask(b.dataset.prompt));
+
+// MOCK TEST QUESTION BANK
+// Format: [question, options, correctOptionIndex, explanation]
+
+const QB={
+
+'NDA Maths':[
+['Solve 2x+5=17.',['4','5','6','7'],2,'2x=12, so x=6.'],
+['Derivative of x³ is:',['x²','2x','3x²','3x'],2,'Power rule: nxⁿ⁻¹.'],
+['P(even number) on a fair die is:',['1/3','1/2','2/3','1/6'],1,'Even outcomes: 2,4,6; hence 3/6.'],
+['Determinant of [[2,1],[3,4]] is:',['5','8','11','−5'],0,'ad−bc=8−3=5.'],
+['sin²θ+cos²θ equals:',['0','1','tan²θ','2'],1,'Fundamental identity.'],
+['20% of 250 is:',['25','40','50','60'],2,'0.2×250=50.'],
+['log₁₀100 equals:',['1','2','10','100'],1,'10²=100.'],
+['Sum of first 10 natural numbers:',['45','50','55','60'],2,'n(n+1)/2=55.'],
+['Perpendicular vectors have dot product:',['1','−1','0','Their magnitudes'],2,'cos90°=0.'],
+['Roots of x²−5x+6=0:',['1,6','2,3','−2,−3','1,5'],1,'(x−2)(x−3)=0.'],
+['A square matrix is invertible when:',['det=0','det≠0','all entries 0','rows differ'],1,'Inverse exists iff determinant is non-zero.'],
+['Slope of y=3x+2:',['2','3','−3','5'],1,'In y=mx+c, slope m=3.']
+],
+
+'Physics':[
+['SI unit of force:',['Joule','Newton','Watt','Pascal'],1,'Force is measured in newton.'],
+['Newton second law (constant mass):',['F=mv','F=ma','P=mv','W=Fs/t'],1,'Net force equals mass × acceleration.'],
+['Mass 2 kg, speed 3 m/s. Momentum?',['2','5','6','9'],2,'p=mv=6 kg m/s.'],
+['Which is scalar?',['Velocity','Force','Displacement','Speed'],3,'Speed has magnitude only.'],
+['SI unit of power:',['Joule','Watt','Newton','Ampere'],1,'Power is work per unit time.'],
+['Speed of light in vacuum:',['3×10⁶','3×10⁸','3×10¹⁰','300'],1,'c is approximately 3×10⁸ m/s.'],
+['Ohm law:',['V=IR','P=VI²','R=VI','I=VR'],0,'At constant physical conditions V=IR.'],
+['Convex lens is usually:',['Diverging','Converging','Opaque','Plane mirror'],1,'Convex lens converges parallel rays.'],
+['Frequency unit:',['Metre','Hertz','Second','Newton'],1,'1 Hz = 1 cycle per second.'],
+['Kinetic energy:',['mv','½mv²','mgh','F/t'],1,'K=½mv².'],
+['Action-reaction act on:',['Same body','Different bodies','Only rest bodies','No bodies'],1,'They act on different bodies.'],
+['Unit of electric charge:',['Ampere','Volt','Coulomb','Ohm'],2,'Charge is measured in coulomb.']
+],
+
+'Chemistry':[
+['Atomic number equals number of:',['Neutrons','Protons','Nucleons','Molecules'],1,'Atomic number is proton number.'],
+['Neutral water pH at 25°C is about:',['0','5','7','14'],2,'Neutral water pH is about 7 at 25°C.'],
+['Formula of water:',['H₂O','HO₂','H₂O₂','OH'],0,'Two hydrogen atoms and one oxygen atom.'],
+['Covalent bond involves:',['Transfer of protons','Sharing electrons','Sharing neutrons','Loss of nucleus'],1,'Covalent bonds share electron pairs.'],
+['Acid-carbonate reaction releases:',['Oxygen','Hydrogen','Carbon dioxide','Nitrogen'],2,'CO₂ is commonly released.'],
+['Avogadro constant is approximately:',['6.022×10²³','3×10⁸','9.8','1.6×10⁻¹⁹'],0,'Entities per mole.'],
+['Oxidation is commonly:',['Gain electrons','Loss electrons','Gain neutrons','Loss protons'],1,'Oxidation is electron loss.'],
+['Catalyst changes rate by:',['Changing K','Alternative pathway','Being fully consumed','Changing atomic number'],1,'It offers a lower-activation-energy pathway.'],
+['Smallest unit retaining element identity:',['Cell','Atom','Ion pair','Compound'],1,'Atom is the basic unit of an element.'],
+['NaCl common name:',['Baking soda','Common salt','Washing soda','Bleaching powder'],1,'Sodium chloride is common salt.']
+],
+
+'English':[
+['Choose correct sentence:',['He go to school.','He goes to school.','He going school.','He gone school.'],1,'Third-person singular present simple takes -s/-es.'],
+['Synonym of abundant:',['Scarce','Plentiful','Tiny','Weak'],1,'Abundant means plentiful.'],
+['Correct article: “___ honest person”',['A','An','The only','No article'],1,'Honest begins with a vowel sound.'],
+['Antonym of expand:',['Extend','Enlarge','Contract','Increase'],2,'Contract means become smaller.'],
+['Identify noun: “Courage matters.”',['Courage','Matters','Both verbs','Neither'],0,'Courage is an abstract noun.'],
+['Interested ___ science.',['on','at','in','for'],2,'Correct phrase: interested in.'],
+['Plural of criterion:',['Criterions','Criteria','Criterias','Criterion'],1,'Criterion → criteria.'],
+['Correct spelling:',['Accomodation','Accommodation','Acommodation','Accommadation'],1,'Accommodation has double c and double m.'],
+['Once in a blue moon means:',['Every day','Very rarely','At night','Very quickly'],1,'It means very rarely.'],
+['Passive: “They built the bridge.”',['The bridge built them.','The bridge was built by them.','The bridge is build.','They were built.'],1,'Past simple passive: was/were + V3.']
+],
+
+'General Knowledge':[
+['Indian Constitution came into effect on:',['15 Aug 1947','26 Jan 1950','26 Nov 1949','2 Oct 1950'],1,'It came into force on 26 January 1950.'],
+['Capital of India:',['Mumbai','New Delhi','Kolkata','Chennai'],1,'New Delhi is India’s capital.'],
+['Largest planet:',['Earth','Saturn','Jupiter','Mars'],2,'Jupiter is the largest planet.'],
+['UN headquarters:',['Geneva','Paris','New York','Rome'],2,'UN headquarters is in New York City.'],
+['Tropic of Cancer passes through:',['India','Russia','South Africa','Japan'],0,'It passes through India.'],
+['Salt March in 1930 was led by:',['Subhas Bose','Mahatma Gandhi','Bhagat Singh','Nehru'],1,'Mahatma Gandhi led the Salt March.'],
+['INC was founded in:',['1857','1885','1905','1942'],1,'Indian National Congress was founded in 1885.'],
+['First President of India:',['S. Radhakrishnan','Rajendra Prasad','Zakir Hussain','V. V. Giri'],1,'Dr Rajendra Prasad was the first President.'],
+['Currency of Japan:',['Yuan','Won','Yen','Rupee'],2,'Japan uses the yen.'],
+['National animal of India:',['Lion','Tiger','Elephant','Leopard'],1,'The Bengal tiger is the national animal.']
+],
+
+'B.Sc. Mathematics':[
+['Derivative of sin x:',['−cos x','cos x','tan x','−sin x'],1,'d(sin x)/dx=cos x.'],
+['Integral of 1/x:',['x²/2','ln|x|+C','eˣ','1/x²'],1,'∫dx/x=ln|x|+C.'],
+['A matrix inverse exists if:',['det=0','det≠0','trace=0','all entries positive'],1,'Non-zero determinant.'],
+['Eigenvalues satisfy:',['det(A−λI)=0','A+I=0','trace=0 always','A=0'],0,'Characteristic equation.'],
+['Rank is the:',['Number of rows only','Maximum independent rows/columns','Determinant always','Trace'],1,'Rank equals maximum linearly independent rows/columns.'],
+['For a continuous f on [a,b], it is:',['Always differentiable','Bounded and attains bounds','Always constant','Never integrable'],1,'Extreme value theorem.'],
+['∫cos x dx:',['−sin x+C','sin x+C','cos x+C','tan x+C'],1,'Antiderivative is sin x.'],
+['Dot product of perpendicular vectors:',['1','−1','0','Infinity'],2,'Angle is 90°, so dot product is zero.']
+],
+
+'B.Sc. Physics':[
+['Dimensional formula of force:',['MLT⁻¹','MLT⁻²','ML²T⁻²','M⁰LT⁻²'],1,'F=ma gives MLT⁻².'],
+['SHM acceleration is:',['ωx','−ω²x','ω²/x','constant'],1,'Acceleration is proportional and opposite to displacement.'],
+['SI unit of capacitance:',['Henry','Farad','Tesla','Weber'],1,'Capacitance is measured in farad.'],
+['Gauss law relates flux to:',['Enclosed charge','Mass','Velocity','Temperature'],0,'Electric flux = enclosed charge/ε₀.'],
+['Wave speed relation:',['v=f/λ','v=fλ','v=λ/f','v=f+λ'],1,'Speed = frequency × wavelength.'],
+['SI unit of magnetic field:',['Tesla','Weber','Henry','Coulomb'],0,'Magnetic flux density is tesla.'],
+['Work-energy theorem:',['W=ΔK','W=Δp','W=ma','W=mv'],0,'Net work equals change in kinetic energy.'],
+['Moment of inertia depends on:',['Mass distribution','Colour','Temperature only','Charge only'],0,'It depends on mass and its distance from axis.']
+],
+
+'B.Sc. Chemistry':[
+['Molarity unit:',['mol kg⁻¹','mol L⁻¹','g mol⁻¹','kg mol⁻¹'],1,'Moles of solute per litre of solution.'],
+['Aldehyde functional group:',['−OH','−CHO','−COOH','−NH₂'],1,'Aldehyde group is −CHO.'],
+['Buffer resists change in:',['Colour','pH','Mass','Volume'],1,'Buffers resist pH changes.'],
+['SN1 reaction intermediate:',['Carbanion','Carbocation','Free neutron','No intermediate'],1,'SN1 proceeds through a carbocation.'],
+['Benzene is:',['Aliphatic','Aromatic','Inorganic','Saturated'],1,'Benzene has an aromatic conjugated π system.'],
+['Oxidation number of O in most compounds:',['+1','−1','−2','0'],2,'Usually −2, with important exceptions.'],
+['A catalyst at equilibrium changes:',['Equilibrium constant','Equilibrium position','Rate both directions','Reaction enthalpy'],2,'It speeds forward and reverse reactions equally.'],
+['sp³ hybridisation geometry:',['Linear','Trigonal planar','Tetrahedral','Square planar'],2,'sp³ has tetrahedral geometry.']
+]
+
+};
+
+function shuffle(a){
+const b=[...a];
+for(let i=b.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[b[i],b[j]]=[b[j],b[i]];
+}
+return b;
+}
+
+function updateCount(){
+const bank=QB[$('#mockSubject').value]||[];
+const sel=$('#mockCount');
+const old=Number(sel.value)||10;
+const vals=[5,10,15,20].filter(n=>n<=bank.length);
+
+if(bank.length&&!vals.includes(bank.length))vals.push(bank.length);
+
+sel.replaceChildren();
+
+[...new Set(vals)].sort((a,b)=>a-b).forEach(n=>{
+const o=document.createElement('option');
+o.value=n;
+o.textContent=n;
+sel.append(o);
+});
+
+sel.value=String(vals.includes(old)?old:(vals.includes(10)?10:vals.at(-1)||5));
+}
+
+$('#mockSubject').onchange=updateCount;
+updateCount();
+
+$('#startMock').onclick=()=>{
+const subject=$('#mockSubject').value;
+const bank=QB[subject]||[];
+
+if(!bank.length)return toast('No questions in this subject yet.');
+
+const count=Math.min(Number($('#mockCount').value),bank.length);
+
+exam={
+subject,
+questions:shuffle(bank).slice(0,count),
+answers:Array(count).fill(null),
+index:0,
+endAt:Date.now()+Number($('#mockMinutes').value)*60000,
+negative:Number($('#negativeMark').value),
+done:false
+};
+
+$('#mockSetup').classList.add('hidden');
+$('#mockResult').classList.add('hidden');
+$('#mockExam').classList.remove('hidden');
+
+$('#examSubject').textContent=subject;
+
+renderQuestion();
+
+clearInterval(examTick);
+examTick=setInterval(tickExam,500);
+tickExam();
+};
+
+function renderQuestion(){
+if(!exam)return;
+
+const q=exam.questions[exam.index];
+
+$('#examQuestion').textContent=q[0];
+$('#examOptions').replaceChildren();
+
+q[1].forEach((text,i)=>{
+const b=document.createElement('button');
+
+b.className='option'+(exam.answers[exam.index]===i?' selected':'');
+b.type='button';
+b.textContent=String.fromCharCode(65+i)+'. '+text;
+
+b.onclick=()=>{
+exam.answers[exam.index]=i;
+renderQuestion();
+};
+
+$('#examOptions').append(b);
+});
+
+$('#examCounter').textContent=`Question ${exam.index+1}/${exam.questions.length} · ${exam.answers.filter(x=>x!==null).length} answered`;
+
+$('#examProgress').style.width=((exam.index+1)/exam.questions.length*100)+'%';
+
+$('#examPrev').disabled=exam.index===0;
+$('#examNext').textContent=exam.index===exam.questions.length-1?'Finish →':'Next →';
+}
+
+$('#examPrev').onclick=()=>{
+if(exam&&exam.index>0){
+exam.index--;
+renderQuestion();
+}
+};
+
+$('#examNext').onclick=()=>{
+if(!exam)return;
+if(exam.index<exam.questions.length-1){
+exam.index++;
+renderQuestion();
+}else{
+finishExam();
+}
+};
+
+$('#finishMock').onclick=()=>{
+if(confirm('Submit this mock test?'))finishExam();
+};
+
+$('#newMock').onclick=()=>{
+$('#mockResult').classList.add('hidden');
+$('#mockSetup').classList.remove('hidden');
+exam=null;
+};
+
+function tickExam(){
+if(!exam||exam.done)return;
+
+const left=Math.max(0,exam.endAt-Date.now());
+
+$('#examClock').textContent=
+String(Math.floor(left/60000)).padStart(2,'0')+':'+
+String(Math.floor(left/1000)%60).padStart(2,'0');
+
+if(left<=0)finishExam();
+}
+
+function finishExam(){
+if(!exam||exam.done)return;
+
+exam.done=true;
+clearInterval(examTick);
+
+let right=0,wrong=0,blank=0;
+
+exam.questions.forEach((q,i)=>{
+const a=exam.answers[i];
+
+if(a===null)blank++;
+else if(a===q[2])right++;
+else wrong++;
+});
+
+const score=Number((right-wrong*exam.negative).toFixed(2));
+
+data.quizScore=(data.quizScore||0)+Math.max(0,Math.round(score));
+
+save();
+renderDashboard();
+
+$('#mockExam').classList.add('hidden');
+$('#mockResult').classList.remove('hidden');
+
+$('#resultScore').textContent=score;
+$('#resultRight').textContent=right;
+$('#resultWrong').textContent=wrong;
+
+$('#resultSummary').textContent=
+`${blank} unanswered · ${right} correct − (${wrong} × ${exam.negative}) negative marks.`;
+
+const box=$('#reviewList');
+box.replaceChildren();
+
+exam.questions.forEach((q,i)=>{
+const div=document.createElement('div');
+div.className='book';
+
+const h=document.createElement('b');
+h.textContent=`Q${i+1}. ${q[0]}`;
+
+const p=document.createElement('p');
+p.textContent=`Your answer: ${exam.answers[i]===null?'Not answered':q[1][exam.answers[i]]} · Correct: ${q[1][q[2]]}`;
+
+const ex=document.createElement('div');
+ex.className='help';
+ex.textContent=q[3];
+
+div.append(h,p,ex);
+box.append(div);
+});
+}
+
+// REVISION BOOKS
+
+const BOOKS={
+
+math:{
+title:'NDA MATHEMATICS — REVISION MASTER NOTES',
+subtitle:'Core formulas and common traps',
+sections:[
+['Algebra & Quadratics','For ax²+bx+c=0, roots=[−b±√(b²−4ac)]/(2a). D=b²−4ac: positive gives distinct real roots, zero equal roots, negative complex roots. Sum=−b/a; product=c/a. AP: aₙ=a+(n−1)d; Sₙ=n/2[2a+(n−1)d]. GP: aₙ=arⁿ⁻¹.'],
+['Trigonometry','sin²θ+cos²θ=1; 1+tan²θ=sec²θ; 1+cot²θ=cosec²θ. sin(A±B)=sinAcosB±cosAsinB. cos(A±B)=cosAcosB∓sinAsinB. Degrees to radians: θπ/180.'],
+['Matrices & Determinants','For [[a,b],[c,d]], determinant=ad−bc. A inverse exists iff |A|≠0. A⁻¹=adj(A)/|A|. A·adj(A)=|A|I; |AB|=|A||B|. Generally AB≠BA. Odd-order skew-symmetric determinant is zero.'],
+['Probability','P(A)=favourable/total for equally likely outcomes. 0≤P(A)≤1. P(Ā)=1−P(A). P(A∪B)=P(A)+P(B)−P(A∩B). P(A|B)=P(A∩B)/P(B). Independent: P(A∩B)=P(A)P(B).'],
+['Vectors & 3D','|a|=√(a₁²+a₂²+a₃²). a·b=|a||b|cosθ; perpendicular vectors have dot product zero. Cross product magnitude=|a||b|sinθ. Scalar triple product gives parallelepiped volume.'],
+['Differential Calculus','d(xⁿ)/dx=nxⁿ⁻¹. (uv)′=u′v+uv′. (u/v)′=(u′v−uv′)/v². Chain rule: f′(g(x))g′(x). d(sin x)=cos x; d(cos x)=−sin x; d(eˣ)=eˣ; d(ln x)=1/x.'],
+['Integral Calculus','∫xⁿdx=xⁿ⁺¹/(n+1)+C (n≠−1). ∫1/x dx=ln|x|+C. ∫eˣdx=eˣ+C. Integration by parts: ∫u dv=uv−∫v du. Definite integral: ∫ₐᵇf(x)dx=F(b)−F(a).']
+]
+},
+
+gat:{
+title:'NDA GAT — SCIENCE & GENERAL STUDIES',
+subtitle:'Compact revision handbook',
+sections:[
+['Physics','v=u+at; s=ut+½at²; v²=u²+2as. F=ma. p=mv. W=Fs cosθ. K=½mv². P=W/t. Ohm law V=IR. Wave speed v=fλ.'],
+['Chemistry','Atomic number=protons. Ionic bond involves electron transfer; covalent bond involves sharing. pH=−log[H⁺]. Oxidation is electron loss; reduction is electron gain. Catalyst changes reaction rate and is regenerated.'],
+['Biology','Cell is the basic structural and functional unit. Nucleus carries genetic material in eukaryotes; ribosomes synthesise proteins; mitochondria are central to aerobic ATP production; chloroplasts perform photosynthesis.'],
+['Geography','Latitude measures north/south angular distance from Equator; longitude measures east/west from Prime Meridian. Revise Indian physiographic divisions, rivers, monsoon, soils, crops, minerals, neighbouring countries and passes with maps.'],
+['History','Key milestones: INC 1885; Swadeshi 1905; Home Rule 1916; Champaran 1917; Kheda 1918; Non-Cooperation 1920; Salt March 1930; Quit India 1942; Independence 1947.'],
+['Polity','Constitution adopted 26 Nov 1949; effective 26 Jan 1950. Fundamental Rights Part III; DPSP Part IV; Fundamental Duties Part IVA. Study Parliament, President, Council of Ministers, courts and federalism.'],
+['English','Parts of speech, subject–verb agreement, articles, tenses, voice, narration, comprehension, synonyms, antonyms, idioms and sentence improvement. Example: He studies; they study; an hour; a university.']
+]
+},
+
+bsc:{
+title:'B.Sc. PCM — SEMESTER REVISION GUIDE',
+subtitle:'Physics, Mathematics and Chemistry framework',
+sections:[
+['Mathematical Methods','Revise limits, continuity, differentiability, mean value theorems, Taylor expansion, integrals, sequences and series, matrices, eigenvalues, vector spaces and differential equations according to university syllabus.'],
+['Classical Mechanics','Newtonian mechanics, conservation of momentum, work-energy theorem, central forces, rigid-body rotation, moment of inertia, oscillations, gravitation and non-inertial frames. Draw free-body diagrams before equations.'],
+['Oscillations & Waves','SHM: x=A cos(ωt+φ), a=−ω²x, T=2π/ω. Small-angle pendulum: T=2π√(l/g). Wave relation v=fλ. Revise superposition, standing waves and resonance.'],
+['Electricity & Magnetism','E=F/q. Gauss law: flux=q enclosed/ε₀. Capacitance C=Q/V; energy=½CV². Magnetic force F=q(v×B). Revise Faraday and Lenz laws.'],
+['Physical Chemistry','Atomic structure, bonding, thermodynamics, chemical equilibrium, ionic equilibrium, kinetics, electrochemistry, solutions and phase equilibria. Track units and assumptions.'],
+['Organic & Inorganic Chemistry','Nomenclature, electronic effects, stereochemistry, substitution, elimination, addition, carbonyl chemistry, periodic trends, coordination compounds and transition elements as prescribed by syllabus.'],
+['Answer Writing','For a 10–15 mark answer: definition; labelled diagram/assumptions; derivation or mechanism; boxed result with units; interpretation; example. Use university past papers for expected depth.']
+]
+}
+};
+
+function renderBooks(){
+const box=$('#bookList');
+box.replaceChildren();
+
+Object.entries(BOOKS).forEach(([key,b])=>{
+const div=document.createElement('div');
+div.className='book';
+
+const h=document.createElement('h3');
+h.textContent=b.title;
+
+const p=document.createElement('p');
+p.textContent=b.subtitle+' · '+b.sections.length+' sections';
+
+const btn=document.createElement('button');
+btn.className='btn green small';
+btn.textContent='🖨️ Print / Save PDF';
+btn.onclick=()=>printBook(key);
+
+div.append(h,p,btn);
+box.append(div);
+});
+}
+
+function printBook(key){
+const b=BOOKS[key];
+const w=window.open('','_blank');
+
+if(!w)return toast('Allow pop-ups to create a PDF.');
+
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+}[c]));
+
+const sections=b.sections.map(([h,p])=>
+`<section><h2>${esc(h)}</h2><p>${esc(p)}</p></section>`
+).join('');
+
+w.document.open();
+
+w.document.write(`
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${esc(b.title)}</title>
+<style>
+body{font:12pt/1.6 Arial,sans-serif;color:#111;max-width:850px;margin:30px auto;padding:0 24px}
+h1{font-size:20pt;border-bottom:3px solid #24558b;padding-bottom:10px}
+h2{font-size:14pt;color:#17365d;margin:22px 0 5px}
+p{white-space:pre-wrap}
+button{padding:10px 15px;margin-bottom:15px}
+@media print{button{display:none}body{margin:15mm}}
+</style>
+</head>
+<body>
+<button onclick="window.print()">Print / Save as PDF</button>
+<h1>${esc(b.title)}</h1>
+<p>${esc(b.subtitle)}
+ANSH.STUDY MASTER PRO</p>
+${sections}
+</body>
+</html>
+`);
+
+w.document.close();
+setTimeout(()=>{w.focus();w.print()},300);
+}
+
+// FOCUS TIMER
+
+function fmt(s){
+s=Math.max(0,Math.ceil(s));
+return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+
+function countFocus(){
+const f=data.focus;
+const now=Date.now();
+
+if(!f.running||!f.lastTickAt)return;
+
+const delta=Math.max(0,(now-f.lastTickAt)/1000);
+
+f.elapsedSec=Math.min(f.selected*60,(f.elapsedSec||0)+delta);
+f.lastTickAt=now;
+
+const mins=Math.floor(f.elapsedSec/60);
+const inc=mins-(f.countedMin||0);
+
+if(inc>0){
+data.studyMins=(data.studyMins||0)+inc;
+f.countedMin=mins;
+}
+
+save();
+}
+
+function updateTimer(){
+const f=data.focus;
+
+if(f.running){
+countFocus();
+
+const left=Math.max(0,Math.ceil((f.endAt-Date.now())/1000));
+
+$('#timerDisplay').textContent=fmt(left);
+$('#timerStatus').textContent='Running';
+
+if(left<=0)completeTimer();
+
+}else{
+$('#timerDisplay').textContent=fmt(f.remaining);
+$('#timerStatus').textContent='Paused / Ready';
+}
+
+renderDashboard();
+}
+
+function startTimer(){
+const f=data.focus;
+
+if(f.running)return;
+
+createAudio();
+
+if(f.remaining<=0){
+f.remaining=f.selected*60;
+f.elapsedSec=0;
+f.countedMin=0;
+}
+
+f.running=true;
+f.lastTickAt=Date.now();
+f.endAt=Date.now()+f.remaining*1000;
+
+save();
+
+clearInterval(timerTick);
+timerTick=setInterval(updateTimer,500);
+
+updateTimer();
+}
+
+function pauseTimer(){
+const f=data.focus;
+
+if(!f.running)return;
+
+if(f.endAt&&Date.now()>=f.endAt){
+completeTimer();
+return;
+}
+
+countFocus();
+
+f.remaining=Math.max(0,Math.ceil((f.endAt-Date.now())/1000));
+f.running=false;
+f.endAt=0;
+f.lastTickAt=0;
+
+save();
+clearInterval(timerTick);
+updateTimer();
+}
+
+function resetTimer(){
+if(data.focus.running)pauseTimer();
+
+const f=data.focus;
+
+f.remaining=f.selected*60;
+f.elapsedSec=0;
+f.countedMin=0;
+f.running=false;
+f.endAt=0;
+f.lastTickAt=0;
+
+save();
+updateTimer();
+}
+
+function completeTimer(){
+const f=data.focus;
+
+if(!f.running)return;
+
+countFocus();
+
+f.running=false;
+f.remaining=0;
+f.endAt=0;
+f.lastTickAt=0;
+
+save();
+clearInterval(timerTick);
+
+updateTimer();
+
+ring();
+
+notifyUser(
+'Focus session complete 🎉',
+'Great work. Take a short break and review what you learned.'
+);
+
+toast('Focus session complete!');
+}
+
+$('#focusLength').value=String(data.focus.selected||25);
+
+$('#focusLength').onchange=()=>{
+if(data.focus.running){
+$('#focusLength').value=String(data.focus.selected);
+return toast('Pause the timer before changing duration.');
+}
+
+data.focus.selected=Number($('#focusLength').value);
+data.focus.remaining=data.focus.selected*60;
+data.focus.elapsedSec=0;
+data.focus.countedMin=0;
+
+save();
+updateTimer();
+};
+
+$('#timerStart').onclick=startTimer;
+$('#timerPause').onclick=pauseTimer;
+$('#timerReset').onclick=resetTimer;
+
+// AUDIO
+
+function createAudio(){
+try{
+const C=window.AudioContext||window.webkitAudioContext;
+
+if(!C)return null;
+
+if(!audioCtx)audioCtx=new C();
+
+if(audioCtx.state==='suspended')audioCtx.resume();
+
+return audioCtx;
+
+}catch(e){
+return null;
+}
+}
+
+function beep(freq,duration,volume=.16){
+const c=createAudio();
+
+if(!c)return;
+
+const o=c.createOscillator();
+const g=c.createGain();
+
+o.type='sine';
+o.frequency.value=freq;
+g.gain.value=volume;
+
+o.connect(g);
+g.connect(c.destination);
+
+o.start();
+o.stop(c.currentTime+duration);
+}
+
+function ring(){
+stopRing();
+
+let n=0;
+const tones=[880,660,880,990,660];
+
+ringTick=setInterval(()=>{
+if(n>=24){
+stopRing();
+return;
+}
+
+beep(tones[n%tones.length],.28,.18);
+n++;
+
+},450);
+}
+
+function stopRing(){
+if(ringTick){
+clearInterval(ringTick);
+ringTick=null;
+}
+}
+
+function notifyUser(title,body){
+if('Notification'in window&&Notification.permission==='granted'){
+try{
+new Notification(title,{
+body,
+tag:'ansh-study-'+Date.now()
+});
+}catch(e){}
+}
+}
+
+$('#enableNotifications').onclick=async()=>{
+if(!('Notification'in window))
+return toast('Notifications are not supported in this browser.');
+
+try{
+const p=await Notification.requestPermission();
+
+toast(
+p==='granted'
+?'Notifications enabled.'
+:'Notification permission not granted.'
+);
+
+}catch(e){
+toast('Could not request notification permission.');
+}
+};
+
+// LOCAL ALARMS
+
+function localDateTime(d){
+const p=n=>String(n).padStart(2,'0');
+
+return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+$('#alarmDate').value=localDateTime(new Date(Date.now()+30*60000));
+
+function renderAlarms(){
+const box=$('#alarmList');
+box.replaceChildren();
+
+const arr=data.alarms.filter(a=>!a.fired).sort((a,b)=>a.at-b.at);
+
+if(!arr.length){
+box.textContent='No pending alarms.';
+return;
+}
+
+arr.forEach(a=>{
+const row=document.createElement('div');
+row.className='item';
+
+const text=document.createElement('div');
+text.className='content';
+
+const b=document.createElement('b');
+b.textContent=a.title;
+
+const time=document.createElement('div');
+time.className='help';
+time.textContent=new Date(a.at).toLocaleString();
+
+text.append(b,time);
+
+const del=document.createElement('button');
+del.className='btn red small';
+del.textContent='Cancel';
+
+del.onclick=()=>{
+data.alarms=data.alarms.filter(x=>x.id!==a.id);
+save();
+renderAlarms();
+};
+
+row.append(text,del);
+box.append(row);
+});
+}
+
+$('#alarmForm').onsubmit=e=>{
+e.preventDefault();
+
+const title=$('#alarmTitle').value.trim()||'Study reminder';
+const at=new Date($('#alarmDate').value).getTime();
+
+if(!Number.isFinite(at)||at<Date.now()+5000)
+return toast('Choose a future time at least 5 seconds from now.');
+
+data.alarms.push({
+id:uid(),
+title,
+at,
+fired:false
+});
+
+save();
+renderAlarms();
+
+toast('Alarm saved. Keep this page open for it to ring.');
+};
+
+function checkAlarms(){
+let changed=false;
+
+for(const a of data.alarms){
+if(!a.fired&&a.at<=Date.now()){
+a.fired=true;
+changed=true;
+
+ring();
+
+notifyUser(
+'⏰ '+a.title,
+'Your scheduled study reminder is due.'
+);
+
+toast('Alarm: '+a.title);
+}
+}
+
+if(changed){
+save();
+renderAlarms();
+}
+}
+
+$('#testSound').onclick=()=>{
+createAudio();
+ring();
+};
+
+$('#stopSound').onclick=stopRing;
+
+document.addEventListener('visibilitychange',()=>{
+if(!document.hidden){
+updateTimer();
+checkAlarms();
+}
+});
+
+window.addEventListener('pageshow',()=>{
+updateTimer();
+checkAlarms();
+});
+
+// INITIALIZE
+
+function renderAll(){
+renderDashboard();
+renderTasks();
+renderNotes();
+renderAlarms();
+updateTimer();
+}
+
+applyTheme();
+renderBooks();
+renderAll();
+
+if(data.chat.length){
+$('#chatBox').replaceChildren();
+data.chat.slice(-12).forEach(m=>
+addBubble(m.role==='user'?'user':'assistant',m.content)
+);
+}
+
+if(data.focus.running&&data.focus.endAt){
+if(data.focus.endAt<=Date.now()){
+completeTimer();
+}else{
+timerTick=setInterval(updateTimer,500);
+updateTimer();
+}
+}
+
+alarmTick=setInterval(checkAlarms,1000);
+checkAlarms();
+
+</script>
 </body>
 </html>
