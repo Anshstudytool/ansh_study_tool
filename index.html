@@ -3,30 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ANSH.STUDY MASTER PRO - 9,999+ NDA Engine, Subject Quiz & AI Hub</title>
-  <!-- jsPDF CDN for Real PDF Generation -->
+  <title>ANSH.STUDY MASTER PRO - Modern NDA & B.Sc. AI Hub</title>
+  <!-- Optional jsPDF CDN (Offline fallback uses native browser Print-to-PDF) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
-      --bg: #030712;
-      --card: #0f172a;
-      --card-alt: #1e293b;
+      --bg: #050816;
+      --bg-glow-1: rgba(99, 102, 241, 0.22);
+      --bg-glow-2: rgba(6, 182, 212, 0.16);
+      --card: rgba(15, 23, 42, 0.72);
+      --card-solid: #0f172a;
+      --card-alt: rgba(30, 41, 59, 0.78);
       --text: #f8fafc;
       --muted: #94a3b8;
-      --primary: #3b82f6;
+      --primary: #38bdf8;
+      --indigo: #6366f1;
       --accent: #10b981;
-      --purple: #8b5cf6;
+      --purple: #a855f7;
       --orange: #f59e0b;
-      --danger: #ef4444;
+      --danger: #f43f5e;
       --border: rgba(255, 255, 255, 0.1);
+      --border-glow: rgba(56, 189, 248, 0.35);
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.42);
     }
     body.light {
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --card-alt: #e2e8f0;
+      --bg: #eef2f9;
+      --bg-glow-1: rgba(99, 102, 241, 0.12);
+      --bg-glow-2: rgba(6, 182, 212, 0.12);
+      --card: rgba(255, 255, 255, 0.85);
+      --card-solid: #ffffff;
+      --card-alt: rgba(226, 232, 240, 0.75);
       --text: #0f172a;
       --muted: #475569;
-      --border: rgba(0, 0, 0, 0.12);
+      --primary: #0284c7;
+      --border: rgba(15, 23, 42, 0.1);
+      --border-glow: rgba(2, 132, 199, 0.35);
+      --shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
     }
     * {
       box-sizing: border-box;
@@ -35,11 +47,15 @@
       font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
     body {
-      background: var(--bg);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 10%, var(--bg-glow-1), transparent 42%),
+        radial-gradient(circle at 85% 25%, var(--bg-glow-2), transparent 45%);
+      background-attachment: fixed;
       color: var(--text);
-      padding-bottom: 92px;
+      padding-bottom: 96px;
       min-height: 100vh;
-      transition: background 0.25s, color 0.25s;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     /* Top App Bar */
@@ -49,6 +65,8 @@
       align-items: center;
       padding: 12px 16px;
       background: var(--card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
@@ -62,16 +80,22 @@
       letter-spacing: 0.4px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
     }
-    .logo span { color: var(--primary); }
+    .logo span.brand-accent {
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
     .pro-tag {
-      background: linear-gradient(45deg, var(--orange), var(--purple));
-      color: #fff;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      color: #ffffff;
       font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
       font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
     }
     .top-actions { display: flex; gap: 6px; flex-wrap: wrap; }
     .chip-btn {
@@ -79,15 +103,15 @@
       color: var(--text);
       border: 1px solid var(--border);
       padding: 6px 10px;
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s ease;
     }
-    .chip-btn:hover { border-color: var(--primary); }
+    .chip-btn:hover { border-color: var(--primary); transform: translateY(-1px); }
     .chip-btn.active-chip {
-      background: rgba(59, 130, 246, 0.22);
+      background: rgba(56, 189, 248, 0.2);
       border-color: var(--primary);
       color: var(--primary);
     }
@@ -105,15 +129,15 @@
       pointer-events: none;
     }
     .toast {
-      background: var(--card);
+      background: var(--card-solid);
       color: var(--text);
       border: 1px solid var(--border);
       border-left: 4px solid var(--primary);
       padding: 10px 14px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      box-shadow: var(--shadow);
       animation: fadeToast 0.2s ease;
     }
     .toast.success { border-left-color: var(--accent); }
@@ -125,21 +149,28 @@
     }
 
     /* Main Container */
-    .container { max-width: 940px; margin: 0 auto; padding: 16px; }
-    .view-section { display: none; animation: slideUp 0.22s ease; }
+    .container { max-width: 960px; margin: 0 auto; padding: 16px; }
+    .view-section { display: none; animation: slideUp 0.24s ease; }
     .view-section.active { display: block; }
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Cards & UI */
+    /* Glassmorphic Cards */
     .card {
       background: var(--card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
       padding: 18px;
       margin-bottom: 16px;
+    }
+    .hero-card {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.18));
+      border: 1px solid rgba(99, 102, 241, 0.35);
     }
     .card-title {
       font-size: 16px;
@@ -159,51 +190,61 @@
     }
     .stat-box {
       background: var(--card);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-top: 3px solid var(--primary);
+      border-radius: 16px;
       padding: 14px;
       text-align: center;
+      box-shadow: var(--shadow);
     }
-    .stat-num { font-size: 26px; font-weight: 900; color: var(--primary); }
-    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .stat-box.s-green { border-top-color: var(--accent); }
+    .stat-box.s-purple { border-top-color: var(--purple); }
+    .stat-box.s-orange { border-top-color: var(--orange); }
+    .stat-num { font-size: 27px; font-weight: 900; color: var(--primary); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 600; }
 
     /* Buttons & Inputs */
     .btn {
       width: 100%;
-      padding: 12px;
+      padding: 12px 14px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       color: #fff;
-      background: var(--primary);
-      transition: 0.2s;
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25);
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
     }
+    .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
     .btn:active { transform: scale(0.98); }
-    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-    .btn-green { background: var(--accent); color: #032219; }
-    .btn-purple { background: var(--purple); }
-    .btn-orange { background: var(--orange); color: #1a1000; }
-    .btn-danger { background: var(--danger); }
-    .btn-outline { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
-    .btn-sm { width: auto; padding: 8px 14px; font-size: 12px; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .btn-green { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.28); }
+    .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6366f1); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.28); }
+    .btn-orange { background: linear-gradient(135deg, #f59e0b, #ea580c); color: #ffffff; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.28); }
+    .btn-danger { background: linear-gradient(135deg, #f43f5e, #e11d48); box-shadow: 0 4px 14px rgba(244, 63, 94, 0.28); }
+    .btn-outline { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); box-shadow: none; }
+    .btn-sm { width: auto; padding: 8px 14px; font-size: 12px; border-radius: 10px; }
 
     .input-box, textarea.input-box, select.input-box {
       width: 100%;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: var(--card-alt);
       color: var(--text);
       font-size: 14px;
       margin-bottom: 10px;
       outline: none;
+      transition: border-color 0.2s;
     }
+    .input-box:focus { border-color: var(--primary); }
     .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
     /* Badges */
@@ -211,11 +252,11 @@
       display: inline-block;
       font-size: 11px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(59,130,246,0.18);
+      background: rgba(56,189,248,0.16);
       color: var(--primary);
-      border: 1px solid rgba(59,130,246,0.3);
+      border: 1px solid rgba(56,189,248,0.35);
     }
     .badge-pyq {
       background: rgba(245,158,11,0.18);
@@ -232,19 +273,20 @@
     .chat-box {
       height: 360px;
       overflow-y: auto;
-      background: var(--bg);
+      background: rgba(2, 6, 23, 0.45);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 12px;
       margin-bottom: 12px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
+    body.light .chat-box { background: rgba(241, 245, 249, 0.75); }
     .msg {
       max-width: 88%;
       padding: 11px 15px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 13.5px;
       line-height: 1.55;
       white-space: pre-wrap;
@@ -253,14 +295,14 @@
     .msg.bot {
       background: var(--card-alt);
       align-self: flex-start;
-      border-bottom-left-radius: 2px;
-      border-left: 4px solid var(--orange);
+      border-bottom-left-radius: 4px;
+      border-left: 4px solid var(--primary);
     }
     .msg.user {
-      background: var(--primary);
+      background: linear-gradient(135deg, #0284c7, #6366f1);
       color: #fff;
       align-self: flex-end;
-      border-bottom-right-radius: 2px;
+      border-bottom-right-radius: 4px;
     }
     .msg code {
       background: rgba(0,0,0,0.28);
@@ -279,15 +321,15 @@
       margin-bottom: 8px;
       background: var(--card-alt);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       color: var(--text);
       font-size: 14px;
       cursor: pointer;
-      transition: 0.15s;
+      transition: all 0.15s ease;
     }
     .mcq-option:hover { border-color: var(--primary); }
     .mcq-option.selected {
-      background: rgba(59, 130, 246, 0.25);
+      background: rgba(56, 189, 248, 0.22);
       border-color: var(--primary);
       font-weight: 700;
     }
@@ -298,9 +340,9 @@
       font-weight: 700;
     }
     .mcq-option.opt-wrong {
-      background: rgba(239, 68, 68, 0.22);
+      background: rgba(244, 63, 94, 0.22);
       border-color: var(--danger);
-      color: #f87171;
+      color: #fb7185;
     }
 
     /* Question Palette Pills */
@@ -322,7 +364,7 @@
       cursor: pointer;
     }
     .q-pill.answered { background: rgba(16,185,129,0.25); border-color: var(--accent); color: var(--accent); }
-    .q-pill.current { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(59,130,246,0.35); }
+    .q-pill.current { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(56,189,248,0.35); }
 
     /* PDF & Todo Items */
     .pdf-item {
@@ -331,7 +373,7 @@
       align-items: center;
       background: var(--card-alt);
       padding: 14px;
-      border-radius: 12px;
+      border-radius: 14px;
       margin-bottom: 10px;
       border: 1px solid var(--border);
       gap: 10px;
@@ -345,7 +387,7 @@
       align-items: center;
       background: var(--card-alt);
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-bottom: 8px;
       font-size: 14px;
       gap: 10px;
@@ -357,7 +399,7 @@
       font-size: 13px;
       padding: 16px;
       border: 1px dashed var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
     }
 
     /* Alarm Banner */
@@ -366,7 +408,7 @@
       background: linear-gradient(90deg, var(--danger), var(--orange));
       color: #fff;
       padding: 12px 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       margin-bottom: 14px;
       align-items: center;
       justify-content: space-between;
@@ -379,17 +421,23 @@
       50% { opacity: 0.85; }
     }
 
-    /* Bottom Navigation Bar (6 Tabs) */
+    /* Floating Glass Bottom Bar */
     .bottom-bar {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 16px);
+      max-width: 940px;
       background: var(--card);
-      border-top: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      padding: 8px 2px;
+      padding: 8px 4px;
       z-index: 999;
     }
     .tab-btn {
@@ -401,12 +449,33 @@
       align-items: center;
       gap: 3px;
       font-size: 10.5px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       padding: 4px 2px;
+      border-radius: 10px;
+      transition: 0.2s;
     }
     .tab-btn .icon { font-size: 18px; }
-    .tab-btn.active { color: var(--primary); }
+    .tab-btn.active {
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    /* Native Offline Print-to-PDF Area (Supports Hindi + Unicode Math 100%) */
+    #printableSheet { display: none; }
+    @media print {
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+      .topbar, .bottom-bar, .container, #toastContainer, #alarmBanner { display: none !important; }
+      #printableSheet {
+        display: block !important;
+        padding: 24px;
+        color: #111;
+        font-family: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
+      }
+      #printableSheet h1 { font-size: 20px; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 12px; color: #0f172a; }
+      #printableSheet p.meta { font-size: 12px; color: #475569; margin-bottom: 16px; }
+      #printableSheet .print-block { margin-bottom: 10px; font-size: 13.5px; line-height: 1.6; page-break-inside: avoid; }
+    }
 
     @media (min-width: 650px) {
       .stats-grid { grid-template-columns: repeat(4, 1fr); }
@@ -418,12 +487,16 @@
   <!-- Toast Container -->
   <div id="toastContainer"></div>
 
-  <!-- Hidden File Input for JSON Backup Restore -->
+  <!-- Hidden File Inputs -->
   <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="handleImportBackup(event)">
+  <input type="file" id="importQPackInput" accept=".json" style="display:none;" onchange="handleImportQuestionPack(event)">
+
+  <!-- Native Print-to-PDF Container (Hindi + Unicode Math Support, 100% Offline) -->
+  <div id="printableSheet"></div>
 
   <!-- Top Navigation Bar -->
   <header class="topbar">
-    <div class="logo">ANSH.<span>STUDY</span> <span class="pro-tag">9999+ ENGINE</span></div>
+    <div class="logo">ANSH.<span class="brand-accent">STUDY</span> <span class="pro-tag">AURA PRO</span></div>
     <div class="top-actions">
       <button class="chip-btn" onclick="requestNotifPermission()" title="Enable Background Alerts">🔔 Alert</button>
       <button class="chip-btn" onclick="toggleTheme()">🌓 Theme</button>
@@ -442,11 +515,11 @@
 
     <!-- ==================== 1. HOME / DASHBOARD TAB ==================== -->
     <section id="tab-home" class="view-section active">
-      <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(139,92,246,0.18));">
+      <div class="card hero-card">
         <div class="row" style="justify-content:space-between;">
           <div>
             <h2 style="font-size: 20px; margin-bottom: 4px;">Ansh, Master Your NDA & B.Sc. 🎖️</h2>
-            <p style="font-size: 13px; color: var(--muted);">9,999+ Non-Repeating Question Engine, Pre-Trained AI & Subject Quiz</p>
+            <p style="font-size: 13px; color: var(--muted);">Zero-Repeat Combinatorial Engine, Safe Sci-Math AI & Offline Hindi PDF</p>
           </div>
           <span class="badge badge-inf" id="engineCounterBadge">♾️ 9,999+ Ready | Seen: 0</span>
         </div>
@@ -457,27 +530,27 @@
           <div class="stat-num" id="dashTasks">0</div>
           <div class="stat-label">Pending Tasks</div>
         </div>
-        <div class="stat-box">
+        <div class="stat-box s-green">
           <div class="stat-num" style="color: var(--accent);" id="dashDone">0</div>
           <div class="stat-label">Completed</div>
         </div>
-        <div class="stat-box">
+        <div class="stat-box s-purple">
           <div class="stat-num" style="color: var(--purple);" id="dashQuizScore">0</div>
           <div class="stat-label">Quiz / Mock Pts</div>
         </div>
-        <div class="stat-box">
+        <div class="stat-box s-orange">
           <div class="stat-num" style="color: var(--orange);" id="dashMins">0</div>
           <div class="stat-label">Study Mins</div>
         </div>
       </div>
 
-      <!-- Background-Accurate Pomodoro & Alarm Timer -->
+      <!-- Background-Accurate Pomodoro & Wake-Lock Timer -->
       <div class="card">
         <div class="card-title">
-          <span>⏳ Smart Focus & Background Alarm Timer</span>
+          <span>⏳ Smart Focus, Wake-Lock & Alarm Timer</span>
           <span id="pomoStatus" style="font-size: 11px; color: var(--accent);">Ready</span>
         </div>
-        <div style="text-align: center; font-size: 46px; font-weight: 900; margin: 10px 0; font-variant-numeric: tabular-nums;" id="pomoDisplay">25:00</div>
+        <div style="text-align: center; font-size: 48px; font-weight: 900; margin: 8px 0; font-variant-numeric: tabular-nums; letter-spacing: 1px;" id="pomoDisplay">25:00</div>
         
         <div class="row" style="justify-content: center; margin-bottom: 12px;">
           <button class="chip-btn" onclick="setPomo(1)">1m (Test)</button>
@@ -485,6 +558,7 @@
           <button class="chip-btn" onclick="setPomo(45)">45m</button>
           <button class="chip-btn" onclick="setPomo(60)">60m</button>
           <button class="chip-btn" onclick="playAlarmSound(true)">🔊 Test Ringtone</button>
+          <button class="chip-btn active-chip" id="wakeLockBtn" onclick="toggleWakeLockSetting()">🔒 Screen Awake: ON</button>
         </div>
 
         <div class="row">
@@ -492,6 +566,9 @@
           <button class="btn btn-outline" style="flex:1;" onclick="pausePomo()">⏸ Pause</button>
           <button class="btn btn-danger" style="flex:1;" onclick="resetPomo()">🔄 Reset</button>
         </div>
+        <p style="font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center;">
+          *Wake Lock keeps mobile screen active during focus so OS won't suspend alarm ringtone.
+        </p>
       </div>
 
       <!-- Quick Launch Card -->
@@ -509,35 +586,33 @@
     <section id="tab-ai" class="view-section">
       <div class="card">
         <div class="card-title">
-          <span>🎖️ Pre-Trained NDA & B.Sc. AI Tutor (28+ Chapters)</span>
-          <span style="font-size: 11px; color: var(--accent);" id="aiBrainCount">Brain: 0 Custom Facts</span>
+          <span>🎖️ Pre-Trained NDA & Scientific Math AI Tutor</span>
+          <span style="font-size: 11px; color: var(--accent);" id="aiBrainCount">Brain: 0 Facts</span>
         </div>
         <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">
-          AI ab <b>NDA Maths, Physics, Chemistry, Biology, Polity, History, Geography, English & B.Sc. PCM</b> par pre-trained hai! Naya fact sikhane ke liye <b>"learn: sawal = jawab"</b> likhein.
+          Ab AI chat mein <b><code>sin(30)</code>, <code>cos(60)</code>, <code>sqrt(144)</code>, <code>log(100)</code></b> jaise scientific math expressions bhi solve hote hain! Naya fact sikhane ke liye <b><code>learn: sawal = jawab</code></b> likhein.
         </p>
 
         <div class="row" style="margin-bottom: 10px;">
           <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
           <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices</button>
           <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus</button>
-          <button class="chip-btn" onclick="askMasterAI('complex numbers')">🌀 Complex</button>
-          <button class="chip-btn" onclick="askMasterAI('vectors')">↗️ Vectors</button>
+          <button class="chip-btn" onclick="askMasterAI('trigonometry')">📐 Trigonometry</button>
           <button class="chip-btn" onclick="askMasterAI('physics')">⚡ Physics</button>
           <button class="chip-btn" onclick="askMasterAI('chemistry')">🧪 Chemistry</button>
           <button class="chip-btn" onclick="askMasterAI('polity')">🏛️ Polity</button>
-          <button class="chip-btn" onclick="askMasterAI('history')">📜 History</button>
-          <button class="chip-btn" onclick="askMasterAI('nda strategy')">🎯 Strategy</button>
+          <button class="chip-btn" onclick="askMasterAI('sin(30) + sqrt(16)')">🧮 sin(30)+sqrt(16)</button>
         </div>
 
         <div class="chat-box" id="aiChatBox">
-          <div class="msg bot">Namaste Ansh! Main ab **28+ NDA & B.Sc. PCM Chapters** par pre-trained hoon.
-1️⃣ Mujhse koi bhi topic puchein: **Sets, Complex Numbers, Quadratics, PnC, Binomial, Matrices, Calculus, Vectors, 3D, Optics, Electricity, Chemistry, Biology, Polity, History, Geography, Defence GK, B.Sc. Real Analysis**.
-2️⃣ Math expression solve karwayein (jaise: <code>(25*4) + 18/2</code>).
+          <div class="msg bot">Namaste Ansh! Main **28+ NDA & B.Sc. PCM Chapters** aur **Scientific Math Parser** ke saath ready hoon.
+1️⃣ Koi bhi chapter puchein: **Sets, Complex, Quadratics, PnC, Matrices, Calculus, Vectors, Physics, Chemistry, Biology, Polity, History, Geography, Defence**.
+2️⃣ Scientific Math solve karwayein: <code>sin(30) + cos(60)</code>, <code>sqrt(225) * 2</code>, <code>log(1000)</code>.
 3️⃣ Naya gyan sikhayein: <code>learn: topic = answer</code>.</div>
         </div>
 
         <div class="row">
-          <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Koi bhi NDA/B.Sc. topic puchein ya 'learn: topic = answer' likhein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
+          <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Chapter puchein, 'sin(30)+sqrt(16)' solve karein, ya 'learn: ...' likhein" onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
           <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
         </div>
       </div>
@@ -545,18 +620,18 @@
       <!-- Learned Knowledge Manager -->
       <div class="card">
         <div class="card-title">
-          <span>🧠 AI Pre-Trained & Custom Brain Manager</span>
+          <span>🧠 AI Brain Manager</span>
           <span style="font-size:11px; color:var(--muted);">Manage saved facts</span>
         </div>
         <div id="learnedBrainList"></div>
       </div>
     </section>
 
-    <!-- ==================== 3. 9,999+ NON-REPEATING MOCK TEST ARENA ==================== -->
+    <!-- ==================== 3. COMBINATORIAL & PROCEDURAL MOCK TEST ARENA ==================== -->
     <section id="tab-mock" class="view-section">
       <div class="card">
         <div class="card-title">
-          <span>📝 NDA 9,999+ Non-Repeating Mock Test Arena</span>
+          <span>📝 NDA 9,999+ Combinatorial Mock Test Arena</span>
           <div class="row">
             <span id="mockTimerBadge" style="font-size: 12px; color: var(--orange); font-weight: 800;">⏱ 00:00</span>
             <button class="chip-btn" onclick="resetSeenQuestions()" title="Reset history of seen questions">🔄 Reset Seen (<span id="seenCountInline">0</span>)</button>
@@ -566,7 +641,7 @@
         <!-- Subject & Mode Selector -->
         <div id="mockSetup">
           <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">
-            ♾️ <b>Zero-Repeat Engine:</b> Har question ka unique hash track hota hai, isliye ek baar aaya hua question dubara repeat nahi hoga!
+            ♾️ <b>UPSC NDA Pattern Engine:</b> Maths numericals ke alawa ab GK, Polity, History, Science & English mein bhi <b>Statement-I/II</b>, <b>Match Pairs</b> & <b>Odd-One-Out</b> combinatorial templates se thousands of unique questions bante hain!
           </p>
 
           <div class="row" style="margin-bottom: 12px;">
@@ -596,8 +671,9 @@
             <button class="btn btn-purple" onclick="startMockTest('gk')">🌍 GAT GK, Polity & Eng</button>
             <button class="btn btn-orange" onclick="startMockTest('full')">🎖️ Full NDA Mixed</button>
           </div>
-          <div style="margin-top:10px;">
-            <button class="btn btn-outline" onclick="startMockTest('pyq')">📜 Dedicated NDA Previous Year Papers (Maths + GAT PYQs)</button>
+          <div class="row" style="margin-top:10px;">
+            <button class="btn btn-outline" style="flex:2;" onclick="startMockTest('pyq')">📜 Dedicated NDA Previous Year Papers</button>
+            <button class="btn btn-outline" style="flex:1;" onclick="document.getElementById('importQPackInput').click()">📥 Import Q-Pack JSON</button>
           </div>
         </div>
 
@@ -611,8 +687,8 @@
 
           <div class="q-palette" id="mockPalette"></div>
 
-          <div style="background: var(--bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px;">
-            <h3 id="mockQuestionText" style="font-size: 15.5px; line-height: 1.55; margin-bottom: 14px;">Question text...</h3>
+          <div style="background: rgba(2,6,23,0.35); padding: 16px; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 12px;">
+            <h3 id="mockQuestionText" style="font-size: 15.5px; line-height: 1.55; margin-bottom: 14px; white-space: pre-line;">Question text...</h3>
             <div id="mockOptionsContainer"></div>
           </div>
           <div class="row">
@@ -626,7 +702,7 @@
         </div>
 
         <!-- Result Area -->
-        <div id="mockResultArea" style="display: none; text-align: center; padding: 14px; background: var(--bg); border-radius: 12px;">
+        <div id="mockResultArea" style="display: none; text-align: center; padding: 14px; background: rgba(2,6,23,0.35); border-radius: 14px;">
           <h3 style="font-size: 20px; color: var(--accent); margin-bottom: 8px;">🏆 Mock Test Scorecard</h3>
           <p id="mockScoreSummary" style="font-size: 14px; line-height: 1.7; margin-bottom: 14px;"></p>
           <div id="mockReviewList" style="text-align: left; max-height: 300px; overflow-y: auto; margin-bottom: 14px; font-size: 13px;"></div>
@@ -638,59 +714,73 @@
       </div>
     </section>
 
-    <!-- ==================== 4. PDF BOOKS TAB ==================== -->
+    <!-- ==================== 4. PDF BOOKS TAB (ONLINE + OFFLINE HINDI VECTOR PDF) ==================== -->
     <section id="tab-pdf" class="view-section">
       <div class="card">
-        <div class="card-title">📚 Detailed Pathfinder, PYQ & B.Sc. Master PDFs</div>
+        <div class="card-title">📚 Pathfinder, PYQ & Offline Hindi+Math PDFs</div>
         <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
-          Ek click mein comprehensive formulas, PYQ digest aur notes ki real PDF download karein:
+          <b>🖨️ Native Vector PDF</b> 100% offline kaam karta hai aur <b>Hindi Devanagari + Math Symbols (θ, π, √, ∫)</b> ko bina gayab hue crisp print/PDF mein save karta hai!
         </p>
 
         <div class="pdf-item">
           <div class="pdf-info">
-            <h4>🎖️ NDA Pathfinder Maths Complete Notes (PDF)</h4>
+            <h4>🎖️ NDA Pathfinder Maths Complete Notes</h4>
             <p>Probability, Matrices, Calculus, Trigonometry, Vectors & Short Tricks</p>
           </div>
-          <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Download PDF</button>
+          <div class="row">
+            <button class="btn btn-green btn-sm" onclick="printNativePDF('nda_pathfinder_math')">🖨️ Hindi/Math PDF (Offline)</button>
+            <button class="btn btn-outline btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Quick jsPDF</button>
+          </div>
         </div>
 
         <div class="pdf-item">
           <div class="pdf-info">
-            <h4>📜 NDA Previous Year Questions (PYQ) Solved Digest (PDF)</h4>
+            <h4>📜 NDA Previous Year Questions (PYQ) Solved Digest</h4>
             <p>All curated Maths & GAT PYQs (2019–2025) with Answers & Explanations</p>
           </div>
-          <button class="btn btn-orange btn-sm" onclick="generateRealPDF('nda_pyq_digest')">⬇ Download PDF</button>
+          <div class="row">
+            <button class="btn btn-orange btn-sm" onclick="printNativePDF('nda_pyq_digest')">🖨️ Hindi/Math PDF (Offline)</button>
+            <button class="btn btn-outline btn-sm" onclick="generateRealPDF('nda_pyq_digest')">⬇ Quick jsPDF</button>
+          </div>
         </div>
 
         <div class="pdf-item">
           <div class="pdf-info">
-            <h4>🌍 NDA GAT Science & World Geography Book (PDF)</h4>
+            <h4>🌍 NDA GAT Science & World Geography Book</h4>
             <p>Physics Formulas, Chemistry Laws, Indian Polity & World Organizations</p>
           </div>
-          <button class="btn btn-purple btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Download PDF</button>
+          <div class="row">
+            <button class="btn btn-purple btn-sm" onclick="printNativePDF('nda_gat_world')">🖨️ Hindi/Math PDF (Offline)</button>
+            <button class="btn btn-outline btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Quick jsPDF</button>
+          </div>
         </div>
 
         <div class="pdf-item">
           <div class="pdf-info">
-            <h4>🎓 B.Sc. PCM Semester Comprehensive Guide (PDF)</h4>
+            <h4>🎓 B.Sc. PCM Semester Comprehensive Guide</h4>
             <p>Mechanics, Differential Equations, Real Analysis & Organic Chemistry</p>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Download PDF</button>
+          <div class="row">
+            <button class="btn btn-primary btn-sm" onclick="printNativePDF('bsc_pcm')">🖨️ Hindi/Math PDF (Offline)</button>
+            <button class="btn btn-outline btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Quick jsPDF</button>
+          </div>
         </div>
 
         <div class="pdf-item">
           <div class="pdf-info">
-            <h4>🧠 My AI Self-Learned Notes & Saved Notes (PDF)</h4>
-            <p>Aapke dwara AI ko sikhaye gaye facts aur saved notes ki personal PDF</p>
+            <h4>🧠 My AI Learned Brain & Hindi Voice Notes</h4>
+            <p>Aapke Hindi voice notes aur custom AI facts ki 100% crisp Hindi-supported PDF</p>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="generateRealPDF('personal_ai_notes')">⬇ Export PDF</button>
+          <div class="row">
+            <button class="btn btn-green btn-sm" onclick="printNativePDF('personal_ai_notes')">🖨️ Save Hindi PDF (Offline)</button>
+            <button class="btn btn-outline btn-sm" onclick="generateRealPDF('personal_ai_notes')">⬇ Quick jsPDF</button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ==================== 5. SELECTED SUBJECT QUIZ + SPEED MATH ARENA ==================== -->
     <section id="tab-quiz" class="view-section">
-      <!-- Mode Switcher -->
       <div class="card">
         <div class="card-title">
           <span>🎯 Quiz Arena (Selected Subject + Speed Math)</span>
@@ -702,7 +792,7 @@
           <button class="btn btn-outline btn-sm" id="tabBtnSpeedQuiz" style="flex:1;" onclick="switchQuizSubMode('speed')">🧮 Speed Math Numeric</button>
         </div>
 
-        <!-- A. NEW FEATURE: SELECTED SUBJECT QUIZ -->
+        <!-- A. SELECTED SUBJECT QUIZ -->
         <div id="subjectQuizPanel">
           <div class="row" style="margin-bottom: 12px;">
             <div style="flex:1; min-width: 220px;">
@@ -724,12 +814,12 @@
             </div>
           </div>
 
-          <div style="background: var(--bg); padding: 16px; border-radius: 14px; border: 1px solid var(--border);">
+          <div style="background: rgba(2,6,23,0.35); padding: 16px; border-radius: 14px; border: 1px solid var(--border);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:8px; flex-wrap:wrap;">
               <span id="subQuizTag" class="badge badge-inf">♾️ Unique Question</span>
               <button class="chip-btn" onclick="loadNextSubjectQuizQuestion()">Next Fresh Q ➔</button>
             </div>
-            <h3 id="subQuizQuestion" style="font-size: 16px; line-height: 1.55; margin-bottom: 14px;">Loading...</h3>
+            <h3 id="subQuizQuestion" style="font-size: 16px; line-height: 1.55; margin-bottom: 14px; white-space: pre-line;">Loading...</h3>
             <div id="subQuizOptions"></div>
             <div id="subQuizFeedback" style="display:none; margin-top:12px; padding:12px; border-radius:10px; font-size:13.5px; line-height:1.5;"></div>
           </div>
@@ -744,7 +834,7 @@
             <button class="btn btn-purple btn-sm" id="btnLvlHard" style="flex:1;" onclick="startQuiz('hard')">🔴 Hard (NDA Infinite)</button>
           </div>
 
-          <div style="background: var(--bg); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
+          <div style="background: rgba(2,6,23,0.35); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
             <div style="font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;" id="qModeLabel">MODE: EASY</div>
             <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px; min-height: 54px; display:flex; align-items:center; justify-content:center;" id="qText">Loading...</div>
             <input type="text" inputmode="decimal" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Numeric Answer likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
@@ -782,7 +872,7 @@
 
   </main>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Floating Glass Bottom Navigation Bar -->
   <nav class="bottom-bar">
     <button class="tab-btn active" data-tab="home" onclick="switchTab('home', this)"><span class="icon">🏠</span>Home</button>
     <button class="tab-btn" data-tab="ai" onclick="switchTab('ai', this)"><span class="icon">🎖️</span>Smart AI</button>
@@ -794,7 +884,7 @@
 
   <script>
     // ================= SAFE STORAGE & APP STATE =================
-    const STORAGE_KEY = 'ansh_master_pro_v4';
+    const STORAGE_KEY = 'ansh_master_pro_v5';
     const DEFAULT_STATE = {
       tasks: [
         { text: "Solve NDA Pathfinder Probability Chapter (50 Qs)", done: false },
@@ -813,6 +903,7 @@
         "indian air force motto": "Touch the Sky with Glory (Nabhah Sprsham Diptam).",
         "indian navy motto": "Sham No Varunah (May the Lord of the Water be auspicious unto us)."
       },
+      customQuestions: [],
       seenHashes: [],
       quizScore: 0,
       quizStreak: 0,
@@ -821,7 +912,7 @@
 
     function loadAppData() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ansh_master_pro_v3') || localStorage.getItem('ansh_master_pro_v2');
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ansh_master_pro_v4') || localStorage.getItem('ansh_master_pro_v3');
         if (!raw) return structuredClone(DEFAULT_STATE);
         const parsed = JSON.parse(raw);
         return {
@@ -830,6 +921,7 @@
           learnedKnowledge: (parsed.learnedKnowledge && typeof parsed.learnedKnowledge === 'object' && !Array.isArray(parsed.learnedKnowledge))
             ? { ...DEFAULT_STATE.learnedKnowledge, ...parsed.learnedKnowledge }
             : structuredClone(DEFAULT_STATE.learnedKnowledge),
+          customQuestions: Array.isArray(parsed.customQuestions) ? parsed.customQuestions : [],
           seenHashes: Array.isArray(parsed.seenHashes) ? parsed.seenHashes.slice(-4000) : [],
           quizScore: Number.isFinite(Number(parsed.quizScore)) ? Number(parsed.quizScore) : 0,
           quizStreak: Number.isFinite(Number(parsed.quizStreak)) ? Number(parsed.quizStreak) : 0,
@@ -876,7 +968,7 @@
     function resetSeenQuestions() {
       seenSet.clear();
       syncData();
-      showToast("Seen question history reset! All 9,999+ questions fresh again.", "success");
+      showToast("Seen question history reset! All questions fresh again.", "success");
     }
 
     function switchTab(tabId, btnEl) {
@@ -904,13 +996,38 @@
       document.body.classList.toggle('light');
     }
 
-    // ================= BACKGROUND-ACCURATE POMODORO + RINGTONE + NOTIFICATIONS =================
+    // ================= BACKGROUND-ACCURATE POMODORO + WAKE LOCK + ALARM =================
     let pomoDurationSec = 25 * 60;
     let pomoRemainingSec = 25 * 60;
     let pomoEndTime = null;
     let pomoInterval = null;
     let audioCtx = null;
     let alarmLoopInterval = null;
+    let keepScreenAwake = true;
+    let wakeLockSentinel = null;
+
+    async function acquireWakeLock() {
+      if (!keepScreenAwake || !('wakeLock' in navigator)) return;
+      try {
+        wakeLockSentinel = await navigator.wakeLock.request('screen');
+      } catch (e) {}
+    }
+
+    function releaseWakeLock() {
+      if (wakeLockSentinel) {
+        try { wakeLockSentinel.release(); } catch (e) {}
+        wakeLockSentinel = null;
+      }
+    }
+
+    function toggleWakeLockSetting() {
+      keepScreenAwake = !keepScreenAwake;
+      const btn = document.getElementById('wakeLockBtn');
+      btn.textContent = keepScreenAwake ? '🔒 Screen Awake: ON' : '🔓 Screen Awake: OFF';
+      btn.className = keepScreenAwake ? 'chip-btn active-chip' : 'chip-btn';
+      if (!keepScreenAwake) releaseWakeLock();
+      else if (pomoInterval) acquireWakeLock();
+    }
 
     function unlockAudio() {
       try {
@@ -951,12 +1068,13 @@
     function startPomo() {
       if (pomoInterval) return;
       unlockAudio();
+      acquireWakeLock();
       if (pomoRemainingSec <= 0) pomoRemainingSec = pomoDurationSec;
       if ("Notification" in window && Notification.permission === "default") {
         try { Notification.requestPermission().catch(() => {}); } catch (e) {}
       }
       pomoEndTime = Date.now() + (pomoRemainingSec * 1000);
-      document.getElementById('pomoStatus').innerText = "🔥 Focusing (Background Active)...";
+      document.getElementById('pomoStatus').innerText = "🔥 Focusing (Wake-Lock Active)...";
 
       pomoInterval = setInterval(() => {
         const left = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
@@ -967,6 +1085,7 @@
           clearInterval(pomoInterval);
           pomoInterval = null;
           pomoEndTime = null;
+          releaseWakeLock();
           const completedMins = Math.max(1, Math.round(pomoDurationSec / 60));
           appData.studyMins += completedMins;
           syncData();
@@ -986,6 +1105,7 @@
           pomoRemainingSec = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
         }
         pomoEndTime = null;
+        releaseWakeLock();
         document.getElementById('pomoStatus').innerText = "⏸ Paused";
         updatePomoDisplay(pomoRemainingSec);
       }
@@ -1051,38 +1171,71 @@
     }
 
     document.addEventListener("visibilitychange", () => {
-      if (!document.hidden && pomoInterval && pomoEndTime) {
-        const left = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
-        pomoRemainingSec = left;
-        updatePomoDisplay(left);
+      if (!document.hidden && pomoInterval) {
+        acquireWakeLock();
+        if (pomoEndTime) {
+          const left = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
+          pomoRemainingSec = left;
+          updatePomoDisplay(left);
+        }
       }
     });
 
-    // ================= PRE-TRAINED SELF-LEARNING SMART AI ENGINE (28+ CHAPTERS) =================
+    // ================= PRE-TRAINED AI + WHITELISTED SCIENTIFIC MATH PARSER =================
     const builtInKnowledge = [
-      { keys: ['sets', 'relation', 'function', 'venn'], ans: "🔢 **Sets, Relations & Functions (NDA Maths):**\n• Number of subsets of a set with n elements = 2ⁿ (proper subsets = 2ⁿ - 1).\n• n(A ∪ B) = n(A) + n(B) - n(A ∩ B).\n• Total relations from A (m) to B (n) = 2^(mn).\n• Reflexive: (a,a)∈R | Symmetric: (a,b)⇒(b,a) | Transitive: (a,b),(b,c)⇒(a,c)." },
-      { keys: ['complex', 'iota', 'argand', 'modulus', 'omega'], ans: "🌀 **Complex Numbers (NDA Maths):**\n• i² = -1, i³ = -i, i⁴ = 1. Sum of 4 consecutive powers of i = 0.\n• Cube roots of unity (1, ω, ω²): 1 + ω + ω² = 0 and ω³ = 1.\n• Modulus |z| = √(x² + y²), |z₁z₂| = |z₁||z₂|.\n• Euler's form: e^(iθ) = cos θ + i sin θ." },
-      { keys: ['quadratic', 'roots', 'discriminant'], ans: "📈 **Quadratic Equations (NDA Maths):**\n• For ax² + bx + c = 0: α + β = -b/a, αβ = c/a.\n• Discriminant D = b² - 4ac: D > 0 (real & distinct), D = 0 (equal), D < 0 (imaginary).\n• If a + b + c = 0, then x = 1 and x = c/a are roots." },
-      { keys: ['sequence', 'series', 'ap', 'gp', 'hp', 'progression'], ans: "📊 **Sequences & Series (AP, GP, HP):**\n• AP: Tₙ = a + (n-1)d | Sₙ = (n/2)[2a + (n-1)d].\n• GP: Tₙ = ar^(n-1) | S_∞ = a / (1 - r) for |r| < 1.\n• AM ≥ GM ≥ HM and GM² = AM × HM." },
-      { keys: ['permutation', 'combination', 'pnc', 'factorial', 'diagonals'], ans: "🔀 **Permutations & Combinations:**\n• ⁿPᵣ = n! / (n-r)! | ⁿCᵣ = n! / [r!(n-r)!].\n• ⁿCᵣ = ⁿC_(n-r) | ⁿCₓ = ⁿCᵧ ⇒ x = y or x + y = n.\n• Circular permutations of n objects = (n - 1)! (Necklace = (n-1)!/2).\n• Diagonals in n-gon = n(n-3)/2." },
-      { keys: ['binomial', 'expansion', 'middle term'], ans: "📦 **Binomial Theorem:**\n• (x + y)ⁿ = Σ ⁿCᵣ x^(n-r) y^r, Total terms = n + 1.\n• Sum of all binomial coefficients = 2ⁿ.\n• Sum of even = Sum of odd coefficients = 2^(n-1)." },
-      { keys: ['logarithm', 'log'], ans: "🪵 **Logarithms:**\n• log_a(xy) = log_a(x) + log_a(y) | log_a(x/y) = log_a(x) - log_a(y).\n• Base change: log_b(a) = log(a) / log(b).\n• log_a(1) = 0, log_a(a) = 1." },
-      { keys: ['matrices', 'matrix', 'determinant', 'adjoint', 'skew'], ans: "🔲 **Matrices & Determinants:**\n• Skew-symmetric matrix of odd order has |A| = 0; all diagonal elements = 0.\n• A · adj(A) = |A| · I | |adj(A)| = |A|^(n-1).\n• (AB)⁻¹ = B⁻¹ · A⁻¹ | (A')⁻¹ = (A⁻¹)'." },
-      { keys: ['trigonometry', 'sin', 'cos', 'tan', 'height', 'distance'], ans: "📐 **Trigonometry Formulas:**\n• sin 2θ = 2tanθ/(1+tan²θ) | cos 2θ = (1-tan²θ)/(1+tan²θ).\n• Max value of a sinθ + b cosθ = √(a² + b²).\n• sin⁻¹x + cos⁻¹x = π/2 | tan⁻¹x + cot⁻¹x = π/2." },
-      { keys: ['straight line', 'circle', 'parabola', 'ellipse', 'hyperbola', 'conic', 'coordinate'], ans: "📍 **Coordinate Geometry & Conics:**\n• Distance = √[(x₂-x₁)² + (y₂-y₁)²] | Perpendicular lines: m₁m₂ = -1.\n• Parabola y² = 4ax (e = 1, latus rectum = 4a).\n• Ellipse (e < 1): b² = a²(1 - e²) | Hyperbola (e > 1): b² = a²(e² - 1).\n• Rectangular Hyperbola eccentricity e = √2." },
-      { keys: ['vector', '3d', 'plane', 'dot', 'cross'], ans: "↗️ **Vectors & 3D Geometry:**\n• a · b = |a||b|cosθ (0 if perpendicular).\n• |a × b| = |a||b|sinθ (Area of parallelogram; ½|a×b| = Area of triangle).\n• Direction cosines: l² + m² + n² = 1." },
-      { keys: ['limit', 'continuity', 'differentiation', 'derivative', 'calculus', 'integration', 'integral', 'differential'], ans: "∫ **Calculus (Limits, Derivatives, Integrals, DE):**\n• lim(x→0) sin(kx)/x = k | lim(x→0) (e^(kx)-1)/x = k.\n• ∫ e^x [f(x) + f'(x)] dx = e^x f(x) + C.\n• ∫₀^(π/2) sinⁿx / (sinⁿx + cosⁿx) dx = π/4.\n• Order of DE = highest derivative; Degree = power of highest derivative (when polynomial)." },
-      { keys: ['probability', 'bayes', 'variance', 'mean', 'statistics'], ans: "🎲 **Probability & Statistics:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B).\n• Independent events: P(A ∩ B) = P(A)P(B).\n• Binomial: Mean = np, Variance = npq (Always Mean > Variance).\n• Correlation coeff r ∈ [-1, 1]; independent of change of origin & scale." },
-      { keys: ['physics', 'optics', 'motion', 'ohm', 'gravity', 'sound', 'lens', 'mirror', 'work', 'energy'], ans: "⚡ **NDA GAT Physics:**\n• Escape Velocity = 11.2 km/s | Orbital Velocity = 7.92 km/s.\n• Mirror: 1/f = 1/v + 1/u | Lens: 1/f = 1/v - 1/u | Power P = 100/f(cm) Dioptre.\n• Ohm's Law: V = IR | Power P = VI = I²R = V²/R.\n• Sound is longitudinal & cannot travel in vacuum." },
-      { keys: ['chemistry', 'acid', 'base', 'ph', 'periodic', 'alloy', 'baking', 'washing'], ans: "🧪 **NDA GAT Chemistry:**\n• Baking Soda: NaHCO₃ | Washing Soda: Na₂CO₃·10H₂O | Bleaching Powder: CaOCl₂.\n• Brass = Cu + Zn | Bronze = Cu + Sn | Solder = Pb + Sn.\n• Vinegar = Acetic acid | Ant sting = Formic acid | Lemon = Citric acid.\n• pH = -log[H⁺]; pH 7 is neutral, <7 acidic, >7 basic." },
-      { keys: ['biology', 'vitamin', 'cell', 'blood', 'disease', 'mitochondria'], ans: "🧬 **NDA GAT Biology:**\n• Mitochondria = Powerhouse of cell | Ribosome = Protein factory | Lysosome = Suicidal bag.\n• Vit A (Night Blindness), Vit B1 (Beriberi), Vit C (Scurvy), Vit D (Rickets).\n• Universal Donor blood group = O⁻ | Universal Recipient = AB⁺." },
-      { keys: ['polity', 'constitution', 'article', 'parliament', 'fundamental', 'president', 'amendment'], ans: "🏛️ **Indian Polity (NDA GAT):**\n• Art 1: Union of States | Art 17: Abolition of Untouchability | Art 21: Right to Life | Art 32: Heart & Soul (Writs).\n• Art 368: Constitutional Amendment | 42nd Amend (1976): Mini Constitution | 61st Amend: Voting age 21→18.\n• Lok Sabha min age: 25 yrs | Rajya Sabha: 30 yrs | President: 35 yrs." },
-      { keys: ['history', 'freedom', 'gandhi', 'battle', 'plassey', 'mughal', 'indus', 'congress'], ans: "📜 **Indian History (NDA GAT):**\n• Battle of Plassey (1757) | Battle of Buxar (1764) | Revolt of 1857.\n• INC founded 1885 (A.O. Hume, W.C. Bonnerjee).\n• Non-Cooperation (1920), Civil Disobedience/Dandi March (1930), Quit India (1942).\n• Lothal (dockyard) & Kalibangan (ploughed field) are Indus Valley sites." },
-      { keys: ['geography', 'river', 'tropic', 'strait', 'monsoon', 'planet', 'pass'], ans: "🌍 **Geography (NDA GAT):**\n• Tropic of Cancer passes through 8 Indian states.\n• Palk Strait separates India & Sri Lanka | 10° Channel separates Andaman & Nicobar.\n• Godavari = Dakshin Ganga | Narmada & Tapi flow west into Arabian Sea.\n• Zoji La (J&K/Ladakh), Nathu La (Sikkim), Shipki La (Himachal)." },
-      { keys: ['defence', 'missile', 'command', 'exercise', 'rank', 'cds'], ans: "🎖️ **Defence & Armed Forces GK:**\n• Army Commands (7): HQ Western (Chandimandir), Northern (Udhampur), Southern (Pune), Eastern (Kolkata), Central (Lucknow), SW (Jaipur), ARTRAC (Shimla).\n• Equivalent Ranks: Major = Sqn Ldr = Lt Cdr | Colonel = Group Capt = Captain (Navy).\n• Exercises: Yudh Abhyas (USA), Garuda/Shakti (France), Indra (Russia), Malabar (Quad)." },
-      { keys: ['bsc', 'real analysis', 'mechanics', 'euler', 'rolle', 'cauchy', 'coriolis'], ans: "🎓 **B.Sc. PCM Core Notes:**\n• Euler's Theorem: x(∂u/∂x) + y(∂u/∂y) = n·u.\n• Moment of Inertia: Solid Sphere = (2/5)MR² | Disc = (1/2)MR² | Ring = MR².\n• Coriolis Force: F_c = -2m(ω × v)." },
-      { keys: ['strategy', 'tips', 'cutoff', 'marks'], ans: "🎖️ **NDA Exam Strategy (Pathfinder Plan):**\n• **Maths (300 Marks):** 120 Qs (+2.5 / -0.83). Target 65+ accurate Qs.\n• **GAT (600 Marks):** 150 Qs (+4 / -1.33). English (200) + Science & GS (400).\n• **Golden Rule:** Accuracy > Guesswork!" }
+      { keys: ['sets', 'relation', 'function', 'venn'], ans: "🔢 **Sets, Relations & Functions (NDA Maths):**\n• Subsets of n elements = 2ⁿ (proper = 2ⁿ - 1).\n• n(A ∪ B) = n(A) + n(B) - n(A ∩ B).\n• Total relations from A (m) to B (n) = 2^(mn)." },
+      { keys: ['complex', 'iota', 'argand', 'modulus', 'omega'], ans: "🌀 **Complex Numbers (NDA Maths):**\n• i² = -1, i³ = -i, i⁴ = 1. Sum of 4 consecutive powers of i = 0.\n• Cube roots of unity: 1 + ω + ω² = 0 and ω³ = 1.\n• Modulus |z| = √(x² + y²)." },
+      { keys: ['quadratic', 'roots', 'discriminant'], ans: "📈 **Quadratic Equations:**\n• ax² + bx + c = 0 ⇒ α + β = -b/a, αβ = c/a.\n• D = b² - 4ac: D > 0 (real distinct), D = 0 (equal), D < 0 (imaginary)." },
+      { keys: ['sequence', 'series', 'ap', 'gp', 'hp', 'progression'], ans: "📊 **Sequences & Series:**\n• AP: Tₙ = a + (n-1)d | Sₙ = (n/2)[2a + (n-1)d].\n• GP: Tₙ = ar^(n-1) | S_∞ = a / (1 - r) for |r| < 1.\n• AM ≥ GM ≥ HM and GM² = AM × HM." },
+      { keys: ['permutation', 'combination', 'pnc', 'factorial', 'diagonals'], ans: "🔀 **Permutations & Combinations:**\n• ⁿPᵣ = n! / (n-r)! | ⁿCᵣ = n! / [r!(n-r)!].\n• Diagonals in n-gon = n(n-3)/2 | Handshakes = n(n-1)/2." },
+      { keys: ['binomial', 'expansion', 'middle term'], ans: "📦 **Binomial Theorem:**\n• (x + y)ⁿ = Σ ⁿCᵣ x^(n-r) y^r, Total terms = n + 1.\n• Sum of all coefficients = 2ⁿ." },
+      { keys: ['logarithm', 'log'], ans: "🪵 **Logarithms:**\n• log_a(xy) = log_a(x) + log_a(y) | Base change: log_b(a) = log(a)/log(b)." },
+      { keys: ['matrices', 'matrix', 'determinant', 'adjoint', 'skew'], ans: "🔲 **Matrices & Determinants:**\n• Skew-symmetric matrix of odd order has |A| = 0.\n• A · adj(A) = |A| · I | |adj(A)| = |A|^(n-1).\n• (AB)⁻¹ = B⁻¹ · A⁻¹." },
+      { keys: ['trigonometry', 'sin', 'cos', 'tan', 'height', 'distance'], ans: "📐 **Trigonometry Formulas:**\n• sin 2θ = 2tanθ/(1+tan²θ) | cos 2θ = (1-tan²θ)/(1+tan²θ).\n• Max value of a sinθ + b cosθ = √(a² + b²)." },
+      { keys: ['straight line', 'circle', 'parabola', 'ellipse', 'hyperbola', 'conic', 'coordinate'], ans: "📍 **Coordinate Geometry & Conics:**\n• Perpendicular lines: m₁m₂ = -1.\n• Rectangular Hyperbola eccentricity e = √2." },
+      { keys: ['vector', '3d', 'plane', 'dot', 'cross'], ans: "↗️ **Vectors & 3D Geometry:**\n• a · b = |a||b|cosθ (0 if perpendicular).\n• Direction cosines: l² + m² + n² = 1." },
+      { keys: ['limit', 'continuity', 'differentiation', 'derivative', 'calculus', 'integration', 'integral', 'differential'], ans: "∫ **Calculus:**\n• lim(x→0) sin(kx)/x = k | lim(x→0) (e^(kx)-1)/x = k.\n• ∫₀^(π/2) sinⁿx / (sinⁿx + cosⁿx) dx = π/4." },
+      { keys: ['probability', 'bayes', 'variance', 'mean', 'statistics'], ans: "🎲 **Probability & Statistics:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B).\n• Binomial: Mean = np, Variance = npq (Always Mean > Variance)." },
+      { keys: ['physics', 'optics', 'motion', 'ohm', 'gravity', 'sound', 'lens', 'mirror', 'work', 'energy'], ans: "⚡ **NDA GAT Physics:**\n• Escape Velocity = 11.2 km/s | Lens Power P = 100/f(cm) D.\n• Ohm's Law: V = IR | KE = ½mv² | PE = mgh." },
+      { keys: ['chemistry', 'acid', 'base', 'ph', 'periodic', 'alloy', 'baking', 'washing'], ans: "🧪 **NDA GAT Chemistry:**\n• Baking Soda: NaHCO₃ | Washing Soda: Na₂CO₃·10H₂O | Brass = Cu + Zn.\n• Vinegar = Acetic acid | Ant sting = Formic acid." },
+      { keys: ['biology', 'vitamin', 'cell', 'blood', 'disease', 'mitochondria'], ans: "🧬 **NDA GAT Biology:**\n• Mitochondria = Powerhouse | Vit A (Night Blindness), Vit C (Scurvy), Vit D (Rickets)." },
+      { keys: ['polity', 'constitution', 'article', 'parliament', 'fundamental', 'president', 'amendment'], ans: "🏛️ **Indian Polity:**\n• Art 1: Union of States | Art 17: Untouchability | Art 21: Life | Art 32: Writs | Art 368: Amendment." },
+      { keys: ['history', 'freedom', 'gandhi', 'battle', 'plassey', 'mughal', 'indus', 'congress'], ans: "📜 **Indian History:**\n• Plassey (1757), Buxar (1764), Revolt (1857), INC (1885), Quit India (1942)." },
+      { keys: ['geography', 'river', 'tropic', 'strait', 'monsoon', 'planet', 'pass'], ans: "🌍 **Geography:**\n• Tropic of Cancer passes through 8 Indian states. Palk Strait separates India & Sri Lanka." },
+      { keys: ['defence', 'missile', 'command', 'exercise', 'rank', 'cds'], ans: "🎖️ **Defence GK:**\n• 7 Army Commands | Exercises: Yudh Abhyas (USA), Garuda (France), Indra (Russia)." },
+      { keys: ['bsc', 'real analysis', 'mechanics', 'euler', 'rolle', 'cauchy', 'coriolis'], ans: "🎓 **B.Sc. PCM Core:**\n• Euler's Theorem: x(∂u/∂x) + y(∂u/∂y) = n·u.\n• Solid Sphere MOI = (2/5)MR²." },
+      { keys: ['strategy', 'tips', 'cutoff', 'marks'], ans: "🎖️ **NDA Exam Strategy:**\n• Maths (300): +2.5 / -0.83 | GAT (600): +4 / -1.33. Accuracy > Guesswork!" }
     ];
+
+    function evaluateSafeScientificMath(expr) {
+      const cleaned = expr.toLowerCase().trim().replace(/\s+/g, '');
+      // Must contain at least one digit and only allowed math characters/identifiers
+      if (!/[0-9]/.test(cleaned)) return null;
+      const stripped = cleaned.replace(/\b(sin|cos|tan|sqrt|log|ln|abs|pow|pi|e)\b/g, '');
+      if (/[^0-9+\-*/().,%^]/.test(stripped)) return null;
+
+      // Replace whitelisted functions/constants safely
+      const jsExpr = cleaned
+        .replace(/\^/g, '**')
+        .replace(/\bpi\b/g, 'Math.PI')
+        .replace(/\be\b/g, 'Math.E')
+        .replace(/\bsin\(/g, '((x)=>Math.sin(x*Math.PI/180))(')
+        .replace(/\bcos\(/g, '((x)=>Math.cos(x*Math.PI/180))(')
+        .replace(/\btan\(/g, '((x)=>Math.tan(x*Math.PI/180))(')
+        .replace(/\bsqrt\(/g, 'Math.sqrt(')
+        .replace(/\blog\(/g, 'Math.log10(')
+        .replace(/\bln\(/g, 'Math.log(')
+        .replace(/\babs\(/g, 'Math.abs(')
+        .replace(/\bpow\(/g, 'Math.pow(');
+
+      try {
+        const val = Function('"use strict";return (' + jsExpr + ')')();
+        if (typeof val === 'number' && Number.isFinite(val)) {
+          return Number(val.toFixed(6));
+        }
+      } catch (e) {}
+      return null;
+    }
 
     function escapeHTML(str) {
       return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
@@ -1162,16 +1315,11 @@
         }
       }
 
-      // 2. Safe Math Expression Evaluator
-      if (/^[0-9+\-*/().%\s^]+$/.test(q)) {
-        try {
-          const sanitized = q.replace(/\^/g, '**');
-          const result = Function('"use strict";return (' + sanitized + ')')();
-          if (typeof result === 'number' && Number.isFinite(result)) {
-            appendBotMsg(`🧮 **Calculation Result:**\n\`${q}\` = **${Number(result.toFixed(6))}**`);
-            return;
-          }
-        } catch (e) {}
+      // 2. Whitelisted Scientific Math Evaluator (sin, cos, tan, sqrt, log, etc.)
+      const mathRes = evaluateSafeScientificMath(q);
+      if (mathRes !== null) {
+        appendBotMsg(`🧮 **Scientific Calculation (Deg Mode):**\n\`${q}\` = **${mathRes}**`);
+        return;
       }
 
       // 3. Check User-Trained / Pre-Seeded Memory
@@ -1262,7 +1410,7 @@
       ]
     };
 
-    // ================= 9,999+ COMBINATORIAL & PROCEDURAL ENGINE =================
+    // ================= DOMAIN-CLAMPED & COMBINATORIAL QUESTION ENGINE =================
     function randInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -1270,17 +1418,36 @@
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    function buildNumericOptions(correctVal, suffix = "", step = 1) {
-      const set = new Set([String(correctVal) + suffix]);
-      const offsets = [-4, -3, -2, -1, 1, 2, 3, 4, 5, -5, 6, -6];
+    // Fix 2: Domain-clamped option builder (never generates negative diagonals or invalid probabilities!)
+    function buildNumericOptions(correctVal, suffix = "", step = 1, limits = {}) {
+      const minVal = limits.minVal !== undefined ? limits.minVal : -Infinity;
+      const maxVal = limits.maxVal !== undefined ? limits.maxVal : Infinity;
+      const integerOnly = Boolean(limits.integerOnly);
+
+      const formatNum = (v) => integerOnly ? Math.round(v) : Number(v.toFixed(2));
+      const cleanCorrect = formatNum(correctVal);
+      const set = new Set([String(cleanCorrect) + suffix]);
+
+      let mult = 1;
       let guard = 0;
-      while (set.size < 4 && guard < 50) {
+      const baseOffsets = [-3, -2, -1, 1, 2, 3, 4, -4, 5, 6];
+      while (set.size < 4 && guard < 80) {
         guard++;
-        const delta = pickRandom(offsets) * step;
-        const candidate = Number((correctVal + delta).toFixed(2));
-        set.add(String(candidate) + suffix);
+        if (guard % 15 === 0) mult++;
+        const delta = pickRandom(baseOffsets) * step * mult;
+        const cand = formatNum(cleanCorrect + delta);
+        if (cand >= minVal && cand <= maxVal && cand !== cleanCorrect) {
+          set.add(String(cand) + suffix);
+        }
       }
-      return { opts: Array.from(set), correctText: String(correctVal) + suffix };
+      // Fallback upward if minVal blocked negative offsets
+      let up = cleanCorrect + step;
+      while (set.size < 4) {
+        const cand = formatNum(up);
+        if (cand >= minVal && cand <= maxVal) set.add(String(cand) + suffix);
+        up += step;
+      }
+      return { opts: Array.from(set).slice(0, 4), correctText: String(cleanCorrect) + suffix };
     }
 
     function buildCategoricalOptions(correctAns, poolValues) {
@@ -1293,7 +1460,7 @@
       return { opts: Array.from(set), correctText: correctAns };
     }
 
-    // --- 1. INFINITE MATHS GENERATOR (BY CHAPTER) ---
+    // --- 1. INFINITE MATHS GENERATOR (DOMAIN CLAMPED) ---
     function genMathsBySub(subFilter = 'any') {
       const subMap = {
         maths_calculus: [2, 3, 4, 13, 14],
@@ -1310,28 +1477,28 @@
         const a = randInt(1, 12), b = randInt(-8, 9), c = randInt(-8, 9), d = randInt(1, 12);
         const det = a * d - b * c;
         q = `Find the determinant of 2×2 matrix [[${a}, ${b}], [${c}, ${d}]].`;
-        ({ opts, correctText } = buildNumericOptions(det));
+        ({ opts, correctText } = buildNumericOptions(det, "", 1, { integerOnly: true }));
         exp = `|A| = (${a})(${d}) - (${b})(${c}) = ${det}.`;
       } else if (tpl === 2) {
         sub = "maths_calculus";
         const a = randInt(2, 9), n = randInt(2, 5), k = randInt(1, 4);
         const ans = a * n * Math.pow(k, n - 1);
         q = `If f(x) = ${a}x^${n}, find f'(${k}).`;
-        ({ opts, correctText } = buildNumericOptions(ans, "", 2));
+        ({ opts, correctText } = buildNumericOptions(ans, "", 2, { minVal: 1, integerOnly: true }));
         exp = `f'(x) = ${a*n}x^${n-1} ⇒ f'(${k}) = ${ans}.`;
       } else if (tpl === 3) {
         sub = "maths_calculus";
         const a = randInt(1, 6), b = randInt(1, 5);
         const ans = a * b * b * b;
         q = `Evaluate ∫₀^${b} (${3 * a}x²) dx.`;
-        ({ opts, correctText } = buildNumericOptions(ans, "", 2));
+        ({ opts, correctText } = buildNumericOptions(ans, "", 2, { minVal: 1, integerOnly: true }));
         exp = `[${a}x³]₀^${b} = ${ans}.`;
       } else if (tpl === 4) {
         sub = "maths_calculus";
         const b = randInt(1, 8), k = randInt(2, 12);
         const a = b * k;
         q = `Evaluate: lim (x → 0) [ sin(${a}x) / (${b}x) ]`;
-        ({ opts, correctText } = buildNumericOptions(k));
+        ({ opts, correctText } = buildNumericOptions(k, "", 1, { minVal: 1, integerOnly: true }));
         exp = `lim sin(ax)/(bx) = a/b = ${a}/${b} = ${k}.`;
       } else if (tpl === 5) {
         sub = "maths_trig_vec";
@@ -1339,35 +1506,35 @@
         const x2 = randInt(1, 7), y2 = randInt(1, 6), z2 = randInt(-5, 6);
         const dot = x1 * x2 + y1 * y2 + z1 * z2;
         q = `Find dot product a·b for a = ${x1}i + (${y1})j + ${z1}k and b = ${x2}i + ${y2}j + (${z2})k.`;
-        ({ opts, correctText } = buildNumericOptions(dot));
+        ({ opts, correctText } = buildNumericOptions(dot, "", 1, { integerOnly: true }));
         exp = `a·b = ${x1*x2} + (${y1*y2}) + (${z1*z2}) = ${dot}.`;
       } else if (tpl === 6) {
         sub = "maths_prob_pnc";
         const n = randInt(5, 16);
         const diag = (n * (n - 3)) / 2;
         q = `How many diagonals does a convex polygon with ${n} sides have?`;
-        ({ opts, correctText } = buildNumericOptions(diag));
+        ({ opts, correctText } = buildNumericOptions(diag, "", 1, { minVal: 1, integerOnly: true }));
         exp = `Diagonals = n(n - 3)/2 = ${n}(${n-3})/2 = ${diag}.`;
       } else if (tpl === 7) {
         sub = "maths_algebra";
         const r1 = randInt(1, 9), r2 = randInt(1, 9);
         const sum = r1 + r2, prod = r1 * r2, ans = r1 * r1 + r2 * r2;
         q = `If α, β are roots of x² - ${sum}x + ${prod} = 0, find α² + β².`;
-        ({ opts, correctText } = buildNumericOptions(ans, "", 2));
+        ({ opts, correctText } = buildNumericOptions(ans, "", 2, { minVal: 2, integerOnly: true }));
         exp = `α² + β² = (α+β)² - 2αβ = ${sum*sum} - ${2*prod} = ${ans}.`;
       } else if (tpl === 8) {
         sub = "maths_prob_pnc";
         const a = randInt(2, 15), d = randInt(2, 9), n = randInt(8, 25);
         const tn = a + (n - 1) * d;
         q = `In an AP with first term a = ${a} and common difference d = ${d}, find the ${n}th term.`;
-        ({ opts, correctText } = buildNumericOptions(tn, "", 2));
+        ({ opts, correctText } = buildNumericOptions(tn, "", 2, { minVal: 1, integerOnly: true }));
         exp = `T_n = ${a} + (${n-1})×${d} = ${tn}.`;
       } else if (tpl === 9) {
         sub = "maths_algebra";
         const k = randInt(1, 5);
         const [re, im, mod] = pickRandom([[3*k,4*k,5*k],[5*k,12*k,13*k],[8*k,15*k,17*k]]);
         q = `Find the modulus |z| of complex number z = ${re} + ${im}i.`;
-        ({ opts, correctText } = buildNumericOptions(mod));
+        ({ opts, correctText } = buildNumericOptions(mod, "", 1, { minVal: 1, integerOnly: true }));
         exp = `|z| = √(${re}² + ${im}²) = ${mod}.`;
       } else if (tpl === 10) {
         sub = "maths_prob_pnc";
@@ -1375,69 +1542,60 @@
         const pb = pickRandom([0.2, 0.3, 0.4, 0.5, 0.6]);
         const ans = Number((pa + pb - pa * pb).toFixed(2));
         q = `If A and B are independent events with P(A) = ${pa} and P(B) = ${pb}, find P(A ∪ B).`;
-        const set = new Set([String(ans)]);
-        [0.1, -0.1, 0.12, -0.08, 0.05].forEach(d => {
-          const c = Number((ans + d).toFixed(2));
-          if (c > 0 && c <= 1) set.add(String(c));
-        });
-        while (set.size < 4) set.add(String(Number((Math.random() * 0.9 + 0.05).toFixed(2))));
-        opts = Array.from(set).slice(0, 4);
-        correctText = String(ans);
+        ({ opts, correctText } = buildNumericOptions(ans, "", 0.05, { minVal: 0.05, maxVal: 1.0 }));
         exp = `P(A∪B) = ${pa} + ${pb} - ${(pa*pb).toFixed(2)} = ${ans}.`;
       } else if (tpl === 11) {
         sub = "maths_algebra";
         const base = randInt(2, 7), k = randInt(2, 4), m = randInt(1, 5);
         const val = Math.pow(base, k);
         q = `Evaluate: log_${base}(${val}) + ${m}·log_${base}(${base})`;
-        ({ opts, correctText } = buildNumericOptions(k + m));
+        ({ opts, correctText } = buildNumericOptions(k + m, "", 1, { minVal: 1, integerOnly: true }));
         exp = `${k} + ${m}(1) = ${k + m}.`;
       } else if (tpl === 12) {
         sub = "maths_trig_vec";
         const k = randInt(1, 4);
         const [a, b, m] = pickRandom([[3*k,4*k,5*k],[5*k,12*k,13*k],[8*k,15*k,17*k]]);
         q = `Find the maximum value of f(θ) = ${a} sin θ + ${b} cos θ.`;
-        ({ opts, correctText } = buildNumericOptions(m));
+        ({ opts, correctText } = buildNumericOptions(m, "", 1, { minVal: 1, integerOnly: true }));
         exp = `Max value = √(${a}² + ${b}²) = ${m}.`;
       } else if (tpl === 13) {
         sub = "maths_calculus";
-        const a = randInt(2, 12), b = randInt(1, 9);
-        const ans = a;
+        const a = randInt(2, 12);
         q = `Evaluate: lim (x → 0) [ (e^(${a}x) - 1) / x ]`;
-        ({ opts, correctText } = buildNumericOptions(ans));
+        ({ opts, correctText } = buildNumericOptions(a, "", 1, { minVal: 1, integerOnly: true }));
         exp = `lim (e^(ax)-1)/x = a = ${a}.`;
       } else if (tpl === 14) {
         sub = "maths_calculus";
         const a = randInt(2, 9), b = randInt(1, 8), x = randInt(1, 5);
         const ans = 2 * a * x + b;
         q = `Find dy/dx at x = ${x} for y = ${a}x² + ${b}x + 7.`;
-        ({ opts, correctText } = buildNumericOptions(ans, "", 2));
+        ({ opts, correctText } = buildNumericOptions(ans, "", 2, { minVal: 1, integerOnly: true }));
         exp = `dy/dx = ${2*a}x + ${b}. At x = ${x}, value = ${ans}.`;
       } else if (tpl === 15) {
         sub = "maths_algebra";
         const n = randInt(3, 8);
         const ans = Math.pow(2, n);
         q = `A set A has ${n} elements. How many total subsets does A have?`;
-        ({ opts, correctText } = buildNumericOptions(ans, "", 2));
+        ({ opts, correctText } = buildNumericOptions(ans, "", 2, { minVal: 2, integerOnly: true }));
         exp = `Total subsets = 2^n = 2^${n} = ${ans}.`;
       } else if (tpl === 16) {
         sub = "maths_algebra";
         const n = randInt(4, 9);
         const ans = Math.pow(2, n);
         q = `Find the sum of all binomial coefficients in the expansion of (1 + x)^${n}.`;
-        ({ opts, correctText } = buildNumericOptions(ans, "", 2));
+        ({ opts, correctText } = buildNumericOptions(ans, "", 2, { minVal: 2, integerOnly: true }));
         exp = `Put x = 1 ⇒ (1 + 1)^${n} = 2^${n} = ${ans}.`;
       } else if (tpl === 17) {
         sub = "maths_trig_vec";
         const x1 = randInt(1, 8), y1 = randInt(1, 8), x2 = x1 + randInt(1, 5), y2 = y1 + randInt(1, 5);
         const slope = Number(((y2 - y1) / (x2 - x1)).toFixed(2));
         q = `Find the slope of the line passing through (${x1}, ${y1}) and (${x2}, ${y2}).`;
-        ({ opts, correctText } = buildNumericOptions(slope, "", 0.5));
+        ({ opts, correctText } = buildNumericOptions(slope, "", 0.5, { minVal: 0.1 }));
         exp = `Slope m = (${y2}-${y1})/(${x2}-${x1}) = ${slope}.`;
       } else if (tpl === 18) {
         sub = "maths_trig_vec";
         const a = randInt(2, 9), c = randInt(2, 6);
-        const b = 1;
-        q = `If vectors (${a}i + λj) and (${b}i - ${c}j) are perpendicular, find λ.`;
+        q = `If vectors (${a}i + λj) and (i - ${c}j) are perpendicular, find λ.`;
         const ans = Number((a / c).toFixed(2));
         ({ opts, correctText } = buildNumericOptions(ans, "", 0.5));
         exp = `Dot product = 0 ⇒ ${a}(1) - ${c}λ = 0 ⇒ λ = ${a}/${c} = ${ans}.`;
@@ -1446,21 +1604,21 @@
         const n = randInt(6, 15);
         const ans = (n * (n - 1)) / 2;
         q = `In a party of ${n} persons, everyone shakes hands with everyone else once. Total handshakes?`;
-        ({ opts, correctText } = buildNumericOptions(ans, "", 2));
+        ({ opts, correctText } = buildNumericOptions(ans, "", 2, { minVal: 1, integerOnly: true }));
         exp = `${n}C2 = ${n}(${n-1})/2 = ${ans}.`;
       } else {
         sub = "maths_prob_pnc";
         const n = randInt(10, 40), p = pickRandom([0.2, 0.4, 0.5, 0.6]);
         const mean = Number((n * p).toFixed(1));
         q = `A binomial distribution has n = ${n} trials and probability of success p = ${p}. Find its Mean.`;
-        ({ opts, correctText } = buildNumericOptions(mean, "", 1));
+        ({ opts, correctText } = buildNumericOptions(mean, "", 1, { minVal: 1 }));
         exp = `Mean = np = ${n} × ${p} = ${mean}.`;
       }
 
       return { q, opts, correctText, exp, tag: "♾️ 9,999+ NDA Maths", cat: "maths", sub };
     }
 
-    // --- 2. INFINITE SCIENCE GENERATOR (NUMERICALS + COMBINATORIAL FACT MATRIX) ---
+    // --- 2. INFINITE SCIENCE GENERATOR (NUMERICALS + STATEMENT/MATCH COMBINATORIAL) ---
     const sciPhysicsFacts = [
       ["Electric Current", "Ampere (A)"], ["Electric Charge", "Coulomb (C)"], ["Potential Difference", "Volt (V)"],
       ["Electrical Resistance", "Ohm (Ω)"], ["Power of Lens", "Dioptre (D)"], ["Force", "Newton (N)"],
@@ -1486,6 +1644,52 @@
       ["Iodine Deficiency", "Goitre"], ["Iron Deficiency", "Anaemia"]
     ];
 
+    function buildCombinatorialFactQuestion(dataset, labelPrefix, cat, sub) {
+      const pattern = randInt(1, 3);
+      if (pattern === 1) {
+        // Direct MCQ
+        const [a, b] = pickRandom(dataset);
+        const q = `${labelPrefix}: "${a}" is correctly associated with which of the following?`;
+        const { opts, correctText } = buildCategoricalOptions(b, dataset.map(x => x[1]));
+        return { q, opts, correctText, exp: `${a} → ${b}.`, tag: `♾️ Combinatorial ${sub}`, cat, sub };
+      } else if (pattern === 2) {
+        // "Which pair is NOT correctly matched?" (nC4 combinations!)
+        const shuffled = [...dataset].sort(() => Math.random() - 0.5).slice(0, 4);
+        const wrongIdx = randInt(0, 3);
+        const wrongOther = shuffled[(wrongIdx + 1) % 4][1];
+        const pairs = shuffled.map((item, idx) => idx === wrongIdx ? `${item[0]} — ${wrongOther}` : `${item[0]} — ${item[1]}`);
+        const q = `Which one of the following pairs is NOT correctly matched?`;
+        return {
+          q,
+          opts: pairs,
+          correctText: pairs[wrongIdx],
+          exp: `Incorrect match: ${shuffled[wrongIdx][0]} actually corresponds to ${shuffled[wrongIdx][1]} (not ${wrongOther}).`,
+          tag: `♾️ NDA Odd-Pair ${sub}`,
+          cat,
+          sub
+        };
+      } else {
+        // UPSC Statement-I & Statement-II style (nC2 combinations!)
+        const shuffled = [...dataset].sort(() => Math.random() - 0.5).slice(0, 3);
+        const s1True = Math.random() < 0.5;
+        const s2True = Math.random() < 0.5;
+        const stmt1 = s1True ? `${shuffled[0][0]} → ${shuffled[0][1]}` : `${shuffled[0][0]} → ${shuffled[2][1]}`;
+        const stmt2 = s2True ? `${shuffled[1][0]} → ${shuffled[1][1]}` : `${shuffled[1][0]} → ${shuffled[2][1]}`;
+        const q = `Consider the following statements:\n1. ${stmt1}\n2. ${stmt2}\nWhich of the statements given above is/are correct?`;
+        const opts = ["1 only", "2 only", "Both 1 and 2", "Neither 1 nor 2"];
+        const correctText = (s1True && s2True) ? "Both 1 and 2" : s1True ? "1 only" : s2True ? "2 only" : "Neither 1 nor 2";
+        return {
+          q,
+          opts,
+          correctText,
+          exp: `Fact 1: ${shuffled[0][0]} = ${shuffled[0][1]} | Fact 2: ${shuffled[1][0]} = ${shuffled[1][1]}.`,
+          tag: `♾️ UPSC Statement ${sub}`,
+          cat,
+          sub
+        };
+      }
+    }
+
     function genScienceBySub(subFilter = 'any') {
       const wantPhysics = subFilter === 'sci_physics' || (subFilter === 'any' && Math.random() < 0.55);
       if (wantPhysics) {
@@ -1495,13 +1699,13 @@
           const I = randInt(2, 15), R = randInt(2, 20);
           const V = I * R;
           q = `A current of ${I} A flows through a resistor of ${R} Ω. Calculate the Voltage across it.`;
-          ({ opts, correctText } = buildNumericOptions(V, " V", 2));
+          ({ opts, correctText } = buildNumericOptions(V, " V", 2, { minVal: 1, integerOnly: true }));
           exp = `V = I × R = ${I} × ${R} = ${V} V.`;
         } else if (mode === 2) {
           const m = randInt(2, 14) * 2, v = randInt(2, 12);
           const ke = 0.5 * m * v * v;
           q = `An object of mass ${m} kg moves with velocity ${v} m/s. Find its Kinetic Energy.`;
-          ({ opts, correctText } = buildNumericOptions(ke, " J", 4));
+          ({ opts, correctText } = buildNumericOptions(ke, " J", 4, { minVal: 1, integerOnly: true }));
           exp = `KE = ½mv² = 0.5 × ${m} × ${v}² = ${ke} J.`;
         } else if (mode === 3) {
           const fCm = pickRandom([10, 20, 25, 40, 50, -10, -20, -25, -50]);
@@ -1513,154 +1717,98 @@
           const r1 = pickRandom([4, 6, 8, 12, 24]), r2 = pickRandom([4, 6, 8, 12, 24]);
           const eq = Number(((r1 * r2) / (r1 + r2)).toFixed(2));
           q = `Two resistors of ${r1} Ω and ${r2} Ω are connected in parallel. Find equivalent resistance.`;
-          ({ opts, correctText } = buildNumericOptions(eq, " Ω", 1));
+          ({ opts, correctText } = buildNumericOptions(eq, " Ω", 1, { minVal: 0.5 }));
           exp = `R_eq = (${r1}×${r2})/(${r1}+${r2}) = ${eq} Ω.`;
         } else if (mode === 5) {
           const f = randInt(10, 80) * 10, lam = randInt(2, 9);
           const v = f * lam;
           q = `A wave has frequency ${f} Hz and wavelength ${lam} m. Calculate its speed.`;
-          ({ opts, correctText } = buildNumericOptions(v, " m/s", 50));
+          ({ opts, correctText } = buildNumericOptions(v, " m/s", 50, { minVal: 50, integerOnly: true }));
           exp = `v = f × λ = ${f} × ${lam} = ${v} m/s.`;
         } else if (mode === 6) {
           const m = randInt(2, 20), h = randInt(3, 25);
           const pe = m * 10 * h;
           q = `Find Potential Energy of a ${m} kg body raised to height ${h} m (g = 10 m/s²).`;
-          ({ opts, correctText } = buildNumericOptions(pe, " J", 20));
+          ({ opts, correctText } = buildNumericOptions(pe, " J", 20, { minVal: 10, integerOnly: true }));
           exp = `PE = mgh = ${m} × 10 × ${h} = ${pe} J.`;
         } else if (mode === 7) {
           const u = randInt(2, 15), a = randInt(2, 8), t = randInt(2, 10);
           const v = u + a * t;
           q = `A body starts with initial velocity ${u} m/s and accelerates at ${a} m/s² for ${t} s. Final velocity?`;
-          ({ opts, correctText } = buildNumericOptions(v, " m/s", 2));
+          ({ opts, correctText } = buildNumericOptions(v, " m/s", 2, { minVal: 1, integerOnly: true }));
           exp = `v = u + at = ${u} + ${a}×${t} = ${v} m/s.`;
         } else {
-          const [qty, unit] = pickRandom(sciPhysicsFacts);
-          const allUnits = sciPhysicsFacts.map(x => x[1]);
-          q = `What is the SI unit of ${qty}?`;
-          ({ opts, correctText } = buildCategoricalOptions(unit, allUnits));
-          exp = `The SI unit of ${qty} is ${unit}.`;
+          return buildCombinatorialFactQuestion(sciPhysicsFacts, "SI Unit Check", "science", "sci_physics");
         }
         return { q, opts, correctText, exp, tag: "♾️ 9,999+ GAT Physics", cat: "science", sub: "sci_physics" };
       } else {
-        const mode = randInt(1, 3);
-        let q = "", opts = [], correctText = "", exp = "";
-        if (mode === 1) {
-          const [name, formula] = pickRandom(sciChemFacts);
-          const pool = sciChemFacts.map(x => x[1]);
-          q = `What is the chemical formula of ${name}?`;
-          ({ opts, correctText } = buildCategoricalOptions(formula, pool));
-          exp = `${name} has chemical formula ${formula}.`;
-        } else if (mode === 2) {
-          const [src, acid] = pickRandom(sciAcidFacts);
-          const pool = sciAcidFacts.map(x => x[1]);
-          q = `Which acid is naturally found in ${src}?`;
-          ({ opts, correctText } = buildCategoricalOptions(acid, pool));
-          exp = `${src} contains ${acid}.`;
-        } else {
-          const [vit, dis] = pickRandom(sciVitFacts);
-          const pool = sciVitFacts.map(x => x[1]);
-          q = `Deficiency of ${vit} causes which condition?`;
-          ({ opts, correctText } = buildCategoricalOptions(dis, pool));
-          exp = `Deficiency of ${vit} leads to ${dis}.`;
-        }
-        return { q, opts, correctText, exp, tag: "♾️ 9,999+ GAT Chem/Bio", cat: "science", sub: "sci_chem_bio" };
+        const pool = pickRandom([sciChemFacts, sciAcidFacts, sciVitFacts]);
+        return buildCombinatorialFactQuestion(pool, "NDA Science", "science", "sci_chem_bio");
       }
     }
 
-    // --- 3. INFINITE GK, POLITY, HISTORY, GEOGRAPHY, DEFENCE & ENGLISH ENGINE ---
+    // --- 3. COMBINATORIAL GK, POLITY, HISTORY, GEOGRAPHY, DEFENCE & ENGLISH ---
     const gkPolityData = [
       ["Article 1", "India as a Union of States"], ["Article 14", "Equality before Law"],
       ["Article 17", "Abolition of Untouchability"], ["Article 19", "Freedom of Speech & Expression"],
-      ["Article 21", "Protection of Life & Personal Liberty"], ["Article 21A", "Right to Free & Compulsory Education"],
-      ["Article 32", "Constitutional Remedies (Writs)"], ["Article 40", "Organization of Village Panchayats"],
+      ["Article 21", "Protection of Life & Personal Liberty"], ["Article 21A", "Right to Free Education"],
+      ["Article 32", "Constitutional Remedies (Writs)"], ["Article 40", "Village Panchayats"],
       ["Article 44", "Uniform Civil Code (UCC)"], ["Article 51A", "Fundamental Duties"],
       ["Article 72", "Pardoning Power of President"], ["Article 110", "Definition of Money Bill"],
       ["Article 280", "Finance Commission"], ["Article 324", "Election Commission of India"],
       ["Article 352", "National Emergency"], ["Article 356", "President's Rule in States"],
-      ["Article 360", "Financial Emergency"], ["Article 368", "Amendment of the Constitution"]
+      ["Article 360", "Financial Emergency"], ["Article 368", "Amendment of Constitution"]
     ];
     const gkHistoryData = [
-      ["Battle of Plassey", "1757"], ["Battle of Buxar", "1764"], ["First War of Independence (Revolt)", "1857"],
-      ["Formation of Indian National Congress", "1885"], ["Partition of Bengal", "1905"],
-      ["Jallianwala Bagh Massacre", "1919"], ["Non-Cooperation Movement Launch", "1920"],
-      ["Chauri Chaura Incident", "1922"], ["Dandi March (Civil Disobedience)", "1930"],
+      ["Battle of Plassey", "1757"], ["Battle of Buxar", "1764"], ["First War of Independence", "1857"],
+      ["Formation of INC", "1885"], ["Partition of Bengal", "1905"],
+      ["Jallianwala Bagh Massacre", "1919"], ["Non-Cooperation Movement", "1920"],
+      ["Chauri Chaura Incident", "1922"], ["Dandi March", "1930"],
       ["Quit India Movement", "1942"], ["Third Battle of Panipat", "1761"]
     ];
     const gkGeoDefData = [
-      ["World Health Organization (WHO)", "Geneva, Switzerland"], ["UNESCO", "Paris, France"],
-      ["United Nations (UN)", "New York, USA"], ["World Bank & IMF", "Washington D.C., USA"],
-      ["International Court of Justice (ICJ)", "The Hague, Netherlands"], ["NATO", "Brussels, Belgium"],
+      ["WHO Headquarters", "Geneva, Switzerland"], ["UNESCO Headquarters", "Paris, France"],
+      ["UN Headquarters", "New York, USA"], ["World Bank & IMF", "Washington D.C., USA"],
+      ["ICJ (World Court)", "The Hague, Netherlands"], ["NATO Headquarters", "Brussels, Belgium"],
       ["ISRO Headquarters", "Bengaluru, India"], ["DRDO Headquarters", "New Delhi, India"],
-      ["NDA (National Defence Academy)", "Khadakwasla, Pune"], ["IMA (Indian Military Academy)", "Dehradun"],
-      ["Indian Naval Academy (INA)", "Ezhimala, Kerala"], ["Air Force Academy (AFA)", "Dundigal, Hyderabad"]
-    ];
-    const gkRiversData = [
-      ["Godavari", "Dakshin Ganga / Vridha Ganga"], ["Kosi", "Sorrow of Bihar"],
-      ["Damodar", "Sorrow of Bengal"], ["Brahmaputra", "Tsangpo in Tibet"],
-      ["Narmada", "West-flowing rift valley river"], ["Luni", "Inland river of Rajasthan"]
+      ["NDA Academy", "Khadakwasla, Pune"], ["IMA Academy", "Dehradun"],
+      ["Indian Naval Academy", "Ezhimala, Kerala"], ["Air Force Academy", "Dundigal, Hyderabad"]
     ];
     const engVocabData = [
       ["ABUNDANT", "Plentiful", "Scarce"], ["CANDID", "Frank & Honest", "Deceitful"],
       ["DILIGENT", "Hardworking", "Lazy"], ["EPHEMERAL", "Short-lived", "Eternal"],
       ["FRUGAL", "Economical / Thrifty", "Extravagant"], ["GREGARIOUS", "Sociable", "Reclusive"],
       ["HARMONY", "Agreement", "Discord"], ["INEVITABLE", "Unavoidable", "Preventable"],
-      ["JUBILANT", "Overjoyed", "Sorrowful"], ["LUCID", "Clear & Easy to understand", "Obscure"],
+      ["JUBILANT", "Overjoyed", "Sorrowful"], ["LUCID", "Clear & Understandable", "Obscure"],
       ["MITIGATE", "Lessen / Alleviate", "Aggravate"], ["OBSOLETE", "Outdated", "Modern"],
-      ["PRUDENT", "Wise & Cautious", "Reckless"], ["RESILIENT", "Tough & Recovering quickly", "Fragile"],
+      ["PRUDENT", "Wise & Cautious", "Reckless"], ["RESILIENT", "Tough & Quick to recover", "Fragile"],
       ["TENACIOUS", "Persistent / Determined", "Yielding"], ["VIGILANT", "Watchful / Alert", "Careless"]
     ];
 
     function genGKBySub(subFilter = 'any') {
+      if (appData.customQuestions && appData.customQuestions.length > 0 && Math.random() < 0.25) {
+        return pickRandom(appData.customQuestions);
+      }
       const target = subFilter === 'any'
         ? pickRandom(['gk_polity_hist', 'gk_geo_def', 'eng_vocab'])
         : subFilter;
 
-      let q = "", opts = [], correctText = "", exp = "";
-
       if (target === 'gk_polity_hist') {
-        if (Math.random() < 0.6) {
-          const [art, desc] = pickRandom(gkPolityData);
-          if (Math.random() < 0.5) {
-            q = `Which Article of the Indian Constitution deals with "${desc}"?`;
-            ({ opts, correctText } = buildCategoricalOptions(art, gkPolityData.map(x => x[0])));
-            exp = `${art} deals with ${desc}.`;
-          } else {
-            q = `${art} of the Indian Constitution is associated with which provision?`;
-            ({ opts, correctText } = buildCategoricalOptions(desc, gkPolityData.map(x => x[1])));
-            exp = `${art} provides for ${desc}.`;
-          }
-        } else {
-          const [evt, yr] = pickRandom(gkHistoryData);
-          q = `In which year did "${evt}" take place?`;
-          ({ opts, correctText } = buildCategoricalOptions(yr, gkHistoryData.map(x => x[1])));
-          exp = `${evt} occurred in ${yr}.`;
-        }
-        return { q, opts, correctText, exp, tag: "♾️ 9,999+ Polity/History", cat: "gk", sub: "gk_polity_hist" };
+        const pool = Math.random() < 0.6 ? gkPolityData : gkHistoryData;
+        return buildCombinatorialFactQuestion(pool, "NDA Polity & History", "gk", "gk_polity_hist");
       } else if (target === 'gk_geo_def') {
-        if (Math.random() < 0.65) {
-          const [org, loc] = pickRandom(gkGeoDefData);
-          q = `Where is ${org} located?`;
-          ({ opts, correctText } = buildCategoricalOptions(loc, gkGeoDefData.map(x => x[1])));
-          exp = `${org} is located at ${loc}.`;
-        } else {
-          const [riv, title] = pickRandom(gkRiversData);
-          q = `Which Indian river is famously known as "${title}"?`;
-          ({ opts, correctText } = buildCategoricalOptions(riv, gkRiversData.map(x => x[0])));
-          exp = `${riv} is known as ${title}.`;
-        }
-        return { q, opts, correctText, exp, tag: "♾️ 9,999+ Geo/Defence", cat: "gk", sub: "gk_geo_def" };
+        return buildCombinatorialFactQuestion(gkGeoDefData, "NDA Geo & Defence", "gk", "gk_geo_def");
       } else {
         const [word, syn, ant] = pickRandom(engVocabData);
         if (Math.random() < 0.5) {
-          q = `Choose the SYNONYM (similar meaning) of the word: "${word}"`;
-          ({ opts, correctText } = buildCategoricalOptions(syn, engVocabData.map(x => x[1])));
-          exp = `Synonym of ${word} is ${syn} (Antonym: ${ant}).`;
+          const q = `Choose the SYNONYM of "${word}":`;
+          const { opts, correctText } = buildCategoricalOptions(syn, engVocabData.map(x => x[1]));
+          return { q, opts, correctText, exp: `Synonym of ${word} is ${syn} (Antonym: ${ant}).`, tag: "♾️ English GAT", cat: "gk", sub: "eng_vocab" };
         } else {
-          q = `Choose the ANTONYM (opposite meaning) of the word: "${word}"`;
-          ({ opts, correctText } = buildCategoricalOptions(ant, engVocabData.map(x => x[2])));
-          exp = `Antonym of ${word} is ${ant} (Synonym: ${syn}).`;
+          const q = `Choose the ANTONYM of "${word}":`;
+          const { opts, correctText } = buildCategoricalOptions(ant, engVocabData.map(x => x[2]));
+          return { q, opts, correctText, exp: `Antonym of ${word} is ${ant} (Synonym: ${syn}).`, tag: "♾️ English GAT", cat: "gk", sub: "eng_vocab" };
         }
-        return { q, opts, correctText, exp, tag: "♾️ 9,999+ English GAT", cat: "gk", sub: "eng_vocab" };
       }
     }
 
@@ -1672,24 +1820,20 @@
         opts: shuffledOpts,
         ans: shuffledOpts.indexOf(correctText),
         exp: raw.exp,
-        tag: raw.tag,
-        cat: raw.cat,
-        sub: raw.sub
+        tag: raw.tag || "Custom Pack",
+        cat: raw.cat || "gk",
+        sub: raw.sub || "gk_polity_hist"
       };
     }
 
     function fetchUniqueQuestion(generatorFn, sessionSeen) {
       let fallback = null;
-      for (let attempt = 0; attempt < 45; attempt++) {
-        const raw = generatorFn();
-        const item = normalizeAndShuffleItem(raw);
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const item = normalizeAndShuffleItem(generatorFn());
         fallback = item;
-        if (!sessionSeen.has(item.q) && !seenSet.has(item.q)) {
-          return item;
-        }
+        if (!sessionSeen.has(item.q) && !seenSet.has(item.q)) return item;
       }
-      // If all static items in a narrow filter were seen, still avoid repeating within current session
-      for (let attempt = 0; attempt < 20; attempt++) {
+      for (let attempt = 0; attempt < 25; attempt++) {
         const item = normalizeAndShuffleItem(generatorFn());
         if (!sessionSeen.has(item.q)) return item;
       }
@@ -1734,7 +1878,7 @@
         const targetSub = subject === 'full' ? pickRandom(['maths', 'science', 'gk']) : subject;
         let item = null;
         if (targetSub === 'maths') {
-          if (mode === 'infinite' && Math.random() < 0.25 && safety < 20) {
+          if (mode === 'infinite' && Math.random() < 0.2 && safety < 20) {
             const unSeenPyqs = pyqBank.maths.filter(p => !seenSet.has(p.q) && !sessionSeen.has(p.q));
             if (unSeenPyqs.length > 0) item = normalizeAndShuffleItem(pickRandom(unSeenPyqs));
           }
@@ -1885,7 +2029,30 @@
       document.getElementById('mockTimerBadge').innerText = "⏱ 00:00";
     }
 
-    // ================= NEW FEATURE: SELECTED SUBJECT QUIZ ARENA =================
+    function handleImportQuestionPack(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const arr = JSON.parse(e.target.result);
+          if (Array.isArray(arr)) {
+            const valid = arr.filter(x => x && x.q && Array.isArray(x.opts) && x.opts.length >= 2 && typeof x.ans === 'number');
+            appData.customQuestions = [...(appData.customQuestions || []), ...valid];
+            syncData();
+            showToast(`${valid.length} custom questions imported!`, "success");
+          } else {
+            showToast("JSON must be an array of {q, opts, ans, exp}.", "warn");
+          }
+        } catch (err) {
+          showToast("Invalid Question Pack JSON.", "error");
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    // ================= SELECTED SUBJECT QUIZ ARENA =================
     let currentSubQuizQ = null;
     let subQuizAnswered = false;
     let subQuizSolved = 0;
@@ -1916,13 +2083,9 @@
       subQuizAnswered = false;
 
       let genFn;
-      if (sub.startsWith('maths_')) {
-        genFn = () => genMathsBySub(sub);
-      } else if (sub.startsWith('sci_')) {
-        genFn = () => genScienceBySub(sub);
-      } else {
-        genFn = () => genGKBySub(sub);
-      }
+      if (sub.startsWith('maths_')) genFn = () => genMathsBySub(sub);
+      else if (sub.startsWith('sci_')) genFn = () => genScienceBySub(sub);
+      else genFn = () => genGKBySub(sub);
 
       const item = fetchUniqueQuestion(genFn, subQuizSessionSeen);
       subQuizSessionSeen.add(item.q);
@@ -1962,8 +2125,8 @@
       } else {
         document.getElementById(`subOpt_${idx}`).classList.add('opt-wrong');
         appData.quizStreak = 0;
-        fb.style.background = 'rgba(239,68,68,0.16)';
-        fb.style.color = '#f87171';
+        fb.style.background = 'rgba(244,63,94,0.16)';
+        fb.style.color = '#fb7185';
         fb.innerHTML = `❌ <b>Galat! Sahi Uttar: ${escapeHTML(currentSubQuizQ.opts[correctIdx])}</b><br>${escapeHTML(currentSubQuizQ.exp)}`;
       }
 
@@ -1972,7 +2135,58 @@
       syncData();
     }
 
-    // ================= REAL MULTI-PAGE PDF GENERATOR =================
+    // ================= OFFLINE NATIVE HINDI+MATH PDF + JSPDF FALLBACK =================
+    function getPDFContentPayload(type) {
+      let title = "", lines = [];
+      if (type === 'nda_pathfinder_math') {
+        title = "NDA Pathfinder Mathematics — Complete Master Formulas";
+        lines = [
+          "1. PROBABILITY & STATISTICS: P(A ∪ B) = P(A) + P(B) - P(A ∩ B) | Mean = np, Variance = npq",
+          "2. MATRICES & DETERMINANTS: Skew-symmetric odd-order |A| = 0 | A·adj(A) = |A|I",
+          "3. TRIGONOMETRY: Max(a sinθ + b cosθ) = √(a² + b²) | sin⁻¹x + cos⁻¹x = π/2",
+          "4. CALCULUS: ∫ e^x[f(x)+f'(x)]dx = e^x f(x) + C | ∫₀^(π/2) sinⁿx/(sinⁿx+cosⁿx)dx = π/4"
+        ];
+      } else if (type === 'nda_pyq_digest') {
+        title = "NDA Previous Year Questions (PYQ) Solved Digest";
+        [...pyqBank.maths, ...pyqBank.science, ...pyqBank.gk].forEach((item, i) => {
+          lines.push(`${i + 1}. [${item.tag}] ${item.q} → Ans: ${item.opts[item.ans]} (${item.exp})`);
+        });
+      } else if (type === 'nda_gat_world') {
+        title = "NDA GAT Science & World Geography Compendium";
+        lines = [
+          "1. HQ: UN (New York), WHO (Geneva), UNESCO (Paris), ICJ (The Hague)",
+          "2. PHYSICS: Escape Velocity = 11.2 km/s | V = IR | P = 100/f(cm) Dioptre",
+          "3. CHEMISTRY: Baking Soda NaHCO₃ | Washing Soda Na₂CO₃·10H₂O | Vinegar = Acetic Acid"
+        ];
+      } else if (type === 'bsc_pcm') {
+        title = "B.Sc. PCM Semester Comprehensive Guide";
+        lines = [
+          "1. Euler's Theorem: x(∂u/∂x) + y(∂u/∂y) = n·u",
+          "2. Moment of Inertia: Solid Sphere = (2/5)MR² | Disc = (1/2)MR²",
+          "3. Coriolis Force: F_c = -2m(ω × v)"
+        ];
+      } else {
+        title = "Ansh Personal AI Brain & Hindi Study Notes";
+        lines.push("--- SAVED STUDY NOTES ---");
+        if (appData.notes.length === 0) lines.push("(No saved notes yet)");
+        appData.notes.forEach((n, idx) => lines.push(`${idx + 1}. ${n.text}`));
+        lines.push("--- AI LEARNED FACTS ---");
+        Object.entries(appData.learnedKnowledge).forEach(([k, v]) => lines.push(`• ${k}: ${v}`));
+      }
+      return { title, lines };
+    }
+
+    function printNativePDF(type) {
+      const { title, lines } = getPDFContentPayload(type);
+      const sheet = document.getElementById('printableSheet');
+      sheet.innerHTML = `
+        <h1>${escapeHTML(title)}</h1>
+        <p class="meta">ANSH.STUDY MASTER PRO | 100% Offline Hindi & Unicode Math Vector PDF</p>
+        ${lines.map(l => `<div class="print-block">${escapeHTML(l)}</div>`).join('')}
+      `;
+      window.print();
+    }
+
     function sanitizeForPDF(str) {
       return String(str)
         .replace(/∪/g, 'U').replace(/∩/g, 'n').replace(/θ/g, 'theta')
@@ -1988,11 +2202,13 @@
 
     function generateRealPDF(type) {
       if (!window.jspdf) {
-        showToast("PDF library load ho rahi hai. Internet check karke dubara try karein.", "warn");
+        showToast("Offline mode detected — opening native Hindi/Math Print-to-PDF!", "info");
+        printNativePDF(type);
         return;
       }
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
+      const { title, lines } = getPDFContentPayload(type);
 
       const drawHeader = () => {
         doc.setFillColor(15, 23, 42);
@@ -2000,103 +2216,22 @@
         doc.setTextColor(255, 255, 255);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(15);
-        doc.text("ANSH.STUDY MASTER PRO - PATHFINDER COMPENDIUM", 14, 16);
+        doc.text("ANSH.STUDY MASTER PRO - AURA EDITION", 14, 16);
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9.5);
-        doc.text("Prepared for Ansh (NDA & B.Sc. PCM) | 9,999+ Engine Edition", 14, 25);
+        doc.text("Prepared for Ansh (NDA & B.Sc. PCM)", 14, 25);
         doc.setTextColor(20, 20, 20);
       };
 
       drawHeader();
-
-      let title = "";
-      let contentLines = [];
-
-      if (type === 'nda_pathfinder_math') {
-        title = "NDA PATHFINDER MATHEMATICS - COMPLETE MASTER FORMULAS";
-        contentLines = [
-          "1. PROBABILITY & STATISTICS:",
-          " - Addition Theorem: P(A U B) = P(A) + P(B) - P(A n B)",
-          " - Conditional Probability: P(A|B) = P(A n B) / P(B)",
-          " - Binomial Distribution: Mean = np, Variance = npq (Mean > Variance)",
-          " - Correlation Coefficient (r) always lies between -1 and +1.",
-          "",
-          "2. MATRICES & DETERMINANTS:",
-          " - Determinant of skew-symmetric matrix of odd order is ALWAYS 0.",
-          " - A * adj(A) = |A| * I  |  |adj(A)| = |A|^(n-1)",
-          " - Inverse Matrix: A^(-1) = adj(A) / |A| (exists only if |A| != 0)",
-          "",
-          "3. TRIGONOMETRY & INVERSE FUNCTIONS:",
-          " - sin(A+B) = sinAcosB + cosAsinB | cos(A+B) = cosAcosB - sinAsinB",
-          " - Max value of (a sinX + b cosX) = +sqrt(a^2 + b^2)",
-          " - sin^(-1)x + cos^(-1)x = pi/2  for all x in [-1, 1]",
-          "",
-          "4. CALCULUS & VECTORS:",
-          " - Integral e^x [f(x) + f'(x)] dx = e^x * f(x) + C",
-          " - Definite Integral: int_0^(pi/2) sin^n(x) / (sin^n(x) + cos^n(x)) dx = pi/4",
-          " - Scalar Triple Product [a b c] = 0 if vectors are coplanar."
-        ];
-      } else if (type === 'nda_pyq_digest') {
-        title = "NDA PREVIOUS YEAR QUESTIONS (PYQ) SOLVED DIGEST";
-        const allPyqs = [...pyqBank.maths, ...pyqBank.science, ...pyqBank.gk];
-        allPyqs.forEach((item, idx) => {
-          contentLines.push(`${idx + 1}. [${item.tag}] ${item.q}`);
-          contentLines.push(`   Ans: ${item.opts[item.ans]} | Explanation: ${item.exp}`);
-          contentLines.push("");
-        });
-      } else if (type === 'nda_gat_world') {
-        title = "NDA GAT SCIENCE & WORLD GEOGRAPHY - MASTER COMPENDIUM";
-        contentLines = [
-          "1. INTERNATIONAL ORGANIZATIONS & HEADQUARTERS:",
-          " - United Nations (UN): New York, USA",
-          " - World Health Organization (WHO): Geneva, Switzerland",
-          " - UNESCO: Paris, France | World Bank & IMF: Washington D.C.",
-          " - International Court of Justice (ICJ): The Hague, Netherlands",
-          "",
-          "2. PHYSICS HIGH-YIELD FORMULAS:",
-          " - Escape Velocity on Earth = 11.2 km/s | Orbital Velocity = 7.92 km/s",
-          " - Mirror Formula: 1/f = 1/v + 1/u | Lens Formula: 1/f = 1/v - 1/u",
-          " - Ohm's Law: V = IR | Electric Power P = VI = I^2R = V^2/R",
-          "",
-          "3. CHEMISTRY & INDIAN POLITY:",
-          " - pH < 7 is Acidic, pH = 7 is Neutral, pH > 7 is Basic.",
-          " - Baking Soda: NaHCO3 | Washing Soda: Na2CO3.10H2O",
-          " - Fundamental Rights: Part III (Articles 12 to 35) of Indian Constitution."
-        ];
-      } else if (type === 'bsc_pcm') {
-        title = "B.Sc. PCM SEMESTER COMPREHENSIVE GUIDE";
-        contentLines = [
-          "1. DIFFERENTIAL CALCULUS & REAL ANALYSIS:",
-          " - Euler's Theorem for Homogeneous Functions: x(du/dx) + y(du/dy) = n*u",
-          " - Rolle's Theorem & Lagrange's Mean Value Theorem conditions.",
-          " - Cauchy's Root Test & D'Alembert's Ratio Test for convergence.",
-          "",
-          "2. MECHANICS & WAVES (PHYSICS):",
-          " - Coriolis Force: F_c = -2m (w x v)",
-          " - Moment of Inertia of Solid Sphere = (2/5)MR^2 | Disc = (1/2)MR^2",
-          " - Simple Harmonic Motion (SHM): d^2x/dt^2 + w^2*x = 0"
-        ];
-      } else {
-        title = "ANSH PERSONAL AI LEARNED BRAIN & REVISION NOTES";
-        contentLines.push("--- SAVED STUDY NOTES ---");
-        if (appData.notes.length === 0) contentLines.push("(No saved notes yet)");
-        appData.notes.forEach((n, idx) => contentLines.push(`${idx + 1}. ${n.text}`));
-        contentLines.push("", "--- AI SELF-LEARNED FACTS ---");
-        const learnedEntries = Object.entries(appData.learnedKnowledge);
-        if (learnedEntries.length === 0) contentLines.push("(No custom learned facts yet)");
-        learnedEntries.forEach(([k, v]) => {
-          contentLines.push(`* ${k.toUpperCase()}: ${v}`);
-        });
-      }
-
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
       doc.text(sanitizeForPDF(title), 14, 46);
-
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
+
       let y = 56;
-      contentLines.forEach(line => {
+      lines.forEach(line => {
         const clean = sanitizeForPDF(line);
         const wrapped = doc.splitTextToSize(clean || " ", 180);
         wrapped.forEach(wLine => {
@@ -2232,8 +2367,8 @@
         setTimeout(generateQuestion, 900);
       } else {
         appData.quizStreak = 0;
-        res.style.background = 'rgba(239,68,68,0.2)';
-        res.style.color = '#f87171';
+        res.style.background = 'rgba(244,63,94,0.2)';
+        res.style.color = '#fb7185';
         res.innerText = `❌ Galat! Sahi Uttar: ${correctAns}`;
         syncData();
       }
@@ -2262,7 +2397,7 @@
         showToast("Mic permission allow karein ya internet check karein.", "error");
       };
       rec.onend = () => {
-        micBtn.style.background = 'var(--purple)';
+        micBtn.style.background = '';
         micBtn.innerText = '🎤 Bolkar Likhein';
       };
       rec.start();
@@ -2361,6 +2496,7 @@
               tasks: Array.isArray(parsed.tasks) ? parsed.tasks : appData.tasks,
               notes: Array.isArray(parsed.notes) ? parsed.notes : appData.notes,
               learnedKnowledge: (parsed.learnedKnowledge && typeof parsed.learnedKnowledge === 'object') ? parsed.learnedKnowledge : appData.learnedKnowledge,
+              customQuestions: Array.isArray(parsed.customQuestions) ? parsed.customQuestions : appData.customQuestions,
               seenHashes: Array.isArray(parsed.seenHashes) ? parsed.seenHashes : appData.seenHashes,
               quizScore: Number.isFinite(Number(parsed.quizScore)) ? Number(parsed.quizScore) : appData.quizScore,
               quizStreak: Number.isFinite(Number(parsed.quizStreak)) ? Number(parsed.quizStreak) : appData.quizStreak,
