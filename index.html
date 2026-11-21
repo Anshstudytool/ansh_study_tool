@@ -1,573 +1,1260 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ANSH.STUDY MASTER PRO - NDA Pathfinder & AI Hub</title>
-<!-- Real PDF Generator Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-  :root {
-    --bg: #030712;
-    --card: #0f172a;
-    --card-alt: #1e293b;
-    --text: #f8fafc;
-    --muted: #94a3b8;
-    --primary: #3b82f6;
-    --accent: #10b981;
-    --purple: #8b5cf6;
-    --orange: #f59e0b;
-    --danger: #ef4444;
-    --border: rgba(255, 255, 255, 0.1);
-  }
-  body.light {
-    --bg: #f1f5f9;
-    --card: #ffffff;
-    --card-alt: #e2e8f0;
-    --text: #0f172a;
-    --muted: #475569;
-    --border: rgba(0, 0, 0, 0.1);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-  body { background: var(--bg); color: var(--text); padding-bottom: 85px; min-height: 100vh; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANSH.STUDY MASTER PRO - NDA Pathfinder & Self-Learning AI Hub</title>
+  <!-- jsPDF CDN for Real PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #030712;
+      --card: #0f172a;
+      --card-alt: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --accent: #10b981;
+      --purple: #8b5cf6;
+      --orange: #f59e0b;
+      --danger: #ef4444;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+    body.light {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --card-alt: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: rgba(0, 0, 0, 0.12);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+      min-height: 100vh;
+      transition: background 0.25s, color 0.25s;
+    }
 
-  /* Top App Bar */
-  topbar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 18px; background: var(--card); border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .logo { font-size: 19px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
-  .logo span { color: var(--primary); }
-  .pro-tag { background: linear-gradient(45deg, var(--orange), var(--purple)); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 6px; font-weight: 800; }
-  .top-actions { display: flex; gap: 8px; }
-  .chip-btn { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    /* Top App Bar */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .logo span { color: var(--primary); }
+    .pro-tag {
+      background: linear-gradient(45deg, var(--orange), var(--purple));
+      color: #fff;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 800;
+    }
+    .top-actions { display: flex; gap: 6px; }
+    .chip-btn {
+      background: var(--card-alt);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .chip-btn:hover { border-color: var(--primary); }
 
-  /* Main Container */
-  .container { max-width: 900px; margin: 0 auto; padding: 16px; }
-  .view-section { display: none; animation: slideUp 0.25s ease; }
-  .view-section.active { display: block; }
-  @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    /* Main Container */
+    .container { max-width: 920px; margin: 0 auto; padding: 16px; }
+    .view-section { display: none; animation: slideUp 0.25s ease; }
+    .view-section.active { display: block; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-  /* Cards & UI */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
-  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
-  .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
-  .stat-num { font-size: 26px; font-weight: 900; color: var(--primary); }
-  .stat-label { font-size: 12px; color: var(--muted); }
+    /* Cards & UI */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-num { font-size: 26px; font-weight: 900; color: var(--primary); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-  /* Buttons & Inputs */
-  .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; color: #fff; background: var(--primary); transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-  .btn:active { transform: scale(0.98); }
-  .btn-green { background: var(--accent); }
-  .btn-purple { background: var(--purple); }
-  .btn-orange { background: var(--orange); color: #000; }
-  .btn-danger { background: var(--danger); }
-  .btn-outline { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
-  .btn-sm { width: auto; padding: 8px 14px; font-size: 12px; }
+    /* Buttons & Inputs */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      background: var(--primary);
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-green { background: var(--accent); color: #032219; }
+    .btn-purple { background: var(--purple); }
+    .btn-orange { background: var(--orange); color: #1a1000; }
+    .btn-danger { background: var(--danger); }
+    .btn-outline { background: var(--card-alt); color: var(--text); border: 1px solid var(--border); }
+    .btn-sm { width: auto; padding: 8px 14px; font-size: 12px; }
 
-  .input-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card-alt); color: var(--text); font-size: 14px; margin-bottom: 10px; outline: none; }
-  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .input-box, textarea.input-box, select.input-box {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-alt);
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
-  /* AI Master Chat */
-  .chat-box { height: 360px; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .msg { max-width: 90%; padding: 11px 15px; border-radius: 12px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
-  .msg.bot { background: var(--card-alt); align-self: flex-start; border-bottom-left-radius: 2px; border-left: 4px solid var(--orange); }
-  .msg.user { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
+    /* AI Master Chat */
+    .chat-box {
+      height: 360px;
+      overflow-y: auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .msg {
+      max-width: 88%;
+      padding: 11px 15px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .msg.bot {
+      background: var(--card-alt);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+      border-left: 4px solid var(--orange);
+    }
+    .msg.user {
+      background: var(--primary);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
 
-  /* PDF & Todo Items */
-  .pdf-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 14px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); gap: 10px; }
-  .pdf-info h4 { font-size: 14px; margin-bottom: 3px; }
-  .pdf-info p { font-size: 11px; color: var(--muted); }
-  .todo-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-alt); padding: 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; }
-  .todo-item.done span { text-decoration: line-through; color: var(--muted); }
+    /* Mock Test Options */
+    .mcq-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .mcq-option:hover { border-color: var(--primary); }
+    .mcq-option.selected {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: var(--primary);
+      font-weight: 700;
+    }
 
-  /* Bottom Navigation Bar */
-  .bottom-bar {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--card); border-top: 1px solid var(--border);
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    padding: 8px 4px; z-index: 999; backdrop-filter: blur(10px);
-  }
-  .tab-btn { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; cursor: pointer; padding: 4px; }
-  .tab-btn .icon { font-size: 20px; }
-  .tab-btn.active { color: var(--primary); }
+    /* PDF & Todo Items */
+    .pdf-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-alt);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      gap: 10px;
+    }
+    .pdf-info h4 { font-size: 14px; margin-bottom: 3px; }
+    .pdf-info p { font-size: 12px; color: var(--muted); }
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-alt);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      gap: 10px;
+    }
+    .todo-item.done span { text-decoration: line-through; color: var(--muted); }
 
-  @media (min-width: 650px) {
-    .stats-grid { grid-template-columns: repeat(4, 1fr); }
-  }
-</style>
+    /* Alarm Banner */
+    #alarmBanner {
+      display: none;
+      background: linear-gradient(90deg, var(--danger), var(--orange));
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.82; }
+    }
+
+    /* Bottom Navigation Bar (6 Tabs) */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      padding: 8px 2px;
+      z-index: 999;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 10.5px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 2px;
+    }
+    .tab-btn .icon { font-size: 18px; }
+    .tab-btn.active { color: var(--primary); }
+
+    @media (min-width: 650px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Top Header -->
-<topbar>
-  <div class="logo">ANSH<span>.STUDY</span> <span class="pro-tag">MASTER AI</span></div>
-  <div class="top-actions">
-    <button class="chip-btn" onclick="toggleTheme()">🌓 Theme</button>
-    <button class="chip-btn" onclick="exportAllData()">💾 Backup</button>
-  </div>
-</topbar>
+  <!-- Top Navigation Bar -->
+  <header class="topbar">
+    <div class="logo">ANSH.<span>STUDY</span> <span class="pro-tag">MASTER PRO</span></div>
+    <div class="top-actions">
+      <button class="chip-btn" onclick="requestNotifPermission()" title="Enable Background Alerts">🔔 Alert</button>
+      <button class="chip-btn" onclick="toggleTheme()">🌓 Theme</button>
+      <button class="chip-btn" onclick="exportAllData()">💾 Backup</button>
+    </div>
+  </header>
 
-<div class="container">
+  <main class="container">
 
-  <!-- ================= TAB 1: HOME DASHBOARD ================= -->
-  <div id="tab-home" class="view-section active">
-    <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(245,158,11,0.15)); border-color: var(--primary);">
-      <h2 style="font-size: 20px; margin-bottom: 4px;">Ansh, Master Your NDA & B.Sc. 🎖️</h2>
-      <p style="font-size: 13px; color: var(--muted);">Pathfinder Complete Knowledge & Smart AI Engine Activated</p>
+    <!-- Active Alarm Alert Banner -->
+    <div id="alarmBanner">
+      <span>⏰ TIME UP! Focus / Study Session Complete!</span>
+      <button class="btn btn-sm" style="background:#000; color:#fff;" onclick="stopAlarmSound()">🔇 Stop Ringtone</button>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-num" id="dashTasks">0</div>
-        <div class="stat-label">Pending Tasks</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" style="color: var(--accent);" id="dashDone">0</div>
-        <div class="stat-label">Completed</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" style="color: var(--purple);" id="dashQuizScore">0</div>
-        <div class="stat-label">Quiz Score</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" style="color: var(--orange);" id="dashMins">0</div>
-        <div class="stat-label">Study Mins</div>
-      </div>
-    </div>
-
-    <!-- Quick Focus Timer -->
-    <div class="card">
-      <div class="card-title">⏳ Pomodoro Focus Timer</div>
-      <div style="text-align: center; font-size: 42px; font-weight: 900; margin: 10px 0;" id="pomoDisplay">25:00</div>
-      <div class="row" style="justify-content: center; margin-bottom: 10px;">
-        <button class="btn btn-outline btn-sm" onclick="setPomo(25)">25m</button>
-        <button class="btn btn-outline btn-sm" onclick="setPomo(45)">45m</button>
-        <button class="btn btn-outline btn-sm" onclick="setPomo(60)">60m</button>
-      </div>
-      <div class="row">
-        <button class="btn btn-green" style="flex:1;" onclick="startPomo()">▶ Start</button>
-        <button class="btn btn-outline" style="flex:1;" onclick="pausePomo()">⏸ Pause</button>
-        <button class="btn btn-danger" style="flex:1;" onclick="resetPomo()">🔄 Reset</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= TAB 2: SMART AI & PATHFINDER TUTOR ================= -->
-  <div id="tab-ai" class="view-section">
-    <div class="card">
-      <div class="card-title">🎖️ NDA Pathfinder & Smart AI Tutor</div>
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Kisi bhi topic par click karein ya apna sawal puchein:</p>
-      
-      <div class="row" style="margin-bottom: 10px;">
-        <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
-        <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices & Det</button>
-        <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus</button>
-        <button class="chip-btn" onclick="askMasterAI('capital')">🇮🇳 India Capital</button>
-        <button class="chip-btn" onclick="askMasterAI('nda strategy')">🎯 Pathfinder Tips</button>
+    <!-- ==================== 1. HOME / DASHBOARD TAB ==================== -->
+    <section id="tab-home" class="view-section active">
+      <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(139,92,246,0.18));">
+        <h2 style="font-size: 20px; margin-bottom: 4px;">Ansh, Master Your NDA & B.Sc. 🎖️</h2>
+        <p style="font-size: 13px; color: var(--muted);">Pathfinder Complete Knowledge, Mock Engine & Self-Learning AI Activated</p>
       </div>
 
-      <div class="chat-box" id="aiChatBox">
-        <div class="msg bot">Namaste Ansh! Main aapka Smart AI Tutor hoon. Aap mujhse koi bhi math calculation (jaise '2+2'), general knowledge, ya NDA Pathfinder ka formula puch sakte hain!</div>
-      </div>
-
-      <div class="row">
-        <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Yahan sawal ya formula likhein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
-        <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= TAB 3: DETAILED REAL PDF BOOKS ================= -->
-  <div id="tab-books" class="view-section">
-    <div class="card">
-      <div class="card-title">📚 Detailed Pathfinder & B.Sc. Master PDFs</div>
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Ek click mein comprehensive (विस्तृत) PDF download karein:</p>
-
-      <div class="pdf-item">
-        <div class="pdf-info">
-          <h4>🎖️ NDA Pathfinder Maths Complete Notes (PDF)</h4>
-          <p>Probability, Binomial, Vectors, 3D Geometry & Full Formulas</p>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-num" id="dashTasks">0</div>
+          <div class="stat-label">Pending Tasks</div>
         </div>
-        <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Download PDF</button>
-      </div>
-
-      <div class="pdf-item">
-        <div class="pdf-info">
-          <h4>🌍 NDA GAT & World Geography Master Book (PDF)</h4>
-          <p>World Organizations, Physics, Chemistry & Indian Polity</p>
+        <div class="stat-box">
+          <div class="stat-num" style="color: var(--accent);" id="dashDone">0</div>
+          <div class="stat-label">Completed</div>
         </div>
-        <button class="btn btn-orange btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Download PDF</button>
-      </div>
-
-      <div class="pdf-item">
-        <div class="pdf-info">
-          <h4>🎓 B.Sc. PCM Semester Comprehensive Guide (PDF)</h4>
-          <p>Mechanics, Matrices, Real Analysis & Organic Chemistry</p>
+        <div class="stat-box">
+          <div class="stat-num" style="color: var(--purple);" id="dashQuizScore">0</div>
+          <div class="stat-label">Quiz / Mock Pts</div>
         </div>
-        <button class="btn btn-purple btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Download PDF</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= TAB 4: ENDLESS MATH QUIZ HUB ================= -->
-  <div id="tab-quiz" class="view-section">
-    <div class="card">
-      <div class="card-title">
-        <span>🧮 Pathfinder Math Quiz Arena</span>
-        <span style="font-size: 12px; color: var(--accent);">Streak: <b id="qStreak">0</b> 🔥</span>
-      </div>
-      
-      <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Level Chunein:</p>
-      <div class="row" style="margin-bottom: 16px;">
-        <button class="btn btn-green btn-sm" style="flex:1;" onclick="startQuiz('easy')">🟢 Easy</button>
-        <button class="btn btn-orange btn-sm" style="flex:1;" onclick="startQuiz('medium')">🟡 Medium</button>
-        <button class="btn btn-purple btn-sm" style="flex:1;" onclick="startQuiz('hard')">🔴 Hard (NDA)</button>
+        <div class="stat-box">
+          <div class="stat-num" style="color: var(--orange);" id="dashMins">0</div>
+          <div class="stat-label">Study Mins</div>
+        </div>
       </div>
 
-      <div style="background: var(--bg); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
-        <div style="font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;" id="qModeLabel">MODE: EASY</div>
-        <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px; min-height: 50px; display:flex; align-items:center; justify-content:center;" id="qText">Loading...</div>
+      <!-- Background-Accurate Pomodoro & Alarm Timer -->
+      <div class="card">
+        <div class="card-title">
+          <span>⏳ Smart Focus & Background Alarm Timer</span>
+          <span id="pomoStatus" style="font-size: 11px; color: var(--accent);">Ready</span>
+        </div>
+        <div style="text-align: center; font-size: 46px; font-weight: 900; margin: 10px 0; font-variant-numeric: tabular-nums;" id="pomoDisplay">25:00</div>
         
-        <input type="number" step="any" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Answer likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
-        
+        <div class="row" style="justify-content: center; margin-bottom: 12px;">
+          <button class="chip-btn" onclick="setPomo(1)">1m (Test)</button>
+          <button class="chip-btn" onclick="setPomo(25)">25m</button>
+          <button class="chip-btn" onclick="setPomo(45)">45m</button>
+          <button class="chip-btn" onclick="setPomo(60)">60m</button>
+          <button class="chip-btn" onclick="playAlarmSound(true)">🔊 Test Ringtone</button>
+        </div>
+
         <div class="row">
-          <button class="btn btn-green" style="flex:2;" onclick="checkQuiz()">✅ Check Answer</button>
-          <button class="btn btn-outline" style="flex:1;" onclick="generateQuestion()">Skip ➔</button>
+          <button class="btn btn-green" style="flex:1;" onclick="startPomo()">▶ Start</button>
+          <button class="btn btn-outline" style="flex:1;" onclick="pausePomo()">⏸ Pause</button>
+          <button class="btn btn-danger" style="flex:1;" onclick="resetPomo()">🔄 Reset</button>
+        </div>
+        <p style="font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center;">
+          *Background Sync Enabled: Tab minimize karne par bhi exact time par ringtone aur notification bajegi.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== 2. SELF-LEARNING SMART AI TAB ==================== -->
+    <section id="tab-ai" class="view-section">
+      <div class="card">
+        <div class="card-title">
+          <span>🎖️ NDA Pathfinder & Self-Learning AI Tutor</span>
+          <span style="font-size: 11px; color: var(--accent);" id="aiBrainCount">Brain: 0 Custom Facts</span>
+        </div>
+        <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">
+          Sawal puchein, math solve karein, ya <b>"learn: sawal = jawab"</b> likhkar AI ko naya gyan sikhayein!
+        </p>
+
+        <div class="row" style="margin-bottom: 10px;">
+          <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
+          <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices</button>
+          <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus</button>
+          <button class="chip-btn" onclick="askMasterAI('trigonometry')">📐 Trigonometry</button>
+          <button class="chip-btn" onclick="askMasterAI('physics')">⚡ GAT Physics</button>
+          <button class="chip-btn" onclick="askMasterAI('nda strategy')">🎯 Strategy</button>
         </div>
 
-        <div id="qResult" style="margin-top: 14px; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; display: none;"></div>
+        <div class="chat-box" id="aiChatBox">
+          <div class="msg bot">Namaste Ansh! Main aapka Self-Learning AI Tutor hoon. 
+1️⃣ Mujhse NDA Pathfinder ke formulas (Probability, Matrices, Calculus, Physics, GK) puchein.
+2️⃣ Koi bhi Math expression solve karwayein (jaise: <code>(25*4) + 18/2</code>).
+3️⃣ Mujhe naya knowledge sikhane ke liye likhein: <code>learn: NDA full form = National Defence Academy</code> — main hamesha ke liye yaad rakhunga!</div>
+        </div>
+
+        <div class="row">
+          <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Sawal puchein ya 'learn: topic = answer' likhein..." onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
+          <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- ================= TAB 5: TOOLS & PLANNER ================= -->
-  <div id="tab-tools" class="view-section">
-    <div class="card">
-      <div class="card-title">🎙️ Voice Notes & Planner</div>
-      <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya bolkar note banayein..."></textarea>
-      <div class="row">
-        <button id="micBtn" class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein</button>
-        <button class="btn btn-green" style="flex:1;" onclick="saveNote()">💾 Save Note</button>
+    <!-- ==================== 3. ONE-CLICK MOCK TEST ARENA ==================== -->
+    <section id="tab-mock" class="view-section">
+      <div class="card">
+        <div class="card-title">
+          <span>📝 NDA One-Click Mock Test Series</span>
+          <span id="mockTimerBadge" style="font-size: 12px; color: var(--orange); font-weight: 800;">⏱ 00:00</span>
+        </div>
+
+        <!-- Subject Selector -->
+        <div id="mockSetup">
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">
+            Ek click mein subject chunein aur UPSC NDA pattern (Negative Marking ke saath) par Mock Test shuru karein:
+          </p>
+          <div class="stats-grid">
+            <button class="btn btn-primary" onclick="startMockTest('maths')">📐 NDA Mathematics (10 Qs)</button>
+            <button class="btn btn-green" onclick="startMockTest('science')">🔬 GAT General Science (10 Qs)</button>
+            <button class="btn btn-purple" onclick="startMockTest('gk')">🌍 GAT GK & Polity (10 Qs)</button>
+            <button class="btn btn-orange" onclick="startMockTest('full')">🎖️ Full NDA Mixed Mock (15 Qs)</button>
+          </div>
+        </div>
+
+        <!-- Active Test Area -->
+        <div id="mockActiveArea" style="display: none;">
+          <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px;">
+            <span id="mockSubjectTitle">Subject: Maths</span>
+            <span id="mockProgress">Question 1 / 10</span>
+          </div>
+          <div style="background: var(--bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px;">
+            <h3 id="mockQuestionText" style="font-size: 16px; line-height: 1.5; margin-bottom: 14px;">Question text...</h3>
+            <div id="mockOptionsContainer"></div>
+          </div>
+          <div class="row">
+            <button class="btn btn-outline" style="flex:1;" onclick="prevMockQ()">⬅ Previous</button>
+            <button class="btn btn-primary" style="flex:1;" onclick="nextMockQ()">Next ➔</button>
+            <button class="btn btn-green" style="flex:1;" onclick="submitMockTest()">✅ Submit Test</button>
+          </div>
+        </div>
+
+        <!-- Result Area -->
+        <div id="mockResultArea" style="display: none; text-align: center; padding: 14px; background: var(--bg); border-radius: 12px;">
+          <h3 style="font-size: 20px; color: var(--accent); margin-bottom: 8px;">🏆 Mock Test Scorecard</h3>
+          <p id="mockScoreSummary" style="font-size: 14px; line-height: 1.7; margin-bottom: 14px;"></p>
+          <div id="mockReviewList" style="text-align: left; max-height: 260px; overflow-y: auto; margin-bottom: 14px; font-size: 13px;"></div>
+          <button class="btn btn-orange" onclick="resetMockUI()">🔄 Doosra Subject Test Dein</button>
+        </div>
       </div>
-      <div id="notesContainer" style="margin-top: 12px;"></div>
-    </div>
+    </section>
 
-    <div class="card">
-      <div class="card-title">📋 Daily Study Tasks</div>
-      <div class="row">
-        <input type="text" id="taskText" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Naya task add karein...">
-        <button class="btn btn-sm" onclick="addTask()">+ Add</button>
+    <!-- ==================== 4. PDF BOOKS TAB ==================== -->
+    <section id="tab-pdf" class="view-section">
+      <div class="card">
+        <div class="card-title">📚 Detailed Pathfinder & B.Sc. Master PDFs</div>
+        <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
+          Ek click mein comprehensive formulas, shortcuts aur notes ki real PDF download karein:
+        </p>
+
+        <div class="pdf-item">
+          <div class="pdf-info">
+            <h4>🎖️ NDA Pathfinder Maths Complete Notes (PDF)</h4>
+            <p>Probability, Matrices, Calculus, Trigonometry, Vectors & Short Tricks</p>
+          </div>
+          <button class="btn btn-green btn-sm" onclick="generateRealPDF('nda_pathfinder_math')">⬇ Download PDF</button>
+        </div>
+
+        <div class="pdf-item">
+          <div class="pdf-info">
+            <h4>🌍 NDA GAT Science & World Geography Book (PDF)</h4>
+            <p>Physics Formulas, Chemistry Laws, Indian Polity & World Organizations</p>
+          </div>
+          <button class="btn btn-orange btn-sm" onclick="generateRealPDF('nda_gat_world')">⬇ Download PDF</button>
+        </div>
+
+        <div class="pdf-item">
+          <div class="pdf-info">
+            <h4>🎓 B.Sc. PCM Semester Comprehensive Guide (PDF)</h4>
+            <p>Mechanics, Differential Equations, Real Analysis & Organic Chemistry</p>
+          </div>
+          <button class="btn btn-purple btn-sm" onclick="generateRealPDF('bsc_pcm')">⬇ Download PDF</button>
+        </div>
+
+        <div class="pdf-item">
+          <div class="pdf-info">
+            <h4>🧠 My AI Self-Learned Notes & Saved Notes (PDF)</h4>
+            <p>Aapke dwara AI ko sikhaye gaye facts aur saved notes ki personal PDF</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="generateRealPDF('personal_ai_notes')">⬇ Export PDF</button>
+        </div>
       </div>
-      <div id="tasksContainer" style="margin-top: 12px;"></div>
-    </div>
-  </div>
+    </section>
 
-</div>
+    <!-- ==================== 5. SPEED MATH QUIZ ARENA ==================== -->
+    <section id="tab-quiz" class="view-section">
+      <div class="card">
+        <div class="card-title">
+          <span>🧮 Pathfinder Speed Math Quiz Arena</span>
+          <span style="color: var(--orange); font-size: 14px;">Streak: <span id="qStreak">0</span> 🔥</span>
+        </div>
 
-<!-- Mobile Bottom App Navigation -->
-<div class="bottom-bar">
-  <button class="tab-btn active" onclick="switchTab('home', this)">
-    <span class="icon">🏠</span>Home
-  </button>
-  <button class="tab-btn" onclick="switchTab('ai', this)">
-    <span class="icon">🎖️</span>Smart AI
-  </button>
-  <button class="tab-btn" onclick="switchTab('books', this)">
-    <span class="icon">📄</span>PDF Books
-  </button>
-  <button class="tab-btn" onclick="switchTab('quiz', this)">
-    <span class="icon">🧮</span>Quiz
-  </button>
-  <button class="tab-btn" onclick="switchTab('tools', this)">
-    <span class="icon">🛠️</span>Tools
-  </button>
-</div>
+        <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">Difficulty Level Chunein (Unlimited Dynamic Questions):</p>
+        <div class="row" style="margin-bottom: 16px;">
+          <button class="btn btn-green btn-sm" style="flex:1;" onclick="startQuiz('easy')">🟢 Easy</button>
+          <button class="btn btn-orange btn-sm" style="flex:1;" onclick="startQuiz('medium')">🟡 Medium</button>
+          <button class="btn btn-purple btn-sm" style="flex:1;" onclick="startQuiz('hard')">🔴 Hard (NDA)</button>
+        </div>
 
-<script>
-  let appData = JSON.parse(localStorage.getItem('ansh_master_data')) || {
-    tasks: [{ text: "Solve NDA Pathfinder Probability Chapter", done: false }],
-    notes: [{ text: "Pathfinder Tip: Algebra & Trigonometry carry 45% weightage in NDA Maths." }],
-    quizScore: 0,
-    quizStreak: 0,
-    studyMins: 90
-  };
+        <div style="background: var(--bg); padding: 18px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
+          <div style="font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 6px;" id="qModeLabel">MODE: EASY</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 16px; min-height: 54px; display:flex; align-items:center; justify-content:center;" id="qText">Loading...</div>
+          <input type="number" step="any" id="qInput" class="input-box" style="text-align: center; font-size: 18px; font-weight: bold;" placeholder="Numeric Answer likhein..." onkeypress="if(event.key==='Enter') checkQuiz()">
+          <div class="row">
+            <button class="btn btn-green" style="flex:2;" onclick="checkQuiz()">✅ Check Answer</button>
+            <button class="btn btn-outline" style="flex:1;" onclick="generateQuestion()">Skip ➔</button>
+          </div>
+          <div id="qResult" style="margin-top: 14px; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; display: none;"></div>
+        </div>
+      </div>
+    </section>
 
-  function syncData() {
-    localStorage.setItem('ansh_master_data', JSON.stringify(appData));
-    document.getElementById('dashTasks').innerText = appData.tasks.filter(t => !t.done).length;
-    document.getElementById('dashDone').innerText = appData.tasks.filter(t => t.done).length;
-    document.getElementById('dashQuizScore').innerText = appData.quizScore;
-    document.getElementById('dashMins').innerText = appData.studyMins;
-    document.getElementById('qStreak').innerText = appData.quizStreak;
-  }
+    <!-- ==================== 6. TOOLS: VOICE NOTES & PLANNER ==================== -->
+    <section id="tab-tools" class="view-section">
+      <div class="card">
+        <div class="card-title">🎙️ Voice Notes & Revision Pad</div>
+        <textarea id="noteText" rows="3" class="input-box" placeholder="Yahan likhein ya 'Bolkar Likhein' dabakar Hindi/English mein note banayein..."></textarea>
+        <div class="row" style="margin-bottom: 12px;">
+          <button id="micBtn" class="btn btn-purple" style="flex:1;" onclick="startVoiceNote()">🎤 Bolkar Likhein</button>
+          <button class="btn btn-green" style="flex:1;" onclick="saveNote()">💾 Save Note</button>
+        </div>
+        <div id="notesContainer"></div>
+      </div>
 
-  function switchTab(tabId, btnEl) {
-    document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + tabId).classList.add('active');
-    btnEl.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+      <div class="card">
+        <div class="card-title">📋 Daily NDA Study Planner</div>
+        <div class="row">
+          <input type="text" id="taskText" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Naya study target add karein..." onkeypress="if(event.key==='Enter') addTask()">
+          <button class="btn btn-sm" onclick="addTask()">+ Add</button>
+        </div>
+        <div id="tasksContainer" style="margin-top: 12px;"></div>
+      </div>
+    </section>
 
-  function toggleTheme() { document.body.classList.toggle('light'); }
+  </main>
 
-  // ================= SMART HYBRID AI ENGINE =================
-  function askMasterAI(topic) {
-    document.getElementById('aiInput').value = topic;
-    sendMasterAIQuery();
-  }
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-bar">
+    <button class="tab-btn active" onclick="switchTab('home', this)"><span class="icon">🏠</span>Home</button>
+    <button class="tab-btn" onclick="switchTab('ai', this)"><span class="icon">🎖️</span>Smart AI</button>
+    <button class="tab-btn" onclick="switchTab('mock', this)"><span class="icon">📝</span>Mock Test</button>
+    <button class="tab-btn" onclick="switchTab('pdf', this)"><span class="icon">📄</span>PDFs</button>
+    <button class="tab-btn" onclick="switchTab('quiz', this)"><span class="icon">🧮</span>Quiz</button>
+    <button class="tab-btn" onclick="switchTab('tools', this)"><span class="icon">🛠️</span>Tools</button>
+  </nav>
 
-  function sendMasterAIQuery() {
-    const input = document.getElementById('aiInput');
-    const q = input.value.trim();
-    if(!q) return;
+  <script>
+    // ================= APP STATE & STORAGE =================
+    let appData = JSON.parse(localStorage.getItem('ansh_master_pro_v2')) || {
+      tasks: [
+        { text: "Solve NDA Pathfinder Probability Chapter (50 Qs)", done: false },
+        { text: "Revise Trigonometry Identities & Matrices", done: false }
+      ],
+      notes: [
+        { text: "Pathfinder Tip: Algebra, Trigonometry & Calculus carry 55%+ weightage in NDA Maths." }
+      ],
+      learnedKnowledge: {
+        "nda full form": "National Defence Academy (Khadakwasla, Pune).",
+        "cds full form": "Combined Defence Services.",
+        "value of g": "Acceleration due to gravity g = 9.8 m/s² (approx 10 m/s² for NDA quick calc)."
+      },
+      quizScore: 0,
+      quizStreak: 0,
+      studyMins: 90
+    };
 
-    const chatBox = document.getElementById('aiChatBox');
-    chatBox.innerHTML += `<div class="msg user">${q}</div>`;
-    input.value = '';
+    function syncData() {
+      localStorage.setItem('ansh_master_pro_v2', JSON.stringify(appData));
+      document.getElementById('dashTasks').innerText = appData.tasks.filter(t => !t.done).length;
+      document.getElementById('dashDone').innerText = appData.tasks.filter(t => t.done).length;
+      document.getElementById('dashQuizScore').innerText = appData.quizScore;
+      document.getElementById('dashMins').innerText = appData.studyMins;
+      document.getElementById('qStreak').innerText = appData.quizStreak;
+      const customCount = Object.keys(appData.learnedKnowledge || {}).length;
+      document.getElementById('aiBrainCount').innerText = `Brain: ${customCount} Learned Facts`;
+    }
 
-    let reply = "";
-    const low = q.toLowerCase();
+    function switchTab(tabId, btnEl) {
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      btnEl.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-    // Smart Math Calculation Resolver (jaise 2+2, 5*5 etc.)
-    if (/^[\d\+\-\*\/\.\(\)\s]+$/.test(q)) {
-      try {
-        let ans = eval(q);
-        reply = `🧮 **Calculation Result:**\n${q} = **${ans}**\n\n👉 *Sahi jawab calculation ke anusaar yahi hai!*`;
-      } catch(e) {
-        reply = "Kripya sahi mathematical expression likhein.";
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+    }
+
+    // ================= BACKGROUND-ACCURATE POMODORO + RINGTONE + NOTIFICATIONS =================
+    let pomoDurationSec = 25 * 60;
+    let pomoRemainingSec = 25 * 60;
+    let pomoEndTime = null;
+    let pomoInterval = null;
+    let audioCtx = null;
+    let alarmLoopInterval = null;
+
+    function requestNotifPermission() {
+      if ("Notification" in window) {
+        Notification.requestPermission().then(perm => {
+          alert(perm === "granted" ? "✅ Background Notifications Enabled!" : "⚠️ Notification permission denied.");
+        });
       }
-    } 
-    else if (low.includes('probability') || low.includes('प्रॉबेबिलिटी')) {
-      reply = "🎲 **NDA Pathfinder - Probability Master Gyan:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n• Conditional Probability: P(A|B) = P(A ∩ B) / P(B)\n• Binomial Distribution: P(X = r) = nCr * p^r * q^(n-r)\n• Independent Events: P(A ∩ B) = P(A) * P(B)";
-    }
-    else if (low.includes('matrices') || low.includes('matrix')) {
-      reply = "🔲 **NDA Pathfinder - Matrices & Determinants:**\n• Determinant of skew-symmetric matrix of odd order is 0.\n• A * adj(A) = |A| * I\n• |AB| = |A| * |B|\n• Inverse: A⁻¹ = adj(A) / |A|";
-    }
-    else if (low.includes('calculus') || low.includes('integration')) {
-      reply = "∫ **NDA Pathfinder - Calculus Formulas:**\n• d/dx (uv) = u(dv/dx) + v(du/dx)\n• Integration by Parts: ∫ u·v dx = u∫v dx - ∫[u'·∫v dx]dx\n• AP Sum: S_n = (n/2)[2a + (n-1)d]";
-    }
-    else if (low.includes('capital') || low.includes('india')) {
-      reply = "🇮🇳 **General Knowledge Info:**\n• India ki Capital (Rajdhani) **New Delhi** hai.\n• Yeh Yamuna nadi ke kinare sthit hai aur 1911 mein Kalkatta se yahan shift ki gayi thi.";
-    }
-    else if (low.includes('nda strategy') || low.includes('tips')) {
-      reply = "🎖️ **NDA Pathfinder Complete Strategy (Ansh's Guide):**\n1. **Maths (300 Marks):** Pathfinder ke har chapter ke CYG questions solve karein.\n2. **GAT (600 Marks):** Physics & Chemistry ke NCERT/Pathfinder direct questions puchte hain.\n3. **Time Management:** 120 questions ke liye 150 minutes milte hain!";
-    }
-    else {
-      reply = `🎖️ **Smart AI Pathfinder Response:** Ansh, aapke sawal ("${q}") ke liye Pathfinder ke core concepts revise karein. Aap mujhse 'Probability', 'Matrices', 'Calculus', ya koi math calculation (jaise '15*4') puch sakte hain!`;
     }
 
-    setTimeout(() => {
-      chatBox.innerHTML += `<div class="msg bot">${reply}</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }, 200);
-  }
-
-  // ================= DETAILED REAL PDF GENERATOR =================
-  function generateRealPDF(type) {
-    if (!window.jspdf) { 
-      alert("PDF engine abhi load ho raha hai. 2 second baad try karein."); 
-      return; 
-    }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, 210, 40, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.text("ANSH.STUDY MASTER PRO - PATHFINDER MASTER BOOK", 15, 20);
-    doc.setFontSize(10);
-    doc.text("Exclusive Comprehensive Study Material | Prepared for Ansh (NDA & B.Sc.)", 15, 30);
-
-    doc.setTextColor(20, 20, 20);
-    doc.setFontSize(11);
-
-    let title = "";
-    let contentLines = [];
-
-    if (type === 'nda_pathfinder_math') {
-      title = "NDA PATHFINDER MATHEMATICS - COMPLETE MASTER NOTES";
-      contentLines = [
-        "1. PROBABILITY & STATISTICS:",
-        "   - Addition Theorem: P(A U B) = P(A) + P(B) - P(A n B)",
-        "   - Conditional Probability: P(A|B) = P(A n B) / P(B)",
-        "   - Binomial Distribution: P(X=r) = nCr * p^r * q^(n-r)",
-        "",
-        "2. MATRICES & DETERMINANTS:",
-        "   - Determinant of skew-symmetric matrix of odd order is 0.",
-        "   - A * adj(A) = |A| * I | Inverse A^(-1) = adj(A) / |A|",
-        "",
-        "3. TRIGONOMETRY & CALCULUS:",
-        "   - sin(A+B) = sinAcosB + cosAsinB",
-        "   - Derivatives: d/dx(x^n) = n*x^(n-1)",
-        "   - Integration by Parts: int u*v dx = u*int v dx - int[u'*int v dx]dx"
-      ];
-    } else if (type === 'nda_gat_world') {
-      title = "NDA GAT & WORLD GEOGRAPHY - MASTER COMPENDIUM";
-      contentLines = [
-        "1. INTERNATIONAL ORGANIZATIONS & HEADQUARTERS:",
-        "   - United Nations (UN): New York, USA",
-        "   - World Health Organization (WHO): Geneva, Switzerland",
-        "   - UNESCO: Paris, France | World Bank: Washington D.C.",
-        "",
-        "2. PHYSICS & CHEMISTRY CORE CONCEPTS:",
-        "   - Ohm's Law: V = IR | Kinetic Energy = 0.5 * m * v^2",
-        "   - Acids, Bases & Salts: pH < 7 is Acidic, pH > 7 is Basic."
-      ];
-    } else {
-      title = "B.Sc. PCM SEMESTER COMPREHENSIVE GUIDE";
-      contentLines = [
-        "1. CALCULUS & DIFFERENTIAL EQUATIONS:",
-        "   - Partial differentiation, Euler's theorem.",
-        "   - First order and higher degree differential equations.",
-        "",
-        "2. MECHANICS & WAVES:",
-        "   - Laws of motion, frames of reference, Coriolis force.",
-        "   - Simple harmonic motion (SHM) and wave equations."
-      ];
+    function setPomo(mins) {
+      pausePomo();
+      pomoDurationSec = mins * 60;
+      pomoRemainingSec = pomoDurationSec;
+      document.getElementById('pomoStatus').innerText = `Set for ${mins} min`;
+      updatePomoDisplay(pomoRemainingSec);
     }
 
-    doc.setFont("helvetica", "bold");
-    doc.text(title, 15, 52);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
+    function updatePomoDisplay(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      document.getElementById('pomoDisplay').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      document.title = sec > 0 && pomoInterval ? `(${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}) ANSH.STUDY` : "ANSH.STUDY MASTER PRO";
+    }
 
-    let y = 62;
-    contentLines.forEach(l => {
-      if (y > 280) { doc.addPage(); y = 20; }
-      doc.text(l, 15, y);
-      y += 7;
+    function startPomo() {
+      if (pomoInterval) return;
+      if ("Notification" in window && Notification.permission === "default") {
+        Notification.requestPermission();
+      }
+      // Timestamp based target so background tab throttling cannot delay the alarm
+      pomoEndTime = Date.now() + (pomoRemainingSec * 1000);
+      document.getElementById('pomoStatus').innerText = "🔥 Focusing (Background Active)...";
+
+      pomoInterval = setInterval(() => {
+        const left = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
+        pomoRemainingSec = left;
+        updatePomoDisplay(left);
+
+        if (left <= 0) {
+          clearInterval(pomoInterval);
+          pomoInterval = null;
+          pomoEndTime = null;
+          const completedMins = Math.round(pomoDurationSec / 60);
+          appData.studyMins += completedMins;
+          syncData();
+          document.getElementById('pomoStatus').innerText = "✅ Session Complete!";
+          triggerAlarmAndNotification(completedMins);
+          pomoRemainingSec = pomoDurationSec;
+          updatePomoDisplay(pomoRemainingSec);
+        }
+      }, 500);
+    }
+
+    function pausePomo() {
+      if (pomoInterval) {
+        clearInterval(pomoInterval);
+        pomoInterval = null;
+        pomoRemainingSec = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
+        document.getElementById('pomoStatus').innerText = "⏸ Paused";
+      }
+    }
+
+    function resetPomo() {
+      pausePomo();
+      stopAlarmSound();
+      pomoRemainingSec = pomoDurationSec;
+      document.getElementById('pomoStatus').innerText = "Ready";
+      updatePomoDisplay(pomoRemainingSec);
+    }
+
+    // Web Audio API Melody Ringtone (No external file needed, works offline)
+    function playSingleChime() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.18);
+          gain.gain.setValueAtTime(0.25, audioCtx.currentTime + idx * 0.18);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.18 + 0.45);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + idx * 0.18);
+          osc.stop(audioCtx.currentTime + idx * 0.18 + 0.45);
+        });
+      } catch (e) { console.log("Audio blocked until interaction", e); }
+    }
+
+    function playAlarmSound(isTest = false) {
+      stopAlarmSound();
+      playSingleChime();
+      if (!isTest) {
+        document.getElementById('alarmBanner').style.display = 'flex';
+        alarmLoopInterval = setInterval(playSingleChime, 2200);
+      }
+    }
+
+    function stopAlarmSound() {
+      if (alarmLoopInterval) {
+        clearInterval(alarmLoopInterval);
+        alarmLoopInterval = null;
+      }
+      document.getElementById('alarmBanner').style.display = 'none';
+    }
+
+    function triggerAlarmAndNotification(mins) {
+      playAlarmSound(false);
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("🎖️ ANSH.STUDY MASTER PRO - Time Up!", {
+          body: `Shabash Ansh! Aapka ${mins} minute ka study session complete ho gaya hai.`
+        });
+      }
+    }
+
+    // Check timer immediately when user switches back to tab
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && pomoInterval && pomoEndTime) {
+        const left = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
+        pomoRemainingSec = left;
+        updatePomoDisplay(left);
+      }
     });
 
-    doc.setFontSize(8);
-    doc.setTextColor(100, 100, 100);
-    doc.text("Generated via ANSH.STUDY MASTER PRO AI Engine", 15, 290);
+    // ================= SELF-LEARNING SMART AI ENGINE =================
+    const builtInKnowledge = [
+      { keys: ['probability', 'bayes', 'binomial'], ans: "🎲 **NDA Pathfinder - Probability Master Notes:**\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n• Conditional: P(A|B) = P(A ∩ B) / P(B)\n• Independent Events: P(A ∩ B) = P(A)·P(B)\n• Binomial Mean = np, Variance = npq (Always Mean > Variance)." },
+      { keys: ['matrices', 'matrix', 'determinant', 'adjoint'], ans: "🔲 **NDA Pathfinder - Matrices & Determinants:**\n• Skew-symmetric matrix of odd order has Determinant = 0.\n• A · adj(A) = |A| · I\n• |adj(A)| = |A|^(n-1)\n• (AB)⁻¹ = B⁻¹ · A⁻¹" },
+      { keys: ['calculus', 'integration', 'derivative', 'differentiation'], ans: "∫ **NDA Pathfinder - Calculus Shortcuts:**\n• ∫ e^x [f(x) + f'(x)] dx = e^x · f(x) + C\n• ∫₀^(π/2) sinⁿx / (sinⁿx + cosⁿx) dx = π/4\n• d/dx (x^x) = x^x (1 + ln x)" },
+      { keys: ['trigonometry', 'sin', 'cos', 'tan'], ans: "📐 **NDA Pathfinder - Trigonometry Formulas:**\n• sin 2θ = 2tanθ / (1 + tan²θ)\n• cos 2θ = (1 - tan²θ) / (1 + tan²θ)\n• Maximum value of a·sinθ + b·cosθ = √(a² + b²)." },
+      { keys: ['physics', 'gat', 'optics', 'motion', 'ohm'], ans: "⚡ **NDA GAT - Physics High-Yield Facts:**\n• Escape Velocity on Earth = 11.2 km/s.\n• Concave mirror forms virtual & magnified image when object is between Pole (P) and Focus (F).\n• Power of Lens P = 1/f (in meters), unit: Dioptre." },
+      { keys: ['strategy', 'tips', 'cutoff', 'marks'], ans: "🎖️ **NDA Exam Strategy (Pathfinder Plan):**\n• **Maths Paper (300 Marks):** 120 Qs (+2.5 / -0.83). Target 65+ accurate Qs.\n• **GAT Paper (600 Marks):** 150 Qs (+4 / -1.33). English (200) + Science & GS (400).\n• **Golden Rule:** Accuracy > Guesswork!" }
+    ];
 
-    doc.save(`${type}_ANSH_COMPREHENSIVE.pdf`);
-  }
-
-  // ================= IMPROVED VOICE RECOGNITION =================
-  function startVoiceNote() {
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRec) { 
-      alert("Aapka browser Voice Recognition support nahi karta. Kripya Google Chrome ka upyog karein."); 
-      return; 
+    function askMasterAI(topic) {
+      document.getElementById('aiInput').value = topic;
+      sendMasterAIQuery();
     }
-    
-    const rec = new SpeechRec();
-    rec.lang = 'hi-IN';
-    const micBtn = document.getElementById('micBtn');
-    
-    rec.onstart = () => {
-      micBtn.style.background = 'var(--danger)';
-      micBtn.innerText = '🔴 Sun raha hoon...';
-    };
 
-    rec.onresult = (e) => {
-      const transcript = e.results[0][0].transcript;
-      const noteInput = document.getElementById('noteText');
-      noteInput.value += (noteInput.value ? " " : "") + transcript;
-    };
+    async function sendMasterAIQuery() {
+      const input = document.getElementById('aiInput');
+      const q = input.value.trim();
+      if (!q) return;
 
-    rec.onerror = () => {
-      alert("Voice recognition mein error aayi. Dobara try karein.");
-    };
+      const chatBox = document.getElementById('aiChatBox');
+      chatBox.innerHTML += `<div class="msg user">${escapeHTML(q)}</div>`;
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
 
-    rec.onend = () => {
-      micBtn.style.background = 'var(--purple)';
-      micBtn.innerText = '🎤 Bolkar Likhein';
-    };
+      const low = q.toLowerCase();
 
-    rec.start();
-  }
+      // 1. Self-Training Command: "learn: question = answer"
+      if (low.startsWith('learn:') && q.includes('=')) {
+        const raw = q.substring(6);
+        const eqIdx = raw.indexOf('=');
+        const key = raw.substring(0, eqIdx).trim().toLowerCase();
+        const val = raw.substring(eqIdx + 1).trim();
+        if (key && val) {
+          appData.learnedKnowledge[key] = val;
+          syncData();
+          appendBotMsg(`🧠 **Memory Updated!** Maine seekh liya hai:\n• **Topic:** ${key}\n• **Answer:** ${val}\n\nAb aap jab bhi iske baare mein puchenge, main turant bataunga!`);
+          return;
+        }
+      }
 
-  // ================= QUIZ & TOOLS =================
-  let qLevel = 'easy', correctAns = 0;
-  function startQuiz(lvl) { qLevel = lvl; document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase(); generateQuestion(); }
-  function generateQuestion() {
-    document.getElementById('qResult').style.display = 'none';
-    document.getElementById('qInput').value = '';
-    const qText = document.getElementById('qText');
-    if (qLevel === 'easy') {
-      let a = Math.floor(Math.random()*40)+10, b = Math.floor(Math.random()*30)+5;
-      correctAns = a + b; qText.innerText = `${a} + ${b} = ?`;
-    } else if (qLevel === 'medium') {
-      let val = 150; correctAns = 30; qText.innerText = `Find 20% of 150?`;
-    } else {
-      correctAns = 12; qText.innerText = `NDA Pathfinder: If f(x) = 2x³, find f'(2)?`;
+      // 2. Safe Math Expression Evaluator
+      if (/^[0-9+\-*/().%\s^]+$/.test(q)) {
+        try {
+          const sanitized = q.replace(/\^/g, '**');
+          const result = Function('"use strict";return (' + sanitized + ')')();
+          if (typeof result === 'number' && !isNaN(result)) {
+            appendBotMsg(`🧮 **Calculation Result:**\n\`${q}\` = **${Number(result.toFixed(6))}**`);
+            return;
+          }
+        } catch (e) {}
+      }
+
+      // 3. Check User-Trained Memory First
+      for (const [k, v] of Object.entries(appData.learnedKnowledge)) {
+        if (low.includes(k) || k.includes(low)) {
+          appendBotMsg(`🧠 **Learned Memory Match (${k}):**\n${v}`);
+          return;
+        }
+      }
+
+      // 4. Check Built-in NDA Pathfinder Knowledge
+      for (const item of builtInKnowledge) {
+        if (item.keys.some(k => low.includes(k))) {
+          appendBotMsg(item.ans);
+          return;
+        }
+      }
+
+      // 5. Autonomous Live Knowledge Fetcher (Wikipedia REST API)
+      const loadingId = "bot-load-" + Date.now();
+      chatBox.innerHTML += `<div class="msg bot" id="${loadingId}">🔍 Internet & Knowledge Base se information collect kar raha hoon...</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const cleanTopic = q.replace(/what is|who is|tell me about|kya hai|kaun hai|\?/gi, '').trim();
+        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanTopic)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.extract) {
+            // Auto-save fetched summary into AI brain for offline future use!
+            appData.learnedKnowledge[cleanTopic.toLowerCase()] = data.extract;
+            syncData();
+            document.getElementById(loadingId).innerText = `🌐 **Live Knowledge Collected & Saved to Brain:**\n**${data.title}:** ${data.extract}`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return;
+          }
+        }
+      } catch (e) {}
+
+      document.getElementById(loadingId).innerText = `🤔 Ansh, "${q}" mere database mein abhi nahi hai. Aap mujhe iska jawab sikha sakte hain! Bas type karein:\nlearn: ${q} = [yahan sahi jawab likhein]`;
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
-  }
-  function checkQuiz() {
-    const val = parseFloat(document.getElementById('qInput').value);
-    const res = document.getElementById('qResult');
-    res.style.display = 'block';
-    if (!isNaN(val) && Math.abs(val - correctAns) < 0.01) {
-      appData.quizScore += 10; appData.quizStreak += 1;
-      res.style.background = 'rgba(16,185,129,0.2)'; res.style.color = '#34d399';
-      res.innerText = `🎉 Sahi Jawab! (+10 pts)`; syncData(); setTimeout(generateQuestion, 1000);
-    } else {
-      appData.quizStreak = 0;
-      res.style.background = 'rgba(239,68,68,0.2)'; res.style.color = '#f87171';
-      res.innerText = `❌ Galat! Sahi Uttar: ${correctAns}`; syncData();
+
+    function appendBotMsg(text) {
+      const chatBox = document.getElementById('aiChatBox');
+      setTimeout(() => {
+        chatBox.innerHTML += `<div class="msg bot">${text}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 150);
     }
-  }
 
-  function saveNote() {
-    const txt = document.getElementById('noteText').value.trim();
-    if(!txt) return;
-    appData.notes.unshift({ text: txt }); 
-    document.getElementById('noteText').value = '';
-    renderNotes(); syncData();
-  }
+    function escapeHTML(str) {
+      return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    }
 
-  function renderNotes() {
-    document.getElementById('notesContainer').innerHTML = appData.notes.map((n, i) => `
-      <div class="todo-item"><span>${n.text}</span><button class="chip-btn" style="color:var(--danger)" onclick="appData.notes.splice(${i},1);renderNotes();syncData();">✕</button></div>
-    `).join('');
-  }
+    // ================= ONE-CLICK NDA MOCK TEST ENGINE =================
+    const mockQuestionBank = {
+      maths: [
+        { q: "If A and B are two independent events with P(A) = 0.3 and P(B) = 0.4, find P(A ∩ B).", opts: ["0.70", "0.12", "0.10", "0.58"], ans: 1, exp: "For independent events, P(A ∩ B) = P(A) × P(B) = 0.3 × 0.4 = 0.12." },
+        { q: "What is the determinant of any skew-symmetric matrix of order 3?", opts: ["1", "-1", "0", "3"], ans: 2, exp: "Determinant of every skew-symmetric matrix of odd order is always 0." },
+        { q: "Evaluate: lim (x → 0) [ (sin 5x) / x ]", opts: ["1", "0", "5", "1/5"], ans: 2, exp: "lim (x→0) sin(kx)/x = k, so answer is 5." },
+        { q: "What is the value of i^4 + i^8 + i^12 + i^16 (where i = √-1)?", opts: ["0", "4", "-4", "1"], ans: 1, exp: "Every multiple of 4 power of i equals 1. Thus 1 + 1 + 1 + 1 = 4." },
+        { q: "Find the derivative of f(x) = e^(3x) with respect to x.", opts: ["e^(3x)", "3e^(3x)", "e^(3x)/3", "3x·e^(3x)"], ans: 1, exp: "d/dx(e^(kx)) = k·e^(kx) = 3e^(3x)." },
+        { q: "If sin θ + cos θ = √2, what is the value of θ (acute)?", opts: ["30°", "45°", "60°", "90°"], ans: 1, exp: "sin 45° + cos 45° = 1/√2 + 1/√2 = 2/√2 = √2." },
+        { q: "How many 3-digit numbers can be formed using digits 1, 2, 3, 4, 5 without repetition?", opts: ["125", "60", "20", "15"], ans: 1, exp: "5P3 = 5 × 4 × 3 = 60." },
+        { q: "What is the eccentricity of a rectangular hyperbola?", opts: ["1", "√2", "2", "1/√2"], ans: 1, exp: "Eccentricity of rectangular hyperbola is always √2." },
+        { q: "Find the dot product of vectors A = 2i + 3j and B = 4i - 2j.", opts: ["2", "14", "-2", "8"], ans: 0, exp: "A·B = (2)(4) + (3)(-2) = 8 - 6 = 2." },
+        { q: "In a triangle ABC, if a = 3, b = 4, c = 5, what is the area of the triangle?", opts: ["12", "6", "10", "7.5"], ans: 1, exp: "3-4-5 is a right triangle. Area = 1/2 × 3 × 4 = 6." }
+      ],
+      science: [
+        { q: "Which mirror is used by dentists to see an enlarged image of teeth?", opts: ["Convex mirror", "Concave mirror", "Plane mirror", "Cylindrical mirror"], ans: 1, exp: "Concave mirror produces a virtual, erect, and magnified image when object is within focus." },
+        { q: "What is the SI unit of Power of a Lens?", opts: ["Watt", "Joule", "Dioptre", "Newton"], ans: 2, exp: "Power of a lens is measured in Dioptre (D = 1/f in meters)." },
+        { q: "Which gas is mainly responsible for acid rain?", opts: ["Methane", "Sulphur Dioxide (SO2)", "Oxygen", "Helium"], ans: 1, exp: "SO2 and NO2 react with water vapor to form sulphuric and nitric acids." },
+        { q: "What is the chemical formula of Baking Soda?", opts: ["Na2CO3", "NaHCO3", "CaOCl2", "NaOH"], ans: 1, exp: "Sodium Bicarbonate (NaHCO3) is Baking Soda." },
+        { q: "Which cell organelle is known as the 'Powerhouse of the Cell'?", opts: ["Ribosome", "Mitochondria", "Lysosome", "Nucleus"], ans: 1, exp: "Mitochondria generates ATP energy." },
+        { q: "Escape velocity from the surface of the Earth is approximately:", opts: ["9.8 km/s", "11.2 km/s", "7.9 km/s", "15.0 km/s"], ans: 1, exp: "Ve = √(2gR) ≈ 11.2 km/s." },
+        { q: "Which vitamin deficiency causes Night Blindness?", opts: ["Vitamin B1", "Vitamin C", "Vitamin A", "Vitamin D"], ans: 2, exp: "Deficiency of Vitamin A (Retinol) causes night blindness." },
+        { q: "Sound waves cannot travel through:", opts: ["Steel", "Water", "Air", "Vacuum"], ans: 3, exp: "Sound is a mechanical wave and requires a material medium." },
+        { q: "What is the pH value of pure distilled water at 25°C?", opts: ["0", "7", "14", "5.5"], ans: 1, exp: "Pure water is neutral with pH = 7." },
+        { q: "Which metal remains in liquid state at room temperature?", opts: ["Sodium", "Mercury", "Magnesium", "Aluminium"], ans: 1, exp: "Mercury (Hg) is a liquid metal at room temperature." }
+      ],
+      gk: [
+        { q: "Where is the National Defence Academy (NDA) located?", opts: ["Dehradun", "Khadakwasla (Pune)", "Wellington", "Gaya"], ans: 1, exp: "NDA is located at Khadakwasla near Pune, Maharashtra." },
+        { q: "Which Article of the Indian Constitution abolishes Untouchability?", opts: ["Article 14", "Article 17", "Article 19", "Article 21"], ans: 1, exp: "Article 17 abolishes untouchability in any form." },
+        { q: "Where are the headquarters of the World Health Organization (WHO)?", opts: ["New York", "Paris", "Geneva", "Vienna"], ans: 2, exp: "WHO headquarters is in Geneva, Switzerland." },
+        { q: "Which planet is known as the 'Morning Star' or 'Evening Star'?", opts: ["Mars", "Venus", "Jupiter", "Saturn"], ans: 1, exp: "Venus is the brightest planet visible from Earth." },
+        { q: "Who was the first Chief of Defence Staff (CDS) of India?", opts: ["Gen. Manoj Mukund Naravane", "Gen. Bipin Rawat", "Gen. Anil Chauhan", "Field Marshal Sam Manekshaw"], ans: 1, exp: "General Bipin Rawat was India's first CDS." },
+        { q: "The Tropic of Cancer passes through how many Indian states?", opts: ["6", "7", "8", "9"], ans: 2, exp: "It passes through 8 states (Gujarat, Rajasthan, MP, Chhattisgarh, Jharkhand, WB, Tripura, Mizoram)." },
+        { q: "Which strait separates India and Sri Lanka?", opts: ["Malacca Strait", "Palk Strait", "Bering Strait", "Hormuz Strait"], ans: 1, exp: "Palk Strait lies between Tamil Nadu and Sri Lanka." },
+        { q: "Who wrote the book 'Wings of Fire'?", opts: ["Dr. A.P.J. Abdul Kalam", "Jawaharlal Nehru", "Rabindranath Tagore", "Vikram Sarabhai"], ans: 0, exp: "Autobiography of Dr. A.P.J. Abdul Kalam." },
+        { q: "What is the minimum age to become a member of the Lok Sabha?", opts: ["21 years", "25 years", "30 years", "35 years"], ans: 1, exp: "Minimum age for Lok Sabha is 25 years (Rajya Sabha is 30)." },
+        { q: "Which river is known as 'Dakshin Ganga'?", opts: ["Krishna", "Kaveri", "Godavari", "Narmada"], ans: 2, exp: "Godavari is the largest peninsular river, called Dakshin Ganga." }
+      ]
+    };
 
-  function addTask() {
-    const txt = document.getElementById('taskText').value.trim();
-    if(!txt) return;
-    appData.tasks.unshift({ text: txt, done: false }); 
-    document.getElementById('taskText').value = '';
-    renderTasks(); syncData();
-  }
+    let currentMockList = [];
+    let currentMockIndex = 0;
+    let userMockAnswers = [];
+    let mockTimerInterval = null;
+    let mockSeconds = 0;
+    let currentMockSub = '';
 
-  function renderTasks() {
-    document.getElementById('tasksContainer').innerHTML = appData.tasks.map((t, i) => `
-      <div class="todo-item ${t.done?'done':''}">
-        <span onclick="appData.tasks[${i}].done=!appData.tasks[${i}].done;renderTasks();syncData();" style="cursor:pointer;">${t.done?'✅':'⬜'} ${t.text}</span>
-        <button class="chip-btn" style="color:var(--danger)" onclick="appData.tasks.splice(${i},1);renderTasks();syncData();">✕</button>
-      </div>
-    `).join('');
-  }
+    function startMockTest(subject) {
+      currentMockSub = subject;
+      if (subject === 'full') {
+        currentMockList = [
+          ...mockQuestionBank.maths.slice(0, 5),
+          ...mockQuestionBank.science.slice(0, 5),
+          ...mockQuestionBank.gk.slice(0, 5)
+        ];
+      } else {
+        currentMockList = [...mockQuestionBank[subject]];
+      }
+      // Shuffle questions
+      currentMockList.sort(() => Math.random() - 0.5);
+      currentMockIndex = 0;
+      userMockAnswers = new Array(currentMockList.length).fill(null);
 
-  let pomoSec = 1500, pomoTimer = null;
-  function setPomo(m) { clearInterval(pomoTimer); pomoTimer=null; pomoSec=m*60; updatePomo(); }
-  function updatePomo() {
-    document.getElementById('pomoDisplay').innerText = `${String(Math.floor(pomoSec/60)).padStart(2,'0')}:${String(pomoSec%60).padStart(2,'0')}`;
-  }
-  function startPomo() {
-    if(pomoTimer) return;
-    pomoTimer = setInterval(() => {
-      if(pomoSec>0) { pomoSec--; updatePomo(); }
-      else { clearInterval(pomoTimer); pomoTimer=null; appData.studyMins+=25; syncData(); alert("Focus session complete!"); }
-    }, 1000);
-  }
-  function pausePomo() { clearInterval(pomoTimer); pomoTimer=null; }
-  function resetPomo() { setPomo(25); }
+      document.getElementById('mockSetup').style.display = 'none';
+      document.getElementById('mockResultArea').style.display = 'none';
+      document.getElementById('mockActiveArea').style.display = 'block';
+      document.getElementById('mockSubjectTitle').innerText = `Subject: ${subject.toUpperCase()}`;
 
-  function exportAllData() {
-    const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ANSH_MASTER_PRO.json'; a.click();
-  }
+      mockSeconds = currentMockList.length * 60; // 1 min per question
+      clearInterval(mockTimerInterval);
+      mockTimerInterval = setInterval(() => {
+        mockSeconds--;
+        const m = Math.floor(mockSeconds / 60);
+        const s = mockSeconds % 60;
+        document.getElementById('mockTimerBadge').innerText = `⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        if (mockSeconds <= 0) submitMockTest();
+      }, 1000);
 
-  renderTasks(); renderNotes(); generateQuestion(); syncData(); updatePomo();
-</script>
+      renderMockQuestion();
+    }
+
+    function renderMockQuestion() {
+      const qObj = currentMockList[currentMockIndex];
+      document.getElementById('mockProgress').innerText = `Question ${currentMockIndex + 1} / ${currentMockList.length}`;
+      document.getElementById('mockQuestionText').innerText = `Q${currentMockIndex + 1}. ${qObj.q}`;
+
+      const optsHtml = qObj.opts.map((opt, idx) => `
+        <button class="mcq-option ${userMockAnswers[currentMockIndex] === idx ? 'selected' : ''}" onclick="selectMockOption(${idx})">
+          <b>(${String.fromCharCode(65 + idx)})</b> ${opt}
+        </button>
+      `).join('');
+      document.getElementById('mockOptionsContainer').innerHTML = optsHtml;
+    }
+
+    function selectMockOption(optIdx) {
+      userMockAnswers[currentMockIndex] = optIdx;
+      renderMockQuestion();
+    }
+
+    function nextMockQ() {
+      if (currentMockIndex < currentMockList.length - 1) {
+        currentMockIndex++;
+        renderMockQuestion();
+      }
+    }
+
+    function prevMockQ() {
+      if (currentMockIndex > 0) {
+        currentMockIndex--;
+        renderMockQuestion();
+      }
+    }
+
+    function submitMockTest() {
+      clearInterval(mockTimerInterval);
+      let correct = 0, wrong = 0, unattempted = 0;
+      const posMark = currentMockSub === 'maths' ? 2.5 : 4;
+      const negMark = currentMockSub === 'maths' ? 0.83 : 1.33;
+
+      let reviewHtml = "";
+      currentMockList.forEach((item, i) => {
+        const uAns = userMockAnswers[i];
+        if (uAns === null) {
+          unattempted++;
+          reviewHtml += `<div style="padding:8px; border-bottom:1px solid var(--border);"><b>Q${i+1}:</b> Skipped | ✅ Ans: <b>${item.opts[item.ans]}</b><br><span style="color:var(--muted);">${item.exp}</span></div>`;
+        } else if (uAns === item.ans) {
+          correct++;
+          reviewHtml += `<div style="padding:8px; border-bottom:1px solid var(--border); color:var(--accent);"><b>Q${i+1}:</b> ✅ Correct (${item.opts[uAns]})</div>`;
+        } else {
+          wrong++;
+          reviewHtml += `<div style="padding:8px; border-bottom:1px solid var(--border); color:var(--danger);"><b>Q${i+1}:</b> ❌ Your Ans: ${item.opts[uAns]} | ✅ Correct: <b>${item.opts[item.ans]}</b><br><span style="color:var(--muted);">${item.exp}</span></div>`;
+        }
+      });
+
+      const netScore = Math.max(0, (correct * posMark) - (wrong * negMark)).toFixed(2);
+      appData.quizScore += Math.round(Number(netScore));
+      syncData();
+
+      document.getElementById('mockActiveArea').style.display = 'none';
+      document.getElementById('mockResultArea').style.display = 'block';
+      document.getElementById('mockScoreSummary').innerHTML = `
+        ✅ Correct: <b>${correct}</b> | ❌ Wrong: <b>${wrong}</b> | ⏭ Skipped: <b>${unattempted}</b><br>
+        🎯 <b>NDA Net Score: ${netScore} Marks</b> (+${Math.round(Number(netScore))} pts added to profile!)
+      `;
+      document.getElementById('mockReviewList').innerHTML = reviewHtml;
+    }
+
+    function resetMockUI() {
+      document.getElementById('mockResultArea').style.display = 'none';
+      document.getElementById('mockSetup').style.display = 'block';
+      document.getElementById('mockTimerBadge').innerText = "⏱ 00:00";
+    }
+
+    // ================= REAL MULTI-PAGE PDF GENERATOR =================
+    function generateRealPDF(type) {
+      if (!window.jspdf) {
+        alert("PDF library load ho rahi hai. Internet connection check karke 2 second baad try karein.");
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFillColor(15, 23, 42);
+      doc.rect(0, 0, 210, 38, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(16);
+      doc.text("ANSH.STUDY MASTER PRO - PATHFINDER MASTER BOOK", 14, 18);
+      doc.setFontSize(10);
+      doc.text("Comprehensive Study Compendium | Prepared for Ansh (NDA & B.Sc. PCM)", 14, 28);
+
+      doc.setTextColor(20, 20, 20);
+      let title = "";
+      let contentLines = [];
+
+      if (type === 'nda_pathfinder_math') {
+        title = "NDA PATHFINDER MATHEMATICS - COMPLETE MASTER FORMULAS";
+        contentLines = [
+          "1. PROBABILITY & STATISTICS:",
+          " - Addition Theorem: P(A U B) = P(A) + P(B) - P(A n B)",
+          " - Conditional Probability: P(A|B) = P(A n B) / P(B)",
+          " - Binomial Distribution: P(X=r) = nCr * p^r * q^(n-r) | Mean = np, Variance = npq",
+          " - Correlation Coefficient (r) always lies between -1 and +1.",
+          "",
+          "2. MATRICES & DETERMINANTS:",
+          " - Determinant of skew-symmetric matrix of odd order is ALWAYS 0.",
+          " - A * adj(A) = |A| * I  |  |adj(A)| = |A|^(n-1)",
+          " - Inverse Matrix: A^(-1) = adj(A) / |A| (exists only if |A| != 0)",
+          "",
+          "3. TRIGONOMETRY & INVERSE FUNCTIONS:",
+          " - sin(A+B) = sinAcosB + cosAsinB | cos(A+B) = cosAcosB - sinAsinB",
+          " - Max value of (a sinX + b cosX) = +sqrt(a^2 + b^2)",
+          " - sin^(-1)x + cos^(-1)x = pi/2  for all x in [-1, 1]",
+          "",
+          "4. CALCULUS & VECTORS:",
+          " - Integral e^x [f(x) + f'(x)] dx = e^x * f(x) + C",
+          " - Definite Integral: int_0^(pi/2) sin^n(x) / (sin^n(x) + cos^n(x)) dx = pi/4",
+          " - Scalar Triple Product [a b c] = 0 if vectors are coplanar."
+        ];
+      } else if (type === 'nda_gat_world') {
+        title = "NDA GAT SCIENCE & WORLD GEOGRAPHY - MASTER COMPENDIUM";
+        contentLines = [
+          "1. INTERNATIONAL ORGANIZATIONS & HEADQUARTERS:",
+          " - United Nations (UN): New York, USA",
+          " - World Health Organization (WHO): Geneva, Switzerland",
+          " - UNESCO: Paris, France | World Bank & IMF: Washington D.C.",
+          " - International Court of Justice (ICJ): The Hague, Netherlands",
+          "",
+          "2. PHYSICS HIGH-YIELD FORMULAS:",
+          " - Escape Velocity on Earth = 11.2 km/s | Orbital Velocity = 7.92 km/s",
+          " - Mirror Formula: 1/f = 1/v + 1/u | Lens Formula: 1/f = 1/v - 1/u",
+          " - Ohm's Law: V = IR | Electric Power P = VI = I^2R = V^2/R",
+          "",
+          "3. CHEMISTRY & INDIAN POLITY:",
+          " - pH < 7 is Acidic, pH = 7 is Neutral, pH > 7 is Basic.",
+          " - Baking Soda: NaHCO3 | Washing Soda: Na2CO3.10H2O",
+          " - Fundamental Rights: Part III (Articles 12 to 35) of Indian Constitution."
+        ];
+      } else if (type === 'bsc_pcm') {
+        title = "B.Sc. PCM SEMESTER COMPREHENSIVE GUIDE";
+        contentLines = [
+          "1. DIFFERENTIAL CALCULUS & REAL ANALYSIS:",
+          " - Euler's Theorem for Homogeneous Functions: x(du/dx) + y(du/dy) = n*u",
+          " - Rolle's Theorem & Lagrange's Mean Value Theorem conditions.",
+          " - Cauchy's Root Test & D'Alembert's Ratio Test for convergence.",
+          "",
+          "2. MECHANICS & WAVES (PHYSICS):",
+          " - Coriolis Force: F_c = -2m (w x v)",
+          " - Moment of Inertia of Solid Sphere = (2/5)MR^2 | Disc = (1/2)MR^2",
+          " - Simple Harmonic Motion (SHM): d^2x/dt^2 + w^2*x = 0"
+        ];
+      } else {
+        title = "ANSH PERSONAL AI LEARNED BRAIN & REVISION NOTES";
+        contentLines.push("--- SAVED STUDY NOTES ---");
+        appData.notes.forEach((n, idx) => contentLines.push(`${idx + 1}. ${n.text}`));
+        contentLines.push("", "--- AI SELF-LEARNED FACTS ---");
+        Object.entries(appData.learnedKnowledge).forEach(([k, v]) => {
+          contentLines.push(`* ${k.toUpperCase()}: ${v}`);
+        });
+      }
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text(title, 14, 50);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      let y = 60;
+      contentLines.forEach(line => {
+        const wrapped = doc.splitTextToSize(line, 180);
+        wrapped.forEach(wLine => {
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          }
+          doc.text(wLine, 14, y);
+          y += 6.5;
+        });
+      });
+
+      doc.setFontSize(8);
+      doc.setTextColor(120, 120, 120);
+      doc.text("Generated via ANSH.STUDY MASTER PRO AI Engine", 14, 290);
+      doc.save(`${type}_ANSH_PRO.pdf`);
+    }
+
+    // ================= DYNAMIC SPEED MATH QUIZ ARENA =================
+    let qLevel = 'easy', correctAns = 0;
+
+    function startQuiz(lvl) {
+      qLevel = lvl;
+      document.getElementById('qModeLabel').innerText = "MODE: " + lvl.toUpperCase();
+      generateQuestion();
+    }
+
+    function generateQuestion() {
+      document.getElementById('qResult').style.display = 'none';
+      document.getElementById('qInput').value = '';
+      const qText = document.getElementById('qText');
+
+      if (qLevel === 'easy') {
+        const a = Math.floor(Math.random() * 65) + 15;
+        const b = Math.floor(Math.random() * 45) + 10;
+        correctAns = a + b;
+        qText.innerText = `${a} + ${b} = ?`;
+      } else if (qLevel === 'medium') {
+        const pct = [10, 20, 25, 30, 40, 50][Math.floor(Math.random() * 6)];
+        const base = (Math.floor(Math.random() * 18) + 2) * 20;
+        correctAns = (pct / 100) * base;
+        qText.innerText = `Find ${pct}% of ${base}?`;
+      } else {
+        // Dynamic NDA Calculus / Algebra generator
+        const type = Math.floor(Math.random() * 3);
+        if (type === 0) {
+          const coeff = Math.floor(Math.random() * 5) + 2;
+          const xVal = Math.floor(Math.random() * 4) + 1;
+          correctAns = 3 * coeff * xVal * xVal;
+          qText.innerText = `NDA Calculus: If f(x) = ${coeff}x³, find f'(${xVal})?`;
+        } else if (type === 1) {
+          const n = Math.floor(Math.random() * 5) + 5;
+          correctAns = (n * (n - 1)) / 2;
+          qText.innerText = `NDA PnC: Evaluate ${n}C₂ = ?`;
+        } else {
+          const a = Math.floor(Math.random() * 6) + 2;
+          const d = Math.floor(Math.random() * 5) + 2;
+          const term = 10;
+          correctAns = a + (term - 1) * d;
+          qText.innerText = `NDA AP: First term a=${a}, diff d=${d}. Find 10th term?`;
+        }
+      }
+    }
+
+    function checkQuiz() {
+      const val = parseFloat(document.getElementById('qInput').value);
+      const res = document.getElementById('qResult');
+      res.style.display = 'block';
+      if (!isNaN(val) && Math.abs(val - correctAns) < 0.01) {
+        appData.quizScore += 10;
+        appData.quizStreak += 1;
+        res.style.background = 'rgba(16,185,129,0.2)';
+        res.style.color = '#34d399';
+        res.innerText = `🎉 Sahi Jawab! (+10 pts)`;
+        syncData();
+        setTimeout(generateQuestion, 900);
+      } else {
+        appData.quizStreak = 0;
+        res.style.background = 'rgba(239,68,68,0.2)';
+        res.style.color = '#f87171';
+        res.innerText = `❌ Galat! Sahi Uttar: ${correctAns}`;
+        syncData();
+      }
+    }
+
+    // ================= VOICE NOTES & PLANNER =================
+    function startVoiceNote() {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        alert("Aapka browser Voice Recognition support nahi karta. Kripya Google Chrome ka upyog karein.");
+        return;
+      }
+      const rec = new SpeechRec();
+      rec.lang = 'hi-IN';
+      const micBtn = document.getElementById('micBtn');
+      rec.onstart = () => {
+        micBtn.style.background = 'var(--danger)';
+        micBtn.innerText = '🔴 Sun raha hoon...';
+      };
+      rec.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        const noteInput = document.getElementById('noteText');
+        noteInput.value += (noteInput.value ? " " : "") + transcript;
+      };
+      rec.onerror = () => {
+        alert("Mic permission allow karein ya internet check karein.");
+      };
+      rec.onend = () => {
+        micBtn.style.background = 'var(--purple)';
+        micBtn.innerText = '🎤 Bolkar Likhein';
+      };
+      rec.start();
+    }
+
+    function saveNote() {
+      const txt = document.getElementById('noteText').value.trim();
+      if (!txt) return;
+      appData.notes.unshift({ text: txt });
+      document.getElementById('noteText').value = '';
+      renderNotes();
+      syncData();
+    }
+
+    function renderNotes() {
+      document.getElementById('notesContainer').innerHTML = appData.notes.map((n, i) => `
+        <div class="todo-item">
+          <span>📝 ${escapeHTML(n.text)}</span>
+          <button class="chip-btn" style="color:var(--danger)" onclick="appData.notes.splice(${i},1);renderNotes();syncData();">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function addTask() {
+      const txt = document.getElementById('taskText').value.trim();
+      if (!txt) return;
+      appData.tasks.unshift({ text: txt, done: false });
+      document.getElementById('taskText').value = '';
+      renderTasks();
+      syncData();
+    }
+
+    function renderTasks() {
+      document.getElementById('tasksContainer').innerHTML = appData.tasks.map((t, i) => `
+        <div class="todo-item ${t.done ? 'done' : ''}">
+          <span onclick="appData.tasks[${i}].done=!appData.tasks[${i}].done;renderTasks();syncData();" style="cursor:pointer; flex:1;">
+            ${t.done ? '✅' : '⬜'} ${escapeHTML(t.text)}
+          </span>
+          <button class="chip-btn" style="color:var(--danger)" onclick="appData.tasks.splice(${i},1);renderTasks();syncData();">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function exportAllData() {
+      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'ANSH_MASTER_PRO_BACKUP.json';
+      a.click();
+    }
+
+    // Initialize App
+    renderTasks();
+    renderNotes();
+    generateQuestion();
+    syncData();
+    updatePomoDisplay(pomoRemainingSec);
+  </script>
 </body>
 </html>
