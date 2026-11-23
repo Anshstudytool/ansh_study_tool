@@ -640,7 +640,7 @@
       border-radius: 22px;
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       padding: 12px 6px;
       z-index: 999;
       overflow: visible;
@@ -1365,52 +1365,6 @@
       </div>
     </section>
 
-    <!-- ==================== 2. PRE-TRAINED SELF-LEARNING AI TAB ==================== -->
-    <section id="tab-ai" class="view-section">
-      <div class="card">
-        <div class="card-title">
-          <span>🎖️ Pre-Trained NDA & Scientific Math AI Tutor</span>
-          <span style="font-size: 11px; color: var(--accent);" id="aiBrainCount">Brain: 0 Facts</span>
-        </div>
-        <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">
-          Ab AI chat mein <b><code>2sin(30)</code>, <code>cos(60)</code>, <code>sqrt(144)</code>, <code>log(100)</code></b> jaise scientific math expressions bhi solve hote hain! Naya fact sikhane ke liye <b><code>learn: sawal = jawab</code></b> likhein.
-        </p>
-
-        <div class="row" style="margin-bottom: 10px;">
-          <button class="chip-btn" onclick="askMasterAI('probability')">🎲 Probability</button>
-          <button class="chip-btn" onclick="askMasterAI('matrices')">🔲 Matrices</button>
-          <button class="chip-btn" onclick="askMasterAI('calculus')">∫ Calculus</button>
-          <button class="chip-btn" onclick="askMasterAI('trigonometry')">📐 Trigonometry</button>
-          <button class="chip-btn" onclick="askMasterAI('physics')">⚡ Physics</button>
-          <button class="chip-btn" onclick="askMasterAI('chemistry')">🧪 Chemistry</button>
-          <button class="chip-btn" onclick="askMasterAI('polity')">🏛️ Polity</button>
-          <button class="chip-btn" onclick="askMasterAI('english')">📚 English</button>
-          <button class="chip-btn" onclick="askMasterAI('2sin(30) + sqrt(16)')">🧮 2sin(30)+sqrt(16)</button>
-        </div>
-
-        <div class="chat-box" id="aiChatBox">
-          <div class="msg bot">Namaste Ansh! Main **21+ NDA PCM, GAT & English Topics** aur **Scientific Math Parser** ke saath ready hoon.
-1️⃣ Koi bhi chapter puchein: **Sets, Complex, Quadratics, PnC, Matrices, Calculus, Vectors, Physics, Chemistry, Biology, Polity, History, Geography, Defence, English**.
-2️⃣ Scientific Math solve karwayein: <code>2sin(30) + cos(60)</code>, <code>sqrt(225) * 2</code>, <code>log(1000)</code>.
-3️⃣ Naya gyan sikhayein: <code>learn: topic = answer</code>.</div>
-        </div>
-
-        <div class="row">
-          <input type="text" id="aiInput" class="input-box" style="flex:1; margin-bottom:0;" placeholder="Chapter puchein, '2sin(30)+sqrt(16)' solve karein, ya 'learn: ...' likhein" onkeypress="if(event.key==='Enter') sendMasterAIQuery()">
-          <button class="btn btn-orange btn-sm" onclick="sendMasterAIQuery()">Ask AI 🚀</button>
-        </div>
-      </div>
-
-      <!-- Learned Knowledge Manager -->
-      <div class="card">
-        <div class="card-title">
-          <span>🧠 AI Brain Manager</span>
-          <span style="font-size:11px; color:var(--muted);">Manage saved facts</span>
-        </div>
-        <div id="learnedBrainList"></div>
-      </div>
-    </section>
-
     <!-- ==================== 3. SMART BOOK / 11th & 12th COMPLETE NOTEBOOK TAB ==================== -->
     <section id="tab-smartbook" class="view-section">
       <!-- List View -->
@@ -1810,7 +1764,6 @@
   <!-- Large Floating Glass Bottom Navigation Bar -->
   <nav class="bottom-bar">
     <button class="tab-btn active" data-tab="home" onclick="switchTab('home', this)"><span class="icon">🏠</span>Home</button>
-    <button class="tab-btn" data-tab="ai" onclick="switchTab('ai', this)"><span class="icon">🤖</span>Smart AI</button>
     <button class="tab-btn" data-tab="smartbook" onclick="switchTab('smartbook', this)"><span class="icon">📖</span>Smart Book</button>
     <button class="tab-btn center-emblem" data-tab="mock" onclick="switchTab('mock', this)"><span class="center-emblem-badge">🎖️</span>Mock</button>
     <button class="tab-btn" data-tab="quiz" onclick="switchTab('quiz', this)"><span class="icon">🎯</span>Quiz</button>
@@ -1983,8 +1936,6 @@
         document.getElementById('dashStreakDays').innerText = (appData.streakDays || 1) + ' Day' + ((appData.streakDays || 1) > 1 ? 's' : '');
       }
       document.getElementById('qStreak').innerText = appData.quizStreak;
-      const customCount = Object.keys(appData.learnedKnowledge || {}).length;
-      document.getElementById('aiBrainCount').innerText = `Brain: ${customCount} Facts + 21 Topics`;
       document.getElementById('engineCounterBadge').innerText = `♾️ 999+ Engine | Seen: ${seenSet.size}`;
       document.getElementById('seenCountInline').innerText = seenSet.size;
       if (document.getElementById('customQCountBadge')) {
@@ -1993,7 +1944,6 @@
       if (document.getElementById('sbProgressBadge')) {
         document.getElementById('sbProgressBadge').innerText = `Read: ${(appData.smartBookRead || []).length} / ${smartBookChapters.length}`;
       }
-      renderLearnedBrain();
       renderWeakTopicsDashboard();
       renderFuturisticDashboard();
     }
@@ -3272,192 +3222,6 @@
       if ('Notification' in window && Notification.permission === 'granted') {
         try { new Notification(title, { body }); } catch (e) {}
       }
-    }
-
-    // ================= SCIENTIFIC MATH PARSER + 21+ TOPIC AI TUTOR =================
-    const AI_KNOWLEDGE_BASE = {
-      "probability": "🎲 **Probability (NDA Must-Do):**\n• P(E) = n(E) / n(S), 0 ≤ P(E) ≤ 1\n• P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n• Conditional: P(A|B) = P(A ∩ B) / P(B)\n• Bayes' Theorem & Binomial Mean = np, Variance = npq.",
-      "matrices": "🔲 **Matrices & Determinants:**\n• |kA| = kⁿ|A| (n = matrix order)\n• A⁻¹ = adj(A)/|A|, |adj(A)| = |A|ⁿ⁻¹\n• Skew-symmetric matrix ke diagonal elements 0 aur odd-order ka det = 0.",
-      "calculus": "∫ **Calculus Fast Formulae:**\n• lim(x→0) sinx/x = 1, lim(x→0) tanx/x = 1\n• ∫₀^(π/2) sinⁿx dx = ∫₀^(π/2) cosⁿx dx (Wallis)\n• King Rule: ∫ₐᵇ f(x)dx = ∫ₐᵇ f(a+b-x)dx.",
-      "trigonometry": "📐 **Trigonometry Golden Rules:**\n• sin 2A = 2sinA cosA, cos 2A = cos²A - sin²A = 1 - 2sin²A\n• Max/Min of (a sinθ + b cosθ) = ±√(a² + b²)\n• sin 18° = (√5 - 1)/4, cos 36° = (√5 + 1)/4.",
-      "quadratic": "📈 **Quadratic Equations:**\n• Roots of ax² + bx + c = 0: [-b ± √(b²-4ac)] / 2a\n• Sum of roots = -b/a, Product = c/a\n• D > 0 Real & Distinct, D = 0 Equal, D < 0 Complex.",
-      "complex": "🌀 **Complex Numbers:**\n• i² = -1; i⁴ⁿ = 1, i⁴ⁿ⁺¹ = i, i⁴ⁿ⁺² = -1, i⁴ⁿ⁺³ = -i\n• z · z̄ = |z|², Cube roots of unity: 1 + ω + ω² = 0, ω³ = 1.",
-      "vectors": "➡️ **Vectors & 3D:**\n• a·b = |a||b|cosθ (0 if perpendicular)\n• |a×b| = |a||b|sinθ (Area of parallelogram)\n• Projection of a on b = (a·b)/|b|.",
-      "pnc": "🔢 **Permutations & Combinations:**\n• Permutation (order matters): ⁿPᵣ = n!/(n-r)!\n• Combination (selection): ⁿCᵣ = n!/[r!(n-r)!]\n• Circular arrangement = (n-1)!.",
-      "sequence": "📊 **AP, GP & HP:**\n• AP: Tₙ = a + (n-1)d, Sₙ = n/2 [2a + (n-1)d]\n• GP: Tₙ = arⁿ⁻¹, S_∞ = a/(1-r) for |r| < 1\n• AM ≥ GM ≥ HM always holds for positive numbers.",
-      "conic": "⭕ **Conic Sections:**\n• Circle: (x-h)² + (y-k)² = r²\n• Parabola y² = 4ax: Focus (a,0), Directrix x = -a, LR = 4a\n• Ellipse: e = √(1 - b²/a²) < 1; Hyperbola: e = √(1 + b²/a²) > 1.",
-      "physics": "⚡ **NDA Physics High-Yield:**\n• Motion: v = u+at, s = ut+½at², v² = u²+2as\n• Projectile: R = u²sin2θ/g (Max at 45°), H = u²sin²θ/2g, T = 2usinθ/g\n• Optics: 1/f = 1/v - 1/u, TIR when i > critical angle.",
-      "mechanics": "🏋️ **Mechanics & Gravitation:**\n• F = ma, Impulse = Δp, Escape velocity v_e = √(2gR) ≈ 11.2 km/s\n• Orbital velocity v_o = √(gR), v_e = √2 v_o.",
-      "electricity": "🔌 **Current & Magnetism:**\n• Ohm's Law: V = IR, Power P = VI = I²R = V²/R\n• Force on moving charge: F = q(v × B), Radius r = mv/(qB).",
-      "chemistry": "🧪 **NDA Chemistry Quick Notes:**\n• pH = -log₁₀[H⁺] (Acidic < 7, Neutral = 7, Basic > 7)\n• Atomic No. = Protons; Mass No. = Protons + Neutrons\n• Baking Soda: NaHCO₃, Washing Soda: Na₂CO₃·10H₂O, Plaster of Paris: CaSO₄·½H₂O.",
-      "biology": "🧬 **GAT Biology Essentials:**\n• Mitochondria = Powerhouse of cell (ATP)\n• Ribosomes = Protein synthesis; Lysosomes = Suicidal bags\n• RBC carries Oxygen via Hemoglobin (Iron); Blood group O⁻ is universal donor.",
-      "polity": "🏛️ **Indian Polity:**\n• Fundamental Rights: Articles 12–35 (Part III); Article 32 = Constitutional Remedies\n• DPSP: Part IV (borrowed from Ireland); Fundamental Duties: Article 51A (42nd Amendment)\n• President = Nominal Head (Art 52), PM & Council of Ministers = Real Executive.",
-      "history": "📜 **History Milestones:**\n• 1857 Revolt (Mangal Pandey / Meerut), 1885 INC founded (A.O. Hume)\n• 1919 Jallianwala Bagh, 1920 Non-Cooperation, 1930 Dandi March, 1942 Quit India.",
-      "geography": "🌍 **Geography & Environment:**\n• Standard Meridian of India: 82.5° E (passes near Mirzapur/Prayagraj, UP)\n• Longest river in India: Ganga; Peninsular longest: Godavari\n• Ozone layer in Stratosphere absorbs harmful UV rays.",
-      "defence": "🎖️ **Indian Defence & SSB:**\n• Supreme Commander of Armed Forces: President of India\n• NDA (Pune), IMA (Dehradun), OTA (Chennai), AFA (Dundigal), INA (Ezhimala)\n• SSB OLQs (Officer Like Qualities): Effective Intelligence, Reasoning, Initiative, Courage.",
-      "english": "📚 **NDA English Golden Rules:**\n• 'Either...or', 'Neither...nor', 'Not only...but also' mein verb closer subject ke hisab se aata hai.\n• 'Scarcely/Hardly' ke saath 'when', aur 'No sooner' ke saath 'than' aata hai.\n• 'Each/Every/Everyone' hamesha singular verb lete hain.\n• 'Prefer/Senior/Junior/Inferior' ke saath 'to' lagta hai, 'than' nahi.",
-      "strategy": "🎯 **NDA Exam Strategy:**\n• Maths (120 Qs) + GAT (150 Qs) — Negative marking is 1/3rd of marks allotted to each question.\n• Accuracy > Blind guessing; revise formulas daily."
-    };
-
-    function evaluateScientificMath(exprRaw) {
-      let expr = exprRaw.toLowerCase().trim();
-      expr = expr.replace(/^(solve|calc|calculate|math|what is|kitna hai)\s+/i, '').replace(/\?+$/, '').trim();
-      if (!/[0-9]/.test(expr)) return null;
-
-      expr = expr
-        .replace(/\bpi\b/g, `(${Math.PI})`)
-        .replace(/\be\b/g, `(${Math.E})`)
-        .replace(/√\s*\(([^)]+)\)/g, 'Math.sqrt($1)')
-        .replace(/√\s*([0-9.]+)/g, 'Math.sqrt($1)')
-        .replace(/\bsqrt\s*\(/g, 'Math.sqrt(')
-        .replace(/\bcbrt\s*\(/g, 'Math.cbrt(')
-        .replace(/\babs\s*\(/g, 'Math.abs(')
-        .replace(/\blog10\s*\(/g, 'Math.log10(')
-        .replace(/\blog\s*\(/g, 'Math.log10(')
-        .replace(/\bln\s*\(/g, 'Math.log(')
-        .replace(/\bexp\s*\(/g, 'Math.exp(')
-        .replace(/(\d+(?:\.\d+)?|\))\s*(sin|cos|tan|asin|acos|atan|sqrt|cbrt|log10|log|ln|abs|exp)\s*\(/g, '$1 * Math.$2(')
-        .replace(/\b(sin|cos|tan)\s*\(\s*([^()]+)\s*\)/g, (_, fn, arg) => `Math.${fn}((${arg}) * Math.PI / 180)`)
-        .replace(/\b(asin|acos|atan)\s*\(\s*([^()]+)\s*\)/g, (_, fn, arg) => `(Math.${fn}(${arg}) * 180 / Math.PI)`)
-        .replace(/\b(sqrt|cbrt|log10|log|ln|abs|exp)\s*\(/g, (_, fn) => {
-          const mapFn = fn === 'log' ? 'log10' : (fn === 'ln' ? 'log' : fn);
-          return `Math.${mapFn}(`;
-        })
-        .replace(/\^/g, '**');
-
-      expr = expr.replace(/Math\.[a-zA-Z0-9_]+/g, m => `__FN_${m.replace(/\./g, '_')}__`);
-      if (/[a-zA-Z_$]/.test(expr)) return null;
-      expr = expr.replace(/__FN_Math_([a-zA-Z0-9_]+)__/g, (_, fn) => `Math.${fn}`);
-
-      try {
-        const val = Function(`"use strict"; return (${expr});`)();
-        if (typeof val === 'number' && Number.isFinite(val)) {
-          const rounded = Math.abs(val - Math.round(val)) < 1e-9 ? Math.round(val) : Number(val.toFixed(6));
-          return `🧮 **Scientific Math Result:**\nInput: \`${exprRaw.trim()}\`\nAnswer: **${rounded}**`;
-        }
-      } catch (e) {}
-      return null;
-    }
-
-    function sendMasterAIQuery() {
-      const inp = document.getElementById('aiInput');
-      const q = inp.value.trim();
-      if (!q) return;
-      appendChatMsg(q, 'user');
-      inp.value = '';
-      respondMasterAI(q);
-    }
-
-    function askMasterAI(topicText) {
-      appendChatMsg(topicText, 'user');
-      respondMasterAI(topicText);
-    }
-
-    function respondMasterAI(rawText) {
-      const lower = rawText.toLowerCase().trim();
-      const learnMatch = rawText.match(/^learn\s*:\s*([^=]+)=\s*(.+)$/i);
-      if (learnMatch) {
-        const key = learnMatch[1].trim().toLowerCase();
-        const val = learnMatch[2].trim();
-        appData.learnedKnowledge[key] = val;
-        appData.quizScore += 10;
-        syncData();
-        appendChatMsg(`✅ **Naya Gyan Yaad Kar Liya!** (+10 XP)\nTopic: **${key}**\nAnswer: ${val}`, 'bot');
-        return;
-      }
-
-      for (const [k, v] of Object.entries(appData.learnedKnowledge || {})) {
-        if (lower === k || lower.includes(k)) {
-          appendChatMsg(`🧠 **Saved Brain (${k}):**\n${v}`, 'bot');
-          return;
-        }
-      }
-
-      for (const [topicKey, replyText] of Object.entries(AI_KNOWLEDGE_BASE)) {
-        if (lower.includes(topicKey)) {
-          appendChatMsg(replyText, 'bot');
-          return;
-        }
-      }
-
-      if (lower.includes('history') || lower.includes('mughal') || lower.includes('gandhi') || lower.includes('1857')) {
-        appendChatMsg(AI_KNOWLEDGE_BASE.history, 'bot'); return;
-      }
-      if (lower.includes('constitution') || lower.includes('article') || lower.includes('parliament') || lower.includes('president')) {
-        appendChatMsg(AI_KNOWLEDGE_BASE.polity, 'bot'); return;
-      }
-      if (lower.includes('river') || lower.includes('monsoon') || lower.includes('soil') || lower.includes('latitude') || lower.includes('prayagraj')) {
-        appendChatMsg(AI_KNOWLEDGE_BASE.geography, 'bot'); return;
-      }
-      if (lower.includes('cell') || lower.includes('vitamin') || lower.includes('blood') || lower.includes('heart') || lower.includes('plant')) {
-        appendChatMsg(AI_KNOWLEDGE_BASE.biology, 'bot'); return;
-      }
-      if (lower.includes('acid') || lower.includes('base') || lower.includes('ph') || lower.includes('periodic') || lower.includes('atom')) {
-        appendChatMsg(AI_KNOWLEDGE_BASE.chemistry, 'bot'); return;
-      }
-      if (lower.includes('ssb') || lower.includes('army') || lower.includes('navy') || lower.includes('air force') || lower.includes('cds')) {
-        appendChatMsg(AI_KNOWLEDGE_BASE.defence, 'bot'); return;
-      }
-      if (lower.includes('synonym') || lower.includes('antonym') || lower.includes('idiom') || lower.includes('grammar')) {
-        appendChatMsg(AI_KNOWLEDGE_BASE.english, 'bot'); return;
-      }
-
-      const mathAns = evaluateScientificMath(rawText);
-      if (mathAns) {
-        appendChatMsg(mathAns, 'bot');
-        return;
-      }
-
-      const sbMatch = smartBookChapters.find(ch => lower.includes(ch.title.toLowerCase().split(' ')[0]) && ch.title.toLowerCase().split(' ')[0].length > 3);
-      if (sbMatch) {
-        appendChatMsg(`📖 **Smart Book Match — Class ${sbMatch.cls} ${sbMatch.sub} (Ch ${sbMatch.ch}: ${sbMatch.title}):**\n${sbMatch.formulas.slice(0, 3).join('\n')}\n\n(Poora chapter padhne ke liye Smart Book tab kholein!)`, 'bot');
-        return;
-      }
-
-      appendChatMsg(
-        `🤔 **"${rawText}"** ka exact match nahi mila.\n• Scientific math ke liye likhein: \`2sin(30) + cos(60)\` ya \`sqrt(196)\`\n• Topics try karein: probability, matrices, calculus, trigonometry, physics, chemistry, biology, polity, history, geography, defence, english\n• Ya sikhayein: \`learn: ${lower} = aapka jawab\``,
-        'bot'
-      );
-    }
-
-    function appendChatMsg(text, sender) {
-      const box = document.getElementById('aiChatBox');
-      const div = document.createElement('div');
-      div.className = `msg ${sender}`;
-      div.innerHTML = formatBasicMarkdown(text);
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function formatBasicMarkdown(str) {
-      return escapeHTML(str)
-        .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
-        .replace(/`([^`]+)`/g, '<code>$1</code>');
-    }
-
-    function renderLearnedBrain() {
-      const wrap = document.getElementById('learnedBrainList');
-      if (!wrap) return;
-      const entries = Object.entries(appData.learnedKnowledge || {});
-      if (entries.length === 0) {
-        wrap.innerHTML = `<div class="empty-state">Koi custom fact saved nahi hai. Chat mein <code>learn: sawal = jawab</code> likh kar add karein.</div>`;
-        return;
-      }
-      wrap.innerHTML = entries.map(([k, v]) => `
-        <div class="todo-item">
-          <div style="flex:1; min-width:0;">
-            <div style="font-weight:700; font-size:13.5px; color:var(--primary);">${escapeHTML(k)}</div>
-            <div style="font-size:12.5px; color:var(--muted); margin-top:2px;">${escapeHTML(v)}</div>
-          </div>
-          <button class="chip-btn" style="color:var(--danger);" onclick="deleteLearnedFact('${escapeJsAttr(k)}')">🗑️</button>
-        </div>
-      `).join('');
-    }
-
-    function deleteLearnedFact(key) {
-      delete appData.learnedKnowledge[key];
-      syncData();
-      showToast(`Deleted fact: "${key}"`, "info");
     }
 
     // ================= 999+ UNIFIED PROCEDURAL & FACT-MATRIX QUESTION ENGINE =================
@@ -4755,128 +4519,148 @@
     startQuiz('easy');
     loadNextSubjectQuizQuestion();
     restoreActiveMockSession();
-// ================= GEMINI AI & UNLIMITED NDA MCQ ENGINE =================
 
-(function initGeminiIntegration() {
-  // 1. Screen par Automatic Floating Button aur Modal Box banana
-  const floatBtn = document.createElement("button");
-  floatBtn.innerHTML = "✨ Gemini AI";
-  floatBtn.style.cssText = "position:fixed; bottom:80px; right:20px; z-index:9999; background:linear-gradient(135deg, #38bdf8, #818cf8); color:#000; font-weight:bold; padding:12px 18px; border:none; border-radius:50px; box-shadow:0 4px 15px rgba(56,189,248,0.4); cursor:pointer; font-size:14px;";
-  document.body.appendChild(floatBtn);
+    // ================= GEMINI AI & UNLIMITED NDA MCQ ENGINE =================
+    (function initGeminiIntegration() {
+      const floatBtn = document.createElement("button");
+      floatBtn.innerHTML = "✨ Gemini AI";
+      floatBtn.style.cssText = "position:fixed; bottom:88px; right:20px; z-index:9999; background:linear-gradient(135deg, #38bdf8, #818cf8); color:#000; font-weight:bold; padding:12px 18px; border:none; border-radius:50px; box-shadow:0 4px 15px rgba(56,189,248,0.4); cursor:pointer; font-size:14px;";
+      document.body.appendChild(floatBtn);
 
-  const modal = document.createElement("div");
-  modal.style.cssText = "display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; justify-content:center; align-items:center; padding:15px; box-sizing:border-box;";
-  modal.innerHTML = `
-    <div style="background:#0f172a; border:1px solid #38bdf8; border-radius:12px; max-width:500px; width:100%; padding:20px; color:#fff; font-family:sans-serif; max-height:90vh; overflow-y:auto;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-        <h3 style="margin:0; color:#38bdf8;">✨ Gemini NDA AI Assistant</h3>
-        <button id="closeGeminiModal" style="background:none; border:none; color:#f87171; font-size:20px; cursor:pointer;">✕</button>
-      </div>
-      
-      <!-- API Key Section -->
-      <div style="background:#1e293b; padding:10px; border-radius:8px; margin-bottom:15px;">
-        <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:5px;">🔑 Gemini API Key (Browser mein safe rahegi):</label>
-        <div style="display:flex; gap:8px;">
-          <input type="password" id="gemKeyInput" placeholder="AIzaSy..." style="flex:1; padding:8px; border-radius:5px; border:1px solid #334155; background:#0f172a; color:#fff;" />
-          <button id="saveGemKeyBtn" style="padding:8px 14px; background:#38bdf8; color:#000; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">Save</button>
+      const modal = document.createElement("div");
+      modal.style.cssText = "display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; justify-content:center; align-items:center; padding:15px; box-sizing:border-box;";
+      modal.innerHTML = `
+        <div style="background:#0f172a; border:1px solid #38bdf8; border-radius:12px; max-width:500px; width:100%; padding:20px; color:#fff; font-family:sans-serif; max-height:90vh; overflow-y:auto;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="margin:0; color:#38bdf8;">✨ Gemini NDA AI Assistant</h3>
+            <button id="closeGeminiModal" style="background:none; border:none; color:#f87171; font-size:20px; cursor:pointer;">✕</button>
+          </div>
+          
+          <div style="background:#1e293b; padding:10px; border-radius:8px; margin-bottom:15px;">
+            <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:5px;">🔑 Gemini API Key (Browser mein safe rahegi):</label>
+            <div style="display:flex; gap:8px;">
+              <input type="password" id="gemKeyInput" placeholder="AIzaSy..." style="flex:1; padding:8px; border-radius:5px; border:1px solid #334155; background:#0f172a; color:#fff;" />
+              <button id="saveGemKeyBtn" style="padding:8px 14px; background:#38bdf8; color:#000; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">Save</button>
+            </div>
+            <div id="gemKeyMsg" style="font-size:11px; color:#4ade80; margin-top:5px;"></div>
+          </div>
+
+          <div style="margin-bottom:15px;">
+            <textarea id="gemPromptInput" rows="3" placeholder="NDA ka koi bhi sawal, formula ya trick puchein..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:#fff; box-sizing:border-box; resize:none;"></textarea>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button id="askGemBtn" style="flex:1; padding:10px; background:#22c55e; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">🚀 Ask AI Tutor</button>
+              <button id="genMcqGemBtn" style="flex:1; padding:10px; background:#a855f7; color:#fff; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">🎯 New NDA MCQ</button>
+            </div>
+          </div>
+
+          <div id="gemOutputBox" style="background:#020617; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:14px; line-height:1.5; white-space:pre-wrap; min-height:80px; color:#e2e8f0;">Yahan AI ka jawab ya naya MCQ dikhega...</div>
         </div>
-        <div id="gemKeyMsg" style="font-size:11px; color:#4ade80; margin-top:5px;"></div>
-      </div>
+      `;
+      document.body.appendChild(modal);
 
-      <!-- Ask AI Tutor Section -->
-      <div style="margin-bottom:15px;">
-        <textarea id="gemPromptInput" rows="3" placeholder="NDA ka koi bhi sawal, formula ya trick puchein..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:#fff; box-sizing:border-box; resize:none;"></textarea>
-        <div style="display:flex; gap:8px; margin-top:8px;">
-          <button id="askGemBtn" style="flex:1; padding:10px; background:#22c55e; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">🚀 Ask AI Tutor</button>
-          <button id="genMcqGemBtn" style="flex:1; padding:10px; background:#a855f7; color:#fff; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">🎯 New NDA MCQ</button>
-        </div>
-      </div>
+      function getGemKey() {
+        try { return localStorage.getItem("ansh_gemini_api_key") || ""; } catch (e) { return ""; }
+      }
+      function setGemKey(val) {
+        try { localStorage.setItem("ansh_gemini_api_key", val); } catch (e) {}
+      }
 
-      <!-- Output Box -->
-      <div id="gemOutputBox" style="background:#020617; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:14px; line-height:1.5; white-space:pre-wrap; min-height:80px; color:#e2e8f0;">Yahan AI ka jawab ya naya MCQ dikhega...</div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-
-  // Modal Open/Close Logic
-  floatBtn.onclick = () => {
-    modal.style.display = "flex";
-    const saved = localStorage.getItem("ansh_gemini_api_key");
-    if (saved) document.getElementById("gemKeyMsg").innerText = "✅ API Key pehle se saved hai.";
-  };
-  document.getElementById("closeGeminiModal").onclick = () => modal.style.display = "none";
-
-  // Save API Key Logic
-  document.getElementById("saveGemKeyBtn").onclick = () => {
-    const val = document.getElementById("gemKeyInput").value.trim();
-    if (!val) return alert("Pehle API Key paste karein!");
-    localStorage.setItem("ansh_gemini_api_key", val);
-    document.getElementById("gemKeyInput").value = "";
-    document.getElementById("gemKeyMsg").innerText = "✅ API Key successfully save ho gayi!";
-    if (typeof showToast === "function") showToast("Gemini API Key Saved!", "success");
-  };
-
-  // Ask AI Tutor Logic
-  document.getElementById("askGemBtn").onclick = async () => {
-    const apiKey = localStorage.getItem("ansh_gemini_api_key");
-    const question = document.getElementById("gemPromptInput").value.trim();
-    const outBox = document.getElementById("gemOutputBox");
-
-    if (!apiKey) return alert("Upar pehle apni Gemini API Key save karein!");
-    if (!question) return alert("Koi sawal likhein!");
-
-    outBox.innerText = "⏳ Gemini soch raha hai...";
-    try {
-      const res = await fetch(`https://googleapis.com{apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: `Tum NDA exam ke expert teacher ho. Hinglish mein short trick aur clear steps ke saath samjhao:\n\n${question}` }] }]
-        })
+      floatBtn.addEventListener("click", () => {
+        modal.style.display = "flex";
+        if (getGemKey()) {
+          document.getElementById("gemKeyMsg").innerText = "✅ API Key pehle se saved hai.";
+        }
       });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error.message);
-      outBox.innerText = data.candidates[0].content.parts[0].text;
-    } catch (err) {
-      outBox.innerText = "❌ Error: " + err.message;
-    }
-  };
+      document.getElementById("closeGeminiModal").addEventListener("click", () => {
+        modal.style.display = "none";
+      });
 
-  // Unlimited NDA MCQ Generator Logic
-  document.getElementById("genMcqGemBtn").onclick = async () => {
-    const apiKey = localStorage.getItem("ansh_gemini_api_key");
-    const topic = document.getElementById("gemPromptInput").value.trim() || "NDA Mathematics, Physics, GK or English";
-    const outBox = document.getElementById("gemOutputBox");
+      document.getElementById("saveGemKeyBtn").addEventListener("click", () => {
+        const val = document.getElementById("gemKeyInput").value.trim();
+        if (!val) {
+          document.getElementById("gemKeyMsg").innerText = "⚠️ Pehle API Key paste karein!";
+          if (typeof showToast === "function") showToast("Pehle API Key paste karein!", "warn");
+          return;
+        }
+        setGemKey(val);
+        document.getElementById("gemKeyInput").value = "";
+        document.getElementById("gemKeyMsg").innerText = "✅ API Key successfully save ho gayi!";
+        if (typeof showToast === "function") showToast("Gemini API Key Saved!", "success");
+      });
 
-    if (!apiKey) return alert("Upar pehle apni Gemini API Key save karein!");
+      document.getElementById("askGemBtn").addEventListener("click", async () => {
+        const apiKey = getGemKey();
+        const question = document.getElementById("gemPromptInput").value.trim();
+        const outBox = document.getElementById("gemOutputBox");
 
-    outBox.innerText = "⏳ Naya NDA level MCQ ban raha hai...";
-    try {
-      const prompt = `Create 1 tough UPSC NDA exam level multiple choice question on topic: "${topic}". 
-      Format clearly in Hinglish with:
-      Question:
-      (A) ...
-      (B) ...
-      (C) ...
-      (D) ...
-      
-      Correct Answer & Short Trick Explanation:`;
+        if (!apiKey) {
+          outBox.innerText = "⚠️ Upar pehle apni Gemini API Key save karein!";
+          if (typeof showToast === "function") showToast("Pehle Gemini API Key save karein!", "warn");
+          return;
+        }
+        if (!question) {
+          outBox.innerText = "⚠️ Kripya koi sawal likhein!";
+          if (typeof showToast === "function") showToast("Koi sawal likhein!", "warn");
+          return;
+        }
 
-      const res = await fetch(`https://googleapis.com{apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }]
-        })
-    ;
-      const data = await res.json();
-      if (data.error) throw new Error(data.error.message);
-      outBox.innerText = data.candidates[0].content.parts[0].text;
-    } catch (err) {
-      outBox.innerText = "❌ Error: " + err.message;
-    }
-  };
-})();
+        outBox.innerText = "⏳ Gemini soch raha hai...";
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: `Tum NDA exam ke expert teacher ho. Hinglish mein short trick aur clear steps ke saath samjhao:\n\n${question}` }] }]
+            })
+          });
+          const data = await res.json();
+          if (data.error) throw new Error(data.error.message);
+          outBox.innerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
+        } catch (err) {
+          outBox.innerText = "❌ Error: " + err.message;
+        }
+      });
+
+      document.getElementById("genMcqGemBtn").addEventListener("click", async () => {
+        const apiKey = getGemKey();
+        const topic = document.getElementById("gemPromptInput").value.trim() || "NDA Mathematics, Physics, GK or English";
+        const outBox = document.getElementById("gemOutputBox");
+
+        if (!apiKey) {
+          outBox.innerText = "⚠️ Upar pehle apni Gemini API Key save karein!";
+          if (typeof showToast === "function") showToast("Pehle Gemini API Key save karein!", "warn");
+          return;
+        }
+
+        outBox.innerText = "⏳ Naya NDA level MCQ ban raha hai...";
+        try {
+          const prompt = `Create 1 tough UPSC NDA exam level multiple choice question on topic: "${topic}".
+Format clearly in Hinglish with:
+Question:
+(A) ...
+(B) ...
+(C) ...
+(D) ...
+
+Correct Answer & Short Trick Explanation:`;
+
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }]
+            })
+          });
+          const data = await res.json();
+          if (data.error) throw new Error(data.error.message);
+          outBox.innerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
+        } catch (err) {
+          outBox.innerText = "❌ Error: " + err.message;
+        }
+      });
+    })();
   </script>
 </body>
 </html>
