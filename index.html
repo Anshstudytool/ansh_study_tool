@@ -473,49 +473,6 @@
     }
     .flashcard-face:hover { transform: translateY(-2px); }
 
-    /* AI Master Chat */
-    .chat-box {
-      height: 360px;
-      overflow-y: auto;
-      background: rgba(2, 6, 23, 0.45);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    body.light .chat-box { background: rgba(241, 245, 249, 0.75); }
-    .msg {
-      max-width: 88%;
-      padding: 11px 15px;
-      border-radius: 14px;
-      font-size: 15px;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    .msg.bot {
-      background: var(--card-alt);
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-      border-left: 4px solid var(--primary);
-    }
-    .msg.user {
-      background: linear-gradient(135deg, #0284c7, #6366f1);
-      color: #fff;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-    .msg code {
-      background: rgba(0,0,0,0.28);
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 12.5px;
-    }
-
     /* Mock Test Options */
     .mcq-option {
       display: block;
@@ -625,7 +582,7 @@
       50% { opacity: 0.85; }
     }
 
-    /* Large Floating Glass Bottom Bar (7 Tabs) */
+    /* Large Floating Glass Bottom Bar (6 Tabs) */
     .bottom-bar {
       position: fixed;
       bottom: 10px;
@@ -1365,7 +1322,7 @@
       </div>
     </section>
 
-    <!-- ==================== 3. SMART BOOK / 11th & 12th COMPLETE NOTEBOOK TAB ==================== -->
+    <!-- ==================== 2. SMART BOOK / 11th & 12th COMPLETE NOTEBOOK TAB ==================== -->
     <section id="tab-smartbook" class="view-section">
       <!-- List View -->
       <div id="sbListView" class="card">
@@ -1481,7 +1438,7 @@
       </div>
     </section>
 
-    <!-- ==================== 4. COMBINATORIAL & PROCEDURAL MOCK TEST ARENA ==================== -->
+    <!-- ==================== 3. COMBINATORIAL & PROCEDURAL MOCK TEST ARENA ==================== -->
     <section id="tab-mock" class="view-section">
       <div class="card">
         <div class="card-title">
@@ -1567,7 +1524,7 @@
       </div>
     </section>
 
-    <!-- ==================== 5. PDF BOOKS TAB ==================== -->
+    <!-- ==================== 4. PDF BOOKS TAB ==================== -->
     <section id="tab-pdf" class="view-section">
       <div class="card">
         <div class="card-title">📚 Pathfinder, Practice & Offline Hindi+Math PDFs</div>
@@ -1621,7 +1578,7 @@
       </div>
     </section>
 
-    <!-- ==================== 6. SELECTED SUBJECT QUIZ + SPEED MATH ARENA ==================== -->
+    <!-- ==================== 5. SELECTED SUBJECT QUIZ + SPEED MATH ARENA ==================== -->
     <section id="tab-quiz" class="view-section">
       <div class="card">
         <div class="card-title">
@@ -1691,7 +1648,7 @@
       </div>
     </section>
 
-    <!-- ==================== 7. TOOLS: VOICE NOTES & PLANNER ==================== -->
+    <!-- ==================== 6. TOOLS: VOICE NOTES & PLANNER ==================== -->
     <section id="tab-tools" class="view-section">
       <!-- Mood Theme, Font Style & Full-Screen Customizer -->
       <div class="card">
@@ -3266,7 +3223,6 @@
       return { q: qText, opts, ans: ansIdx, exp: expText, cat, sub, tag };
     }
 
-    // --- 1. ENGLISH FACT-MATRIX (40+ Vocab Words -> Synonyms, Antonyms, Match Pairs; 25+ Idioms; 20+ Grammar Rules) ---
     const ENG_VOCAB_MATRIX = [
       { w: "METICULOUS", syn: "Careful and precise", ant: "Careless" },
       { w: "BENEVOLENT", syn: "Kind and charitable", ant: "Malicious" },
@@ -3343,7 +3299,6 @@
       { q: "Fill in the blank: Mathematics ___ my favourite subject for NDA.", ans: "is", dist: ["are", "were", "have"], exp: "Subject names ending in '-ics' (Mathematics, Physics) take a singular verb ('is')." }
     ];
 
-    // --- 2. GK FACT-MATRIX (Polity, History, Geography, Defence) ---
     const GK_POLITY_FACTS = [
       ["Article 14", "Right to Equality before Law"],
       ["Article 17", "Abolition of Untouchability"],
@@ -3641,7 +3596,6 @@
         return buildMcqFromAnswer(gItem.q, gItem.ans, gItem.dist, gItem.exp, 'english', 'eng_grammar', "✍️ Grammar Rule");
       }
 
-      // eng_vocab: Synonyms, Antonyms, Idioms, Match-Pairs, Odd-One-Out (999+ Combinations)
       const engMode = randInt(1, 4);
       if (engMode === 1) {
         const word = pickRandom(ENG_VOCAB_MATRIX);
@@ -3662,350 +3616,365 @@
       return buildDynamicMatchFromMatrix(vocabPairs, "Match List-I (Word) with List-II (Synonym)", 'english', 'eng_vocab');
     }
 
-    const PYQ_QUESTION_BANK = [
-      { q: "NDA-Style Practice: What is the number of proper subsets of a set containing 4 elements?", opts: ["15", "16", "14", "8"], ans: 0, exp: "Total subsets = 2⁴ = 16; proper subsets = 2⁴ - 1 = 15.", cat: "maths", sub: "maths_algebra", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: If A is a square matrix of order 3 and |A| = 5, then |2A| is equal to:", opts: ["40", "10", "20", "8"], ans: 0, exp: "|kA| = kⁿ|A| ⇒ 2³ × 5 = 8 × 5 = 40.", cat: "maths", sub: "maths_algebra", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: The value of cos 15° is:", opts: ["(√3 + 1) / (2√2)", "(√3 - 1) / (2√2)", "1 / √2", "√3 / 2"], ans: 0, exp: "cos 15° = cos(45° - 30°) = (√3 + 1)/(2√2).", cat: "maths", sub: "maths_trig_vec", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: Value of i⁵⁷ + 1/i¹²⁵ (where i = √(-1)) is:", opts: ["0", "2i", "-2i", "1"], ans: 0, exp: "i⁵⁷ = i; i¹²⁵ = i ⇒ 1/i = -i. Sum = i + (-i) = 0.", cat: "maths", sub: "maths_algebra", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: Which phenomenon proves the transverse nature of light waves?", opts: ["Polarization", "Interference", "Diffraction", "Dispersion"], ans: 0, exp: "Only transverse waves can be polarized; sound (longitudinal) cannot.", cat: "science", sub: "sci_physics", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: Escape velocity from Earth's surface is approximately:", opts: ["11.2 km/s", "7.9 km/s", "9.8 km/s", "2.4 km/s"], ans: 0, exp: "v_e = √(2gR) ≈ 11.2 km/s.", cat: "science", sub: "sci_physics", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: Which part of the human brain regulates body temperature and hunger?", opts: ["Hypothalamus", "Cerebellum", "Medulla", "Cerebrum"], ans: 0, exp: "Hypothalamus controls thermoregulation, hunger, thirst, and pituitary.", cat: "science", sub: "sci_chem_bio", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: Which Constitutional Amendment added Fundamental Duties to the Constitution of India?", opts: ["42nd Amendment", "44th Amendment", "52nd Amendment", "73rd Amendment"], ans: 0, exp: "42nd Amendment Act, 1976 added Article 51A (Part IVA).", cat: "gk", sub: "gk_polity_hist", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: Choose the word nearest in meaning to 'TENACIOUS':", opts: ["Persistent", "Yielding", "Careless", "Fragile"], ans: 0, exp: "Tenacious means holding firmly to a purpose; persistent.", cat: "english", sub: "eng_vocab", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Practice: Neither of the two brothers ___ selected for the academy.", opts: ["was", "were", "are", "have"], ans: 0, exp: "'Neither of + plural noun' takes a singular verb ('was').", cat: "english", sub: "eng_grammar", tag: "📜 NDA-Style Set" }
+    const NDA_STYLE_BANK = [
+      { q: "NDA-Style Maths: If A and B are mutually exclusive events with P(A) = 0.35 and P(B) = 0.45, find P(A ∪ B).", opts: ["0.80", "0.1575", "0.10", "0.20"], ans: 0, exp: "Mutually exclusive events ⇒ P(A ∪ B) = P(A) + P(B) = 0.35 + 0.45 = 0.80.", cat: "maths", sub: "maths_prob_pnc", tag: "📜 NDA-Style Set" },
+      { q: "NDA-Style Maths: Number of permutations of letters of the word 'ARMY' is:", opts: ["24", "12", "6", "48"], ans: 0, exp: "4 distinct letters ⇒ 4! = 24.", cat: "maths", sub: "maths_prob_pnc", tag: "📜 NDA-Style Set" },
+      { q: "NDA-Style Maths: If det(A) = 5 for a 3×3 matrix A, what is det(2A)?", opts: ["40", "10", "20", "80"], ans: 0, exp: "For n×n matrix, det(kA) = kⁿ det(A) ⇒ 2³ × 5 = 8 × 5 = 40.", cat: "maths", sub: "maths_algebra", tag: "📜 NDA-Style Set" },
+      { q: "NDA-Style Physics: A body is dropped from a height of 80 m (g = 10 m/s²). Time taken to reach ground is:", opts: ["4 s", "8 s", "2 s", "16 s"], ans: 0, exp: "h = ½gt² ⇒ 80 = 5t² ⇒ t² = 16 ⇒ t = 4 s.", cat: "science", sub: "sci_physics", tag: "📜 NDA-Style Set" },
+      { q: "NDA-Style GK: Which Article of the Indian Constitution is known as 'Heart and Soul' by Dr. B.R. Ambedkar?", opts: ["Article 32", "Article 19", "Article 21", "Article 14"], ans: 0, exp: "Article 32 grants the right to constitutional remedies via writs.", cat: "gk", sub: "gk_polity_hist", tag: "📜 NDA-Style Set" },
+      { q: "NDA-Style GK: Where is the National Defence Academy (NDA) located?", opts: ["Khadakwasla, Pune", "Dehradun", "Chennai", "Ezhimala"], ans: 0, exp: "NDA is located at Khadakwasla near Pune, Maharashtra.", cat: "gk", sub: "gk_geo_def", tag: "📜 NDA-Style Set" },
+      { q: "NDA-Style English: Choose the word closest in meaning to 'OBSTINATE':", opts: ["Stubborn", "Flexible", "Cautious", "Generous"], ans: 0, exp: "Obstinate means stubborn or firmly refusing to change one's attitude.", cat: "english", sub: "eng_vocab", tag: "📜 NDA-Style Set" },
+      { q: "NDA-Style English: Choose the word most opposite in meaning to 'TRANSIENT':", opts: ["Permanent", "Temporary", "Brief", "Fleeting"], ans: 0, exp: "Transient means lasting for a short time; opposite is Permanent.", cat: "english", sub: "eng_vocab", tag: "📜 NDA-Style Set" }
     ];
 
-    function generateUnifiedQuestion(subKey = 'mixed') {
-      const customMatch = (appData.customQuestions || []).filter(q => subKey === 'mixed' || q.sub === subKey || q.cat === subKey);
-      if (customMatch.length > 0 && Math.random() < 0.25) {
-        return pickRandom(customMatch);
+    function getCustomQuestionsByCategory(catOrSub) {
+      const list = Array.isArray(appData.customQuestions) ? appData.customQuestions : [];
+      if (!list.length) return [];
+      if (catOrSub === 'full' || catOrSub === 'mixed' || catOrSub === 'pyq') return list;
+      return list.filter(item => item.cat === catOrSub || item.sub === catOrSub);
+    }
+
+    function hashQuestion(qObj) {
+      const str = `${qObj.q || ''}||${(qObj.opts || []).join('|')}||${qObj.ans ?? ''}`;
+      let h = 2166136261;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
       }
-      return generateProceduralQuestion(subKey);
+      return 'q_' + (h >>> 0).toString(36);
     }
 
-    function questionHash(qObj) {
-      return `${qObj.cat || ''}|${qObj.q}|${(qObj.opts || []).join('~')}`;
-    }
-
-    function getUniqueQuestion(generatorFn, maxAttempts = 40) {
+    function getUniqueQuestion(generatorFn, maxAttempts = 30) {
+      let candidate = null;
       for (let i = 0; i < maxAttempts; i++) {
-        const candidate = generatorFn();
-        const h = questionHash(candidate);
-        if (!seenSet.has(h)) {
-          seenSet.add(h);
+        candidate = generatorFn();
+        const key = hashQuestion(candidate);
+        if (!seenSet.has(key)) {
+          seenSet.add(key);
+          if (seenSet.size > MAX_SEEN_HASHES) {
+            const first = seenSet.values().next().value;
+            seenSet.delete(first);
+          }
           return candidate;
         }
       }
-      seenSet.clear();
-      const fresh = generatorFn();
-      seenSet.add(questionHash(fresh));
-      return fresh;
+      return candidate || generateProceduralQuestion('mixed');
     }
 
-    function getQuestionPoolBySubject(sub) {
-      const custom = (appData.customQuestions || []).filter(q => sub === 'full' || sub === 'weak' || q.cat === sub);
-      const pyq = PYQ_QUESTION_BANK.filter(q => sub === 'full' || sub === 'weak' || sub === 'pyq' || q.cat === sub);
-      return { custom, pyq };
-    }
-
-    function buildMockQuestionSet(sub, count, mode) {
-      const set = [];
-      const { custom, pyq } = getQuestionPoolBySubject(sub);
-      const weakSubs = getWeakTopics().map(w => w.sub);
-
-      const pickProceduralForSub = () => {
-        if (sub === 'weak' && weakSubs.length > 0) return generateProceduralQuestion(pickRandom(weakSubs));
-        if (sub === 'maths') return generateProceduralQuestion(pickRandom(['maths_calculus', 'maths_algebra', 'maths_trig_vec', 'maths_prob_pnc']));
-        if (sub === 'science') return generateProceduralQuestion(pickRandom(['sci_physics', 'sci_chem_bio']));
-        if (sub === 'gk') return generateProceduralQuestion(pickRandom(['gk_polity_hist', 'gk_geo_def']));
-        if (sub === 'english') return generateProceduralQuestion(pickRandom(['eng_vocab', 'eng_grammar']));
-        return generateProceduralQuestion('mixed');
-      };
-
-      const staticPool = [...custom, ...pyq];
-
-      for (let i = 0; i < count; i++) {
-        let qItem = null;
-        if (mode === 'procedural_only') {
-          qItem = getUniqueQuestion(pickProceduralForSub);
-        } else if (mode === 'pyq_only') {
-          if (staticPool.length > 0) {
-            const candidate = pickRandom(staticPool);
-            qItem = { ...candidate, tag: candidate.tag || "📜 NDA-Style Practice" };
-          } else {
-            qItem = getUniqueQuestion(pickProceduralForSub);
-          }
-        } else {
-          const useStatic = staticPool.length > 0 && (i % 4 === 0);
-          if (useStatic) {
-            const candidate = pickRandom(staticPool);
-            qItem = { ...candidate, tag: candidate.tag || "📜 NDA-Style Practice" };
-          } else {
-            qItem = getUniqueQuestion(pickProceduralForSub);
-          }
-        }
-        set.push(qItem);
+    function generateUnifiedQuestion(subKeyOrCat, mode = 'infinite') {
+      const customMatches = getCustomQuestionsByCategory(subKeyOrCat);
+      if (customMatches.length > 0 && Math.random() < 0.25) {
+        const c = pickRandom(customMatches);
+        return { ...c, tag: c.tag || "📥 Custom Q-Pack" };
       }
-      return set;
+
+      if (mode === 'procedural_only') {
+        if (subKeyOrCat === 'maths') return generateProceduralQuestion(pickRandom(['maths_calculus', 'maths_algebra', 'maths_trig_vec', 'maths_prob_pnc']));
+        if (subKeyOrCat === 'science') return generateProceduralQuestion(pickRandom(['sci_physics', 'sci_chem_bio']));
+        if (subKeyOrCat === 'gk') return generateProceduralQuestion(pickRandom(['gk_polity_hist', 'gk_geo_def']));
+        if (subKeyOrCat === 'english') return generateProceduralQuestion(pickRandom(['eng_vocab', 'eng_grammar']));
+        if (subKeyOrCat === 'full' || subKeyOrCat === 'mixed' || subKeyOrCat === 'pyq') return generateProceduralQuestion('mixed');
+        return generateProceduralQuestion(subKeyOrCat);
+      }
+
+      if (mode === 'pyq_only') {
+        const pool = subKeyOrCat === 'full' || subKeyOrCat === 'pyq'
+          ? [...NDA_STYLE_BANK, ...customMatches]
+          : [...NDA_STYLE_BANK.filter(x => x.cat === subKeyOrCat || x.sub === subKeyOrCat), ...customMatches];
+        if (pool.length > 0) return pickRandom(pool);
+      }
+
+      if (subKeyOrCat === 'maths') return generateProceduralQuestion(pickRandom(['maths_calculus', 'maths_algebra', 'maths_trig_vec', 'maths_prob_pnc']));
+      if (subKeyOrCat === 'science') return generateProceduralQuestion(pickRandom(['sci_physics', 'sci_chem_bio']));
+      if (subKeyOrCat === 'gk') return generateProceduralQuestion(pickRandom(['gk_polity_hist', 'gk_geo_def']));
+      if (subKeyOrCat === 'english') return generateProceduralQuestion(pickRandom(['eng_vocab', 'eng_grammar']));
+      if (subKeyOrCat === 'full' || subKeyOrCat === 'pyq') {
+        if (Math.random() < 0.22) return pickRandom(NDA_STYLE_BANK);
+        return generateProceduralQuestion('mixed');
+      }
+      return generateProceduralQuestion(subKeyOrCat);
     }
 
-    // ================= MOCK TEST ENGINE WITH REFRESH PERSISTENCE =================
-    let mockQuestions = [];
-    let currentMockIdx = 0;
-    let userAnswers = [];
-    let currentMockSub = 'full';
-    let mockTimerInterval = null;
-    let mockSecondsElapsed = 0;
-    let mockTotalAllowedSec = 0;
+    function handleImportQuestionPack(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || '[]'));
+          const arr = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.questions) ? parsed.questions : []);
+          const valid = [];
+          for (const item of arr) {
+            if (!item || typeof item.q !== 'string' || !Array.isArray(item.opts) || item.opts.length < 2) continue;
+            const ansIdx = Number.isInteger(item.ans) && item.ans >= 0 && item.ans < item.opts.length ? item.ans : 0;
+            valid.push({
+              q: item.q.trim(),
+              opts: item.opts.slice(0, 4).map(o => String(o)),
+              ans: ansIdx,
+              exp: String(item.exp || 'Imported from custom Q-Pack.'),
+              cat: ['maths', 'science', 'gk', 'english'].includes(item.cat) ? item.cat : 'gk',
+              sub: String(item.sub || 'gk_polity_hist'),
+              tag: String(item.tag || '📥 Imported Q-Pack')
+            });
+          }
+          if (!valid.length) {
+            showToast("JSON mein valid questions (q, opts, ans) nahi mile.", "error");
+            return;
+          }
+          appData.customQuestions = [...valid, ...(appData.customQuestions || [])].slice(0, 5000);
+          saveCustomQuestionsToIDB(appData.customQuestions);
+          syncData();
+          showToast(`${valid.length} custom questions imported successfully!`, "success");
+        } catch (err) {
+          showToast("Invalid JSON file: " + err.message, "error");
+        }
+      };
+      reader.readAsText(file);
+    }
 
-    function saveActiveMockSession() {
-      if (!mockQuestions || mockQuestions.length === 0) return;
+    // ================= MOCK TEST ENGINE WITH QUESTION PALETTE & AUTO-SAVE =================
+    let currentMockSub = 'full';
+    let currentMockMode = 'infinite';
+    let mockQuestions = [];
+    let mockIndex = 0;
+    let userAnswers = [];
+    let mockTimerInterval = null;
+    let mockElapsedSeconds = 0;
+
+    function saveMockDraft() {
       try {
+        if (!mockQuestions.length || document.getElementById('mockActiveArea').style.display === 'none') {
+          localStorage.removeItem(ACTIVE_MOCK_KEY);
+          return;
+        }
         localStorage.setItem(ACTIVE_MOCK_KEY, JSON.stringify({
-          mockQuestions,
-          currentMockIdx,
-          userAnswers,
-          currentMockSub,
-          mockSecondsElapsed,
-          mockTotalAllowedSec
+          sub: currentMockSub,
+          mode: currentMockMode,
+          questions: mockQuestions,
+          index: mockIndex,
+          answers: userAnswers,
+          elapsed: mockElapsedSeconds
         }));
       } catch (e) {}
     }
 
-    function clearActiveMockSession() {
+    function clearMockDraft() {
       try { localStorage.removeItem(ACTIVE_MOCK_KEY); } catch (e) {}
     }
 
-    function restoreActiveMockSession() {
-      try {
-        const raw = localStorage.getItem(ACTIVE_MOCK_KEY);
-        if (!raw) return false;
-        const data = JSON.parse(raw);
-        if (!Array.isArray(data.mockQuestions) || data.mockQuestions.length === 0) return false;
-        mockQuestions = data.mockQuestions;
-        currentMockIdx = Math.min(data.currentMockIdx || 0, mockQuestions.length - 1);
-        userAnswers = Array.isArray(data.userAnswers) ? data.userAnswers : new Array(mockQuestions.length).fill(null);
-        currentMockSub = data.currentMockSub || 'full';
-        mockSecondsElapsed = Number(data.mockSecondsElapsed) || 0;
-        mockTotalAllowedSec = Number(data.mockTotalAllowedSec) || Math.round(mockQuestions.length * 75);
+    function startMockTest(sub, restoredDraft = null) {
+      clearInterval(mockTimerInterval);
+      mockTimerInterval = null;
 
-        document.getElementById('mockSetup').style.display = 'none';
-        document.getElementById('mockResultArea').style.display = 'none';
-        document.getElementById('mockActiveArea').style.display = 'block';
-        document.getElementById('mockSubjectTitle').innerText = `Resumed Mock: ${currentMockSub.toUpperCase()}`;
+      if (restoredDraft) {
+        currentMockSub = restoredDraft.sub || 'full';
+        currentMockMode = restoredDraft.mode || 'infinite';
+        mockQuestions = restoredDraft.questions || [];
+        mockIndex = Math.min(Math.max(0, restoredDraft.index || 0), Math.max(0, mockQuestions.length - 1));
+        userAnswers = Array.isArray(restoredDraft.answers) ? restoredDraft.answers : new Array(mockQuestions.length).fill(null);
+        mockElapsedSeconds = restoredDraft.elapsed || 0;
+      } else {
+        currentMockSub = sub;
+        const modeSel = document.getElementById('mockModeSelect');
+        const countSel = document.getElementById('mockCountSelect');
+        currentMockMode = modeSel ? modeSel.value : 'infinite';
+        const qCount = countSel ? parseInt(countSel.value, 10) : 15;
 
-        clearInterval(mockTimerInterval);
-        mockTimerInterval = setInterval(tickMockTimer, 1000);
-        renderMockQuestion();
-        showToast("Previous incomplete Mock Test session restored!", "info");
-        return true;
-      } catch (e) {
-        return false;
+        const dueMistakes = sub === 'weak' ? getDueMistakes() : [];
+        const targetCount = sub === 'weak' ? Math.max(5, Math.min(qCount, dueMistakes.length || 10)) : qCount;
+
+        mockQuestions = [];
+        for (let i = 0; i < targetCount; i++) {
+          if (sub === 'weak' && i < dueMistakes.length) {
+            const m = dueMistakes[i];
+            mockQuestions.push({ q: m.q, opts: m.opts, ans: m.ans, exp: m.exp, cat: m.cat || 'gk', sub: m.sub || 'gk_polity_hist', tag: "🔁 Spaced Revision" });
+          } else if (sub === 'weak') {
+            const ranked = getWeakTopics();
+            const weakSub = ranked.length > 0 ? ranked[0].sub : 'maths_trig_vec';
+            mockQuestions.push(getUniqueQuestion(() => generateUnifiedQuestion(weakSub, currentMockMode)));
+          } else {
+            mockQuestions.push(getUniqueQuestion(() => generateUnifiedQuestion(sub, currentMockMode)));
+          }
+        }
+        syncData();
+        mockIndex = 0;
+        userAnswers = new Array(mockQuestions.length).fill(null);
+        mockElapsedSeconds = 0;
       }
-    }
-
-    function tickMockTimer() {
-      mockSecondsElapsed++;
-      const rem = Math.max(0, mockTotalAllowedSec - mockSecondsElapsed);
-      const mins = String(Math.floor(rem / 60)).padStart(2, '0');
-      const secs = String(rem % 60).padStart(2, '0');
-      const badge = document.getElementById('mockTimerBadge');
-      badge.innerText = `⏱ ${mins}:${secs} left`;
-      if (rem === 0) {
-        clearInterval(mockTimerInterval);
-        showToast("NDA Mock time limit reached! Auto-submitting...", "warn");
-        submitMockTest();
-        return;
-      }
-      if (mockSecondsElapsed % 5 === 0) saveActiveMockSession();
-    }
-
-    function startMockTest(sub) {
-      currentMockSub = sub;
-      const mode = document.getElementById('mockModeSelect').value;
-      const count = parseInt(document.getElementById('mockCountSelect').value, 10) || 15;
-
-      mockQuestions = buildMockQuestionSet(sub, count, mode);
-      currentMockIdx = 0;
-      userAnswers = new Array(mockQuestions.length).fill(null);
-      mockSecondsElapsed = 0;
-      mockTotalAllowedSec = Math.round(mockQuestions.length * 75);
-
-      syncData();
-      saveActiveMockSession();
 
       document.getElementById('mockSetup').style.display = 'none';
       document.getElementById('mockResultArea').style.display = 'none';
       document.getElementById('mockActiveArea').style.display = 'block';
-      document.getElementById('mockSubjectTitle').innerText = `Mock: ${sub.toUpperCase()} (${mode.replace('_', ' ')})`;
 
-      clearInterval(mockTimerInterval);
-      mockTimerInterval = setInterval(tickMockTimer, 1000);
+      const subNames = {
+        maths: "📐 NDA Mathematics (999+)",
+        science: "🔬 GAT General Science (999+)",
+        gk: "🌍 GAT GK & Polity (999+)",
+        english: "📚 NDA English (999+)",
+        full: "🎖️ Full NDA Mixed (999+)",
+        pyq: "📜 NDA-Style Set",
+        weak: "🧠 Adaptive Weakness & Revision"
+      };
+      document.getElementById('mockSubjectTitle').innerText = subNames[currentMockSub] || currentMockSub;
+
+      updateMockTimerLabel();
+      mockTimerInterval = setInterval(() => {
+        mockElapsedSeconds++;
+        updateMockTimerLabel();
+        if (mockElapsedSeconds % 5 === 0) saveMockDraft();
+      }, 1000);
+
+      saveMockDraft();
       renderMockQuestion();
+    }
+
+    function updateMockTimerLabel() {
+      const m = String(Math.floor(mockElapsedSeconds / 60)).padStart(2, '0');
+      const s = String(mockElapsedSeconds % 60).padStart(2, '0');
+      const recommendedMins = (mockQuestions.length * 1.25).toFixed(1).replace(/\.0$/, '');
+      document.getElementById('mockTimerBadge').innerText = `⏱ ${m}:${s} / ~${recommendedMins}m`;
     }
 
     function renderMockPalette() {
       const pal = document.getElementById('mockPalette');
       if (!pal) return;
-      pal.innerHTML = mockQuestions.map((_, i) => {
+      pal.innerHTML = mockQuestions.map((_, idx) => {
         const cls = ['q-pill'];
-        if (userAnswers[i] !== null) cls.push('answered');
-        if (i === currentMockIdx) cls.push('current');
-        return `<button class="${cls.join(' ')}" onclick="jumpMockQ(${i})">${i + 1}</button>`;
+        if (idx === mockIndex) cls.push('current');
+        if (userAnswers[idx] !== null) cls.push('answered');
+        return `<button class="${cls.join(' ')}" onclick="jumpMockQ(${idx})">${idx + 1}</button>`;
       }).join('');
-    }
-
-    function renderMockQuestion() {
-      const qObj = mockQuestions[currentMockIdx];
-      document.getElementById('mockProgress').innerText = `Q ${currentMockIdx + 1} / ${mockQuestions.length}`;
-      document.getElementById('mockSourceBadge').innerText = qObj.tag || "♾️ Fresh";
-      document.getElementById('mockQuestionText').innerText = `${currentMockIdx + 1}. ${qObj.q}`;
-
-      const cont = document.getElementById('mockOptionsContainer');
-      cont.innerHTML = '';
-      qObj.opts.forEach((optText, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'mcq-option' + (userAnswers[currentMockIdx] === idx ? ' selected' : '');
-        btn.innerHTML = `<b>(${String.fromCharCode(65 + idx)})</b> ${escapeHTML(optText)}`;
-        btn.onclick = () => {
-          userAnswers[currentMockIdx] = idx;
-          saveActiveMockSession();
-          renderMockQuestion();
-        };
-        cont.appendChild(btn);
-      });
-      renderMockPalette();
     }
 
     function jumpMockQ(idx) {
       if (idx >= 0 && idx < mockQuestions.length) {
-        currentMockIdx = idx;
-        saveActiveMockSession();
+        mockIndex = idx;
+        saveMockDraft();
+        renderMockQuestion();
+      }
+    }
+
+    function renderMockQuestion() {
+      const qObj = mockQuestions[mockIndex];
+      document.getElementById('mockProgress').innerText = `Question ${mockIndex + 1} / ${mockQuestions.length}`;
+      const badge = document.getElementById('mockSourceBadge');
+      badge.innerText = qObj.tag || "♾️ 999+ Engine";
+      badge.className = qObj.tag && qObj.tag.includes("NDA-Style") ? "badge badge-pyq" : "badge badge-inf";
+
+      document.getElementById('mockQuestionText').innerText = qObj.q;
+      const optBox = document.getElementById('mockOptionsContainer');
+      optBox.innerHTML = '';
+
+      qObj.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'mcq-option' + (userAnswers[mockIndex] === idx ? ' selected' : '');
+        btn.innerHTML = `<b>(${String.fromCharCode(65 + idx)})</b> ${escapeHTML(optText)}`;
+        btn.onclick = () => {
+          userAnswers[mockIndex] = idx;
+          saveMockDraft();
+          renderMockQuestion();
+        };
+        optBox.appendChild(btn);
+      });
+      renderMockPalette();
+    }
+
+    function prevMockQ() {
+      if (mockIndex > 0) {
+        mockIndex--;
+        saveMockDraft();
         renderMockQuestion();
       }
     }
 
     function nextMockQ() {
-      if (currentMockIdx < mockQuestions.length - 1) {
-        currentMockIdx++;
-        saveActiveMockSession();
+      if (mockIndex < mockQuestions.length - 1) {
+        mockIndex++;
+        saveMockDraft();
         renderMockQuestion();
       } else {
-        showToast("Aap last question par hain. 'Submit Test' dabayein!", "info");
-      }
-    }
-
-    function prevMockQ() {
-      if (currentMockIdx > 0) {
-        currentMockIdx--;
-        saveActiveMockSession();
-        renderMockQuestion();
+        confirmSubmitMock();
       }
     }
 
     function confirmSubmitMock() {
       const unanswered = userAnswers.filter(a => a === null).length;
       const msg = unanswered > 0
-        ? `${unanswered} questions abhi unanswered hain. Kya aap test submit karna chahte hain?`
+        ? `${unanswered} question(s) abhi unattempted hain. Kya aap test submit karna chahte hain?`
         : "Kya aap Mock Test submit karke scorecard dekhna chahte hain?";
       openConfirmModal("Submit Mock Test?", msg, submitMockTest);
     }
 
     function confirmAbortMock() {
-      openConfirmModal("Exit Mock Test?", "Is test ki current progress discard ho jayegi. Bahar jaana chahte hain?", () => {
+      openConfirmModal("Exit Mock Test?", "Current test progress discard ho jayegi. Kya aap bahar jana chahte hain?", () => {
         clearInterval(mockTimerInterval);
-        clearActiveMockSession();
+        mockTimerInterval = null;
+        clearMockDraft();
         resetMockUI();
       });
     }
 
     function submitMockTest() {
       clearInterval(mockTimerInterval);
-      clearActiveMockSession();
-      let correct = 0, wrong = 0, skipped = 0;
-      const reviewHtml = [];
+      mockTimerInterval = null;
+      clearMockDraft();
 
-      mockQuestions.forEach((q, i) => {
-        const ans = userAnswers[i];
-        if (ans === null) {
-          skipped++;
-          reviewHtml.push(`<div style="margin-bottom:10px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.04);"><b>Q${i + 1}:</b> ${escapeHTML(q.q)}<br><span style="color:var(--muted);">Skipped</span> • <b>Ans:</b> ${escapeHTML(q.opts[q.ans])}<br><span style="color:var(--muted);">${escapeHTML(q.exp)}</span></div>`);
-        } else if (ans === q.ans) {
+      let correct = 0, wrong = 0, unattempted = 0;
+      let reviewHTML = '';
+
+      mockQuestions.forEach((qObj, idx) => {
+        const picked = userAnswers[idx];
+        const isCorrect = picked === qObj.ans;
+        if (picked === null) {
+          unattempted++;
+        } else if (isCorrect) {
           correct++;
-          recordTopicAttempt(q.sub, true, q);
-          reviewHtml.push(`<div style="margin-bottom:10px; padding:10px; border-radius:10px; background:rgba(16,185,129,0.12);"><b>Q${i + 1}:</b> ${escapeHTML(q.q)}<br><span style="color:var(--accent);">✔ Correct (${escapeHTML(q.opts[ans])})</span><br><span style="color:var(--muted);">${escapeHTML(q.exp)}</span></div>`);
+          recordTopicAttempt(qObj.sub, true, qObj);
         } else {
           wrong++;
-          recordTopicAttempt(q.sub, false, q);
-          reviewHtml.push(`<div style="margin-bottom:10px; padding:10px; border-radius:10px; background:rgba(244,63,94,0.12);"><b>Q${i + 1}:</b> ${escapeHTML(q.q)}<br><span style="color:var(--danger);">✘ Your Ans: ${escapeHTML(q.opts[ans])}</span> | <span style="color:var(--accent);">Correct: ${escapeHTML(q.opts[q.ans])}</span><br><span style="color:var(--muted);">${escapeHTML(q.exp)}</span></div>`);
+          recordTopicAttempt(qObj.sub, false, qObj);
         }
+
+        const statusColor = picked === null ? 'var(--muted)' : (isCorrect ? 'var(--accent)' : 'var(--danger)');
+        const statusText = picked === null ? 'Unattempted' : (isCorrect ? 'Correct' : `Wrong (You: ${qObj.opts[picked]})`);
+        reviewHTML += `
+          <div style="padding:10px; border-bottom:1px solid var(--border); margin-bottom:6px;">
+            <div style="font-weight:700; margin-bottom:4px; white-space:pre-line;">Q${idx + 1}. ${escapeHTML(qObj.q)}</div>
+            <div style="color:${statusColor}; font-weight:700;">${escapeHTML(statusText)} • Ans: ${escapeHTML(qObj.opts[qObj.ans])}</div>
+            <div style="color:var(--muted); font-size:12px; margin-top:3px;">💡 ${escapeHTML(qObj.exp)}</div>
+          </div>
+        `;
       });
 
-      const earnedXp = Math.max(0, correct * 10 - wrong * 3);
-      appData.quizScore += earnedXp;
-      appData.studyMins += Math.max(1, Math.round(mockSecondsElapsed / 60));
+      const accuracy = mockQuestions.length > 0 ? Math.round((correct / mockQuestions.length) * 100) : 0;
+      const earnedXP = correct * 10;
+      appData.quizScore += earnedXP;
+      appData.studyMins += Math.max(1, Math.round(mockElapsedSeconds / 60));
       updateDailyStreak();
       syncData();
 
       document.getElementById('mockActiveArea').style.display = 'none';
       document.getElementById('mockResultArea').style.display = 'block';
-      const acc = mockQuestions.length > 0 ? Math.round((correct / mockQuestions.length) * 100) : 0;
-      document.getElementById('mockScoreSummary').innerHTML =
-        `Total Questions: <b>${mockQuestions.length}</b> | Time Taken: <b>${Math.floor(mockSecondsElapsed / 60)}m ${mockSecondsElapsed % 60}s</b><br>` +
-        `Correct: <b style="color:var(--accent);">${correct}</b> | Wrong: <b style="color:var(--danger);">${wrong}</b> | Skipped: <b>${skipped}</b><br>` +
-        `Accuracy: <b>${acc}%</b> | XP Earned: <b style="color:var(--primary);">+${earnedXp} XP</b>`;
-      document.getElementById('mockReviewList').innerHTML = reviewHtml.join('');
-      showToast(`Mock submitted! +${earnedXp} XP added.`, "success");
+      document.getElementById('mockScoreSummary').innerHTML = `
+        <b>Total Questions:</b> ${mockQuestions.length} | <b>Time Taken:</b> ${Math.floor(mockElapsedSeconds / 60)}m ${mockElapsedSeconds % 60}s<br>
+        <span style="color:var(--accent);">✅ Correct: ${correct}</span> |
+        <span style="color:var(--danger);">❌ Wrong: ${wrong}</span> |
+        <span>⚪ Skipped: ${unattempted}</span><br>
+        <b>Accuracy:</b> ${accuracy}% | <b>XP Earned:</b> +${earnedXP} XP
+      `;
+      document.getElementById('mockReviewList').innerHTML = reviewHTML;
     }
 
     function resetMockUI() {
       clearInterval(mockTimerInterval);
-      clearActiveMockSession();
+      mockTimerInterval = null;
       document.getElementById('mockSetup').style.display = 'block';
       document.getElementById('mockActiveArea').style.display = 'none';
       document.getElementById('mockResultArea').style.display = 'none';
-      document.getElementById('mockTimerBadge').innerText = '⏱ 00:00';
     }
 
-    function handleImportQuestionPack(event) {
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const parsed = JSON.parse(e.target.result);
-          const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.questions) ? parsed.questions : null);
-          if (!list || list.length === 0) {
-            showToast("Invalid Q-Pack JSON: expected array of {q, opts, ans, exp, cat}.", "error");
-            return;
-          }
-          let added = 0;
-          for (const item of list) {
-            if (item && typeof item.q === 'string' && Array.isArray(item.opts) && item.opts.length >= 2 && typeof item.ans === 'number') {
-              appData.customQuestions.push({
-                q: item.q,
-                opts: item.opts.map(String),
-                ans: item.ans,
-                exp: String(item.exp || "Imported custom question."),
-                cat: ['maths', 'science', 'gk', 'english'].includes(item.cat) ? item.cat : 'gk',
-                sub: item.sub || (item.cat === 'english' ? 'eng_vocab' : 'gk_polity_hist'),
-                tag: "📦 Imported Q-Pack"
-              });
-              added++;
-            }
-          }
-          saveCustomQuestionsToIDB(appData.customQuestions);
-          syncData();
-          showToast(`Imported ${added} custom questions into Unified Quiz, Mock & Smart Book!`, "success");
-        } catch (err) {
-          showToast("Error parsing Q-Pack JSON file.", "error");
-        }
-        event.target.value = '';
-      };
-      reader.readAsText(file);
-    }
-
-    // ================= SELECTED SUBJECT QUIZ + PROCEDURAL SPEED MATH QUIZ =================
+    // ================= SELECTED SUBJECT QUIZ + SPEED MATH QUIZ =================
     let currentSubQuizItem = null;
     let subQuizAnswered = false;
     let subQuizSolvedCount = 0;
@@ -4025,37 +3994,41 @@
       } else {
         subPanel.style.display = 'none';
         spdPanel.style.display = 'block';
-        btnSub.className = 'btn btn-outline btn-sm';
         btnSpd.className = 'btn btn-primary btn-sm';
+        btnSub.className = 'btn btn-outline btn-sm';
       }
     }
 
     function loadNextSubjectQuizQuestion() {
-      const selSub = document.getElementById('subjectQuizSelect').value;
+      const sel = document.getElementById('subjectQuizSelect');
+      const subKey = sel ? sel.value : 'maths_calculus';
       subQuizAnswered = false;
       const fb = document.getElementById('subQuizFeedback');
       fb.style.display = 'none';
       fb.innerHTML = '';
 
-      currentSubQuizItem = getUniqueQuestion(() => generateUnifiedQuestion(selSub));
+      currentSubQuizItem = getUniqueQuestion(() => generateUnifiedQuestion(subKey, 'infinite'));
       syncData();
 
-      document.getElementById('subQuizTag').innerText = `${currentSubQuizItem.tag} • Unseen Guaranteed`;
-      document.getElementById('subQuizQuestion').innerText = currentSubQuizItem.q;
+      const tagEl = document.getElementById('subQuizTag');
+      tagEl.innerText = currentSubQuizItem.tag || "♾️ 999+ Engine";
+      tagEl.className = (currentSubQuizItem.tag || "").includes("NDA-Style") ? "badge badge-pyq" : "badge badge-inf";
 
-      const optWrap = document.getElementById('subQuizOptions');
-      optWrap.innerHTML = '';
+      document.getElementById('subQuizQuestion').innerText = currentSubQuizItem.q;
+      const optsDiv = document.getElementById('subQuizOptions');
+      optsDiv.innerHTML = '';
+
       currentSubQuizItem.opts.forEach((optText, idx) => {
-        const b = document.createElement('button');
-        b.className = 'mcq-option';
-        b.id = `subOptBtn_${idx}`;
-        b.innerHTML = `<b>(${String.fromCharCode(65 + idx)})</b> ${escapeHTML(optText)}`;
-        b.onclick = () => checkSubjectQuizOption(idx);
-        optWrap.appendChild(b);
+        const btn = document.createElement('button');
+        btn.className = 'mcq-option';
+        btn.id = `subOptBtn_${idx}`;
+        btn.innerHTML = `<b>(${String.fromCharCode(65 + idx)})</b> ${escapeHTML(optText)}`;
+        btn.onclick = () => checkSubjectQuizAnswer(idx);
+        optsDiv.appendChild(btn);
       });
     }
 
-    function checkSubjectQuizOption(chosenIdx) {
+    function checkSubjectQuizAnswer(chosenIdx) {
       if (subQuizAnswered || !currentSubQuizItem) return;
       subQuizAnswered = true;
       subQuizSolvedCount++;
@@ -4063,25 +4036,24 @@
       const correctIdx = currentSubQuizItem.ans;
       const fb = document.getElementById('subQuizFeedback');
       fb.style.display = 'block';
-
       document.getElementById(`subOptBtn_${correctIdx}`).classList.add('opt-correct');
 
       if (chosenIdx === correctIdx) {
         subQuizCorrectCount++;
-        appData.quizScore += 10;
         appData.quizStreak += 1;
+        appData.quizScore += 10;
         recordTopicAttempt(currentSubQuizItem.sub, true, currentSubQuizItem);
         updateDailyStreak();
         fb.style.background = 'rgba(16,185,129,0.18)';
         fb.style.color = '#34d399';
-        fb.innerHTML = `🎉 <b>Sahi Jawab! (+10 XP)</b><br>${escapeHTML(currentSubQuizItem.exp)}`;
+        fb.innerHTML = `🎉 <b>Bilkul Sahi! (+10 XP)</b><br>${escapeHTML(currentSubQuizItem.exp)}`;
       } else {
         document.getElementById(`subOptBtn_${chosenIdx}`).classList.add('opt-wrong');
         appData.quizStreak = 0;
         recordTopicAttempt(currentSubQuizItem.sub, false, currentSubQuizItem);
         fb.style.background = 'rgba(244,63,94,0.18)';
         fb.style.color = '#fb7185';
-        fb.innerHTML = `❌ <b>Galat!</b> Sahi option <b>(${String.fromCharCode(65 + correctIdx)}) ${escapeHTML(currentSubQuizItem.opts[correctIdx])}</b> hai.<br>${escapeHTML(currentSubQuizItem.exp)}`;
+        fb.innerHTML = `❌ <b>Galat Jawab!</b> Sahi Option: <b>(${String.fromCharCode(65 + correctIdx)}) ${escapeHTML(currentSubQuizItem.opts[correctIdx])}</b><br>${escapeHTML(currentSubQuizItem.exp)}`;
       }
 
       const acc = Math.round((subQuizCorrectCount / subQuizSolvedCount) * 100);
@@ -4089,276 +4061,109 @@
       syncData();
     }
 
-    // --- SPEED MATH NUMERIC QUIZ ---
     let currentLevel = 'easy';
-    let currentAnswer = 0;
-    let currentExplanation = '';
-    let speedAnsweredCurrent = false;
+    let currentAns = 0;
+    let currentSol = '';
+    let speedAnswered = false;
 
     function startQuiz(level) {
       currentLevel = level;
-      document.getElementById('qModeLabel').innerText = `MODE: ${level.toUpperCase()} (PROCEDURAL)`;
-      document.getElementById('btnLvlEasy').style.opacity = level === 'easy' ? '1' : '0.65';
-      document.getElementById('btnLvlMedium').style.opacity = level === 'medium' ? '1' : '0.65';
-      document.getElementById('btnLvlHard').style.opacity = level === 'hard' ? '1' : '0.65';
+      const labels = { easy: 'MODE: EASY (Speed Arithmetic)', medium: 'MODE: MEDIUM (Algebra & Squares)', hard: 'MODE: HARD (NDA Infinite Procedural)' };
+      document.getElementById('qModeLabel').innerText = labels[level];
+      document.getElementById('btnLvlEasy').className = level === 'easy' ? 'btn btn-green btn-sm' : 'btn btn-outline btn-sm';
+      document.getElementById('btnLvlMedium').className = level === 'medium' ? 'btn btn-orange btn-sm' : 'btn btn-outline btn-sm';
+      document.getElementById('btnLvlHard').className = level === 'hard' ? 'btn btn-purple btn-sm' : 'btn btn-outline btn-sm';
       generateQuestion();
     }
 
     function generateQuestion() {
-      const resBox = document.getElementById('qResult');
-      const inp = document.getElementById('qInput');
-      resBox.style.display = 'none';
-      inp.value = '';
-      inp.disabled = false;
-      speedAnsweredCurrent = false;
+      speedAnswered = false;
+      document.getElementById('qInput').value = '';
+      document.getElementById('qResult').style.display = 'none';
+      document.getElementById('qCheckBtn').disabled = false;
 
       if (currentLevel === 'easy') {
-        const a = randInt(12, 80), b = randInt(10, 60);
-        if (Math.random() < 0.5) {
-          currentAnswer = a + b;
-          currentExplanation = `${a} + ${b} = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `${a} + ${b} = ?`;
-        } else {
-          const x = randInt(4, 15), y = randInt(3, 12);
-          currentAnswer = x * y;
-          currentExplanation = `${x} × ${y} = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `${x} × ${y} = ?`;
-        }
+        const ops = ['+', '-', '×'];
+        const op = pickRandom(ops);
+        let a = randInt(12, 60), b = randInt(5, 35);
+        if (op === '+') { currentAns = a + b; currentSol = `${a} + ${b} = ${currentAns}`; document.getElementById('qText').innerText = `${a} + ${b} = ?`; }
+        else if (op === '-') { if (a < b) [a, b] = [b, a]; currentAns = a - b; currentSol = `${a} - ${b} = ${currentAns}`; document.getElementById('qText').innerText = `${a} - ${b} = ?`; }
+        else { a = randInt(6, 19); b = randInt(4, 15); currentAns = a * b; currentSol = `${a} × ${b} = ${currentAns}`; document.getElementById('qText').innerText = `${a} × ${b} = ?`; }
       } else if (currentLevel === 'medium') {
         const type = randInt(1, 3);
-        if (type === 1) {
-          const base = randInt(11, 25);
-          currentAnswer = base * base;
-          currentExplanation = `${base}² = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `Square nikalen: ${base}² = ?`;
-        } else if (type === 2) {
-          const pct = pickRandom([10, 15, 20, 25, 40, 50]);
-          const num = pickRandom([80, 120, 150, 200, 240, 300]);
-          currentAnswer = (pct * num) / 100;
-          currentExplanation = `(${pct}/100) × ${num} = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `${pct}% of ${num} = ?`;
-        } else {
-          const a = randInt(5, 18), b = randInt(2, 9), c = randInt(3, 12);
-          currentAnswer = a * b + c;
-          currentExplanation = `(${a} × ${b}) + ${c} = ${a * b} + ${c} = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `(${a} × ${b}) + ${c} = ?`;
-        }
+        if (type === 1) { const n = randInt(12, 30); currentAns = n * n; currentSol = `${n}² = ${currentAns}`; document.getElementById('qText').innerText = `Square nikalo: ${n}² = ?`; }
+        else if (type === 2) { const x = randInt(3, 18), a = randInt(2, 9), b = randInt(5, 25); const rhs = a * x + b; currentAns = x; currentSol = `${a}x + ${b} = ${rhs} ⇒ ${a}x = ${rhs - b} ⇒ x = ${x}`; document.getElementById('qText').innerText = `Solve for x: ${a}x + ${b} = ${rhs}`; }
+        else { const d1 = randInt(1, 6), d2 = randInt(1, 6); currentAns = d1 + d2; currentSol = `Dice 1 (${d1}) + Dice 2 (${d2}) = ${currentAns}`; document.getElementById('qText').innerText = `Do dice par ${d1} aur ${d2} aaye. Dono ka sum kya hoga?`; }
       } else {
         const type = randInt(1, 4);
-        if (type === 1) {
-          const a = randInt(2, 8), d = randInt(2, 7), n = randInt(6, 12);
-          currentAnswer = a + (n - 1) * d;
-          currentExplanation = `Tₙ = ${a} + (${n}-1)×${d} = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `AP: ${a}, ${a + d}, ${a + 2 * d}... Find ${n}th term`;
-        } else if (type === 2) {
-          const n = randInt(5, 10);
-          currentAnswer = (n * (n + 1)) / 2;
-          currentExplanation = `Sum = ${n}(${n}+1)/2 = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `Sum of first ${n} natural numbers = ?`;
-        } else if (type === 3) {
-          const root = randInt(12, 26);
-          currentAnswer = root;
-          currentExplanation = `√(${root * root}) = ${root}`;
-          document.getElementById('qText').innerText = `√(${root * root}) = ?`;
-        } else {
-          const base = randInt(2, 5), exp = randInt(3, 5);
-          currentAnswer = Math.pow(base, exp);
-          currentExplanation = `${base}^${exp} = ${currentAnswer}`;
-          document.getElementById('qText').innerText = `${base}^${exp} = ?`;
-        }
+        if (type === 1) { const a = randInt(2, 8), b = randInt(1, 7), c = randInt(1, 6), d = randInt(2, 8); currentAns = a * d - b * c; currentSol = `det = (${a}×${d}) - (${b}×${c}) = ${currentAns}`; document.getElementById('qText').innerText = `det [[${a}, ${b}], [${c}, ${d}]] = ?`; }
+        else if (type === 2) { const n = randInt(2, 6), x = randInt(2, 4); currentAns = n * Math.pow(x, n - 1); currentSol = `d/dx(x^${n}) at x=${x} is ${n}×${x}^${n - 1} = ${currentAns}`; document.getElementById('qText').innerText = `If f(x) = x^${n}, find f'(${x})`; }
+        else if (type === 3) { const n = randInt(5, 11); currentAns = (n * (n - 3)) / 2; currentSol = `Diagonals = ${n}(${n}-3)/2 = ${currentAns}`; document.getElementById('qText').innerText = `${n}-sided polygon mein kitne diagonals honge?`; }
+        else { const m = randInt(2, 12), a = randInt(2, 9); currentAns = m * a; currentSol = `F = m × a = ${m} × ${a} = ${currentAns} N`; document.getElementById('qText').innerText = `Mass ${m} kg aur acceleration ${a} m/s² par Force (N) = ?`; }
       }
-      inp.focus();
     }
 
     function checkQuiz() {
-      if (speedAnsweredCurrent) {
-        generateQuestion();
-        return;
-      }
+      if (speedAnswered) return;
       const rawVal = document.getElementById('qInput').value.trim();
+      const userVal = parseFloat(rawVal);
       const resBox = document.getElementById('qResult');
       resBox.style.display = 'block';
-
-      if (rawVal === '' || !Number.isFinite(Number(rawVal))) {
-        resBox.style.background = 'rgba(245, 158, 11, 0.18)';
-        resBox.style.color = '#fbbf24';
-        resBox.innerText = "⚠️ Kripya valid numeric answer likhein!";
+      if (rawVal === '' || isNaN(userVal)) {
+        resBox.style.background = 'rgba(245,158,11,0.2)';
+        resBox.style.color = 'var(--orange)';
+        resBox.innerText = '⚠️ Kripya ek valid numeric answer likhein!';
         return;
       }
-
-      speedAnsweredCurrent = true;
-      document.getElementById('qInput').disabled = true;
-      const userAns = Number(rawVal);
-
-      if (Math.abs(userAns - currentAnswer) < 1e-6) {
+      speedAnswered = true;
+      document.getElementById('qCheckBtn').disabled = true;
+      if (Math.abs(userVal - currentAns) < 0.001) {
         const pts = currentLevel === 'hard' ? 20 : (currentLevel === 'medium' ? 15 : 10);
         appData.quizScore += pts;
         appData.quizStreak += 1;
         updateDailyStreak();
-        syncData();
-        resBox.style.background = 'rgba(16, 185, 129, 0.2)';
-        resBox.style.color = '#34d399';
-        resBox.innerHTML = `🎉 <b>Shabash! Sahi Jawab! (+${pts} XP)</b><br><span style="font-size:12px; opacity:0.9;">${escapeHTML(currentExplanation)}</span><br><button class="btn btn-green btn-sm" style="margin-top:8px;" onclick="generateQuestion()">Next Question ➔</button>`;
+        resBox.style.background = 'rgba(16,185,129,0.2)';
+        resBox.style.color = 'var(--accent)';
+        resBox.innerHTML = `🎉 <b>Sahi Jawab! (+${pts} XP)</b><br><span style="font-size:12px;">${escapeHTML(currentSol)}</span>`;
       } else {
         appData.quizStreak = 0;
-        syncData();
-        resBox.style.background = 'rgba(244, 63, 94, 0.2)';
-        resBox.style.color = '#fb7185';
-        resBox.innerHTML = `❌ <b>Galat!</b> Sahi jawab <b>${currentAnswer}</b> hai.<br><span style="font-size:12px; opacity:0.9;">${escapeHTML(currentExplanation)}</span><br><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="generateQuestion()">Try Next ➔</button>`;
+        resBox.style.background = 'rgba(244,63,94,0.2)';
+        resBox.style.color = 'var(--danger)';
+        resBox.innerHTML = `❌ <b>Galat!</b> Sahi answer <b>${currentAns}</b> hai.<br><span style="font-size:12px;">${escapeHTML(currentSol)}</span>`;
       }
-    }
-
-    // ================= PDF BOOKS: OFFLINE NATIVE PRINT-TO-PDF (HINDI+MATH) + JSPDF =================
-    const PDF_DOCS = {
-      nda_pathfinder_math: {
-        title: "NDA Pathfinder Maths Complete Notes",
-        lines: [
-          "1. Probability: P(E) = n(E)/n(S); P(A∪B) = P(A) + P(B) - P(A∩B); Bayes' Theorem.",
-          "2. Matrices & Determinants: |kA| = k^n |A|; A⁻¹ = adj(A)/|A|; Skew-symmetric diagonal = 0.",
-          "3. Calculus: lim(x→0) sin(x)/x = 1; King Rule ∫ₐᵇ f(x)dx = ∫ₐᵇ f(a+b-x)dx.",
-          "4. Trigonometry: sin 2θ = 2sinθ cosθ; cos 2θ = cos²θ - sin²θ; Max/Min of a sinθ + b cosθ = ±√(a² + b²).",
-          "5. Vectors & 3D: a·b = |a||b|cosθ; |a×b| = |a||b|sinθ; Projection of a on b = (a·b)/|b|."
-        ]
-      },
-      nda_pyq_digest: {
-        title: "NDA-Style Practice Questions Solved Digest",
-        lines: PYQ_QUESTION_BANK.map((q, idx) => `Q${idx + 1}. ${q.q}\n   Answer: ${q.opts[q.ans]} — ${q.exp}`)
-      },
-      nda_gat_world: {
-        title: "NDA GAT Science, English & World Geography Book",
-        lines: [
-          "1. Physics: v = u + at; s = ut + ½at²; Projectile Range R = u²sin(2θ)/g (Max at 45°); TIR requires i > critical angle.",
-          "2. Chemistry: pH = -log₁₀[H⁺]; Baking Soda = NaHCO₃; Washing Soda = Na₂CO₃·10H₂O.",
-          "3. English Rules: Neither...nor (closer subject); Scarcely/Hardly...when; No sooner...than; Senior/Junior/Prefer...to.",
-          "4. Indian Polity: Fundamental Rights (Art 12–35, Art 32 Writs); DPSP (Part IV); Fundamental Duties (Art 51A).",
-          "5. Geography: Indian Standard Meridian = 82.5° E (5h 30m ahead of GMT); NDA Academy = Khadakwasla, Pune."
-        ]
-      }
-    };
-
-    function buildPersonalNotesDoc() {
-      const lines = [];
-      if (appData.notes && appData.notes.length > 0) {
-        lines.push("--- Voice & Revision Notes ---");
-        appData.notes.forEach((n, i) => lines.push(`${i + 1}. ${n.text}`));
-      }
-      const kbEntries = Object.entries(appData.learnedKnowledge || {});
-      if (kbEntries.length > 0) {
-        lines.push("--- AI Learned Brain Facts ---");
-        kbEntries.forEach(([k, v]) => lines.push(`• ${k}: ${v}`));
-      }
-      if (lines.length === 0) lines.push("Abhi koi note ya learned fact saved nahi hai.");
-      return { title: "My AI Learned Brain & Voice Notes", lines };
-    }
-
-    function printNativePDF(docKey) {
-      const doc = docKey === 'personal_ai_notes' ? buildPersonalNotesDoc() : PDF_DOCS[docKey];
-      if (!doc) return;
-      const sheet = document.getElementById('printableSheet');
-      sheet.innerHTML = `
-        <h1>${escapeHTML(doc.title)}</h1>
-        <p class="meta">ANSH.STUDY MASTER PRO • Offline Native Vector PDF (100% Hindi & Math Symbol Support)</p>
-        ${doc.lines.map(line => `<div class="print-block">${escapeHTML(line)}</div>`).join('')}
-      `;
-      window.print();
-    }
-
-    function generateRealPDF(docKey) {
-      const doc = docKey === 'personal_ai_notes' ? buildPersonalNotesDoc() : PDF_DOCS[docKey];
-      if (!doc) return;
-      const jsPDFRef = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : null;
-
-      if (!jsPDFRef) {
-        showToast("jsPDF offline hai — Hindi/Math ke liye 'Hindi/Math PDF (Offline)' ya .txt download use karein.", "warn");
-        downloadPlainTextFallback(doc);
-        return;
-      }
-
-      try {
-        const pdf = new jsPDFRef({ unit: 'pt', format: 'a4' });
-        const marginX = 40;
-        let y = 50;
-
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(16);
-        pdf.setTextColor(15, 23, 42);
-        pdf.text(doc.title, marginX, y);
-        y += 24;
-
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(10.5);
-        pdf.setTextColor(40, 40, 40);
-
-        doc.lines.forEach((line) => {
-          const safeAscii = line
-            .replace(/θ/g, 'theta').replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/∫/g, 'integral')
-            .replace(/⁻¹/g, '^-1').replace(/²/g, '^2').replace(/³/g, '^3').replace(/⁴/g, '^4').replace(/⁵/g, '^5')
-            .replace(/·/g, '.').replace(/×/g, 'x').replace(/→/g, '->').replace(/∪/g, ' U ').replace(/∩/g, ' n ')
-            .replace(/±/g, '+/-').replace(/≈/g, '~=')
-            .replace(/[^\x20-\x7E\n]/g, '?');
-
-          const wrapped = pdf.splitTextToSize(safeAscii, 515);
-          wrapped.forEach((wLine) => {
-            if (y > 780) {
-              pdf.addPage();
-              y = 50;
-            }
-            pdf.text(wLine, marginX, y);
-            y += 15;
-          });
-          y += 6;
-        });
-
-        pdf.save(`${docKey}.pdf`);
-        showToast(`Quick PDF "${docKey}.pdf" downloaded!`, "success");
-      } catch (err) {
-        downloadPlainTextFallback(doc);
-      }
-    }
-
-    function downloadPlainTextFallback(doc) {
-      const content = `${doc.title}\n${'='.repeat(doc.title.length)}\n\n${doc.lines.join('\n\n')}`;
-      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${doc.title.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.txt`;
-      a.click();
-      URL.revokeObjectURL(url);
+      syncData();
+      setTimeout(() => { if (speedAnswered) generateQuestion(); }, 1800);
     }
 
     // ================= VOICE NOTES & PLANNER =================
     function startVoiceNote() {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRec) {
-        showToast("Is browser mein Speech Recognition supported nahi hai. Yahan type karke Save Note dabayein!", "warn");
+        showToast("Is browser mein Speech Recognition supported nahi hai. Chrome ya keyboard mic use karein.", "warn");
         return;
       }
       const rec = new SpeechRec();
       rec.lang = 'hi-IN';
       rec.interimResults = false;
       const btn = document.getElementById('micBtn');
-      btn.innerText = "🔴 Sun raha hoon...";
+      btn.innerText = "🔴 Sun raha hoon... Boliye";
       rec.onresult = (e) => {
         const transcript = e.results[0][0].transcript;
-        const ta = document.getElementById('noteText');
-        ta.value = ta.value ? `${ta.value} ${transcript}` : transcript;
+        const box = document.getElementById('noteText');
+        box.value = (box.value ? box.value + ' ' : '') + transcript;
         showToast("Voice note captured!", "success");
       };
-      rec.onerror = () => showToast("Mic permission check karein ya text type karein.", "error");
+      rec.onerror = (ev) => { showToast("Voice capture error: " + ev.error, "error"); };
       rec.onend = () => { btn.innerText = "🎤 Bolkar Likhein"; };
       rec.start();
     }
 
     function saveNote() {
-      const ta = document.getElementById('noteText');
-      const txt = ta.value.trim();
-      if (!txt) {
-        showToast("Pehle kuch note likhein ya bolein!", "warn");
-        return;
-      }
+      const txt = document.getElementById('noteText').value.trim();
+      if (!txt) return showToast("Pehle note likhein ya bolein!", "warn");
       appData.notes.unshift({ text: txt });
-      ta.value = '';
+      document.getElementById('noteText').value = '';
+      updateDailyStreak();
       syncData();
       renderNotes();
       showToast("Note saved!", "success");
@@ -4372,15 +4177,15 @@
     }
 
     function renderNotes() {
-      const c = document.getElementById('notesContainer');
+      const box = document.getElementById('notesContainer');
       if (!appData.notes.length) {
-        c.innerHTML = `<div class="empty-state">Abhi koi note saved nahi hai.</div>`;
+        box.innerHTML = `<div class="empty-state">Abhi koi note save nahi hai.</div>`;
         return;
       }
-      c.innerHTML = appData.notes.map((n, i) => `
+      box.innerHTML = appData.notes.map((n, i) => `
         <div class="todo-item">
-          <span style="white-space: pre-wrap;">${escapeHTML(n.text)}</span>
-          <button class="chip-btn" onclick="deleteNote(${i})">🗑️</button>
+          <span style="white-space:pre-line;">📝 ${escapeHTML(n.text)}</span>
+          <button class="chip-btn" onclick="deleteNote(${i})">🗑</button>
         </div>
       `).join('');
     }
@@ -4388,9 +4193,10 @@
     function addTask() {
       const inp = document.getElementById('taskText');
       const txt = inp.value.trim();
-      if (!txt) return;
-      appData.tasks.unshift({ text: txt, done: false });
+      if (!txt) return showToast("Target likhein!", "warn");
+      appData.tasks.push({ text: txt, done: false });
       inp.value = '';
+      updateDailyStreak();
       syncData();
       renderTasks();
       showToast("Study target added!", "success");
@@ -4413,86 +4219,183 @@
     }
 
     function renderTasks() {
-      const c = document.getElementById('tasksContainer');
+      const box = document.getElementById('tasksContainer');
       if (!appData.tasks.length) {
-        c.innerHTML = `<div class="empty-state">Aaj ka koi pending task nahi hai. Naya target add karein!</div>`;
+        box.innerHTML = `<div class="empty-state">Aaj ka koi task pending nahi hai. Naya target add karein!</div>`;
         return;
       }
-      c.innerHTML = appData.tasks.map((t, i) => `
+      box.innerHTML = appData.tasks.map((t, i) => `
         <div class="todo-item ${t.done ? 'done' : ''}">
-          <span style="cursor:pointer; flex:1;" onclick="toggleTask(${i})">${t.done ? '☑️' : '⬜'} ${escapeHTML(t.text)}</span>
-          <button class="chip-btn" onclick="deleteTask(${i})">🗑️</button>
+          <span style="cursor:pointer; flex:1;" onclick="toggleTask(${i})">${t.done ? '✅' : '⬜'} ${escapeHTML(t.text)}</span>
+          <button class="chip-btn" onclick="deleteTask(${i})">🗑</button>
         </div>
       `).join('');
     }
 
-    // ================= FULL BACKUP & RESTORE + COPY FULL APP CODE =================
+    // ================= NATIVE OFFLINE HINDI+MATH PDF & JSPDF EXPORT =================
+    function buildPdfContent(type) {
+      if (type === 'nda_pathfinder_math') {
+        return {
+          title: "NDA Pathfinder Maths Complete Notes",
+          lines: [
+            "1. Probability: 0 <= P(E) <= 1; P(A U B) = P(A) + P(B) - P(A n B); Bayes Theorem.",
+            "2. Matrices & Determinants: |kA| = k^n |A|; adj(adj A) = |A|^(n-2) A; A^-1 exists iff |A| != 0.",
+            "3. Trigonometry: sin(2theta) = 2sin(theta)cos(theta); cos(2theta) = cos^2(theta) - sin^2(theta); Max of a sin(theta) + b cos(theta) = sqrt(a^2 + b^2).",
+            "4. Calculus: d/dx(x^n) = n*x^(n-1); Integral_0^(pi/2) log(sin x) dx = -(pi/2)*log(2).",
+            "5. Vectors & 3D: a . b = |a||b|cos(theta); |a x b| = |a||b|sin(theta); Direction cosines l^2 + m^2 + n^2 = 1."
+          ]
+        };
+      }
+      if (type === 'nda_pyq_digest') {
+        const items = NDA_STYLE_BANK.slice(0, 8);
+        return {
+          title: "NDA-Style Practice Questions & Solutions Digest",
+          lines: items.map((item, idx) => `Q${idx + 1}. ${item.q}\nAns: ${item.opts[item.ans]} | ${item.exp}`)
+        };
+      }
+      if (type === 'nda_gat_world') {
+        return {
+          title: "NDA GAT Science, English & World Geography",
+          lines: [
+            "1. Physics: v = u + at; s = ut + 1/2 at^2; v^2 = u^2 + 2as; Escape velocity Earth = 11.2 km/s; 1 HP = 746 W.",
+            "2. Chemistry: pH = -log10[H+]; Atomic number = protons; Oxidation = loss of electrons (OIL RIG).",
+            "3. English: Focus on Synonyms, Antonyms, Idioms & Phrases, Spotting Errors & Subject-Verb Agreement.",
+            "4. Polity & Defence: Fundamental Rights (Part III, Art 12-35); DPSP (Part IV); NDA Khadakwasla, IMA Dehradun, OTA Chennai."
+          ]
+        };
+      }
+      const userNotes = appData.notes.map((n, i) => `Note ${i + 1}: ${n.text}`);
+      const brainFacts = Object.entries(appData.learnedKnowledge || {}).map(([k, v]) => `Fact [${k}]: ${v}`);
+      return {
+        title: "My AI Learned Brain & Hindi Voice Notes",
+        lines: [...userNotes, ...brainFacts].length ? [...userNotes, ...brainFacts] : ["Koi personal note ya learned fact abhi save nahi hai."]
+      };
+    }
+
+    function printNativePDF(type) {
+      const docData = buildPdfContent(type);
+      const sheet = document.getElementById('printableSheet');
+      sheet.innerHTML = `
+        <h1>${escapeHTML(docData.title)}</h1>
+        <p class="meta">ANSH.STUDY MASTER PRO • Offline Vector Print/PDF (Hindi Devanagari & Math Symbols Supported)</p>
+        ${docData.lines.map(line => `<div class="print-block">${escapeHTML(line)}</div>`).join('')}
+      `;
+      window.print();
+    }
+
+    function generateRealPDF(type) {
+      const docData = buildPdfContent(type);
+      if (window.jspdf && window.jspdf.jsPDF) {
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+          doc.setFontSize(16);
+          doc.text(docData.title, 40, 50);
+          doc.setFontSize(10);
+          doc.setTextColor(100);
+          doc.text("ANSH.STUDY MASTER PRO (ASCII/Latin Quick Export — Use 'Hindi/Math PDF' for Devanagari)", 40, 68);
+          doc.setTextColor(20);
+          doc.setFontSize(11);
+          let y = 95;
+          docData.lines.forEach(line => {
+            const safeLine = line.replace(/[^\x20-\x7E\n]/g, '?');
+            const wrapped = doc.splitTextToSize(safeLine, 515);
+            wrapped.forEach(wLine => {
+              if (y > 780) { doc.addPage(); y = 50; }
+              doc.text(wLine, 40, y);
+              y += 16;
+            });
+            y += 8;
+          });
+          doc.save(`${type}.pdf`);
+          showToast(`${type}.pdf downloaded!`, "success");
+          return;
+        } catch (e) {}
+      }
+      printNativePDF(type);
+    }
+
+    // ================= BACKUP & RESTORE =================
     function exportAllData() {
-      appData.seenHashes = Array.from(seenSet).slice(-MAX_SEEN_HASHES);
-      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+      const payload = { ...appData, seenHashes: Array.from(seenSet).slice(-MAX_SEEN_HASHES), exportedAt: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `ansh_study_backup_${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      showToast("Full backup JSON downloaded!", "success");
-    }
-
-    function handleImportBackup(event) {
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const parsed = JSON.parse(e.target.result);
-          if (!parsed || typeof parsed !== 'object') throw new Error("Invalid format");
-          appData = {
-            ...structuredClone(DEFAULT_STATE),
-            ...parsed,
-            learnedKnowledge: {
-              ...DEFAULT_STATE.learnedKnowledge,
-              ...(parsed.learnedKnowledge && typeof parsed.learnedKnowledge === 'object' ? parsed.learnedKnowledge : {})
-            }
-          };
-          seenSet = new Set(Array.isArray(appData.seenHashes) ? appData.seenHashes : []);
-          saveCustomQuestionsToIDB(appData.customQuestions || []);
-          syncData();
-          renderNotes();
-          renderTasks();
-          renderSmartBookList();
-          showToast("Backup restored successfully!", "success");
-        } catch (err) {
-          showToast("Invalid backup JSON file!", "error");
-        }
-        event.target.value = '';
-      };
-      reader.readAsText(file);
+      showToast("Backup JSON downloaded!", "success");
     }
 
     function copyFullAppCode() {
       const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(fullHtml)
-          .then(() => showToast("Poora updated HTML code clipboard mein copy ho gaya!", "success"))
-          .catch(() => fallbackCopyCode(fullHtml));
+        navigator.clipboard.writeText(fullHtml).then(() => {
+          showToast("Complete updated HTML code copied to clipboard!", "success");
+        }).catch(() => {
+          fallbackCopyText(fullHtml);
+        });
       } else {
-        fallbackCopyCode(fullHtml);
+        fallbackCopyText(fullHtml);
       }
     }
 
-    function fallbackCopyCode(text) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
+    function fallbackCopyText(text) {
       try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
         document.execCommand('copy');
-        showToast("Poora updated HTML code copy ho gaya!", "success");
+        document.body.removeChild(ta);
+        showToast("Complete updated HTML code copied!", "success");
       } catch (e) {
-        showToast("Copy fail hua, browser source se copy karein.", "warn");
+        showToast("Copy failed. Please use browser Save/View Source.", "warn");
       }
-      ta.remove();
+    }
+
+    function handleImportBackup(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || '{}'));
+          if (!parsed || typeof parsed !== 'object') throw new Error("Invalid JSON");
+          appData = {
+            ...structuredClone(DEFAULT_STATE),
+            ...parsed,
+            tasks: Array.isArray(parsed.tasks) ? parsed.tasks : DEFAULT_STATE.tasks,
+            notes: Array.isArray(parsed.notes) ? parsed.notes : DEFAULT_STATE.notes,
+            learnedKnowledge: (parsed.learnedKnowledge && typeof parsed.learnedKnowledge === 'object' && !Array.isArray(parsed.learnedKnowledge))
+              ? parsed.learnedKnowledge : DEFAULT_STATE.learnedKnowledge,
+            customQuestions: Array.isArray(parsed.customQuestions) ? parsed.customQuestions : [],
+            smartBookRead: Array.isArray(parsed.smartBookRead) ? parsed.smartBookRead : [],
+            smartBookBookmarks: Array.isArray(parsed.smartBookBookmarks) ? parsed.smartBookBookmarks : [],
+            smartBookNotes: (parsed.smartBookNotes && typeof parsed.smartBookNotes === 'object') ? parsed.smartBookNotes : {},
+            mistakeNotebook: Array.isArray(parsed.mistakeNotebook) ? parsed.mistakeNotebook : [],
+            topicStats: (parsed.topicStats && typeof parsed.topicStats === 'object') ? parsed.topicStats : {},
+            themePrefs: (parsed.themePrefs && typeof parsed.themePrefs === 'object') ? parsed.themePrefs : structuredClone(DEFAULT_STATE.themePrefs),
+            quizScore: Number.isFinite(Number(parsed.quizScore)) ? Number(parsed.quizScore) : 0,
+            quizStreak: Number.isFinite(Number(parsed.quizStreak)) ? Number(parsed.quizStreak) : 0,
+            studyMins: Number.isFinite(Number(parsed.studyMins)) ? Number(parsed.studyMins) : 90
+          };
+          seenSet = new Set(Array.isArray(parsed.seenHashes) ? parsed.seenHashes.slice(-MAX_SEEN_HASHES) : []);
+          syncData();
+          applySavedThemePrefs();
+          renderTasks();
+          renderNotes();
+          renderSmartBookList();
+          showToast("Backup restored successfully!", "success");
+        } catch (err) {
+          showToast("Backup restore failed: " + err.message, "error");
+        }
+      };
+      reader.readAsText(file);
     }
 
     function escapeHTML(str) {
@@ -4500,67 +4403,368 @@
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
-    function escapeJsAttr(str) {
-      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-    }
-
-    // ================= INITIALIZE APP =================
+    // ================= INITIALIZATION =================
     updateDailyStreak();
     applySavedThemePrefs();
-    renderPomoDisplay(pomoTotalSeconds);
-    renderNotes();
-    renderTasks();
-    renderSmartBookList();
     loadCustomQuestionsFromIDB();
     syncData();
+    renderTasks();
+    renderNotes();
+    renderSmartBookList();
     startQuiz('easy');
     loadNextSubjectQuizQuestion();
-    restoreActiveMockSession();
 
-    // ================= GEMINI AI & UNLIMITED NDA MCQ ENGINE =================
+    try {
+      const draftRaw = localStorage.getItem(ACTIVE_MOCK_KEY);
+      if (draftRaw) {
+        const draft = JSON.parse(draftRaw);
+        if (draft && Array.isArray(draft.questions) && draft.questions.length > 0) {
+          const mockTabBtn = document.querySelector('.tab-btn[data-tab="mock"]');
+          switchTab('mock', mockTabBtn);
+          startMockTest(draft.sub || 'full', draft);
+          showToast("Unsaved Mock Test draft restored!", "info");
+        }
+      }
+    } catch (e) {}
+  </script>
+
+  <!-- ================= UNIVERSAL GEMINI AI MODAL (ANY LANGUAGE • ANY TOPIC) ================= -->
+  <script>
     (function initGeminiIntegration() {
+      const styleTag = document.createElement("style");
+      styleTag.textContent = `
+        #gemFloatBtn {
+          position: fixed;
+          bottom: 88px;
+          right: 18px;
+          z-index: 9999;
+          background: linear-gradient(135deg, #38bdf8, #818cf8);
+          color: #050816;
+          font-weight: 800;
+          padding: 12px 18px;
+          border: 1px solid rgba(255,255,255,0.28);
+          border-radius: 999px;
+          box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
+          cursor: pointer;
+          font-size: 13.5px;
+          letter-spacing: 0.3px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #gemFloatBtn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 28px rgba(129, 140, 248, 0.45);
+        }
+        #gemModalBackdrop {
+          display: none;
+          position: fixed;
+          inset: 0;
+          width: 100vw;
+          height: 100dvh;
+          background: rgba(2, 6, 23, 0.78);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          z-index: 10000;
+          align-items: center;
+          justify-content: center;
+          padding: 14px;
+          box-sizing: border-box;
+        }
+        #gemModalBackdrop.open {
+          display: flex;
+        }
+        #gemModalCard {
+          width: 100%;
+          max-width: 680px;
+          height: min(88dvh, 760px);
+          background: rgba(15, 23, 42, 0.92);
+          border: 1px solid rgba(56, 189, 248, 0.32);
+          border-radius: 22px;
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          color: #f8fafc;
+          font-family: var(--app-font, system-ui, -apple-system, sans-serif);
+        }
+        .gem-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 14px 18px;
+          background: rgba(30, 41, 59, 0.55);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          gap: 10px;
+          flex-shrink: 0;
+        }
+        .gem-title-wrap {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        .gem-title {
+          margin: 0;
+          font-size: 16.5px;
+          font-weight: 800;
+          background: linear-gradient(90deg, #38bdf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .gem-pill {
+          font-size: 11px;
+          font-weight: 700;
+          padding: 3px 9px;
+          border-radius: 999px;
+          background: rgba(56, 189, 248, 0.14);
+          color: #7dd3fc;
+          border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        .gem-icon-btn {
+          background: rgba(30, 41, 59, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #e2e8f0;
+          font-size: 12px;
+          font-weight: 700;
+          padding: 7px 11px;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .gem-icon-btn:hover {
+          border-color: #38bdf8;
+          background: rgba(51, 65, 85, 0.95);
+        }
+        .gem-close-btn {
+          background: rgba(244, 63, 94, 0.15);
+          border: 1px solid rgba(244, 63, 94, 0.35);
+          color: #fda4af;
+          font-size: 15px;
+          font-weight: 800;
+          width: 34px;
+          height: 34px;
+          border-radius: 10px;
+          cursor: pointer;
+        }
+        .gem-body {
+          padding: 14px 18px 18px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          flex: 1;
+          min-height: 0;
+          overflow-y: auto;
+        }
+        .gem-key-box {
+          background: rgba(30, 41, 59, 0.65);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+          padding: 12px;
+          flex-shrink: 0;
+        }
+        .gem-controls-row {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+        .gem-select {
+          background: #0f172a;
+          color: #f8fafc;
+          border: 1px solid rgba(148, 163, 184, 0.25);
+          border-radius: 10px;
+          padding: 8px 11px;
+          font-size: 13px;
+          font-weight: 600;
+          outline: none;
+          cursor: pointer;
+        }
+        .gem-chips {
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+        }
+        .gem-chip {
+          background: rgba(56, 189, 248, 0.1);
+          color: #bae6fd;
+          border: 1px solid rgba(56, 189, 248, 0.25);
+          border-radius: 999px;
+          padding: 5px 11px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .gem-chip:hover {
+          background: rgba(56, 189, 248, 0.22);
+          border-color: #38bdf8;
+        }
+        #gemPromptInput {
+          width: 100%;
+          min-height: 76px;
+          padding: 12px 14px;
+          border-radius: 14px;
+          border: 1px solid rgba(148, 163, 184, 0.25);
+          background: rgba(2, 6, 23, 0.72);
+          color: #f8fafc;
+          font-size: 14.5px;
+          line-height: 1.5;
+          resize: vertical;
+          box-sizing: border-box;
+          outline: none;
+        }
+        #gemPromptInput:focus {
+          border-color: #38bdf8;
+        }
+        .gem-action-bar {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+        .gem-btn-primary {
+          flex: 1.4;
+          min-width: 130px;
+          padding: 11px 14px;
+          border: none;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: #050816;
+          font-weight: 800;
+          font-size: 13.5px;
+          cursor: pointer;
+        }
+        .gem-btn-secondary {
+          flex: 1;
+          min-width: 120px;
+          padding: 11px 14px;
+          border: none;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #8b5cf6, #6366f1);
+          color: #ffffff;
+          font-weight: 800;
+          font-size: 13.5px;
+          cursor: pointer;
+        }
+        .gem-btn-stop {
+          padding: 11px 14px;
+          border: none;
+          border-radius: 12px;
+          background: #f43f5e;
+          color: #ffffff;
+          font-weight: 800;
+          font-size: 13.5px;
+          cursor: pointer;
+        }
+        .gem-output-wrap {
+          flex: 1;
+          min-height: 140px;
+          display: flex;
+          flex-direction: column;
+          background: rgba(2, 6, 23, 0.85);
+          border: 1px solid rgba(148, 163, 184, 0.16);
+          border-radius: 14px;
+          overflow: hidden;
+        }
+        .gem-output-bar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 12px;
+          background: rgba(15, 23, 42, 0.85);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          font-size: 12px;
+          color: #94a3b8;
+        }
+        #gemOutputBox {
+          flex: 1;
+          overflow-y: auto;
+          padding: 14px;
+          font-size: 14.5px;
+          line-height: 1.65;
+          white-space: pre-wrap;
+          word-break: break-word;
+          color: #e2e8f0;
+        }
+      `;
+      document.head.appendChild(styleTag);
+
       const floatBtn = document.createElement("button");
+      floatBtn.id = "gemFloatBtn";
       floatBtn.innerHTML = "✨ Gemini AI";
-      floatBtn.style.cssText = "position:fixed; bottom:88px; right:20px; z-index:9999; background:linear-gradient(135deg, #38bdf8, #818cf8); color:#000; font-weight:bold; padding:12px 18px; border:none; border-radius:50px; box-shadow:0 4px 15px rgba(56,189,248,0.4); cursor:pointer; font-size:14px;";
       document.body.appendChild(floatBtn);
 
       const modal = document.createElement("div");
-      modal.style.cssText = "display:none; position:fixed; inset:0; width:100vw; height:100dvh; background:#050816; z-index:10000; flex-direction:column;";
+      modal.id = "gemModalBackdrop";
       modal.innerHTML = `
-        <div style="display:flex; flex-direction:column; width:100%; height:100%; padding:14px 16px; color:#fff; font-family:var(--app-font, sans-serif); box-sizing:border-box; max-width:960px; margin:0 auto;">
-          <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:10px; border-bottom:1px solid rgba(56,189,248,0.25); flex-shrink:0;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <h3 style="margin:0; color:#38bdf8; font-size:18px;">✨ Gemini NDA AI Assistant</h3>
-              <span style="font-size:11px; background:rgba(56,189,248,0.16); color:#38bdf8; padding:3px 8px; border-radius:999px; font-weight:700;">3.8 Flash</span>
+        <div id="gemModalCard" role="dialog" aria-modal="true" aria-label="Universal Gemini AI">
+          <div class="gem-header">
+            <div class="gem-title-wrap">
+              <h3 class="gem-title">✨ Gemini Omni AI</h3>
+              <span class="gem-pill">Any Language • Any Topic</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <button id="toggleGemKeyBtn" style="background:#1e293b; border:1px solid #334155; color:#94a3b8; font-size:12px; padding:6px 10px; border-radius:8px; cursor:pointer; font-weight:600;">🔑 API Key</button>
-              <button id="closeGeminiModal" style="background:rgba(244,63,94,0.16); border:1px solid rgba(244,63,94,0.4); color:#fb7185; font-size:16px; width:34px; height:34px; border-radius:8px; cursor:pointer; font-weight:bold;">✕</button>
+              <button id="toggleGemKeyBtn" class="gem-icon-btn">🔑 API Key</button>
+              <button id="closeGeminiModal" class="gem-close-btn" title="Close">✕</button>
             </div>
           </div>
 
-          <div id="gemKeyPanel" style="background:#1e293b; padding:10px 12px; border-radius:10px; margin-top:10px; flex-shrink:0;">
-            <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:5px;">🔑 Gemini API Key (Browser mein safe rahegi):</label>
-            <div style="display:flex; gap:8px;">
-              <input type="password" id="gemKeyInput" placeholder="AIzaSy..." style="flex:1; padding:9px 10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#fff; font-size:14px;" />
-              <button id="saveGemKeyBtn" style="padding:9px 16px; background:#38bdf8; color:#000; font-weight:bold; border:none; border-radius:8px; cursor:pointer;">Save</button>
+          <div class="gem-body">
+            <div id="gemKeyPanel" class="gem-key-box">
+              <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:6px;">
+                🔑 Gemini API Key (Sirf aapke browser ke localStorage mein save hoti hai):
+              </label>
+              <div style="display:flex; gap:8px;">
+                <input type="password" id="gemKeyInput" placeholder="AIzaSy..." style="flex:1; padding:9px 12px; border-radius:10px; border:1px solid #334155; background:#0f172a; color:#fff; font-size:14px; outline:none;" />
+                <button id="saveGemKeyBtn" style="padding:9px 16px; background:#38bdf8; color:#050816; font-weight:800; border:none; border-radius:10px; cursor:pointer;">Save</button>
+              </div>
+              <div id="gemKeyMsg" style="font-size:12px; color:#4ade80; margin-top:6px;"></div>
             </div>
-            <div id="gemKeyMsg" style="font-size:11.5px; color:#4ade80; margin-top:5px;"></div>
-          </div>
 
-          <div style="margin-top:10px; flex-shrink:0;">
-            <textarea id="gemPromptInput" rows="3" placeholder="NDA ka koi bhi sawal, formula ya trick puchein..." style="width:100%; padding:12px; border-radius:10px; border:1px solid #334155; background:#0f172a; color:#fff; box-sizing:border-box; resize:vertical; font-size:15px;"></textarea>
-            <div style="display:flex; gap:8px; margin-top:8px;">
-              <button id="askGemBtn" style="flex:1; padding:11px; background:#22c55e; color:#000; font-weight:800; border:none; border-radius:10px; cursor:pointer; font-size:14px;">🚀 Ask AI Tutor</button>
-              <button id="genMcqGemBtn" style="flex:1; padding:11px; background:#a855f7; color:#fff; font-weight:800; border:none; border-radius:10px; cursor:pointer; font-size:14px;">🎯 New NDA MCQ</button>
-              <button id="stopGemBtn" style="display:none; padding:11px 14px; background:#f43f5e; color:#fff; font-weight:800; border:none; border-radius:10px; cursor:pointer; font-size:14px;">⏹ Stop</button>
+            <div class="gem-controls-row">
+              <select id="gemLangSelect" class="gem-select" title="Response Language">
+                <option value="auto" selected>🌐 Language: Auto (Same as Question)</option>
+                <option value="Hinglish (natural Hindi written in Roman script)">🇮🇳 Hinglish</option>
+                <option value="Hindi (Devanagari script)">🕉️ Hindi (हिन्दी)</option>
+                <option value="English">🇬🇧 English</option>
+                <option value="Sanskrit">📜 Sanskrit (संस्कृतम्)</option>
+              </select>
+
+              <select id="gemStyleSelect" class="gem-select" title="Answer Depth">
+                <option value="clear, structured, and complete with key points and examples" selected>📚 Complete & Clear</option>
+                <option value="concise with quick bullet points and short tricks">⚡ Short & Crisp</option>
+                <option value="step-by-step from basic to advanced">🪜 Step-by-Step</option>
+              </select>
+            </div>
+
+            <div class="gem-chips">
+              <button type="button" class="gem-chip" data-prefix="Explain clearly with examples: ">💡 Explain Topic</button>
+              <button type="button" class="gem-chip" data-prefix="Solve step-by-step with short trick: ">🧮 Solve Problem</button>
+              <button type="button" class="gem-chip" data-prefix="Create 1 challenging MCQ with 4 options, answer, and explanation on: ">🎯 Make MCQ</button>
+              <button type="button" class="gem-chip" data-prefix="Summarize key points for quick revision: ">📝 Quick Summary</button>
+            </div>
+
+            <textarea id="gemPromptInput" placeholder="Kisi bhi language aur kisi bhi topic par kuch bhi puchein (Maths, Physics, Chem, GK, Coding, Grammar, ya koi bhi sawal)..."></textarea>
+
+            <div class="gem-action-bar">
+              <button id="askGemBtn" class="gem-btn-primary">🚀 Ask Anything</button>
+              <button id="genMcqGemBtn" class="gem-btn-secondary">🎯 Generate MCQ</button>
+              <button id="stopGemBtn" class="gem-btn-stop" style="display:none;">⏹ Stop</button>
+            </div>
+
+            <div class="gem-output-wrap">
+              <div class="gem-output-bar">
+                <span id="gemStatusLabel">Ready • All Subjects Supported</span>
+                <div style="display:flex; gap:6px;">
+                  <button type="button" id="copyGemOutBtn" class="gem-icon-btn" style="padding:4px 9px; font-size:11px;">📋 Copy</button>
+                  <button type="button" id="clearGemOutBtn" class="gem-icon-btn" style="padding:4px 9px; font-size:11px;">🧹 Clear</button>
+                </div>
+              </div>
+              <div id="gemOutputBox">Yahan kisi bhi topic aur kisi bhi language mein aapka jawab dikhega...</div>
             </div>
           </div>
-
-          <div id="gemOutputBox" style="flex:1; overflow-y:auto; margin-top:12px; background:#020617; border:1px solid #1e293b; padding:14px; border-radius:12px; font-size:15px; line-height:1.65; white-space:pre-wrap; color:#e2e8f0;">Yahan AI ka jawab ya naya MCQ dikhega...</div>
         </div>
       `;
       document.body.appendChild(modal);
@@ -4568,30 +4772,52 @@
       let activeAbortCtrl = null;
 
       function getGemKey() {
-        try { return localStorage.getItem("ansh_gemini_api_key") || ""; } catch (e) { return ""; }
+        try { return (localStorage.getItem("ansh_gemini_api_key") || "").trim(); } catch (e) { return ""; }
       }
       function setGemKey(val) {
-        try { localStorage.setItem("ansh_gemini_api_key", val); } catch (e) {}
+        try { localStorage.setItem("ansh_gemini_api_key", val.trim()); } catch (e) {}
       }
-      function setBusyState(isBusy) {
+      function setBusyState(isBusy, labelText) {
         const askBtn = document.getElementById("askGemBtn");
         const mcqBtn = document.getElementById("genMcqGemBtn");
         const stopBtn = document.getElementById("stopGemBtn");
+        const statusEl = document.getElementById("gemStatusLabel");
         askBtn.disabled = isBusy;
         mcqBtn.disabled = isBusy;
         askBtn.style.opacity = isBusy ? "0.6" : "1";
         mcqBtn.style.opacity = isBusy ? "0.6" : "1";
         stopBtn.style.display = isBusy ? "inline-block" : "none";
+        if (labelText && statusEl) statusEl.textContent = labelText;
+      }
+
+      function buildUniversalSystemPrompt(userQuestion, isMcqMode) {
+        const langVal = document.getElementById("gemLangSelect").value;
+        const styleVal = document.getElementById("gemStyleSelect").value;
+        const langRule = langVal === "auto"
+          ? "Detect the language of the user's question and reply in that exact same language."
+          : `Reply strictly in ${langVal}.`;
+
+        const taskRule = isMcqMode
+          ? `Create 1 high-quality multiple choice question (A, B, C, D) on the requested topic/subject, followed by the correct option and a clear explanation.`
+          : `Answer accurately across ANY topic, subject, or domain (Mathematics, Physics, Chemistry, Biology, GK, History, Geography, Polity, Languages, Programming, Science, or general questions). Keep the explanation ${styleVal}.`;
+
+        return `You are a versatile, knowledgeable universal AI assistant and tutor.
+${langRule}
+${taskRule}
+
+User Request:
+${userQuestion}`;
       }
 
       floatBtn.addEventListener("click", () => {
-        modal.style.display = "flex";
+        modal.classList.add("open");
         document.body.style.overflow = "hidden";
         const keyPanel = document.getElementById("gemKeyPanel");
         if (getGemKey()) {
           document.getElementById("gemKeyMsg").innerText = "✅ API Key saved hai.";
           keyPanel.style.display = "none";
         } else {
+          document.getElementById("gemKeyMsg").innerText = "";
           keyPanel.style.display = "block";
         }
       });
@@ -4603,9 +4829,15 @@
 
       document.getElementById("closeGeminiModal").addEventListener("click", () => {
         if (activeAbortCtrl) { activeAbortCtrl.abort(); activeAbortCtrl = null; }
-        setBusyState(false);
-        modal.style.display = "none";
+        setBusyState(false, "Ready • All Subjects Supported");
+        modal.classList.remove("open");
         document.body.style.overflow = "";
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          document.getElementById("closeGeminiModal").click();
+        }
       });
 
       document.getElementById("stopGemBtn").addEventListener("click", () => {
@@ -4613,115 +4845,168 @@
           activeAbortCtrl.abort();
           activeAbortCtrl = null;
         }
-        setBusyState(false);
+        setBusyState(false, "Stopped by user");
+      });
+
+      document.querySelectorAll(".gem-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          const prefix = chip.getAttribute("data-prefix") || "";
+          const inp = document.getElementById("gemPromptInput");
+          if (!inp.value.trim()) {
+            inp.value = prefix;
+          } else if (!inp.value.startsWith(prefix)) {
+            inp.value = prefix + inp.value.trim();
+          }
+          inp.focus();
+        });
+      });
+
+      document.getElementById("copyGemOutBtn").addEventListener("click", () => {
+        const txt = document.getElementById("gemOutputBox").innerText || "";
+        if (!txt.trim()) return;
+        navigator.clipboard?.writeText(txt).then(() => {
+          if (typeof showToast === "function") showToast("Jawab copy ho gaya!", "success");
+        }).catch(() => {});
+      });
+
+      document.getElementById("clearGemOutBtn").addEventListener("click", () => {
+        document.getElementById("gemOutputBox").innerText = "Yahan kisi bhi topic aur kisi bhi language mein aapka jawab dikhega...";
+        document.getElementById("gemStatusLabel").textContent = "Cleared";
       });
 
       document.getElementById("saveGemKeyBtn").addEventListener("click", () => {
         const val = document.getElementById("gemKeyInput").value.trim();
+        const msgEl = document.getElementById("gemKeyMsg");
         if (!val) {
-          document.getElementById("gemKeyMsg").innerText = "⚠️ Pehle API Key paste karein!";
+          msgEl.style.color = "#fbbf24";
+          msgEl.innerText = "⚠️ Pehle API Key paste karein!";
           if (typeof showToast === "function") showToast("Pehle API Key paste karein!", "warn");
           return;
         }
+        if (!val.startsWith("AIza") || val.length < 25) {
+          msgEl.style.color = "#fbbf24";
+          msgEl.innerText = "⚠️ Key thodi chhoti ya unusual lag rahi hai — phir bhi save kar li gayi hai.";
+        } else {
+          msgEl.style.color = "#4ade80";
+          msgEl.innerText = "✅ API Key successfully save ho gayi!";
+        }
         setGemKey(val);
         document.getElementById("gemKeyInput").value = "";
-        document.getElementById("gemKeyMsg").innerText = "✅ API Key successfully save ho gayi!";
-        document.getElementById("gemKeyPanel").style.display = "none";
+        setTimeout(() => {
+          document.getElementById("gemKeyPanel").style.display = "none";
+        }, 600);
         if (typeof showToast === "function") showToast("Gemini API Key Saved!", "success");
       });
 
-      async function callGeminiFast(promptText, outBox) {
+      async function callGeminiOmni(fullPrompt, outBox) {
         const apiKey = getGemKey();
         if (!apiKey) {
           document.getElementById("gemKeyPanel").style.display = "block";
-          outBox.innerText = "⚠️ Upar pehle apni Gemini API Key save karein!";
+          outBox.innerText = "⚠️ Upar pehle apni valid Gemini API Key save karein!";
           if (typeof showToast === "function") showToast("Pehle Gemini API Key save karein!", "warn");
           return;
         }
 
-        if (activeAbortCtrl) activeAbortCtrl.abort();
-        activeAbortCtrl = new AbortController();
-        const timeoutId = setTimeout(() => {
-          if (activeAbortCtrl) activeAbortCtrl.abort("timeout");
-        }, 25000);
+        const maxRetries = 2;
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+          if (activeAbortCtrl) activeAbortCtrl.abort();
+          activeAbortCtrl = new AbortController();
+          const timeoutId = setTimeout(() => {
+            if (activeAbortCtrl) activeAbortCtrl.abort("timeout");
+          }, 25000);
 
-        setBusyState(true);
-        outBox.innerText = "⚡ Fast response aa raha hai...";
+          setBusyState(
+            true,
+            attempt === 0
+              ? "⚡ Generating response..."
+              : `🔄 High demand — retrying (${attempt}/${maxRetries})...`
+          );
+          if (attempt === 0) outBox.innerText = "⚡ Jawab taiyar ho raha hai...";
 
-        try {
-          const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
-          const res = await fetch(streamUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            signal: activeAbortCtrl.signal,
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: promptText }] }],
-              generationConfig: { maxOutputTokens: 700, temperature: 0.7 }
-            })
-          });
-
-          if (!res.ok) {
-            const errJson = await res.json().catch(() => ({}));
-            throw new Error(errJson.error?.message || `HTTP ${res.status}`);
-          }
-
-          if (res.body && res.body.getReader) {
-            const reader = res.body.getReader();
-            const decoder = new TextDecoder("utf-8");
-            let buffer = "";
-            let fullText = "";
-
-            while (true) {
-              const { value, done } = await reader.read();
-              if (done) break;
-              buffer += decoder.decode(value, { stream: true });
-              const lines = buffer.split("\n");
-              buffer = lines.pop() || "";
-
-              for (const line of lines) {
-                const trimmed = line.trim();
-                if (!trimmed.startsWith("data:")) continue;
-                const payload = trimmed.slice(5).trim();
-                if (!payload || payload === "[DONE]") continue;
-                try {
-                  const chunk = JSON.parse(payload);
-                  const part = chunk.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                  if (part) {
-                    fullText += part;
-                    outBox.innerText = fullText;
-                    outBox.scrollTop = outBox.scrollHeight;
-                  }
-                } catch (e) {}
-              }
-            }
-            if (!fullText) outBox.innerText = "Koi jawab nahi mila, dobara try karein.";
-          } else {
-            const fallbackUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-            const fbRes = await fetch(fallbackUrl, {
+          try {
+            const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+            const res = await fetch(streamUrl, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               signal: activeAbortCtrl.signal,
               body: JSON.stringify({
-                contents: [{ parts: [{ text: promptText }] }],
-                generationConfig: { maxOutputTokens: 700, temperature: 0.7 }
+                contents: [{ parts: [{ text: fullPrompt }] }],
+                generationConfig: { maxOutputTokens: 1200, temperature: 0.7 }
               })
             });
-            const data = await fbRes.json();
-            if (data.error) throw new Error(data.error.message);
-            outBox.innerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
+
+            if (!res.ok) {
+              const errJson = await res.json().catch(() => ({}));
+              const msg = errJson.error?.message || `HTTP ${res.status}`;
+              const isHighDemand = /high demand|overloaded|unavailable|quota|429|503/i.test(msg) || res.status === 429 || res.status === 503;
+              clearTimeout(timeoutId);
+              if (isHighDemand && attempt < maxRetries) {
+                await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+                continue;
+              }
+              throw new Error(msg);
+            }
+
+            let fullText = "";
+            if (res.body && res.body.getReader) {
+              const reader = res.body.getReader();
+              const decoder = new TextDecoder("utf-8");
+              let buffer = "";
+              outBox.innerText = "";
+
+              while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n");
+                buffer = lines.pop() || "";
+
+                for (const line of lines) {
+                  const trimmed = line.trim();
+                  if (!trimmed.startsWith("data:")) continue;
+                  const payload = trimmed.slice(5).trim();
+                  if (!payload || payload === "[DONE]") continue;
+                  try {
+                    const chunk = JSON.parse(payload);
+                    const part = chunk.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                    if (part) {
+                      fullText += part;
+                      outBox.innerText = fullText;
+                      outBox.scrollTop = outBox.scrollHeight;
+                    }
+                  } catch (e) {}
+                }
+              }
+            } else {
+              const data = await res.json();
+              fullText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+              outBox.innerText = fullText || "Koi jawab nahi mila.";
+            }
+
+            clearTimeout(timeoutId);
+            activeAbortCtrl = null;
+            setBusyState(false, "✅ Response complete");
+            if (!fullText) outBox.innerText = "Koi jawab nahi mila, dobara try karein.";
+            return;
+          } catch (err) {
+            clearTimeout(timeoutId);
+            const msg = String(err && err.message ? err.message : err);
+            const isHighDemand = /high demand|overloaded|unavailable|503/i.test(msg);
+            if (isHighDemand && attempt < maxRetries) {
+              await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+              continue;
+            }
+            activeAbortCtrl = null;
+            setBusyState(false, "❌ Error");
+            if (err.name === "AbortError") {
+              outBox.innerText = outBox.innerText && !outBox.innerText.startsWith("⚡")
+                ? outBox.innerText + "\n\n⏹ Request stopped / timed out."
+                : "⏳ Request ruk gayi ya timeout ho gaya. Dobara try karein.";
+            } else {
+              outBox.innerText = "❌ Error: " + msg;
+            }
+            return;
           }
-        } catch (err) {
-          if (err.name === "AbortError") {
-            outBox.innerText = (outBox.innerText && outBox.innerText !== "⚡ Fast response aa raha hai...")
-              ? outBox.innerText + "\n\n⏹ Stopped / Network slow (25s timeout)."
-              : "⏳ Network slow tha ya request stop ki gayi. Dobara try karein.";
-          } else {
-            outBox.innerText = "❌ Error: " + err.message;
-          }
-        } finally {
-          clearTimeout(timeoutId);
-          activeAbortCtrl = null;
-          setBusyState(false);
         }
       }
 
@@ -4729,28 +5014,17 @@
         const question = document.getElementById("gemPromptInput").value.trim();
         const outBox = document.getElementById("gemOutputBox");
         if (!question) {
-          outBox.innerText = "⚠️ Kripya koi sawal likhein!";
-          if (typeof showToast === "function") showToast("Koi sawal likhein!", "warn");
+          outBox.innerText = "⚠️ Kripya kisi bhi topic ya language mein apna sawal likhein!";
+          if (typeof showToast === "function") showToast("Pehle sawal likhein!", "warn");
           return;
         }
-        callGeminiFast(`Tum NDA exam ke expert teacher ho. Hinglish mein concise short trick aur clear steps ke saath samjhao:
-
-${question}`, outBox);
+        callGeminiOmni(buildUniversalSystemPrompt(question, false), outBox);
       });
 
       document.getElementById("genMcqGemBtn").addEventListener("click", () => {
-        const topic = document.getElementById("gemPromptInput").value.trim() || "NDA Mathematics, Physics, GK or English";
+        const topic = document.getElementById("gemPromptInput").value.trim() || "Any subject or general knowledge";
         const outBox = document.getElementById("gemOutputBox");
-        const prompt = `Create 1 tough UPSC NDA exam level multiple choice question on topic: "${topic}".
-Keep it concise in Hinglish with:
-Question:
-(A) ...
-(B) ...
-(C) ...
-(D) ...
-
-Correct Answer & Short Trick Explanation:`;
-        callGeminiFast(prompt, outBox);
+        callGeminiOmni(buildUniversalSystemPrompt(topic, true), outBox);
       });
     })();
   </script>
