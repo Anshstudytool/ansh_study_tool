@@ -4755,6 +4755,128 @@
     startQuiz('easy');
     loadNextSubjectQuizQuestion();
     restoreActiveMockSession();
+// ================= GEMINI AI & UNLIMITED NDA MCQ ENGINE =================
+
+(function initGeminiIntegration() {
+  // 1. Screen par Automatic Floating Button aur Modal Box banana
+  const floatBtn = document.createElement("button");
+  floatBtn.innerHTML = "✨ Gemini AI";
+  floatBtn.style.cssText = "position:fixed; bottom:80px; right:20px; z-index:9999; background:linear-gradient(135deg, #38bdf8, #818cf8); color:#000; font-weight:bold; padding:12px 18px; border:none; border-radius:50px; box-shadow:0 4px 15px rgba(56,189,248,0.4); cursor:pointer; font-size:14px;";
+  document.body.appendChild(floatBtn);
+
+  const modal = document.createElement("div");
+  modal.style.cssText = "display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; justify-content:center; align-items:center; padding:15px; box-sizing:border-box;";
+  modal.innerHTML = `
+    <div style="background:#0f172a; border:1px solid #38bdf8; border-radius:12px; max-width:500px; width:100%; padding:20px; color:#fff; font-family:sans-serif; max-height:90vh; overflow-y:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0; color:#38bdf8;">✨ Gemini NDA AI Assistant</h3>
+        <button id="closeGeminiModal" style="background:none; border:none; color:#f87171; font-size:20px; cursor:pointer;">✕</button>
+      </div>
+      
+      <!-- API Key Section -->
+      <div style="background:#1e293b; padding:10px; border-radius:8px; margin-bottom:15px;">
+        <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:5px;">🔑 Gemini API Key (Browser mein safe rahegi):</label>
+        <div style="display:flex; gap:8px;">
+          <input type="password" id="gemKeyInput" placeholder="AIzaSy..." style="flex:1; padding:8px; border-radius:5px; border:1px solid #334155; background:#0f172a; color:#fff;" />
+          <button id="saveGemKeyBtn" style="padding:8px 14px; background:#38bdf8; color:#000; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">Save</button>
+        </div>
+        <div id="gemKeyMsg" style="font-size:11px; color:#4ade80; margin-top:5px;"></div>
+      </div>
+
+      <!-- Ask AI Tutor Section -->
+      <div style="margin-bottom:15px;">
+        <textarea id="gemPromptInput" rows="3" placeholder="NDA ka koi bhi sawal, formula ya trick puchein..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:#fff; box-sizing:border-box; resize:none;"></textarea>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button id="askGemBtn" style="flex:1; padding:10px; background:#22c55e; color:#000; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">🚀 Ask AI Tutor</button>
+          <button id="genMcqGemBtn" style="flex:1; padding:10px; background:#a855f7; color:#fff; font-weight:bold; border:none; border-radius:6px; cursor:pointer;">🎯 New NDA MCQ</button>
+        </div>
+      </div>
+
+      <!-- Output Box -->
+      <div id="gemOutputBox" style="background:#020617; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:14px; line-height:1.5; white-space:pre-wrap; min-height:80px; color:#e2e8f0;">Yahan AI ka jawab ya naya MCQ dikhega...</div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Modal Open/Close Logic
+  floatBtn.onclick = () => {
+    modal.style.display = "flex";
+    const saved = localStorage.getItem("ansh_gemini_api_key");
+    if (saved) document.getElementById("gemKeyMsg").innerText = "✅ API Key pehle se saved hai.";
+  };
+  document.getElementById("closeGeminiModal").onclick = () => modal.style.display = "none";
+
+  // Save API Key Logic
+  document.getElementById("saveGemKeyBtn").onclick = () => {
+    const val = document.getElementById("gemKeyInput").value.trim();
+    if (!val) return alert("Pehle API Key paste karein!");
+    localStorage.setItem("ansh_gemini_api_key", val);
+    document.getElementById("gemKeyInput").value = "";
+    document.getElementById("gemKeyMsg").innerText = "✅ API Key successfully save ho gayi!";
+    if (typeof showToast === "function") showToast("Gemini API Key Saved!", "success");
+  };
+
+  // Ask AI Tutor Logic
+  document.getElementById("askGemBtn").onclick = async () => {
+    const apiKey = localStorage.getItem("ansh_gemini_api_key");
+    const question = document.getElementById("gemPromptInput").value.trim();
+    const outBox = document.getElementById("gemOutputBox");
+
+    if (!apiKey) return alert("Upar pehle apni Gemini API Key save karein!");
+    if (!question) return alert("Koi sawal likhein!");
+
+    outBox.innerText = "⏳ Gemini soch raha hai...";
+    try {
+      const res = await fetch(`https://googleapis.com{apiKey}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `Tum NDA exam ke expert teacher ho. Hinglish mein short trick aur clear steps ke saath samjhao:\n\n${question}` }] }]
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      outBox.innerText = data.candidates[0].content.parts[0].text;
+    } catch (err) {
+      outBox.innerText = "❌ Error: " + err.message;
+    }
+  };
+
+  // Unlimited NDA MCQ Generator Logic
+  document.getElementById("genMcqGemBtn").onclick = async () => {
+    const apiKey = localStorage.getItem("ansh_gemini_api_key");
+    const topic = document.getElementById("gemPromptInput").value.trim() || "NDA Mathematics, Physics, GK or English";
+    const outBox = document.getElementById("gemOutputBox");
+
+    if (!apiKey) return alert("Upar pehle apni Gemini API Key save karein!");
+
+    outBox.innerText = "⏳ Naya NDA level MCQ ban raha hai...";
+    try {
+      const prompt = `Create 1 tough UPSC NDA exam level multiple choice question on topic: "${topic}". 
+      Format clearly in Hinglish with:
+      Question:
+      (A) ...
+      (B) ...
+      (C) ...
+      (D) ...
+      
+      Correct Answer & Short Trick Explanation:`;
+
+      const res = await fetch(`https://googleapis.com{apiKey}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+    ;
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      outBox.innerText = data.candidates[0].content.parts[0].text;
+    } catch (err) {
+      outBox.innerText = "❌ Error: " + err.message;
+    }
+  };
+})();
   </script>
 </body>
 </html>
