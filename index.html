@@ -1310,7 +1310,7 @@
         </svg>
         <div style="flex:1; min-width:180px;">
           <div class="row" style="gap:6px; margin-bottom:2px;">
-            <span style="font-size:13.5px; font-weight:800; color:var(--primary);">🤖 Smart Suggestion</span>
+            <span style="font-size:13.5px; font-weight:800; color:var(--primary);">⚡ Grok Smart Suggestion</span>
             <span class="badge badge-danger" id="mistakeDueBadge">0 Due</span>
           </div>
           <div id="weakTopicsSummary" style="font-size:13px; line-height:1.45;">
@@ -1567,8 +1567,8 @@
 
         <div class="pdf-item">
           <div class="pdf-info">
-            <h4>🧠 My AI Learned Brain & Hindi Voice Notes</h4>
-            <p>Aapke Hindi voice notes aur custom AI facts ki 100% crisp Hindi-supported PDF</p>
+            <h4>🧠 My Learned Brain & Hindi Voice Notes</h4>
+            <p>Aapke Hindi voice notes aur custom facts ki 100% crisp Hindi-supported PDF</p>
           </div>
           <div class="row">
             <button class="btn btn-green btn-sm" onclick="printNativePDF('personal_ai_notes')">🖨️ Save Hindi PDF (Offline)</button>
@@ -3610,45 +3610,25 @@
       if (engMode === 3) {
         const idm = pickRandom(ENG_IDIOMS_MATRIX);
         const others = shuffleArray(ENG_IDIOMS_MATRIX.filter(x => x.idm !== idm.idm)).slice(0, 3).map(x => x.mean);
-        return buildMcqFromAnswer(`Choose the correct meaning of the Idiom: "${idm.idm}"`, idm.mean, others, `Idiom "${idm.idm}" means: ${idm.mean}.`, 'english', 'eng_vocab', "💬 Idiom");
+        return buildMcqFromAnswer(`Select the most appropriate meaning of the idiom: "${idm.idm}"`, idm.mean, others, `"${idm.idm}" means "${idm.mean}".`, 'english', 'eng_vocab', "💬 Idiom");
       }
-      const vocabPairs = shuffleArray(ENG_VOCAB_MATRIX).slice(0, 3).map(x => [x.w, x.syn]);
-      return buildDynamicMatchFromMatrix(vocabPairs, "Match List-I (Word) with List-II (Synonym)", 'english', 'eng_vocab');
+      const gItem = pickRandom(ENG_GRAMMAR_MATRIX);
+      return buildMcqFromAnswer(gItem.q, gItem.ans, gItem.dist, gItem.exp, 'english', 'eng_grammar', "✍️ Grammar Rule");
     }
 
-    const NDA_STYLE_BANK = [
-      { q: "NDA-Style Maths: If A and B are mutually exclusive events with P(A) = 0.35 and P(B) = 0.45, find P(A ∪ B).", opts: ["0.80", "0.1575", "0.10", "0.20"], ans: 0, exp: "Mutually exclusive events ⇒ P(A ∪ B) = P(A) + P(B) = 0.35 + 0.45 = 0.80.", cat: "maths", sub: "maths_prob_pnc", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Maths: Number of permutations of letters of the word 'ARMY' is:", opts: ["24", "12", "6", "48"], ans: 0, exp: "4 distinct letters ⇒ 4! = 24.", cat: "maths", sub: "maths_prob_pnc", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Maths: If det(A) = 5 for a 3×3 matrix A, what is det(2A)?", opts: ["40", "10", "20", "80"], ans: 0, exp: "For n×n matrix, det(kA) = kⁿ det(A) ⇒ 2³ × 5 = 8 × 5 = 40.", cat: "maths", sub: "maths_algebra", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style Physics: A body is dropped from a height of 80 m (g = 10 m/s²). Time taken to reach ground is:", opts: ["4 s", "8 s", "2 s", "16 s"], ans: 0, exp: "h = ½gt² ⇒ 80 = 5t² ⇒ t² = 16 ⇒ t = 4 s.", cat: "science", sub: "sci_physics", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style GK: Which Article of the Indian Constitution is known as 'Heart and Soul' by Dr. B.R. Ambedkar?", opts: ["Article 32", "Article 19", "Article 21", "Article 14"], ans: 0, exp: "Article 32 grants the right to constitutional remedies via writs.", cat: "gk", sub: "gk_polity_hist", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style GK: Where is the National Defence Academy (NDA) located?", opts: ["Khadakwasla, Pune", "Dehradun", "Chennai", "Ezhimala"], ans: 0, exp: "NDA is located at Khadakwasla near Pune, Maharashtra.", cat: "gk", sub: "gk_geo_def", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style English: Choose the word closest in meaning to 'OBSTINATE':", opts: ["Stubborn", "Flexible", "Cautious", "Generous"], ans: 0, exp: "Obstinate means stubborn or firmly refusing to change one's attitude.", cat: "english", sub: "eng_vocab", tag: "📜 NDA-Style Set" },
-      { q: "NDA-Style English: Choose the word most opposite in meaning to 'TRANSIENT':", opts: ["Permanent", "Temporary", "Brief", "Fleeting"], ans: 0, exp: "Transient means lasting for a short time; opposite is Permanent.", cat: "english", sub: "eng_vocab", tag: "📜 NDA-Style Set" }
-    ];
-
-    function getCustomQuestionsByCategory(catOrSub) {
-      const list = Array.isArray(appData.customQuestions) ? appData.customQuestions : [];
-      if (!list.length) return [];
-      if (catOrSub === 'full' || catOrSub === 'mixed' || catOrSub === 'pyq') return list;
-      return list.filter(item => item.cat === catOrSub || item.sub === catOrSub);
-    }
-
-    function hashQuestion(qObj) {
-      const str = `${qObj.q || ''}||${(qObj.opts || []).join('|')}||${qObj.ans ?? ''}`;
+    function hashQuestion(qText) {
       let h = 2166136261;
-      for (let i = 0; i < str.length; i++) {
-        h ^= str.charCodeAt(i);
+      for (let i = 0; i < qText.length; i++) {
+        h ^= qText.charCodeAt(i);
         h = Math.imul(h, 16777619);
       }
-      return 'q_' + (h >>> 0).toString(36);
+      return (h >>> 0).toString(36);
     }
 
-    function getUniqueQuestion(generatorFn, maxAttempts = 30) {
-      let candidate = null;
-      for (let i = 0; i < maxAttempts; i++) {
-        candidate = generatorFn();
-        const key = hashQuestion(candidate);
+    function getUniqueQuestion(generatorFn) {
+      for (let attempt = 0; attempt < 25; attempt++) {
+        const candidate = generatorFn();
+        const key = hashQuestion(candidate.q);
         if (!seenSet.has(key)) {
           seenSet.add(key);
           if (seenSet.size > MAX_SEEN_HASHES) {
@@ -3658,41 +3638,40 @@
           return candidate;
         }
       }
-      return candidate || generateProceduralQuestion('mixed');
+      const fallback = generatorFn();
+      seenSet.add(hashQuestion(fallback.q));
+      return fallback;
     }
 
-    function generateUnifiedQuestion(subKeyOrCat, mode = 'infinite') {
-      const customMatches = getCustomQuestionsByCategory(subKeyOrCat);
-      if (customMatches.length > 0 && Math.random() < 0.25) {
-        const c = pickRandom(customMatches);
-        return { ...c, tag: c.tag || "📥 Custom Q-Pack" };
+    function getCustomQuestionsByCategory(catOrSub) {
+      const list = appData.customQuestions || [];
+      if (!catOrSub || catOrSub === 'all' || catOrSub === 'full' || catOrSub === 'pyq') return list;
+      return list.filter(item => item.cat === catOrSub || item.sub === catOrSub);
+    }
+
+    function generateUnifiedQuestion(subKey = 'mixed', mode = 'infinite') {
+      const cat = subKey === 'mixed'
+        ? pickRandom(['maths', 'science', 'gk', 'english'])
+        : (subKey.startsWith('maths') ? 'maths' : (subKey.startsWith('sci') ? 'science' : (subKey.startsWith('eng') ? 'english' : 'gk')));
+
+      const customPool = getCustomQuestionsByCategory(subKey === 'mixed' ? 'all' : (cat === 'maths' ? 'maths' : subKey));
+      if ((mode === 'pyq_only' || (mode === 'infinite' && Math.random() < 0.25)) && customPool.length > 0) {
+        const picked = pickRandom(customPool);
+        return {
+          q: picked.q,
+          opts: picked.opts,
+          ans: picked.ans,
+          exp: picked.exp || "Imported Question Pack item.",
+          cat: picked.cat || cat,
+          sub: picked.sub || subKey,
+          tag: "📥 Imported Q-Pack"
+        };
       }
 
-      if (mode === 'procedural_only') {
-        if (subKeyOrCat === 'maths') return generateProceduralQuestion(pickRandom(['maths_calculus', 'maths_algebra', 'maths_trig_vec', 'maths_prob_pnc']));
-        if (subKeyOrCat === 'science') return generateProceduralQuestion(pickRandom(['sci_physics', 'sci_chem_bio']));
-        if (subKeyOrCat === 'gk') return generateProceduralQuestion(pickRandom(['gk_polity_hist', 'gk_geo_def']));
-        if (subKeyOrCat === 'english') return generateProceduralQuestion(pickRandom(['eng_vocab', 'eng_grammar']));
-        if (subKeyOrCat === 'full' || subKeyOrCat === 'mixed' || subKeyOrCat === 'pyq') return generateProceduralQuestion('mixed');
-        return generateProceduralQuestion(subKeyOrCat);
+      if (cat === 'gk' || cat === 'science') {
+        if (Math.random() < 0.5) return generateCombinatorialQuestion(subKey === 'mixed' ? pickRandom(['gk_polity_hist', 'gk_geo_def', 'sci_physics', 'sci_chem_bio']) : subKey);
       }
-
-      if (mode === 'pyq_only') {
-        const pool = subKeyOrCat === 'full' || subKeyOrCat === 'pyq'
-          ? [...NDA_STYLE_BANK, ...customMatches]
-          : [...NDA_STYLE_BANK.filter(x => x.cat === subKeyOrCat || x.sub === subKeyOrCat), ...customMatches];
-        if (pool.length > 0) return pickRandom(pool);
-      }
-
-      if (subKeyOrCat === 'maths') return generateProceduralQuestion(pickRandom(['maths_calculus', 'maths_algebra', 'maths_trig_vec', 'maths_prob_pnc']));
-      if (subKeyOrCat === 'science') return generateProceduralQuestion(pickRandom(['sci_physics', 'sci_chem_bio']));
-      if (subKeyOrCat === 'gk') return generateProceduralQuestion(pickRandom(['gk_polity_hist', 'gk_geo_def']));
-      if (subKeyOrCat === 'english') return generateProceduralQuestion(pickRandom(['eng_vocab', 'eng_grammar']));
-      if (subKeyOrCat === 'full' || subKeyOrCat === 'pyq') {
-        if (Math.random() < 0.22) return pickRandom(NDA_STYLE_BANK);
-        return generateProceduralQuestion('mixed');
-      }
-      return generateProceduralQuestion(subKeyOrCat);
+      return generateProceduralQuestion(subKey);
     }
 
     function handleImportQuestionPack(event) {
@@ -3702,232 +3681,258 @@
       const reader = new FileReader();
       reader.onload = () => {
         try {
-          const parsed = JSON.parse(String(reader.result || '[]'));
-          const arr = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.questions) ? parsed.questions : []);
-          const valid = [];
-          for (const item of arr) {
-            if (!item || typeof item.q !== 'string' || !Array.isArray(item.opts) || item.opts.length < 2) continue;
-            const ansIdx = Number.isInteger(item.ans) && item.ans >= 0 && item.ans < item.opts.length ? item.ans : 0;
-            valid.push({
-              q: item.q.trim(),
-              opts: item.opts.slice(0, 4).map(o => String(o)),
-              ans: ansIdx,
-              exp: String(item.exp || 'Imported from custom Q-Pack.'),
-              cat: ['maths', 'science', 'gk', 'english'].includes(item.cat) ? item.cat : 'gk',
-              sub: String(item.sub || 'gk_polity_hist'),
-              tag: String(item.tag || '📥 Imported Q-Pack')
-            });
-          }
-          if (!valid.length) {
-            showToast("JSON mein valid questions (q, opts, ans) nahi mile.", "error");
+          const parsed = JSON.parse(reader.result);
+          const arr = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.questions) ? parsed.questions : null);
+          if (!arr || arr.length === 0) {
+            showToast("Invalid Q-Pack JSON: expected an array of question objects.", "error");
             return;
           }
-          appData.customQuestions = [...valid, ...(appData.customQuestions || [])].slice(0, 5000);
-          saveCustomQuestionsToIDB(appData.customQuestions);
+          const valid = [];
+          for (const item of arr) {
+            if (item && typeof item.q === 'string' && Array.isArray(item.opts) && item.opts.length >= 2 && typeof item.ans === 'number') {
+              valid.push({
+                q: item.q.trim(),
+                opts: item.opts.slice(0, 4).map(String),
+                ans: Math.max(0, Math.min(item.opts.length - 1, Math.floor(item.ans))),
+                exp: typeof item.exp === 'string' ? item.exp : "Custom imported question.",
+                cat: ['maths', 'science', 'gk', 'english'].includes(item.cat) ? item.cat : 'gk',
+                sub: typeof item.sub === 'string' ? item.sub : 'gk_polity_hist'
+              });
+            }
+          }
+          if (valid.length === 0) {
+            showToast("No valid questions found inside JSON file.", "error");
+            return;
+          }
+          const merged = [...valid, ...(appData.customQuestions || [])];
+          appData.customQuestions = merged;
+          saveCustomQuestionsToIDB(merged);
           syncData();
-          showToast(`${valid.length} custom questions imported successfully!`, "success");
+          showToast(`Imported ${valid.length} custom questions into Unified 999+ Engine!`, "success");
         } catch (err) {
-          showToast("Invalid JSON file: " + err.message, "error");
+          showToast("Failed to parse JSON Q-Pack.", "error");
         }
       };
       reader.readAsText(file);
     }
 
-    // ================= MOCK TEST ENGINE WITH QUESTION PALETTE & AUTO-SAVE =================
+    // ================= MOCK TEST ENGINE WITH PERSISTENT SESSION & PALETTE =================
+    let currentMockQuestions = [];
+    let currentMockIndex = 0;
+    let userMockAnswers = [];
     let currentMockSub = 'full';
-    let currentMockMode = 'infinite';
-    let mockQuestions = [];
-    let mockIndex = 0;
-    let userAnswers = [];
+    let mockElapsedSec = 0;
     let mockTimerInterval = null;
-    let mockElapsedSeconds = 0;
 
-    function saveMockDraft() {
+    function saveActiveMockSession() {
+      if (currentMockQuestions.length === 0) return;
       try {
-        if (!mockQuestions.length || document.getElementById('mockActiveArea').style.display === 'none') {
-          localStorage.removeItem(ACTIVE_MOCK_KEY);
-          return;
-        }
-        localStorage.setItem(ACTIVE_MOCK_KEY, JSON.stringify({
+        sessionStorage.setItem(ACTIVE_MOCK_KEY, JSON.stringify({
+          questions: currentMockQuestions,
+          index: currentMockIndex,
+          answers: userMockAnswers,
           sub: currentMockSub,
-          mode: currentMockMode,
-          questions: mockQuestions,
-          index: mockIndex,
-          answers: userAnswers,
-          elapsed: mockElapsedSeconds
+          elapsed: mockElapsedSec
         }));
       } catch (e) {}
     }
 
-    function clearMockDraft() {
-      try { localStorage.removeItem(ACTIVE_MOCK_KEY); } catch (e) {}
+    function clearActiveMockSession() {
+      try { sessionStorage.removeItem(ACTIVE_MOCK_KEY); } catch (e) {}
     }
 
-    function startMockTest(sub, restoredDraft = null) {
-      clearInterval(mockTimerInterval);
-      mockTimerInterval = null;
+    function restoreActiveMockSessionIfAny() {
+      try {
+        const raw = sessionStorage.getItem(ACTIVE_MOCK_KEY);
+        if (!raw) return false;
+        const sess = JSON.parse(raw);
+        if (!Array.isArray(sess.questions) || sess.questions.length === 0) return false;
+        currentMockQuestions = sess.questions;
+        currentMockIndex = Math.min(sess.index || 0, sess.questions.length - 1);
+        userMockAnswers = Array.isArray(sess.answers) ? sess.answers : new Array(sess.questions.length).fill(null);
+        currentMockSub = sess.sub || 'full';
+        mockElapsedSec = Number(sess.elapsed) || 0;
 
-      if (restoredDraft) {
-        currentMockSub = restoredDraft.sub || 'full';
-        currentMockMode = restoredDraft.mode || 'infinite';
-        mockQuestions = restoredDraft.questions || [];
-        mockIndex = Math.min(Math.max(0, restoredDraft.index || 0), Math.max(0, mockQuestions.length - 1));
-        userAnswers = Array.isArray(restoredDraft.answers) ? restoredDraft.answers : new Array(mockQuestions.length).fill(null);
-        mockElapsedSeconds = restoredDraft.elapsed || 0;
-      } else {
-        currentMockSub = sub;
-        const modeSel = document.getElementById('mockModeSelect');
-        const countSel = document.getElementById('mockCountSelect');
-        currentMockMode = modeSel ? modeSel.value : 'infinite';
-        const qCount = countSel ? parseInt(countSel.value, 10) : 15;
+        document.getElementById('mockSetup').style.display = 'none';
+        document.getElementById('mockResultArea').style.display = 'none';
+        document.getElementById('mockActiveArea').style.display = 'block';
+        startMockClock();
+        renderMockQuestion();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
 
-        const dueMistakes = sub === 'weak' ? getDueMistakes() : [];
-        const targetCount = sub === 'weak' ? Math.max(5, Math.min(qCount, dueMistakes.length || 10)) : qCount;
+    function startMockClock() {
+      if (mockTimerInterval) clearInterval(mockTimerInterval);
+      updateMockClockBadge();
+      mockTimerInterval = setInterval(() => {
+        mockElapsedSec += 1;
+        updateMockClockBadge();
+        if (mockElapsedSec % 5 === 0) saveActiveMockSession();
+      }, 1000);
+    }
 
-        mockQuestions = [];
-        for (let i = 0; i < targetCount; i++) {
-          if (sub === 'weak' && i < dueMistakes.length) {
-            const m = dueMistakes[i];
-            mockQuestions.push({ q: m.q, opts: m.opts, ans: m.ans, exp: m.exp, cat: m.cat || 'gk', sub: m.sub || 'gk_polity_hist', tag: "🔁 Spaced Revision" });
-          } else if (sub === 'weak') {
-            const ranked = getWeakTopics();
-            const weakSub = ranked.length > 0 ? ranked[0].sub : 'maths_trig_vec';
-            mockQuestions.push(getUniqueQuestion(() => generateUnifiedQuestion(weakSub, currentMockMode)));
+    function stopMockClock() {
+      if (mockTimerInterval) {
+        clearInterval(mockTimerInterval);
+        mockTimerInterval = null;
+      }
+    }
+
+    function updateMockClockBadge() {
+      const m = String(Math.floor(mockElapsedSec / 60)).padStart(2, '0');
+      const s = String(mockElapsedSec % 60).padStart(2, '0');
+      const recommendedMin = (currentMockQuestions.length * 1.25).toFixed(1).replace(/\.0$/, '');
+      document.getElementById('mockTimerBadge').innerText = `⏱ ${m}:${s} / ${recommendedMin}m NDA Pace`;
+    }
+
+    function startMockTest(sub) {
+      currentMockSub = sub;
+      const mode = document.getElementById('mockModeSelect').value;
+      const count = parseInt(document.getElementById('mockCountSelect').value, 10) || 15;
+      currentMockQuestions = [];
+
+      if (sub === 'weak') {
+        const mistakes = appData.mistakeNotebook || [];
+        const weakTopics = getWeakTopics();
+        for (let i = 0; i < count; i++) {
+          if (i < mistakes.length) {
+            const m = mistakes[i];
+            currentMockQuestions.push({ q: m.q, opts: m.opts, ans: m.ans, exp: m.exp, cat: m.cat, sub: m.sub, tag: "📓 Mistake Drill" });
           } else {
-            mockQuestions.push(getUniqueQuestion(() => generateUnifiedQuestion(sub, currentMockMode)));
+            const targetSub = weakTopics.length > 0 ? weakTopics[i % weakTopics.length].sub : 'maths_trig_vec';
+            currentMockQuestions.push(getUniqueQuestion(() => generateUnifiedQuestion(targetSub, mode)));
           }
         }
-        syncData();
-        mockIndex = 0;
-        userAnswers = new Array(mockQuestions.length).fill(null);
-        mockElapsedSeconds = 0;
+      } else {
+        const subMap = {
+          maths: () => generateUnifiedQuestion(pickRandom(['maths_calculus', 'maths_algebra', 'maths_trig_vec', 'maths_prob_pnc']), mode),
+          science: () => generateUnifiedQuestion(pickRandom(['sci_physics', 'sci_chem_bio']), mode),
+          gk: () => generateUnifiedQuestion(pickRandom(['gk_polity_hist', 'gk_geo_def']), mode),
+          english: () => generateUnifiedQuestion(pickRandom(['eng_vocab', 'eng_grammar']), mode),
+          pyq: () => generateUnifiedQuestion('mixed', 'pyq_only'),
+          full: () => generateUnifiedQuestion('mixed', mode)
+        };
+        const genFn = subMap[sub] || subMap.full;
+        for (let i = 0; i < count; i++) {
+          currentMockQuestions.push(getUniqueQuestion(genFn));
+        }
       }
+
+      syncData();
+      currentMockIndex = 0;
+      userMockAnswers = new Array(currentMockQuestions.length).fill(null);
+      mockElapsedSec = 0;
+      saveActiveMockSession();
 
       document.getElementById('mockSetup').style.display = 'none';
       document.getElementById('mockResultArea').style.display = 'none';
       document.getElementById('mockActiveArea').style.display = 'block';
-
-      const subNames = {
-        maths: "📐 NDA Mathematics (999+)",
-        science: "🔬 GAT General Science (999+)",
-        gk: "🌍 GAT GK & Polity (999+)",
-        english: "📚 NDA English (999+)",
-        full: "🎖️ Full NDA Mixed (999+)",
-        pyq: "📜 NDA-Style Set",
-        weak: "🧠 Adaptive Weakness & Revision"
-      };
-      document.getElementById('mockSubjectTitle').innerText = subNames[currentMockSub] || currentMockSub;
-
-      updateMockTimerLabel();
-      mockTimerInterval = setInterval(() => {
-        mockElapsedSeconds++;
-        updateMockTimerLabel();
-        if (mockElapsedSeconds % 5 === 0) saveMockDraft();
-      }, 1000);
-
-      saveMockDraft();
+      startMockClock();
       renderMockQuestion();
-    }
-
-    function updateMockTimerLabel() {
-      const m = String(Math.floor(mockElapsedSeconds / 60)).padStart(2, '0');
-      const s = String(mockElapsedSeconds % 60).padStart(2, '0');
-      const recommendedMins = (mockQuestions.length * 1.25).toFixed(1).replace(/\.0$/, '');
-      document.getElementById('mockTimerBadge').innerText = `⏱ ${m}:${s} / ~${recommendedMins}m`;
     }
 
     function renderMockPalette() {
       const pal = document.getElementById('mockPalette');
-      if (!pal) return;
-      pal.innerHTML = mockQuestions.map((_, idx) => {
-        const cls = ['q-pill'];
-        if (idx === mockIndex) cls.push('current');
-        if (userAnswers[idx] !== null) cls.push('answered');
-        return `<button class="${cls.join(' ')}" onclick="jumpMockQ(${idx})">${idx + 1}</button>`;
-      }).join('');
-    }
-
-    function jumpMockQ(idx) {
-      if (idx >= 0 && idx < mockQuestions.length) {
-        mockIndex = idx;
-        saveMockDraft();
-        renderMockQuestion();
-      }
+      pal.innerHTML = '';
+      currentMockQuestions.forEach((_, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'q-pill';
+        if (userMockAnswers[idx] !== null) btn.classList.add('answered');
+        if (idx === currentMockIndex) btn.classList.add('current');
+        btn.textContent = idx + 1;
+        btn.onclick = () => {
+          currentMockIndex = idx;
+          renderMockQuestion();
+          saveActiveMockSession();
+        };
+        pal.appendChild(btn);
+      });
     }
 
     function renderMockQuestion() {
-      const qObj = mockQuestions[mockIndex];
-      document.getElementById('mockProgress').innerText = `Question ${mockIndex + 1} / ${mockQuestions.length}`;
+      const qObj = currentMockQuestions[currentMockIndex];
+      document.getElementById('mockSubjectTitle').innerText = `Subject: ${currentMockSub.toUpperCase()} (${SUB_LABELS[qObj.sub] || qObj.sub})`;
       const badge = document.getElementById('mockSourceBadge');
       badge.innerText = qObj.tag || "♾️ 999+ Engine";
-      badge.className = qObj.tag && qObj.tag.includes("NDA-Style") ? "badge badge-pyq" : "badge badge-inf";
+      badge.className = 'badge badge-inf';
+      document.getElementById('mockProgress').innerText = `Question ${currentMockIndex + 1} / ${currentMockQuestions.length}`;
+      document.getElementById('mockQuestionText').innerText = `Q${currentMockIndex + 1}. ${qObj.q}`;
 
-      document.getElementById('mockQuestionText').innerText = qObj.q;
+      renderMockPalette();
+
       const optBox = document.getElementById('mockOptionsContainer');
       optBox.innerHTML = '';
-
       qObj.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
-        btn.className = 'mcq-option' + (userAnswers[mockIndex] === idx ? ' selected' : '');
+        btn.className = 'mcq-option' + (userMockAnswers[currentMockIndex] === idx ? ' selected' : '');
         btn.innerHTML = `<b>(${String.fromCharCode(65 + idx)})</b> ${escapeHTML(optText)}`;
         btn.onclick = () => {
-          userAnswers[mockIndex] = idx;
-          saveMockDraft();
+          userMockAnswers[currentMockIndex] = idx;
           renderMockQuestion();
+          saveActiveMockSession();
         };
         optBox.appendChild(btn);
       });
-      renderMockPalette();
-    }
-
-    function prevMockQ() {
-      if (mockIndex > 0) {
-        mockIndex--;
-        saveMockDraft();
-        renderMockQuestion();
-      }
     }
 
     function nextMockQ() {
-      if (mockIndex < mockQuestions.length - 1) {
-        mockIndex++;
-        saveMockDraft();
+      if (currentMockIndex < currentMockQuestions.length - 1) {
+        currentMockIndex++;
         renderMockQuestion();
+        saveActiveMockSession();
       } else {
         confirmSubmitMock();
       }
     }
 
+    function prevMockQ() {
+      if (currentMockIndex > 0) {
+        currentMockIndex--;
+        renderMockQuestion();
+        saveActiveMockSession();
+      }
+    }
+
     function confirmSubmitMock() {
-      const unanswered = userAnswers.filter(a => a === null).length;
-      const msg = unanswered > 0
-        ? `${unanswered} question(s) abhi unattempted hain. Kya aap test submit karna chahte hain?`
-        : "Kya aap Mock Test submit karke scorecard dekhna chahte hain?";
-      openConfirmModal("Submit Mock Test?", msg, submitMockTest);
+      const unanswered = userMockAnswers.filter(a => a === null).length;
+      if (unanswered > 0) {
+        openConfirmModal(
+          "Submit Mock Test?",
+          `Abhi ${unanswered} question(s) unanswered hain. Kya aap test submit karna chahte hain?`,
+          () => finishMockTest()
+        );
+      } else {
+        finishMockTest();
+      }
     }
 
     function confirmAbortMock() {
-      openConfirmModal("Exit Mock Test?", "Current test progress discard ho jayegi. Kya aap bahar jana chahte hain?", () => {
-        clearInterval(mockTimerInterval);
-        mockTimerInterval = null;
-        clearMockDraft();
-        resetMockUI();
-      });
+      openConfirmModal(
+        "Exit Mock Test?",
+        "Current test progress discard ho jayegi. Kya aap bahar jana chahte hain?",
+        () => {
+          stopMockClock();
+          clearActiveMockSession();
+          currentMockQuestions = [];
+          resetMockUI();
+        }
+      );
     }
 
-    function submitMockTest() {
-      clearInterval(mockTimerInterval);
-      mockTimerInterval = null;
-      clearMockDraft();
+    function finishMockTest() {
+      stopMockClock();
+      clearActiveMockSession();
+      let correct = 0, wrong = 0, skipped = 0;
+      let reviewHtml = '';
 
-      let correct = 0, wrong = 0, unattempted = 0;
-      let reviewHTML = '';
-
-      mockQuestions.forEach((qObj, idx) => {
-        const picked = userAnswers[idx];
-        const isCorrect = picked === qObj.ans;
-        if (picked === null) {
-          unattempted++;
+      currentMockQuestions.forEach((qObj, idx) => {
+        const chosen = userMockAnswers[idx];
+        const isCorrect = chosen === qObj.ans;
+        if (chosen === null) {
+          skipped++;
         } else if (isCorrect) {
           correct++;
           recordTopicAttempt(qObj.sub, true, qObj);
@@ -3936,49 +3941,49 @@
           recordTopicAttempt(qObj.sub, false, qObj);
         }
 
-        const statusColor = picked === null ? 'var(--muted)' : (isCorrect ? 'var(--accent)' : 'var(--danger)');
-        const statusText = picked === null ? 'Unattempted' : (isCorrect ? 'Correct' : `Wrong (You: ${qObj.opts[picked]})`);
-        reviewHTML += `
-          <div style="padding:10px; border-bottom:1px solid var(--border); margin-bottom:6px;">
-            <div style="font-weight:700; margin-bottom:4px; white-space:pre-line;">Q${idx + 1}. ${escapeHTML(qObj.q)}</div>
-            <div style="color:${statusColor}; font-weight:700;">${escapeHTML(statusText)} • Ans: ${escapeHTML(qObj.opts[qObj.ans])}</div>
-            <div style="color:var(--muted); font-size:12px; margin-top:3px;">💡 ${escapeHTML(qObj.exp)}</div>
-          </div>
-        `;
+        const chosenLabel = chosen === null ? 'Skipped' : `(${String.fromCharCode(65 + chosen)}) ${qObj.opts[chosen]}`;
+        const ansLabel = `(${String.fromCharCode(65 + qObj.ans)}) ${qObj.opts[qObj.ans]}`;
+        const color = chosen === null ? 'var(--muted)' : (isCorrect ? 'var(--accent)' : 'var(--danger)');
+        reviewHtml += `<div style="margin-bottom:10px; padding:10px; background:rgba(15,23,42,0.55); border-radius:8px; border-left:3px solid ${color};">
+          <div><b>Q${idx + 1}:</b> ${escapeHTML(qObj.q)}</div>
+          <div style="color:${color}; margin-top:3px;">Your Ans: ${escapeHTML(chosenLabel)} | Correct: ${escapeHTML(ansLabel)}</div>
+          <div style="color:var(--muted); font-size:12px; margin-top:2px;">💡 ${escapeHTML(qObj.exp)}</div>
+        </div>`;
       });
 
-      const accuracy = mockQuestions.length > 0 ? Math.round((correct / mockQuestions.length) * 100) : 0;
-      const earnedXP = correct * 10;
-      appData.quizScore += earnedXP;
-      appData.studyMins += Math.max(1, Math.round(mockElapsedSeconds / 60));
+      const total = currentMockQuestions.length;
+      const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const earnedXp = correct * 10;
+      appData.quizScore += earnedXp;
+      appData.studyMins += Math.max(5, Math.round(mockElapsedSec / 60));
       updateDailyStreak();
       syncData();
 
       document.getElementById('mockActiveArea').style.display = 'none';
       document.getElementById('mockResultArea').style.display = 'block';
-      document.getElementById('mockScoreSummary').innerHTML = `
-        <b>Total Questions:</b> ${mockQuestions.length} | <b>Time Taken:</b> ${Math.floor(mockElapsedSeconds / 60)}m ${mockElapsedSeconds % 60}s<br>
-        <span style="color:var(--accent);">✅ Correct: ${correct}</span> |
-        <span style="color:var(--danger);">❌ Wrong: ${wrong}</span> |
-        <span>⚪ Skipped: ${unattempted}</span><br>
-        <b>Accuracy:</b> ${accuracy}% | <b>XP Earned:</b> +${earnedXP} XP
-      `;
-      document.getElementById('mockReviewList').innerHTML = reviewHTML;
+      document.getElementById('mockScoreSummary').innerHTML =
+        `Score: <b>${correct} / ${total}</b> (${accuracy}%) • Time: <b>${Math.floor(mockElapsedSec / 60)}m ${mockElapsedSec % 60}s</b><br>` +
+        `Correct: <span style="color:var(--accent);">${correct}</span> | Wrong: <span style="color:var(--danger);">${wrong}</span> | Skipped: ${skipped}<br>` +
+        `Earned: <b>+${earnedXp} XP</b> (Galat sawal Mistake Notebook mein save ho gaye hain)`;
+      document.getElementById('mockReviewList').innerHTML = reviewHtml;
+      currentMockQuestions = [];
     }
 
     function resetMockUI() {
-      clearInterval(mockTimerInterval);
-      mockTimerInterval = null;
+      stopMockClock();
+      clearActiveMockSession();
+      currentMockQuestions = [];
       document.getElementById('mockSetup').style.display = 'block';
       document.getElementById('mockActiveArea').style.display = 'none';
       document.getElementById('mockResultArea').style.display = 'none';
+      document.getElementById('mockTimerBadge').innerText = '⏱ 00:00';
     }
 
-    // ================= SELECTED SUBJECT QUIZ + SPEED MATH QUIZ =================
+    // ================= SELECTED SUBJECT QUIZ + SPEED MATH NUMERIC QUIZ =================
     let currentSubQuizItem = null;
     let subQuizAnswered = false;
-    let subQuizSolvedCount = 0;
-    let subQuizCorrectCount = 0;
+    let subQuizSolved = 0;
+    let subQuizCorrect = 0;
 
     function switchQuizSubMode(mode) {
       const subPanel = document.getElementById('subjectQuizPanel');
@@ -3990,18 +3995,18 @@
         spdPanel.style.display = 'none';
         btnSub.className = 'btn btn-primary btn-sm';
         btnSpd.className = 'btn btn-outline btn-sm';
-        if (!currentSubQuizItem) loadNextSubjectQuizQuestion();
+        loadNextSubjectQuizQuestion();
       } else {
         subPanel.style.display = 'none';
         spdPanel.style.display = 'block';
-        btnSpd.className = 'btn btn-primary btn-sm';
         btnSub.className = 'btn btn-outline btn-sm';
+        btnSpd.className = 'btn btn-primary btn-sm';
+        generateQuestion();
       }
     }
 
     function loadNextSubjectQuizQuestion() {
-      const sel = document.getElementById('subjectQuizSelect');
-      const subKey = sel ? sel.value : 'maths_calculus';
+      const subKey = document.getElementById('subjectQuizSelect').value;
       subQuizAnswered = false;
       const fb = document.getElementById('subQuizFeedback');
       fb.style.display = 'none';
@@ -4010,190 +4015,227 @@
       currentSubQuizItem = getUniqueQuestion(() => generateUnifiedQuestion(subKey, 'infinite'));
       syncData();
 
-      const tagEl = document.getElementById('subQuizTag');
-      tagEl.innerText = currentSubQuizItem.tag || "♾️ 999+ Engine";
-      tagEl.className = (currentSubQuizItem.tag || "").includes("NDA-Style") ? "badge badge-pyq" : "badge badge-inf";
-
+      document.getElementById('subQuizTag').innerText = currentSubQuizItem.tag || "♾️ Fresh Question";
       document.getElementById('subQuizQuestion').innerText = currentSubQuizItem.q;
-      const optsDiv = document.getElementById('subQuizOptions');
-      optsDiv.innerHTML = '';
 
+      const optBox = document.getElementById('subQuizOptions');
+      optBox.innerHTML = '';
       currentSubQuizItem.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.className = 'mcq-option';
         btn.id = `subOptBtn_${idx}`;
         btn.innerHTML = `<b>(${String.fromCharCode(65 + idx)})</b> ${escapeHTML(optText)}`;
         btn.onclick = () => checkSubjectQuizAnswer(idx);
-        optsDiv.appendChild(btn);
+        optBox.appendChild(btn);
       });
     }
 
     function checkSubjectQuizAnswer(chosenIdx) {
       if (subQuizAnswered || !currentSubQuizItem) return;
       subQuizAnswered = true;
-      subQuizSolvedCount++;
+      subQuizSolved += 1;
 
       const correctIdx = currentSubQuizItem.ans;
       const fb = document.getElementById('subQuizFeedback');
       fb.style.display = 'block';
+
       document.getElementById(`subOptBtn_${correctIdx}`).classList.add('opt-correct');
 
       if (chosenIdx === correctIdx) {
-        subQuizCorrectCount++;
+        subQuizCorrect += 1;
         appData.quizStreak += 1;
         appData.quizScore += 10;
         recordTopicAttempt(currentSubQuizItem.sub, true, currentSubQuizItem);
         updateDailyStreak();
-        fb.style.background = 'rgba(16,185,129,0.18)';
+        fb.style.background = 'rgba(16, 185, 129, 0.18)';
         fb.style.color = '#34d399';
-        fb.innerHTML = `🎉 <b>Bilkul Sahi! (+10 XP)</b><br>${escapeHTML(currentSubQuizItem.exp)}`;
+        fb.innerHTML = `🎉 <b>Sahi Jawab! (+10 XP)</b><br>${escapeHTML(currentSubQuizItem.exp)}`;
       } else {
         document.getElementById(`subOptBtn_${chosenIdx}`).classList.add('opt-wrong');
         appData.quizStreak = 0;
         recordTopicAttempt(currentSubQuizItem.sub, false, currentSubQuizItem);
-        fb.style.background = 'rgba(244,63,94,0.18)';
+        fb.style.background = 'rgba(244, 63, 94, 0.18)';
         fb.style.color = '#fb7185';
-        fb.innerHTML = `❌ <b>Galat Jawab!</b> Sahi Option: <b>(${String.fromCharCode(65 + correctIdx)}) ${escapeHTML(currentSubQuizItem.opts[correctIdx])}</b><br>${escapeHTML(currentSubQuizItem.exp)}`;
+        fb.innerHTML = `❌ <b>Galat!</b> Sahi option hai <b>(${String.fromCharCode(65 + correctIdx)}) ${escapeHTML(currentSubQuizItem.opts[correctIdx])}</b>.<br>${escapeHTML(currentSubQuizItem.exp)}`;
       }
 
-      const acc = Math.round((subQuizCorrectCount / subQuizSolvedCount) * 100);
-      document.getElementById('subQuizStats').innerText = `Solved: ${subQuizSolvedCount} | Accuracy: ${acc}%`;
+      const acc = Math.round((subQuizCorrect / subQuizSolved) * 100);
+      document.getElementById('subQuizStats').innerText = `Solved: ${subQuizSolved} | Accuracy: ${acc}%`;
       syncData();
     }
 
-    let currentLevel = 'easy';
+    // Speed Math Numeric Quiz
+    let quizLevel = 'easy';
     let currentAns = 0;
-    let currentSol = '';
+    let currentExplain = '';
     let speedAnswered = false;
 
-    function startQuiz(level) {
-      currentLevel = level;
-      const labels = { easy: 'MODE: EASY (Speed Arithmetic)', medium: 'MODE: MEDIUM (Algebra & Squares)', hard: 'MODE: HARD (NDA Infinite Procedural)' };
-      document.getElementById('qModeLabel').innerText = labels[level];
-      document.getElementById('btnLvlEasy').className = level === 'easy' ? 'btn btn-green btn-sm' : 'btn btn-outline btn-sm';
-      document.getElementById('btnLvlMedium').className = level === 'medium' ? 'btn btn-orange btn-sm' : 'btn btn-outline btn-sm';
-      document.getElementById('btnLvlHard').className = level === 'hard' ? 'btn btn-purple btn-sm' : 'btn btn-outline btn-sm';
+    function startQuiz(lvl) {
+      quizLevel = lvl;
+      document.getElementById('qModeLabel').innerText = 'MODE: ' + lvl.toUpperCase();
       generateQuestion();
     }
 
     function generateQuestion() {
       speedAnswered = false;
+      const resEl = document.getElementById('qResult');
+      resEl.style.display = 'none';
       document.getElementById('qInput').value = '';
-      document.getElementById('qResult').style.display = 'none';
       document.getElementById('qCheckBtn').disabled = false;
 
-      if (currentLevel === 'easy') {
-        const ops = ['+', '-', '×'];
-        const op = pickRandom(ops);
-        let a = randInt(12, 60), b = randInt(5, 35);
-        if (op === '+') { currentAns = a + b; currentSol = `${a} + ${b} = ${currentAns}`; document.getElementById('qText').innerText = `${a} + ${b} = ?`; }
-        else if (op === '-') { if (a < b) [a, b] = [b, a]; currentAns = a - b; currentSol = `${a} - ${b} = ${currentAns}`; document.getElementById('qText').innerText = `${a} - ${b} = ?`; }
-        else { a = randInt(6, 19); b = randInt(4, 15); currentAns = a * b; currentSol = `${a} × ${b} = ${currentAns}`; document.getElementById('qText').innerText = `${a} × ${b} = ?`; }
-      } else if (currentLevel === 'medium') {
-        const type = randInt(1, 3);
-        if (type === 1) { const n = randInt(12, 30); currentAns = n * n; currentSol = `${n}² = ${currentAns}`; document.getElementById('qText').innerText = `Square nikalo: ${n}² = ?`; }
-        else if (type === 2) { const x = randInt(3, 18), a = randInt(2, 9), b = randInt(5, 25); const rhs = a * x + b; currentAns = x; currentSol = `${a}x + ${b} = ${rhs} ⇒ ${a}x = ${rhs - b} ⇒ x = ${x}`; document.getElementById('qText').innerText = `Solve for x: ${a}x + ${b} = ${rhs}`; }
-        else { const d1 = randInt(1, 6), d2 = randInt(1, 6); currentAns = d1 + d2; currentSol = `Dice 1 (${d1}) + Dice 2 (${d2}) = ${currentAns}`; document.getElementById('qText').innerText = `Do dice par ${d1} aur ${d2} aaye. Dono ka sum kya hoga?`; }
+      if (quizLevel === 'easy') {
+        const a = randInt(12, 99), b = randInt(12, 99);
+        if (Math.random() > 0.45) {
+          currentAns = a + b;
+          currentExplain = `${a} + ${b} = ${currentAns}`;
+          document.getElementById('qText').innerText = `${a} + ${b} = ?`;
+        } else {
+          currentAns = a - b;
+          currentExplain = `${a} - ${b} = ${currentAns}`;
+          document.getElementById('qText').innerText = `${a} - ${b} = ?`;
+        }
+      } else if (quizLevel === 'medium') {
+        const a = randInt(11, 35), b = randInt(4, 15), c = randInt(5, 40);
+        currentAns = a * b + c;
+        currentExplain = `(${a} × ${b}) + ${c} = ${a * b} + ${c} = ${currentAns}`;
+        document.getElementById('qText').innerText = `(${a} × ${b}) + ${c} = ?`;
       } else {
-        const type = randInt(1, 4);
-        if (type === 1) { const a = randInt(2, 8), b = randInt(1, 7), c = randInt(1, 6), d = randInt(2, 8); currentAns = a * d - b * c; currentSol = `det = (${a}×${d}) - (${b}×${c}) = ${currentAns}`; document.getElementById('qText').innerText = `det [[${a}, ${b}], [${c}, ${d}]] = ?`; }
-        else if (type === 2) { const n = randInt(2, 6), x = randInt(2, 4); currentAns = n * Math.pow(x, n - 1); currentSol = `d/dx(x^${n}) at x=${x} is ${n}×${x}^${n - 1} = ${currentAns}`; document.getElementById('qText').innerText = `If f(x) = x^${n}, find f'(${x})`; }
-        else if (type === 3) { const n = randInt(5, 11); currentAns = (n * (n - 3)) / 2; currentSol = `Diagonals = ${n}(${n}-3)/2 = ${currentAns}`; document.getElementById('qText').innerText = `${n}-sided polygon mein kitne diagonals honge?`; }
-        else { const m = randInt(2, 12), a = randInt(2, 9); currentAns = m * a; currentSol = `F = m × a = ${m} × ${a} = ${currentAns} N`; document.getElementById('qText').innerText = `Mass ${m} kg aur acceleration ${a} m/s² par Force (N) = ?`; }
+        const type = randInt(1, 3);
+        if (type === 1) {
+          const base = randInt(12, 32);
+          const add = randInt(5, 30);
+          currentAns = base * base + add;
+          currentExplain = `${base}² + ${add} = ${base * base} + ${add} = ${currentAns}`;
+          document.getElementById('qText').innerText = `${base}² + ${add} = ?`;
+        } else if (type === 2) {
+          const r = randInt(2, 12), n = randInt(3, 12), a = randInt(1, 10);
+          currentAns = a + (n - 1) * r;
+          currentExplain = `Tₙ = a + (n-1)d = ${a} + (${n}-1)×${r} = ${currentAns}`;
+          document.getElementById('qText').innerText = `AP: a=${a}, d=${r}, n=${n} ⇒ Tₙ = ?`;
+        } else {
+          const p = pickRandom([10, 20, 25, 40, 50, 75]);
+          const num = randInt(2, 12) * 20;
+          currentAns = (p * num) / 100;
+          currentExplain = `${p}% of ${num} = (${p}/100) × ${num} = ${currentAns}`;
+          document.getElementById('qText').innerText = `${p}% of ${num} = ?`;
+        }
       }
+      document.getElementById('qInput').focus();
     }
 
     function checkQuiz() {
       if (speedAnswered) return;
       const rawVal = document.getElementById('qInput').value.trim();
-      const userVal = parseFloat(rawVal);
-      const resBox = document.getElementById('qResult');
-      resBox.style.display = 'block';
-      if (rawVal === '' || isNaN(userVal)) {
-        resBox.style.background = 'rgba(245,158,11,0.2)';
-        resBox.style.color = 'var(--orange)';
-        resBox.innerText = '⚠️ Kripya ek valid numeric answer likhein!';
+      const userVal = Number(rawVal);
+      const resEl = document.getElementById('qResult');
+      resEl.style.display = 'block';
+
+      if (rawVal === '' || !Number.isFinite(userVal)) {
+        resEl.style.background = 'rgba(245, 158, 11, 0.2)';
+        resEl.style.color = '#fbbf24';
+        resEl.innerText = "⚠️ Kripya ek valid number likhein!";
         return;
       }
+
       speedAnswered = true;
       document.getElementById('qCheckBtn').disabled = true;
-      if (Math.abs(userVal - currentAns) < 0.001) {
-        const pts = currentLevel === 'hard' ? 20 : (currentLevel === 'medium' ? 15 : 10);
-        appData.quizScore += pts;
+
+      if (Math.abs(userVal - currentAns) < 1e-6) {
         appData.quizStreak += 1;
+        appData.quizScore += (quizLevel === 'hard' ? 20 : quizLevel === 'medium' ? 15 : 10);
         updateDailyStreak();
-        resBox.style.background = 'rgba(16,185,129,0.2)';
-        resBox.style.color = 'var(--accent)';
-        resBox.innerHTML = `🎉 <b>Sahi Jawab! (+${pts} XP)</b><br><span style="font-size:12px;">${escapeHTML(currentSol)}</span>`;
+        resEl.style.background = 'rgba(16, 185, 129, 0.2)';
+        resEl.style.color = '#34d399';
+        resEl.innerHTML = `🎉 <b>Bilkul Sahi!</b> (${currentExplain})<br><button class="btn btn-green btn-sm" style="margin-top:8px;" onclick="generateQuestion()">Next Question ➔</button>`;
       } else {
         appData.quizStreak = 0;
-        resBox.style.background = 'rgba(244,63,94,0.2)';
-        resBox.style.color = 'var(--danger)';
-        resBox.innerHTML = `❌ <b>Galat!</b> Sahi answer <b>${currentAns}</b> hai.<br><span style="font-size:12px;">${escapeHTML(currentSol)}</span>`;
+        resEl.style.background = 'rgba(244, 63, 94, 0.2)';
+        resEl.style.color = '#fb7185';
+        resEl.innerHTML = `❌ <b>Galat!</b> Sahi jawab hai <b>${currentAns}</b><br><span style="font-size:12px;">${currentExplain}</span><br><button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="generateQuestion()">Try Next ➔</button>`;
       }
       syncData();
-      setTimeout(() => { if (speedAnswered) generateQuestion(); }, 1800);
     }
 
-    // ================= VOICE NOTES & PLANNER =================
+    // ================= VOICE NOTES (HINDI/ENGLISH) & PLANNER =================
+    let isRecording = false;
     function startVoiceNote() {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRec) {
-        showToast("Is browser mein Speech Recognition supported nahi hai. Chrome ya keyboard mic use karein.", "warn");
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        showToast("Is browser mein Voice Typing supported nahi hai. Chrome use karein ya type karke Save Note dabayein.", "warn");
         return;
       }
-      const rec = new SpeechRec();
-      rec.lang = 'hi-IN';
-      rec.interimResults = false;
-      const btn = document.getElementById('micBtn');
-      btn.innerText = "🔴 Sun raha hoon... Boliye";
-      rec.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        const box = document.getElementById('noteText');
-        box.value = (box.value ? box.value + ' ' : '') + transcript;
-        showToast("Voice note captured!", "success");
+      const recognition = new SR();
+      recognition.lang = 'hi-IN';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      const micBtn = document.getElementById('micBtn');
+
+      recognition.onstart = () => {
+        isRecording = true;
+        micBtn.innerText = "🔴 Sun raha hoon... Boliye";
       };
-      rec.onerror = (ev) => { showToast("Voice capture error: " + ev.error, "error"); };
-      rec.onend = () => { btn.innerText = "🎤 Bolkar Likhein"; };
-      rec.start();
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const box = document.getElementById('noteText');
+        box.value = box.value ? (box.value + ' ' + transcript) : transcript;
+      };
+      recognition.onerror = (e) => {
+        showToast("Voice error: " + (e.error || 'mic blocked'), "error");
+      };
+      recognition.onend = () => {
+        isRecording = false;
+        micBtn.innerText = "🎤 Bolkar Likhein";
+      };
+      if (!isRecording) {
+        try { recognition.start(); } catch (e) { showToast("Mic start nahi ho saka.", "error"); }
+      }
     }
 
     function saveNote() {
-      const txt = document.getElementById('noteText').value.trim();
-      if (!txt) return showToast("Pehle note likhein ya bolein!", "warn");
+      const box = document.getElementById('noteText');
+      const txt = box.value.trim();
+      if (!txt) return;
       appData.notes.unshift({ text: txt });
-      document.getElementById('noteText').value = '';
+      const lower = txt.toLowerCase();
+      if (lower.includes(' is ') || lower.includes(' hai ')) {
+        const sep = lower.includes(' is ') ? ' is ' : ' hai ';
+        const parts = txt.split(new RegExp(sep, 'i'));
+        if (parts.length >= 2 && parts[0].trim().length < 60) {
+          appData.learnedKnowledge[parts[0].trim().toLowerCase()] = parts.slice(1).join(sep).trim();
+        }
+      }
+      box.value = '';
       updateDailyStreak();
       syncData();
       renderNotes();
       showToast("Note saved!", "success");
     }
 
-    function deleteNote(idx) {
-      appData.notes.splice(idx, 1);
-      syncData();
-      renderNotes();
-      showToast("Note deleted.", "info");
-    }
-
     function renderNotes() {
-      const box = document.getElementById('notesContainer');
+      const c = document.getElementById('notesContainer');
+      c.innerHTML = '';
       if (!appData.notes.length) {
-        box.innerHTML = `<div class="empty-state">Abhi koi note save nahi hai.</div>`;
+        c.innerHTML = '<div class="empty-state">Abhi koi note save nahi hai.</div>';
         return;
       }
-      box.innerHTML = appData.notes.map((n, i) => `
-        <div class="todo-item">
-          <span style="white-space:pre-line;">📝 ${escapeHTML(n.text)}</span>
-          <button class="chip-btn" onclick="deleteNote(${i})">🗑</button>
-        </div>
-      `).join('');
+      appData.notes.forEach((n, i) => {
+        const div = document.createElement('div');
+        div.className = 'todo-item';
+        div.innerHTML = `<span style="white-space:pre-line;">📝 ${escapeHTML(n.text)}</span><button class="chip-btn" onclick="deleteNote(${i})">🗑</button>`;
+        c.appendChild(div);
+      });
+    }
+
+    function deleteNote(i) {
+      appData.notes.splice(i, 1);
+      syncData();
+      renderNotes();
     }
 
     function addTask() {
       const inp = document.getElementById('taskText');
       const txt = inp.value.trim();
-      if (!txt) return showToast("Target likhein!", "warn");
+      if (!txt) return;
       appData.tasks.push({ text: txt, done: false });
       inp.value = '';
       updateDailyStreak();
@@ -4202,9 +4244,9 @@
       showToast("Study target added!", "success");
     }
 
-    function toggleTask(idx) {
-      appData.tasks[idx].done = !appData.tasks[idx].done;
-      if (appData.tasks[idx].done) {
+    function toggleTask(i) {
+      appData.tasks[i].done = !appData.tasks[i].done;
+      if (appData.tasks[i].done) {
         appData.quizScore += 5;
         updateDailyStreak();
       }
@@ -4212,149 +4254,131 @@
       renderTasks();
     }
 
-    function deleteTask(idx) {
-      appData.tasks.splice(idx, 1);
+    function deleteTask(i) {
+      appData.tasks.splice(i, 1);
       syncData();
       renderTasks();
     }
 
     function renderTasks() {
-      const box = document.getElementById('tasksContainer');
+      const c = document.getElementById('tasksContainer');
+      c.innerHTML = '';
       if (!appData.tasks.length) {
-        box.innerHTML = `<div class="empty-state">Aaj ka koi task pending nahi hai. Naya target add karein!</div>`;
+        c.innerHTML = '<div class="empty-state">Aaj ka koi task baki nahi hai. Naya target add karein!</div>';
         return;
       }
-      box.innerHTML = appData.tasks.map((t, i) => `
-        <div class="todo-item ${t.done ? 'done' : ''}">
-          <span style="cursor:pointer; flex:1;" onclick="toggleTask(${i})">${t.done ? '✅' : '⬜'} ${escapeHTML(t.text)}</span>
-          <button class="chip-btn" onclick="deleteTask(${i})">🗑</button>
-        </div>
-      `).join('');
+      appData.tasks.forEach((t, i) => {
+        const div = document.createElement('div');
+        div.className = 'todo-item' + (t.done ? ' done' : '');
+        div.innerHTML = `<span style="cursor:pointer; flex:1;" onclick="toggleTask(${i})">${t.done ? '✅' : '⬜'} ${escapeHTML(t.text)}</span><button class="chip-btn" onclick="deleteTask(${i})">🗑</button>`;
+        c.appendChild(div);
+      });
     }
 
-    // ================= NATIVE OFFLINE HINDI+MATH PDF & JSPDF EXPORT =================
-    function buildPdfContent(type) {
-      if (type === 'nda_pathfinder_math') {
-        return {
-          title: "NDA Pathfinder Maths Complete Notes",
-          lines: [
-            "1. Probability: 0 <= P(E) <= 1; P(A U B) = P(A) + P(B) - P(A n B); Bayes Theorem.",
-            "2. Matrices & Determinants: |kA| = k^n |A|; adj(adj A) = |A|^(n-2) A; A^-1 exists iff |A| != 0.",
-            "3. Trigonometry: sin(2theta) = 2sin(theta)cos(theta); cos(2theta) = cos^2(theta) - sin^2(theta); Max of a sin(theta) + b cos(theta) = sqrt(a^2 + b^2).",
-            "4. Calculus: d/dx(x^n) = n*x^(n-1); Integral_0^(pi/2) log(sin x) dx = -(pi/2)*log(2).",
-            "5. Vectors & 3D: a . b = |a||b|cos(theta); |a x b| = |a||b|sin(theta); Direction cosines l^2 + m^2 + n^2 = 1."
-          ]
-        };
+    // ================= 100% OFFLINE HINDI + MATH VECTOR PDF & JSPDF =================
+    const PDF_DOCS = {
+      nda_pathfinder_math: {
+        title: "NDA Pathfinder Maths Complete Revision Sheet",
+        lines: [
+          "1. Quadratic Equations: Roots of ax² + bx + c = 0 are [-b ± √(b² - 4ac)] / 2a. Sum = -b/a, Product = c/a.",
+          "2. Trigonometry: sin²θ + cos²θ = 1 | 1 + tan²θ = sec²θ | sin(A ± B) = sinA cosB ± cosA sinB.",
+          "3. Matrices & Determinants: |kA| = kⁿ|A| for n×n matrix. A⁻¹ = adj(A) / |A| (when |A| ≠ 0).",
+          "4. Calculus: d/dx(xⁿ) = n·xⁿ⁻¹ | ∫ eˣ[f(x) + f'(x)] dx = eˣ·f(x) + C.",
+          "5. Probability & Vectors: P(A ∪ B) = P(A) + P(B) - P(A ∩ B). Dot product a·b = |a||b|cosθ."
+        ]
+      },
+      nda_pyq_digest: {
+        title: "NDA-Style Practice Questions & Solutions Digest",
+        lines: [
+          "Q1. What is the derivative of sin(x²) with respect to x? -> Ans: 2x cos(x²) (Chain Rule).",
+          "Q2. Find the value of i⁵⁷ + 1/i¹²⁵ (where i = √(-1)). -> Ans: i + (-i) = 0.",
+          "Q3. If P(A) = 0.4, P(B) = 0.5 and A, B are independent, find P(A ∩ B). -> Ans: 0.4 × 0.5 = 0.20.",
+          "Q4. Equation of a line with slope m passing through (x₁, y₁): y - y₁ = m(x - x₁).",
+          "Q5. NDA Marking Scheme: Maths = 120 Qs (300 Marks, +2.5 / -0.83), GAT = 150 Qs (600 Marks, +4 / -1.33)."
+        ]
+      },
+      nda_gat_world: {
+        title: "NDA GAT Science, English & Defence Notes",
+        lines: [
+          "1. Physics: Newton's 2nd Law F = ma | Kinetic Energy KE = ½mv² | Lens Power P = 100/f(cm) Dioptres.",
+          "2. Chemistry: pH = -log₁₀[H⁺]. Acid pH < 7, Neutral = 7, Base pH > 7. Mole = Mass / Molar Mass.",
+          "3. English: 'Scarcely/Hardly' pairs with 'when'; 'No sooner' pairs with 'than'; 'Senior/Junior' take 'to'.",
+          "4. Defence Academies: NDA (Khadakwasla, Pune), IMA (Dehradun), OTA (Chennai), AFA (Dundigal), INA (Ezhimala)."
+        ]
       }
-      if (type === 'nda_pyq_digest') {
-        const items = NDA_STYLE_BANK.slice(0, 8);
-        return {
-          title: "NDA-Style Practice Questions & Solutions Digest",
-          lines: items.map((item, idx) => `Q${idx + 1}. ${item.q}\nAns: ${item.opts[item.ans]} | ${item.exp}`)
-        };
+    };
+
+    function buildPdfLines(docKey) {
+      if (docKey === 'personal_ai_notes') {
+        const lines = ["Saved Voice & Revision Notes:"];
+        appData.notes.forEach((n, idx) => lines.push(`${idx + 1}. ${n.text}`));
+        lines.push("", "Learned Facts:");
+        Object.entries(appData.learnedKnowledge).forEach(([k, v]) => lines.push(`• ${k}: ${v}`));
+        return { title: "My Learned Brain & Hindi Notes", lines };
       }
-      if (type === 'nda_gat_world') {
-        return {
-          title: "NDA GAT Science, English & World Geography",
-          lines: [
-            "1. Physics: v = u + at; s = ut + 1/2 at^2; v^2 = u^2 + 2as; Escape velocity Earth = 11.2 km/s; 1 HP = 746 W.",
-            "2. Chemistry: pH = -log10[H+]; Atomic number = protons; Oxidation = loss of electrons (OIL RIG).",
-            "3. English: Focus on Synonyms, Antonyms, Idioms & Phrases, Spotting Errors & Subject-Verb Agreement.",
-            "4. Polity & Defence: Fundamental Rights (Part III, Art 12-35); DPSP (Part IV); NDA Khadakwasla, IMA Dehradun, OTA Chennai."
-          ]
-        };
-      }
-      const userNotes = appData.notes.map((n, i) => `Note ${i + 1}: ${n.text}`);
-      const brainFacts = Object.entries(appData.learnedKnowledge || {}).map(([k, v]) => `Fact [${k}]: ${v}`);
-      return {
-        title: "My AI Learned Brain & Hindi Voice Notes",
-        lines: [...userNotes, ...brainFacts].length ? [...userNotes, ...brainFacts] : ["Koi personal note ya learned fact abhi save nahi hai."]
-      };
+      return PDF_DOCS[docKey] || { title: "ANSH.STUDY Notes", lines: ["No content."] };
     }
 
-    function printNativePDF(type) {
-      const docData = buildPdfContent(type);
+    function printNativePDF(docKey) {
+      const doc = buildPdfLines(docKey);
       const sheet = document.getElementById('printableSheet');
       sheet.innerHTML = `
-        <h1>${escapeHTML(docData.title)}</h1>
-        <p class="meta">ANSH.STUDY MASTER PRO • Offline Vector Print/PDF (Hindi Devanagari & Math Symbols Supported)</p>
-        ${docData.lines.map(line => `<div class="print-block">${escapeHTML(line)}</div>`).join('')}
+        <h1>${escapeHTML(doc.title)}</h1>
+        <p class="meta">Generated by ANSH.STUDY MASTER PRO • 100% Offline Hindi & Math Print/PDF</p>
+        ${doc.lines.map(line => `<div class="print-block">${escapeHTML(line)}</div>`).join('')}
       `;
       window.print();
     }
 
-    function generateRealPDF(type) {
-      const docData = buildPdfContent(type);
-      if (window.jspdf && window.jspdf.jsPDF) {
-        try {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-          doc.setFontSize(16);
-          doc.text(docData.title, 40, 50);
-          doc.setFontSize(10);
-          doc.setTextColor(100);
-          doc.text("ANSH.STUDY MASTER PRO (ASCII/Latin Quick Export — Use 'Hindi/Math PDF' for Devanagari)", 40, 68);
-          doc.setTextColor(20);
-          doc.setFontSize(11);
-          let y = 95;
-          docData.lines.forEach(line => {
-            const safeLine = line.replace(/[^\x20-\x7E\n]/g, '?');
-            const wrapped = doc.splitTextToSize(safeLine, 515);
-            wrapped.forEach(wLine => {
-              if (y > 780) { doc.addPage(); y = 50; }
-              doc.text(wLine, 40, y);
-              y += 16;
-            });
-            y += 8;
-          });
-          doc.save(`${type}.pdf`);
-          showToast(`${type}.pdf downloaded!`, "success");
-          return;
-        } catch (e) {}
-      }
-      printNativePDF(type);
+    function sanitizeForJsPdf(str) {
+      return String(str)
+        .replace(/[^\x20-\x7E]/g, (ch) => {
+          const map = { '×': 'x', '÷': '/', '²': '^2', '³': '^3', '√': 'sqrt', 'θ': 'theta', 'π': 'pi', '∫': 'integral', '±': '+/-', '≠': '!=', '—': '-' };
+          return map[ch] || '';
+        });
     }
 
-    // ================= BACKUP & RESTORE =================
+    function generateRealPDF(docKey) {
+      const doc = buildPdfLines(docKey);
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        showToast("jsPDF offline/blocked hai — Offline Hindi/Math PDF use karein!", "warn");
+        printNativePDF(docKey);
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(16);
+      pdf.text(sanitizeForJsPdf(doc.title), 40, 50);
+
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(11);
+      let y = 80;
+      doc.lines.forEach(rawLine => {
+        const clean = sanitizeForJsPdf(rawLine);
+        if (!clean.trim()) { y += 8; return; }
+        const wrapped = pdf.splitTextToSize(clean, 515);
+        wrapped.forEach(wLine => {
+          if (y > 780) { pdf.addPage(); y = 50; }
+          pdf.text(wLine, 40, y);
+          y += 17;
+        });
+        y += 6;
+      });
+      pdf.save(`${docKey}.pdf`);
+      showToast(`${docKey}.pdf downloaded! (For Hindi Devanagari, use Offline Hindi/Math PDF)`, "success");
+    }
+
+    // ================= BACKUP, RESTORE & FULL CODE COPY =================
     function exportAllData() {
-      const payload = { ...appData, seenHashes: Array.from(seenSet).slice(-MAX_SEEN_HASHES), exportedAt: new Date().toISOString() };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `ansh_study_backup_${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
-      URL.revokeObjectURL(url);
-      showToast("Backup JSON downloaded!", "success");
-    }
-
-    function copyFullAppCode() {
-      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(fullHtml).then(() => {
-          showToast("Complete updated HTML code copied to clipboard!", "success");
-        }).catch(() => {
-          fallbackCopyText(fullHtml);
-        });
-      } else {
-        fallbackCopyText(fullHtml);
-      }
-    }
-
-    function fallbackCopyText(text) {
-      try {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showToast("Complete updated HTML code copied!", "success");
-      } catch (e) {
-        showToast("Copy failed. Please use browser Save/View Source.", "warn");
-      }
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast("Backup JSON exported!", "success");
     }
 
     function handleImportBackup(event) {
@@ -4364,38 +4388,62 @@
       const reader = new FileReader();
       reader.onload = () => {
         try {
-          const parsed = JSON.parse(String(reader.result || '{}'));
-          if (!parsed || typeof parsed !== 'object') throw new Error("Invalid JSON");
+          const parsed = JSON.parse(reader.result);
+          if (!parsed || typeof parsed !== 'object') throw new Error("Invalid format");
           appData = {
             ...structuredClone(DEFAULT_STATE),
             ...parsed,
             tasks: Array.isArray(parsed.tasks) ? parsed.tasks : DEFAULT_STATE.tasks,
             notes: Array.isArray(parsed.notes) ? parsed.notes : DEFAULT_STATE.notes,
-            learnedKnowledge: (parsed.learnedKnowledge && typeof parsed.learnedKnowledge === 'object' && !Array.isArray(parsed.learnedKnowledge))
-              ? parsed.learnedKnowledge : DEFAULT_STATE.learnedKnowledge,
+            learnedKnowledge: (parsed.learnedKnowledge && typeof parsed.learnedKnowledge === 'object')
+              ? { ...DEFAULT_STATE.learnedKnowledge, ...parsed.learnedKnowledge }
+              : DEFAULT_STATE.learnedKnowledge,
             customQuestions: Array.isArray(parsed.customQuestions) ? parsed.customQuestions : [],
+            seenHashes: Array.isArray(parsed.seenHashes) ? parsed.seenHashes : [],
             smartBookRead: Array.isArray(parsed.smartBookRead) ? parsed.smartBookRead : [],
             smartBookBookmarks: Array.isArray(parsed.smartBookBookmarks) ? parsed.smartBookBookmarks : [],
             smartBookNotes: (parsed.smartBookNotes && typeof parsed.smartBookNotes === 'object') ? parsed.smartBookNotes : {},
-            mistakeNotebook: Array.isArray(parsed.mistakeNotebook) ? parsed.mistakeNotebook : [],
-            topicStats: (parsed.topicStats && typeof parsed.topicStats === 'object') ? parsed.topicStats : {},
-            themePrefs: (parsed.themePrefs && typeof parsed.themePrefs === 'object') ? parsed.themePrefs : structuredClone(DEFAULT_STATE.themePrefs),
-            quizScore: Number.isFinite(Number(parsed.quizScore)) ? Number(parsed.quizScore) : 0,
-            quizStreak: Number.isFinite(Number(parsed.quizStreak)) ? Number(parsed.quizStreak) : 0,
-            studyMins: Number.isFinite(Number(parsed.studyMins)) ? Number(parsed.studyMins) : 90
+            mistakeNotebook: Array.isArray(parsed.mistakeNotebook) ? parsed.mistakeNotebook : []
           };
-          seenSet = new Set(Array.isArray(parsed.seenHashes) ? parsed.seenHashes.slice(-MAX_SEEN_HASHES) : []);
+          seenSet = new Set(appData.seenHashes || []);
+          saveCustomQuestionsToIDB(appData.customQuestions || []);
           syncData();
-          applySavedThemePrefs();
           renderTasks();
           renderNotes();
           renderSmartBookList();
           showToast("Backup restored successfully!", "success");
         } catch (err) {
-          showToast("Backup restore failed: " + err.message, "error");
+          showToast("Invalid backup JSON file.", "error");
         }
       };
       reader.readAsText(file);
+    }
+
+    function copyFullAppCode() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(fullHtml).then(() => {
+          showToast("Full standalone HTML app code copied to clipboard!", "success");
+        }).catch(() => fallbackCopyText(fullHtml));
+      } else {
+        fallbackCopyText(fullHtml);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast("Full standalone HTML app code copied!", "success");
+      } catch (e) {
+        showToast("Copy failed in this browser context.", "error");
+      }
+      ta.remove();
     }
 
     function escapeHTML(str) {
@@ -4403,629 +4451,273 @@
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+        .replace(/"/g, '&quot;');
     }
 
     // ================= INITIALIZATION =================
     updateDailyStreak();
-    applySavedThemePrefs();
     loadCustomQuestionsFromIDB();
-    syncData();
+    applySavedThemePrefs();
     renderTasks();
     renderNotes();
     renderSmartBookList();
-    startQuiz('easy');
     loadNextSubjectQuizQuestion();
-
-    try {
-      const draftRaw = localStorage.getItem(ACTIVE_MOCK_KEY);
-      if (draftRaw) {
-        const draft = JSON.parse(draftRaw);
-        if (draft && Array.isArray(draft.questions) && draft.questions.length > 0) {
-          const mockTabBtn = document.querySelector('.tab-btn[data-tab="mock"]');
-          switchTab('mock', mockTabBtn);
-          startMockTest(draft.sub || 'full', draft);
-          showToast("Unsaved Mock Test draft restored!", "info");
-        }
-      }
-    } catch (e) {}
+    generateQuestion();
+    syncData();
+    restoreActiveMockSessionIfAny();
   </script>
 
-  <!-- ================= UNIVERSAL GEMINI AI MODAL (ANY LANGUAGE • ANY TOPIC) ================= -->
-  <script>
-    (function initGeminiIntegration() {
-      const styleTag = document.createElement("style");
-      styleTag.textContent = `
-        #gemFloatBtn {
-          position: fixed;
-          bottom: 88px;
-          right: 18px;
-          z-index: 9999;
-          background: linear-gradient(135deg, #38bdf8, #818cf8);
-          color: #050816;
-          font-weight: 800;
-          padding: 12px 18px;
-          border: 1px solid rgba(255,255,255,0.28);
-          border-radius: 999px;
-          box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
-          cursor: pointer;
-          font-size: 13.5px;
-          letter-spacing: 0.3px;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        #gemFloatBtn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 28px rgba(129, 140, 248, 0.45);
-        }
-        #gemModalBackdrop {
-          display: none;
-          position: fixed;
-          inset: 0;
-          width: 100vw;
-          height: 100dvh;
-          background: rgba(2, 6, 23, 0.78);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          z-index: 10000;
-          align-items: center;
-          justify-content: center;
-          padding: 14px;
-          box-sizing: border-box;
-        }
-        #gemModalBackdrop.open {
-          display: flex;
-        }
-        #gemModalCard {
-          width: 100%;
-          max-width: 680px;
-          height: min(88dvh, 760px);
-          background: rgba(15, 23, 42, 0.92);
-          border: 1px solid rgba(56, 189, 248, 0.32);
-          border-radius: 22px;
-          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          color: #f8fafc;
-          font-family: var(--app-font, system-ui, -apple-system, sans-serif);
-        }
-        .gem-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 14px 18px;
-          background: rgba(30, 41, 59, 0.55);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-          gap: 10px;
-          flex-shrink: 0;
-        }
-        .gem-title-wrap {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
-        .gem-title {
-          margin: 0;
-          font-size: 16.5px;
-          font-weight: 800;
-          background: linear-gradient(90deg, #38bdf8, #c084fc);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .gem-pill {
-          font-size: 11px;
-          font-weight: 700;
-          padding: 3px 9px;
-          border-radius: 999px;
-          background: rgba(56, 189, 248, 0.14);
-          color: #7dd3fc;
-          border: 1px solid rgba(56, 189, 248, 0.3);
-        }
-        .gem-icon-btn {
-          background: rgba(30, 41, 59, 0.9);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #e2e8f0;
-          font-size: 12px;
-          font-weight: 700;
-          padding: 7px 11px;
-          border-radius: 10px;
-          cursor: pointer;
-          transition: background 0.2s ease, border-color 0.2s ease;
-        }
-        .gem-icon-btn:hover {
-          border-color: #38bdf8;
-          background: rgba(51, 65, 85, 0.95);
-        }
-        .gem-close-btn {
-          background: rgba(244, 63, 94, 0.15);
-          border: 1px solid rgba(244, 63, 94, 0.35);
-          color: #fda4af;
-          font-size: 15px;
-          font-weight: 800;
-          width: 34px;
-          height: 34px;
-          border-radius: 10px;
-          cursor: pointer;
-        }
-        .gem-body {
-          padding: 14px 18px 18px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          flex: 1;
-          min-height: 0;
-          overflow-y: auto;
-        }
-        .gem-key-box {
-          background: rgba(30, 41, 59, 0.65);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 12px;
-          flex-shrink: 0;
-        }
-        .gem-controls-row {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-          align-items: center;
-        }
-        .gem-select {
-          background: #0f172a;
-          color: #f8fafc;
-          border: 1px solid rgba(148, 163, 184, 0.25);
-          border-radius: 10px;
-          padding: 8px 11px;
-          font-size: 13px;
-          font-weight: 600;
-          outline: none;
-          cursor: pointer;
-        }
-        .gem-chips {
-          display: flex;
-          gap: 6px;
-          flex-wrap: wrap;
-        }
-        .gem-chip {
-          background: rgba(56, 189, 248, 0.1);
-          color: #bae6fd;
-          border: 1px solid rgba(56, 189, 248, 0.25);
-          border-radius: 999px;
-          padding: 5px 11px;
-          font-size: 12px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.15s ease;
-        }
-        .gem-chip:hover {
-          background: rgba(56, 189, 248, 0.22);
-          border-color: #38bdf8;
-        }
-        #gemPromptInput {
-          width: 100%;
-          min-height: 76px;
-          padding: 12px 14px;
-          border-radius: 14px;
-          border: 1px solid rgba(148, 163, 184, 0.25);
-          background: rgba(2, 6, 23, 0.72);
-          color: #f8fafc;
-          font-size: 14.5px;
-          line-height: 1.5;
-          resize: vertical;
-          box-sizing: border-box;
-          outline: none;
-        }
-        #gemPromptInput:focus {
-          border-color: #38bdf8;
-        }
-        .gem-action-bar {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-        }
-        .gem-btn-primary {
-          flex: 1.4;
-          min-width: 130px;
-          padding: 11px 14px;
-          border: none;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #10b981, #059669);
-          color: #050816;
-          font-weight: 800;
-          font-size: 13.5px;
-          cursor: pointer;
-        }
-        .gem-btn-secondary {
-          flex: 1;
-          min-width: 120px;
-          padding: 11px 14px;
-          border: none;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #8b5cf6, #6366f1);
-          color: #ffffff;
-          font-weight: 800;
-          font-size: 13.5px;
-          cursor: pointer;
-        }
-        .gem-btn-stop {
-          padding: 11px 14px;
-          border: none;
-          border-radius: 12px;
-          background: #f43f5e;
-          color: #ffffff;
-          font-weight: 800;
-          font-size: 13.5px;
-          cursor: pointer;
-        }
-        .gem-output-wrap {
-          flex: 1;
-          min-height: 140px;
-          display: flex;
-          flex-direction: column;
-          background: rgba(2, 6, 23, 0.85);
-          border: 1px solid rgba(148, 163, 184, 0.16);
-          border-radius: 14px;
-          overflow: hidden;
-        }
-        .gem-output-bar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 8px 12px;
-          background: rgba(15, 23, 42, 0.85);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-          font-size: 12px;
-          color: #94a3b8;
-        }
-        #gemOutputBox {
-          flex: 1;
-          overflow-y: auto;
-          padding: 14px;
-          font-size: 14.5px;
-          line-height: 1.65;
-          white-space: pre-wrap;
-          word-break: break-word;
-          color: #e2e8f0;
-        }
-      `;
-      document.head.appendChild(styleTag);
-
-      const floatBtn = document.createElement("button");
-      floatBtn.id = "gemFloatBtn";
-      floatBtn.innerHTML = "✨ Gemini AI";
-      document.body.appendChild(floatBtn);
-
-      const modal = document.createElement("div");
-      modal.id = "gemModalBackdrop";
-      modal.innerHTML = `
-        <div id="gemModalCard" role="dialog" aria-modal="true" aria-label="Universal Gemini AI">
-          <div class="gem-header">
-            <div class="gem-title-wrap">
-              <h3 class="gem-title">✨ Gemini Omni AI</h3>
-              <span class="gem-pill">Any Language • Any Topic</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <button id="toggleGemKeyBtn" class="gem-icon-btn">🔑 API Key</button>
-              <button id="closeGeminiModal" class="gem-close-btn" title="Close">✕</button>
-            </div>
-          </div>
-
-          <div class="gem-body">
-            <div id="gemKeyPanel" class="gem-key-box">
-              <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:6px;">
-                🔑 Gemini API Key (Sirf aapke browser ke localStorage mein save hoti hai):
-              </label>
-              <div style="display:flex; gap:8px;">
-                <input type="password" id="gemKeyInput" placeholder="AIzaSy..." style="flex:1; padding:9px 12px; border-radius:10px; border:1px solid #334155; background:#0f172a; color:#fff; font-size:14px; outline:none;" />
-                <button id="saveGemKeyBtn" style="padding:9px 16px; background:#38bdf8; color:#050816; font-weight:800; border:none; border-radius:10px; cursor:pointer;">Save</button>
-              </div>
-              <div id="gemKeyMsg" style="font-size:12px; color:#4ade80; margin-top:6px;"></div>
-            </div>
-
-            <div class="gem-controls-row">
-              <select id="gemLangSelect" class="gem-select" title="Response Language">
-                <option value="auto" selected>🌐 Language: Auto (Same as Question)</option>
-                <option value="Hinglish (natural Hindi written in Roman script)">🇮🇳 Hinglish</option>
-                <option value="Hindi (Devanagari script)">🕉️ Hindi (हिन्दी)</option>
-                <option value="English">🇬🇧 English</option>
-                <option value="Sanskrit">📜 Sanskrit (संस्कृतम्)</option>
-              </select>
-
-              <select id="gemStyleSelect" class="gem-select" title="Answer Depth">
-                <option value="clear, structured, and complete with key points and examples" selected>📚 Complete & Clear</option>
-                <option value="concise with quick bullet points and short tricks">⚡ Short & Crisp</option>
-                <option value="step-by-step from basic to advanced">🪜 Step-by-Step</option>
-              </select>
-            </div>
-
-            <div class="gem-chips">
-              <button type="button" class="gem-chip" data-prefix="Explain clearly with examples: ">💡 Explain Topic</button>
-              <button type="button" class="gem-chip" data-prefix="Solve step-by-step with short trick: ">🧮 Solve Problem</button>
-              <button type="button" class="gem-chip" data-prefix="Create 1 challenging MCQ with 4 options, answer, and explanation on: ">🎯 Make MCQ</button>
-              <button type="button" class="gem-chip" data-prefix="Summarize key points for quick revision: ">📝 Quick Summary</button>
-            </div>
-
-            <textarea id="gemPromptInput" placeholder="Kisi bhi language aur kisi bhi topic par kuch bhi puchein (Maths, Physics, Chem, GK, Coding, Grammar, ya koi bhi sawal)..."></textarea>
-
-            <div class="gem-action-bar">
-              <button id="askGemBtn" class="gem-btn-primary">🚀 Ask Anything</button>
-              <button id="genMcqGemBtn" class="gem-btn-secondary">🎯 Generate MCQ</button>
-              <button id="stopGemBtn" class="gem-btn-stop" style="display:none;">⏹ Stop</button>
-            </div>
-
-            <div class="gem-output-wrap">
-              <div class="gem-output-bar">
-                <span id="gemStatusLabel">Ready • All Subjects Supported</span>
-                <div style="display:flex; gap:6px;">
-                  <button type="button" id="copyGemOutBtn" class="gem-icon-btn" style="padding:4px 9px; font-size:11px;">📋 Copy</button>
-                  <button type="button" id="clearGemOutBtn" class="gem-icon-btn" style="padding:4px 9px; font-size:11px;">🧹 Clear</button>
-                </div>
-              </div>
-              <div id="gemOutputBox">Yahan kisi bhi topic aur kisi bhi language mein aapka jawab dikhega...</div>
-            </div>
+  <!-- ==================== GROK AI MULTI-TURN SESSION CHAT MODAL & ENGINE ==================== -->
+  <div id="grokAiModal" class="modal-backdrop" onclick="if(event.target===this) closeGrokModal()">
+    <div class="modal-box" style="max-width:600px; border-color:rgba(168,85,247,0.55);">
+      <div class="row" style="justify-content:space-between; margin-bottom:10px;">
+        <div class="row" style="gap:8px;">
+          <span style="font-size:22px;">🤖</span>
+          <div>
+            <h3 style="font-size:17px; font-weight:900;">Grok AI NDA Mentor</h3>
+            <div style="font-size:11px; color:var(--muted);">Multi-Turn Session Memory • PCM • GAT • English</div>
           </div>
         </div>
-      `;
-      document.body.appendChild(modal);
+        <div class="row" style="gap:6px;">
+          <button class="chip-btn" onclick="clearGrokSession()" title="Clear session chat history">🗑️ Clear Chat</button>
+          <button class="chip-btn" onclick="closeGrokModal()">✕ Close</button>
+        </div>
+      </div>
 
-      let activeAbortCtrl = null;
+      <div class="row" style="margin-bottom:8px;">
+        <input type="password" id="grokApiKeyInput" class="input-box" style="flex:1; margin-bottom:0; font-size:13px; padding:9px 12px;" placeholder="xAI Grok API Key (xai-...) — optional (offline mentor mode works too)" oninput="saveGrokApiKey()">
+        <span class="badge badge-purple" id="grokTurnCounter">0 Turns</span>
+      </div>
 
-      function getGemKey() {
-        try { return (localStorage.getItem("ansh_gemini_api_key") || "").trim(); } catch (e) { return ""; }
+      <div class="row" style="gap:5px; margin-bottom:10px;">
+        <button class="chip-btn" style="font-size:11.5px;" onclick="quickGrokPrompt('NDA Maths ke liye Trigonometry aur Calculus ki top 5 short tricks batao.')">📐 Maths Tricks</button>
+        <button class="chip-btn" style="font-size:11.5px;" onclick="quickGrokPrompt('Physics mein Rotational Motion aur Gravitation ke key formulas samjhao.')">⚡ Physics Notes</button>
+        <button class="chip-btn" style="font-size:11.5px;" onclick="quickGrokPrompt('NDA English spotting error ke 5 high-yield rules with examples do.')">📚 English Rules</button>
+      </div>
+
+      <div id="grokChatThread" style="background:rgba(2,6,23,0.45); border:1px solid var(--border); border-radius:14px; padding:12px; max-height:290px; overflow-y:auto; margin-bottom:10px; display:flex; flex-direction:column; gap:8px;"></div>
+
+      <textarea id="grokPromptInput" rows="2" class="input-box" style="margin-bottom:8px;" placeholder="Apna doubt ya follow-up sawal likhein (e.g., 'Is concept ka ek aur NDA numerical do')..." onkeypress="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); askGrokAI(); }"></textarea>
+
+      <div class="row">
+        <button class="btn btn-purple" id="grokSendBtn" style="flex:1.5;" onclick="askGrokAI()">✨ Send Message</button>
+        <button class="btn btn-green btn-sm" onclick="saveLastGrokToNotes()">💾 Save Reply</button>
+        <button class="btn btn-outline btn-sm" onclick="copyLastGrokAnswer()">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GROK_KEY_STORAGE = 'ansh_grok_api_key_v1';
+    // Session-scoped multi-turn conversation array: [{ role: 'user' | 'assistant', content: string }]
+    let grokSessionHistory = [];
+    let lastGrokAnswerText = "";
+
+    function openGrokModal(presetText = "") {
+      const modal = document.getElementById('grokAiModal');
+      if (!modal) return;
+      const keyInput = document.getElementById('grokApiKeyInput');
+      if (keyInput) {
+        try { keyInput.value = localStorage.getItem(GROK_KEY_STORAGE) || ''; } catch (e) {}
       }
-      function setGemKey(val) {
-        try { localStorage.setItem("ansh_gemini_api_key", val.trim()); } catch (e) {}
+      modal.classList.add('open');
+      renderGrokThread();
+      const promptBox = document.getElementById('grokPromptInput');
+      if (presetText && promptBox) {
+        promptBox.value = presetText;
       }
-      function setBusyState(isBusy, labelText) {
-        const askBtn = document.getElementById("askGemBtn");
-        const mcqBtn = document.getElementById("genMcqGemBtn");
-        const stopBtn = document.getElementById("stopGemBtn");
-        const statusEl = document.getElementById("gemStatusLabel");
-        askBtn.disabled = isBusy;
-        mcqBtn.disabled = isBusy;
-        askBtn.style.opacity = isBusy ? "0.6" : "1";
-        mcqBtn.style.opacity = isBusy ? "0.6" : "1";
-        stopBtn.style.display = isBusy ? "inline-block" : "none";
-        if (labelText && statusEl) statusEl.textContent = labelText;
+      if (promptBox) promptBox.focus();
+    }
+
+    function closeGrokModal() {
+      const modal = document.getElementById('grokAiModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function saveGrokApiKey() {
+      const val = (document.getElementById('grokApiKeyInput').value || '').trim();
+      try { localStorage.setItem(GROK_KEY_STORAGE, val); } catch (e) {}
+    }
+
+    function quickGrokPrompt(text) {
+      document.getElementById('grokPromptInput').value = text;
+      askGrokAI();
+    }
+
+    function updateGrokTurnCounter() {
+      const badge = document.getElementById('grokTurnCounter');
+      if (!badge) return;
+      const turns = Math.floor(grokSessionHistory.length / 2);
+      badge.textContent = `${turns} Turn${turns === 1 ? '' : 's'}`;
+    }
+
+    function renderGrokThread() {
+      const thread = document.getElementById('grokChatThread');
+      if (!thread) return;
+      updateGrokTurnCounter();
+
+      if (grokSessionHistory.length === 0) {
+        thread.innerHTML = `<div class="empty-state" style="padding:14px; font-size:12.5px;">Session chat start karein! Follow-up sawalon ke liye poori session history yaad rakhi jayegi. Jab tak chat clear nahi karte, conversation context bana rahega.</div>`;
+        return;
       }
 
-      function buildUniversalSystemPrompt(userQuestion, isMcqMode) {
-        const langVal = document.getElementById("gemLangSelect").value;
-        const styleVal = document.getElementById("gemStyleSelect").value;
-        const langRule = langVal === "auto"
-          ? "Detect the language of the user's question and reply in that exact same language."
-          : `Reply strictly in ${langVal}.`;
+      thread.innerHTML = grokSessionHistory.map((msg) => {
+        const isUser = msg.role === 'user';
+        return `
+          <div style="padding:10px 12px; border-radius:12px; font-size:13.5px; line-height:1.55; white-space:pre-line; border:1px solid var(--border); ${
+            isUser
+              ? 'background:rgba(56,189,248,0.14); border-color:rgba(56,189,248,0.35); margin-left:18px;'
+              : 'background:rgba(168,85,247,0.12); border-color:rgba(168,85,247,0.32); margin-right:18px;'
+          }">
+            <div style="font-size:11px; font-weight:800; margin-bottom:3px; color:${isUser ? 'var(--primary)' : '#c084fc'};">${isUser ? '🧑 You' : '🤖 Grok AI'}</div>
+            <div>${escapeHTML(msg.content)}</div>
+          </div>
+        `;
+      }).join('');
+      thread.scrollTop = thread.scrollHeight;
+    }
 
-        const taskRule = isMcqMode
-          ? `Create 1 high-quality multiple choice question (A, B, C, D) on the requested topic/subject, followed by the correct option and a clear explanation.`
-          : `Answer accurately across ANY topic, subject, or domain (Mathematics, Physics, Chemistry, Biology, GK, History, Geography, Polity, Languages, Programming, Science, or general questions). Keep the explanation ${styleVal}.`;
+    function clearGrokSession() {
+      grokSessionHistory = [];
+      lastGrokAnswerText = "";
+      renderGrokThread();
+      showToast("Grok session chat history cleared!", "info");
+    }
 
-        return `You are a versatile, knowledgeable universal AI assistant and tutor.
-${langRule}
-${taskRule}
+    function buildOfflineGrokMentorReply(promptText) {
+      const qLower = promptText.toLowerCase();
+      const prevUserTurns = grokSessionHistory.filter(m => m.role === 'user').slice(-3, -1);
+      const contextHint = prevUserTurns.length > 0
+        ? ` (Continuing from: "${prevUserTurns[prevUserTurns.length - 1].content.slice(0, 55)}...")`
+        : "";
 
-User Request:
-${userQuestion}`;
+      for (const [k, v] of Object.entries(appData.learnedKnowledge || {})) {
+        if (qLower.includes(k)) {
+          return `📌 Found in your Study Brain${contextHint}:\n${k.toUpperCase()} — ${v}\n\nTip: Is topic ke 10 MCQs Mock tab mein solve karein.`;
+        }
+      }
+      if (qLower.includes('trig') || qLower.includes('calc') || qLower.includes('math')) {
+        return `📐 NDA Maths Focus${contextHint}:\n• sin²θ + cos²θ = 1, 1 + tan²θ = sec²θ\n• Max/Min of (a sinθ + b cosθ) = ±√(a² + b²)\n• lim(x→0) sin(ax)/tan(bx) = a/b\n• ∫₀^(π/2) f(sinx) dx = ∫₀^(π/2) f(cosx) dx\n\nFollow-up: Kya aap ispar ek aur practice numerical chahte hain?`;
+      }
+      if (qLower.includes('phys') || qLower.includes('rotat') || qLower.includes('grav')) {
+        return `⚡ NDA Physics Focus${contextHint}:\n• v = u + at, s = ut + ½at², v² = u² + 2as\n• Escape velocity vₑ = √(2gR) ≈ 11.2 km/s\n• Torque τ = Iα, Angular momentum L = Iω\n\nFollow-up: Kisi specific formula ka derivation ya numerical chahiye?`;
+      }
+      if (qLower.includes('eng') || qLower.includes('grammar') || qLower.includes('vocab')) {
+        return `📚 NDA English Focus${contextHint}:\n• Neither/Nor & Either/Or: Verb agrees with nearest subject.\n• No sooner...than | Scarcely/Hardly...when.\n• Senior/Junior/Superior take 'to', not 'than'.\n\nFollow-up: Kya aap iske aur spotting-error examples chahte hain?`;
+      }
+      return `🤖 Grok Offline Mentor${contextHint}:\nAapka sawal: "${promptText}"\n• Step 1: Concept aur formula clear karein (Smart Book tab dekhein).\n• Step 2: 15–20 timed MCQs practice karein (1.25 min/Q NDA pace).\n• Step 3: Galat sawal Mistake Notebook mein revise karein.\n\n(Live xAI API ke liye upar xai-... key enter karein.)`;
+    }
+
+    async function askGrokAI() {
+      const promptBox = document.getElementById('grokPromptInput');
+      const promptText = (promptBox.value || '').trim();
+      if (!promptText) {
+        showToast("Pehle koi sawal likhein!", "warn");
+        return;
       }
 
-      floatBtn.addEventListener("click", () => {
-        modal.classList.add("open");
-        document.body.style.overflow = "hidden";
-        const keyPanel = document.getElementById("gemKeyPanel");
-        if (getGemKey()) {
-          document.getElementById("gemKeyMsg").innerText = "✅ API Key saved hai.";
-          keyPanel.style.display = "none";
+      const apiKey = (document.getElementById('grokApiKeyInput').value || '').trim();
+      const sendBtn = document.getElementById('grokSendBtn');
+
+      grokSessionHistory.push({ role: 'user', content: promptText });
+      promptBox.value = '';
+      renderGrokThread();
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "⏳ Thinking...";
+
+      try {
+        let reply = "";
+        if (apiKey) {
+          const messagesPayload = [
+            {
+              role: "system",
+              content: "You are Grok AI, an expert NDA (National Defence Academy) & PCM/GAT mentor. Keep answers clear, structured, and helpful for multi-turn study sessions."
+            },
+            ...grokSessionHistory.slice(-16)
+          ];
+          const res = await fetch("https://api.x.ai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+              model: "grok-3-mini",
+              messages: messagesPayload,
+              temperature: 0.4
+            })
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content)
+            ? data.choices[0].message.content.trim()
+            : buildOfflineGrokMentorReply(promptText);
         } else {
-          document.getElementById("gemKeyMsg").innerText = "";
-          keyPanel.style.display = "block";
-        }
-      });
-
-      document.getElementById("toggleGemKeyBtn").addEventListener("click", () => {
-        const keyPanel = document.getElementById("gemKeyPanel");
-        keyPanel.style.display = keyPanel.style.display === "none" ? "block" : "none";
-      });
-
-      document.getElementById("closeGeminiModal").addEventListener("click", () => {
-        if (activeAbortCtrl) { activeAbortCtrl.abort(); activeAbortCtrl = null; }
-        setBusyState(false, "Ready • All Subjects Supported");
-        modal.classList.remove("open");
-        document.body.style.overflow = "";
-      });
-
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          document.getElementById("closeGeminiModal").click();
-        }
-      });
-
-      document.getElementById("stopGemBtn").addEventListener("click", () => {
-        if (activeAbortCtrl) {
-          activeAbortCtrl.abort();
-          activeAbortCtrl = null;
-        }
-        setBusyState(false, "Stopped by user");
-      });
-
-      document.querySelectorAll(".gem-chip").forEach((chip) => {
-        chip.addEventListener("click", () => {
-          const prefix = chip.getAttribute("data-prefix") || "";
-          const inp = document.getElementById("gemPromptInput");
-          if (!inp.value.trim()) {
-            inp.value = prefix;
-          } else if (!inp.value.startsWith(prefix)) {
-            inp.value = prefix + inp.value.trim();
-          }
-          inp.focus();
-        });
-      });
-
-      document.getElementById("copyGemOutBtn").addEventListener("click", () => {
-        const txt = document.getElementById("gemOutputBox").innerText || "";
-        if (!txt.trim()) return;
-        navigator.clipboard?.writeText(txt).then(() => {
-          if (typeof showToast === "function") showToast("Jawab copy ho gaya!", "success");
-        }).catch(() => {});
-      });
-
-      document.getElementById("clearGemOutBtn").addEventListener("click", () => {
-        document.getElementById("gemOutputBox").innerText = "Yahan kisi bhi topic aur kisi bhi language mein aapka jawab dikhega...";
-        document.getElementById("gemStatusLabel").textContent = "Cleared";
-      });
-
-      document.getElementById("saveGemKeyBtn").addEventListener("click", () => {
-        const val = document.getElementById("gemKeyInput").value.trim();
-        const msgEl = document.getElementById("gemKeyMsg");
-        if (!val) {
-          msgEl.style.color = "#fbbf24";
-          msgEl.innerText = "⚠️ Pehle API Key paste karein!";
-          if (typeof showToast === "function") showToast("Pehle API Key paste karein!", "warn");
-          return;
-        }
-        if (!val.startsWith("AIza") || val.length < 25) {
-          msgEl.style.color = "#fbbf24";
-          msgEl.innerText = "⚠️ Key thodi chhoti ya unusual lag rahi hai — phir bhi save kar li gayi hai.";
-        } else {
-          msgEl.style.color = "#4ade80";
-          msgEl.innerText = "✅ API Key successfully save ho gayi!";
-        }
-        setGemKey(val);
-        document.getElementById("gemKeyInput").value = "";
-        setTimeout(() => {
-          document.getElementById("gemKeyPanel").style.display = "none";
-        }, 600);
-        if (typeof showToast === "function") showToast("Gemini API Key Saved!", "success");
-      });
-
-      async function callGeminiOmni(fullPrompt, outBox) {
-        const apiKey = getGemKey();
-        if (!apiKey) {
-          document.getElementById("gemKeyPanel").style.display = "block";
-          outBox.innerText = "⚠️ Upar pehle apni valid Gemini API Key save karein!";
-          if (typeof showToast === "function") showToast("Pehle Gemini API Key save karein!", "warn");
-          return;
+          reply = buildOfflineGrokMentorReply(promptText);
         }
 
-        const maxRetries = 2;
-        for (let attempt = 0; attempt <= maxRetries; attempt++) {
-          if (activeAbortCtrl) activeAbortCtrl.abort();
-          activeAbortCtrl = new AbortController();
-          const timeoutId = setTimeout(() => {
-            if (activeAbortCtrl) activeAbortCtrl.abort("timeout");
-          }, 25000);
-
-          setBusyState(
-            true,
-            attempt === 0
-              ? "⚡ Generating response..."
-              : `🔄 High demand — retrying (${attempt}/${maxRetries})...`
-          );
-          if (attempt === 0) outBox.innerText = "⚡ Jawab taiyar ho raha hai...";
-
-          try {
-            const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
-            const res = await fetch(streamUrl, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              signal: activeAbortCtrl.signal,
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: fullPrompt }] }],
-                generationConfig: { maxOutputTokens: 1200, temperature: 0.7 }
-              })
-            });
-
-            if (!res.ok) {
-              const errJson = await res.json().catch(() => ({}));
-              const msg = errJson.error?.message || `HTTP ${res.status}`;
-              const isHighDemand = /high demand|overloaded|unavailable|quota|429|503/i.test(msg) || res.status === 429 || res.status === 503;
-              clearTimeout(timeoutId);
-              if (isHighDemand && attempt < maxRetries) {
-                await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
-                continue;
-              }
-              throw new Error(msg);
-            }
-
-            let fullText = "";
-            if (res.body && res.body.getReader) {
-              const reader = res.body.getReader();
-              const decoder = new TextDecoder("utf-8");
-              let buffer = "";
-              outBox.innerText = "";
-
-              while (true) {
-                const { value, done } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split("\n");
-                buffer = lines.pop() || "";
-
-                for (const line of lines) {
-                  const trimmed = line.trim();
-                  if (!trimmed.startsWith("data:")) continue;
-                  const payload = trimmed.slice(5).trim();
-                  if (!payload || payload === "[DONE]") continue;
-                  try {
-                    const chunk = JSON.parse(payload);
-                    const part = chunk.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                    if (part) {
-                      fullText += part;
-                      outBox.innerText = fullText;
-                      outBox.scrollTop = outBox.scrollHeight;
-                    }
-                  } catch (e) {}
-                }
-              }
-            } else {
-              const data = await res.json();
-              fullText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-              outBox.innerText = fullText || "Koi jawab nahi mila.";
-            }
-
-            clearTimeout(timeoutId);
-            activeAbortCtrl = null;
-            setBusyState(false, "✅ Response complete");
-            if (!fullText) outBox.innerText = "Koi jawab nahi mila, dobara try karein.";
-            return;
-          } catch (err) {
-            clearTimeout(timeoutId);
-            const msg = String(err && err.message ? err.message : err);
-            const isHighDemand = /high demand|overloaded|unavailable|503/i.test(msg);
-            if (isHighDemand && attempt < maxRetries) {
-              await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
-              continue;
-            }
-            activeAbortCtrl = null;
-            setBusyState(false, "❌ Error");
-            if (err.name === "AbortError") {
-              outBox.innerText = outBox.innerText && !outBox.innerText.startsWith("⚡")
-                ? outBox.innerText + "\n\n⏹ Request stopped / timed out."
-                : "⏳ Request ruk gayi ya timeout ho gaya. Dobara try karein.";
-            } else {
-              outBox.innerText = "❌ Error: " + msg;
-            }
-            return;
-          }
-        }
+        grokSessionHistory.push({ role: 'assistant', content: reply });
+        lastGrokAnswerText = reply;
+        renderGrokThread();
+      } catch (err) {
+        const fallbackReply = buildOfflineGrokMentorReply(promptText);
+        grokSessionHistory.push({ role: 'assistant', content: fallbackReply });
+        lastGrokAnswerText = fallbackReply;
+        renderGrokThread();
+        showToast("Live Grok API unreachable; offline mentor reply added to session.", "warn");
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "✨ Send Message";
       }
+    }
 
-      document.getElementById("askGemBtn").addEventListener("click", () => {
-        const question = document.getElementById("gemPromptInput").value.trim();
-        const outBox = document.getElementById("gemOutputBox");
-        if (!question) {
-          outBox.innerText = "⚠️ Kripya kisi bhi topic ya language mein apna sawal likhein!";
-          if (typeof showToast === "function") showToast("Pehle sawal likhein!", "warn");
-          return;
-        }
-        callGeminiOmni(buildUniversalSystemPrompt(question, false), outBox);
-      });
+    function saveLastGrokToNotes() {
+      const latestAssistant = [...grokSessionHistory].reverse().find(m => m.role === 'assistant');
+      const textToSave = lastGrokAnswerText || (latestAssistant ? latestAssistant.content : '');
+      if (!textToSave) {
+        showToast("Pehle Grok AI se koi reply generate karein!", "warn");
+        return;
+      }
+      appData.notes.unshift({ text: `[Grok AI]\n${textToSave}` });
+      syncData();
+      renderNotes();
+      showToast("Grok AI reply saved to Notes!", "success");
+    }
 
-      document.getElementById("genMcqGemBtn").addEventListener("click", () => {
-        const topic = document.getElementById("gemPromptInput").value.trim() || "Any subject or general knowledge";
-        const outBox = document.getElementById("gemOutputBox");
-        callGeminiOmni(buildUniversalSystemPrompt(topic, true), outBox);
-      });
+    function copyLastGrokAnswer() {
+      const latestAssistant = [...grokSessionHistory].reverse().find(m => m.role === 'assistant');
+      const textToCopy = lastGrokAnswerText || (latestAssistant ? latestAssistant.content : '');
+      if (!textToCopy) {
+        showToast("Copy karne ke liye koi reply nahi hai!", "warn");
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(() => showToast("Grok answer copied!", "success")).catch(() => fallbackCopyText(textToCopy));
+      } else {
+        fallbackCopyText(textToCopy);
+      }
+    }
+
+    (function wireGrokTriggers() {
+      const grokBar = document.querySelector('.ai-suggestion-bar');
+      if (grokBar && !grokBar.querySelector('#openGrokModalBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'openGrokModalBtn';
+        btn.className = 'btn btn-primary btn-sm';
+        btn.textContent = '🤖 Ask Grok AI';
+        btn.onclick = () => openGrokModal();
+        grokBar.appendChild(btn);
+      }
+      const quickGrid = document.querySelector('.quick-tiles-grid');
+      if (quickGrid && !quickGrid.querySelector('#quickGrokTile')) {
+        const tile = document.createElement('button');
+        tile.id = 'quickGrokTile';
+        tile.className = 'quick-tile';
+        tile.innerHTML = '<span class="qt-icon">🤖</span>Grok AI';
+        tile.onclick = () => openGrokModal();
+        quickGrid.appendChild(tile);
+      }
     })();
   </script>
 </body>
